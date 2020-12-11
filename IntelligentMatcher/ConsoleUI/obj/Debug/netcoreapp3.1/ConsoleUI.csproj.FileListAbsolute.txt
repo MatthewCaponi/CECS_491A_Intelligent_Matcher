@@ -1,0 +1,4 @@
+C:\Users\Matt\source\repos\IntelligentMatcher\ConsoleUI\obj\Debug\netcoreapp3.1\ConsoleUI.csprojAssemblyReference.cache
+C:\Users\Matt\source\repos\IntelligentMatcher\ConsoleUI\obj\Debug\netcoreapp3.1\ConsoleUI.AssemblyInfoInputs.cache
+C:\Users\Matt\source\repos\IntelligentMatcher\ConsoleUI\obj\Debug\netcoreapp3.1\ConsoleUI.AssemblyInfo.cs
+C:\Users\Matt\source\repos\IntelligentMatcher\ConsoleUI\obj\Debug\netcoreapp3.1\ConsoleUI.csproj.CoreCompileInputs.cache

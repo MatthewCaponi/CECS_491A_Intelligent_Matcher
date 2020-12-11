@@ -1,0 +1,9 @@
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\bin\Debug\netstandard2.0\UserManagement.deps.json
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\bin\Debug\netstandard2.0\UserManagement.dll
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\bin\Debug\netstandard2.0\UserManagement.pdb
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.csprojAssemblyReference.cache
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.AssemblyInfoInputs.cache
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.AssemblyInfo.cs
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.csproj.CoreCompileInputs.cache
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.dll
+C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.pdb

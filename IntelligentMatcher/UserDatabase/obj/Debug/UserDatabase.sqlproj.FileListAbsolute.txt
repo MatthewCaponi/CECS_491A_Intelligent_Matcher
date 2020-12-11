@@ -1,0 +1,6 @@
+C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.dacpac
+C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.dll
+C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.pdb
+C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.dll
+C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.pdb
+C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.sqlprojAssemblyReference.cache
