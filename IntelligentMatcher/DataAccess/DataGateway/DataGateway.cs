@@ -16,29 +16,40 @@ namespace DataAccess
         public async Task<List<T>> LoadData<T, U>(string query, U parameters, string connectionString)
         {
     
-            
-            using (IDbConnection connection = new SqlConnection(connectionString))
+            try
             {
-                var rows = await connection.QueryAsync<T>(query,
-                                                            parameters);
+                using (IDbConnection connection = new SqlConnection(connectionString))
+                {
+                    var rows = await connection.QueryAsync<T>(query,
+                                                                parameters);
 
-                return rows.ToList();
+                    return rows.ToList();
+                }
             }
-            
-
-            
+            catch (SqlException e)
+            {
+                return null;
+            }
+    
         }
 
         public async Task<int> SaveData<T>(string query, T parameters, string connectionString)
         {
             
-            
-            using (IDbConnection connection = new SqlConnection(connectionString))
+            try
             {
-                return await connection.ExecuteAsync(query,
-                                                        parameters);
+                using (IDbConnection connection = new SqlConnection(connectionString))
+                {
+                    return await connection.ExecuteAsync(query,
+                                                            parameters);
 
+                }
             }
+            catch (SqlException e)
+            {
+                return 0;
+            }
+            
             
 
             

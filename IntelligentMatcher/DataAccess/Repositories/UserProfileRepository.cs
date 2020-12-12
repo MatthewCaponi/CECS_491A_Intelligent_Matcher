@@ -69,44 +69,41 @@ namespace DataAccess.Repositories
             return p.Get<int>("Id");
         }
 
-        public Task<int> UpdateUserAccountType(int id, UserProfileModel.AccountType accountType)
+        public Task<int> UpdateUserAccountType(int id, string accountType)
         {
-            var query = "update [UserProfile]" +
-                        "set AccountType = @AccountType" +
-                        "where Id = @Id;";
+            var query = "update [UserProfile] set AccountType = @AccountType where UserAccountId = @UserAccountId;";
 
             return _dataGateway.SaveData(query,
                                          new
                                          {
-                                             Id = id,
-                                             AccountType = accountType.ToString()
+                                             AccountType = accountType.ToString(),
+                                             UserAccountId = id
+                                             
                                          },
-                                         _connectionString.SqlConnectionString); ;
+                                         _connectionString.SqlConnectionString); 
         }
 
-        public Task<int> UpdateUserAccountStatus(int id, UserProfileModel.AccountStatus accountStatus)
+        public Task<int> UpdateUserAccountStatus(int id, string accountStatus)
         {
-            var query = "update [UserProfile]" +
-                        "set AccountStatus = @AccountStatus" +
-                        "where Id = @Id;";
+            var query = "update [UserProfile] set AccountStatus = @AccountStatus where UserAccountId = @UserAccountId;";
 
             return _dataGateway.SaveData(query,
                                          new
-                                         {
-                                             Id = id,
-                                             AccountStatus = accountStatus.ToString()
+                                         {                                   
+                                             AccountStatus = accountStatus.ToString(),
+                                             UserAccountId = id
                                          },
-                                         _connectionString.SqlConnectionString); ;
+                                         _connectionString.SqlConnectionString); 
         }
 
         public Task<int> DeleteUserProfileById(int id)
         {
-            var query = "delete from [UserProfile] where Id = @Id";
+            var query = "delete from [UserProfile] where UserAccountId = @UserAccountId";
 
             return _dataGateway.SaveData(query,
                                          new
                                          {
-                                             Id = id
+                                             UserAccountId = id
                                          },
                                          _connectionString.SqlConnectionString);
         }

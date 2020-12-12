@@ -4,8 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using static Models.UserProfileModel;
 
 namespace DataAccessUnitTestes
 {
@@ -26,7 +28,7 @@ namespace DataAccessUnitTestes
                 UserAccountModel userAccountModel = new UserAccountModel("TestUser" + i, "TestPass" + i, "TestEmail" + i);
                 userAccountModel.Id = await testRepo.InsertUserAccountTestRows(userAccountModel);
 
-                UserProfileModel model = new UserProfileModel($"FirstName {i}", $"LastName {i}", DateTime.Now, DateTime.Today.Date,
+                UserProfileModel model = new UserProfileModel($"FirstName{i}", $"LastName{i}", DateTime.Now, DateTime.Today.Date,
                      UserProfileModel.AccountType.User.ToString(), UserProfileModel.AccountStatus.Active.ToString(), userAccountModel.Id);
                 await testRepo.InsertUserProfileTestRows(model);
 
@@ -67,5 +69,80 @@ namespace DataAccessUnitTestes
             //Assert
             Assert.IsTrue(actualAccount.LastName == lastName);
         }
+
+        [DataTestMethod]
+        [DataRow(1, "LastName1")]
+        [DataRow(2, "LastName2")]
+        [DataRow(3, "LastName3")]
+        [DataRow(4, "LastName4")]
+        public async Task GetUserProfileByAccountId_UseProfileExists_ReturnCorrectUsername(int accountId, string expectedLastName)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+
+
+            // Act
+            var userProfileModel = await userProfile.GetUserProfileByAccountId(accountId);
+            var actualLastName = userProfileModel.LastName;
+
+            // Assert
+            Assert.IsTrue(actualLastName == expectedLastName);
+            
+        }
+
+        [DataTestMethod]
+        [DataRow(1, AccountType.Admin)]
+        [DataRow(3, AccountType.Admin)]
+        public async Task UpdateUserAccountType(int accountId, AccountType accountType)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            // Act
+            var userProfileModel = await userProfile.UpdateUserAccountType(accountId, accountType.ToString());
+            var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
+            var actualAccountType = retrievedAccount.accountType;
+
+            // Assert
+            Assert.IsTrue(accountType.ToString() == actualAccountType);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, AccountStatus.Suspended)]
+        [DataRow(2, AccountStatus.Disabled)]
+        public async Task UpdateUserAccountStatus(int accountId, AccountStatus accountStatus)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            // Act
+            var userProfileModel = await userProfile.UpdateUserAccountStatus(accountId, accountStatus.ToString());
+            var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
+            var actualAccountStatus = retrievedAccount.accountStatus;
+
+            // Assert
+            Assert.IsTrue(accountStatus.ToString() == actualAccountStatus);
+        }
+
+        [DataTestMethod]
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        public async Task DeleteUserProfileById(int accountId)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            // Act
+            var userProfileModel = await userProfile.DeleteUserProfileById(accountId);
+            var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
+
+            // Assert
+            Assert.IsNull(retrievedAccount);
+        }
     }
+
+    
 }

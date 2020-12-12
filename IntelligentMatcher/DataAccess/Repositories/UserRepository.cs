@@ -17,13 +17,13 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
-        public Task<List<UserListTransferModel>> GetUserList()
+        public async Task<List<UserListTransferModel>> GetUserList()
         {
-            var query = "select [ua.Id], [FirstName], [LastName], [Username], [AccountCreationDate]" +
-                        "from [UserAccount ua] inner join [UserProfile up]" +
-                        "on ua.Id = up.Id;";
+            var query = "select UserAccount.[Id], [FirstName], [LastName], [Username], [AccountCreationDate]" +
+                        "from [UserAccount] inner join [UserProfile]" +
+                        "on UserAccount.Id = UserProfile.UserAccountId;";
 
-            return _dataGateway.LoadData<UserListTransferModel, dynamic>(query,
+            return await _dataGateway.LoadData<UserListTransferModel, dynamic>(query,
                                                                           new { },
                                                                           _connectionString.SqlConnectionString);
         }

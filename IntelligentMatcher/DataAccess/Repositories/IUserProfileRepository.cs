@@ -9,7 +9,7 @@ namespace DataAccess.Repositories
         Task<int> DeleteUserProfileById(int id);
         Task<UserProfileModel> GetUserProfileByAccountId(int accountId);
         Task<UserProfileModel> GetUserProfileById(int id);
-        Task<int> UpdateUserAccountStatus(int id, UserProfileModel.AccountStatus accountStatus);
-        Task<int> UpdateUserAccountType(int id, UserProfileModel.AccountType accountType);
+        Task<int> UpdateUserAccountStatus(int id, string accountStatus);
+        Task<int> UpdateUserAccountType(int id, string accountType);
     }
 }
