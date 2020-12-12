@@ -35,7 +35,7 @@ namespace Logging
 
         public ILogService CreateLogService<T>(List<ILogTarget> targets)
         {
-            return new LogService(_logTargets);
+            return new LogService<T>(_logTargets);
         }
     }
 }
