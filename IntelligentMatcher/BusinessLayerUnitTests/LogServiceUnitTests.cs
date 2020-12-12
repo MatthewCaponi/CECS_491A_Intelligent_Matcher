@@ -32,7 +32,8 @@ namespace BusinessLayerUnitTests
             //Assert
             string actualMessage = LogTargetHelper.ReadTestLog(logPath);
             Debug.WriteLine("Message: " + actualMessage);
-            Assert.IsTrue(actualMessage != null);
+            StringAssert.Contains(actualMessage, message);
+            StringAssert.Contains(actualMessage, ipAddress);
         }
 
     }

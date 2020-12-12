@@ -21,5 +21,10 @@ namespace Logging
         {
             return _eventName;
         }
+
+        public string GetEventInfo()
+        {
+            return $"{_userId} {_url}";
+        }
     }
 }

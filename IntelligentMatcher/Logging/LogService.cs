@@ -90,7 +90,7 @@ namespace Logging
             var currentDateTime = GetCurrentDateTime();
             var caller = SetCaller(typeof(T));
             var eventName = loggingEvent.GetEventName();
-            WriteToTargets(currentDateTime, caller, message, LogLevel.trace, eventName);
+            WriteToTargets(currentDateTime, caller, message, LogLevel.trace, loggingEvent, eventName);
         }
 
         public void LogTrace(string message)
@@ -118,7 +118,7 @@ namespace Logging
             return DateTime.UtcNow;
         }
 
-        private void WriteToTargets(DateTime dateTime, string caller, string message, LogLevel logLevel, EventName eventName)
+        private void WriteToTargets(DateTime dateTime, string caller, string message, LogLevel logLevel, ILoggingEvent loggingEvent, EventName eventName)
         {
             foreach (ILogTarget target in _logTargets)
             {
@@ -126,7 +126,7 @@ namespace Logging
 
                 if (targetType == typeof(TextLogTarget))
                 {
-                    var builtMessage = $"{ dateTime } { logLevel.ToString() } { caller } { message }";
+                    var builtMessage = $"{ dateTime } { logLevel.ToString() } { caller } {loggingEvent.GetEventInfo()} {message}";
                     ILogTarget logTarget = new TextLogTarget();
                     logTarget.LogToTarget(builtMessage, eventName);
                 }

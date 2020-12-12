@@ -5,5 +5,8 @@
     public interface ILoggingEvent
     {
         EventName GetEventName();
+
+        string GetEventInfo();
+
     }
 }
