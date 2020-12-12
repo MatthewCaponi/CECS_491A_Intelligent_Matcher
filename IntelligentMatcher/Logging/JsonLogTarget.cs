@@ -6,9 +6,25 @@ namespace Logging
 {
     public class JsonLogTarget : ILogTarget
     {
-        public void LogToTarget(string message, EventName eventname)
+        public void LogToTarget(string message, EventName eventName)
         {
-            string logPath = "logs/" + eventname.ToString() + "/" + eventname.ToString() + "-log- " + DateTime.Today + ".json";
+
+            // Read the file as one string. 
+            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
+            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
+            string logPath = Path.Combine(directory, fileName);
+
+
+            message = "{'message':'" + message + "'}";
+
+            //create the log directory under the user profile if it does not exist
+            if (!Directory.Exists(directory))
+            {
+                DirectoryInfo di = Directory.CreateDirectory(directory);
+            }
+
+            //create the file first then write
+            Console.WriteLine(logPath);
             if (!File.Exists(logPath))
             {
 
@@ -17,6 +33,7 @@ namespace Logging
                     writer.WriteLine(message);
                 }
             }
+            //if file exists just write to the log file
             else
             {
                 using (StreamWriter writer = File.AppendText(logPath))
@@ -24,8 +41,6 @@ namespace Logging
                     writer.WriteLine(message);
                 }
             }
-
         }
     }
-
 }
