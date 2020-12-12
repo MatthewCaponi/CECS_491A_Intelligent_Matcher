@@ -82,15 +82,15 @@ namespace Logging
 
         public void LogTrace(ILoggingEvent loggingEvent, Exception e, string message)
         {
-            var currentDateTime = GetCurrentDateTime();
-            var caller = SetCaller(typeof(T));
-            var eventName = loggingEvent.GetEventName();
-            WriteToTargets(currentDateTime, caller, message, LogLevel.trace, eventName);
+
         }
 
         public void LogTrace(ILoggingEvent loggingEvent, string message)
         {
-            throw new NotImplementedException();
+            var currentDateTime = GetCurrentDateTime();
+            var caller = SetCaller(typeof(T));
+            var eventName = loggingEvent.GetEventName();
+            WriteToTargets(currentDateTime, caller, message, LogLevel.trace, eventName);
         }
 
         public void LogTrace(string message)
@@ -152,7 +152,6 @@ namespace Logging
                     var builtMessage = $"{ logLevel.ToString() } : { dateTime } { caller } { message }";
                     ILogTarget logTarget = new ConsoleLogTarget();
                     logTarget.LogToTarget(builtMessage, eventName);
-
                 }
             }
         }
