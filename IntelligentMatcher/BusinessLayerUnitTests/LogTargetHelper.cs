@@ -24,26 +24,26 @@ namespace BusinessLayerUnitTests
     }
 }
 
- public class ConsoleOutputReader : IDisposable
+public class ConsoleOutputChecker : IDisposable
+{
+    private StringWriter stringWriter;
+    private TextWriter originalOutput;
+
+    public ConsoleOutputChecker()
     {
-        StringWriter sw;
-        TextWriter oo;
-
-        public ConsoleOutputReader()
-        {
-            sw = new StringWriter();
-        oo = Console.Out;
-            Console.SetOut(sw);
-        }
-
-        public string GetOuput()
-        {
-            return sw.ToString();
-        }
-
-        public void Dispose()
-        {
-            Console.SetOut(oo);
-            oo.Dispose();
-        }
+        stringWriter = new StringWriter();
+        originalOutput = Console.Out;
+        Console.SetOut(stringWriter);
     }
+
+    public string GetOuput()
+    {
+        return stringWriter.ToString();
+    }
+
+    public void Dispose()
+    {
+        Console.SetOut(originalOutput);
+        stringWriter.Dispose();
+    }
+}
