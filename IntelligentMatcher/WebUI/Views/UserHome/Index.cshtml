@@ -1,8 +1,87 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "User Management Home";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">User List</h1>
+    <div class="search">
+        <input type="text" />
+        <button>Search</button>
+    </div>
+    <div class="adduser"><button>Add User</button></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">User ID</th>
+                <th scope="col">User Name</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Account Creation Date</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>Newcomer</td>
+                <td>Bear</td>
+                <td>Hugger</td>
+                <td>December 11, 2020</td>
+                <td><button>Edit</button></td>
+                <td>
+                    <div class="dropdown">
+                        <button class="userdrop">...</button>
+                        <div class="useractioncontent">
+                            <a href="#">Change Username</a>
+                            <a href="#">Change Password</a>
+                            <a href="#">Change E-Mail</a>
+                            <a href="#">Suspend User</a>
+                            <a href="#">Ban/Delete User</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Veteran</td>
+                <td>Great</td>
+                <td>Tiger</td>
+                <td>January 3, 2009</td>
+                <td><button>Edit</button></td>
+                <td>
+                    <div class="dropdown">
+                        <button class="userdrop">...</button>
+                        <div class="useractioncontent">
+                            <a href="#">Change Username</a>
+                            <a href="#">Change Password</a>
+                            <a href="#">Change E-Mail</a>
+                            <a href="#">Suspend User</a>
+                            <a href="#">Ban/Delete User</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">3</th>
+                <td>Laziness</td>
+                <td>Robbie</td>
+                <td>Rotten</td>
+                <td>November 17, 2016</td>
+                <td><button>Edit</button></td>
+                <td>
+                    <div class="dropdown">
+                        <button class="userdrop">...</button>
+                        <div class="useractioncontent">
+                            <a href="#">Change Username</a>
+                            <a href="#">Change Password</a>
+                            <a href="#">Change E-Mail</a>
+                            <a href="#">Suspend User</a>
+                            <a href="#">Ban/Delete User</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
