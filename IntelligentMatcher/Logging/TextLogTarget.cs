@@ -31,4 +31,8 @@ namespace Logging
 
         }
     }
+
+    //Writes to the log folder and selects the correct folder baised on the enum value
+
+
 }

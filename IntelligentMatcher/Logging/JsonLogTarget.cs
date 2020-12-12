@@ -8,13 +8,6 @@ namespace Logging
     {
         public void LogToTarget(string message, EventName eventname)
         {
-            WriteLog(message, eventname);
-        }
-
-
-        private void WriteLog(string message, EventName eventname)
-        {
-
             string logPath = "logs/" + eventname.ToString() + "/" + eventname.ToString() + "-log- " + DateTime.Today + ".json";
             if (!File.Exists(logPath))
             {
@@ -34,4 +27,5 @@ namespace Logging
 
         }
     }
+
 }
