@@ -6,9 +6,10 @@ namespace Logging
 {
     public class ConsoleLogTarget : ILogTarget
     {
-        public void LogToTarget(string message)
+        public void LogToTarget(string message , EventName eventname)
         {
-            throw new NotImplementedException();
+
+            Console.WriteLine("New " + eventname.ToString() + ": " + message);
         }
 
     }
