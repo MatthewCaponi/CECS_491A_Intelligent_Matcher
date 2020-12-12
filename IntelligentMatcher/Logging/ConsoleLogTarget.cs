@@ -10,5 +10,6 @@ namespace Logging
         {
             throw new NotImplementedException();
         }
+
     }
 }
