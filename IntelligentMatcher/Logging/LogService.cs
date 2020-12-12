@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Logging
 {
@@ -82,14 +84,9 @@ namespace Logging
         {
             var currentDateTime = GetCurrentDateTime();
             var caller = SetCaller(typeof(T));
-
-            WriteToTargets(currentDateTime, caller, message, LogLevel.trace);
-
-            
-            
+            var eventName = loggingEvent.GetEventName();
+            WriteToTargets(currentDateTime, caller, message, LogLevel.trace, eventName);
         }
-
-        
 
         public void LogTrace(ILoggingEvent loggingEvent, string message)
         {
@@ -121,7 +118,7 @@ namespace Logging
             return DateTime.UtcNow;
         }
 
-        private void WriteToTargets(DateTime dateTime, string caller, string message, LogLevel logLevel)
+        private void WriteToTargets(DateTime dateTime, string caller, string message, LogLevel logLevel, EventName eventName)
         {
             foreach (ILogTarget target in _logTargets)
             {
@@ -131,21 +128,33 @@ namespace Logging
                 {
                     var builtMessage = $"{ dateTime } { logLevel.ToString() } { caller } { message }";
                     ILogTarget logTarget = new TextLogTarget();
-                    logTarget.LogToTarget(builtMessage);
+                    logTarget.LogToTarget(builtMessage, eventName);
                 }
-
 
                 else if (targetType == typeof(JsonLogTarget))
                 {
+                    var anonLog = new
+                    {
+                        DateTime = dateTime,
+                        LogLevel = logLevel.ToString(),
+                        Caller = caller,
+                        Message = message
+                    };
 
+                    var builtMessage = JsonSerializer.Serialize(anonLog);
+
+                    ILogTarget logTarget = new JsonLogTarget();
+
+                    logTarget.LogToTarget(builtMessage, eventName);
                 }
                 else if (targetType == typeof(ConsoleLogTarget))
                 {
+                    var builtMessage = $"{ logLevel.ToString() } : { dateTime } { caller } { message }";
+                    ILogTarget logTarget = new ConsoleLogTarget();
+                    logTarget.LogToTarget(builtMessage, eventName);
 
                 }
             }
-
-
         }
             
         private string SetCaller(Type type)
