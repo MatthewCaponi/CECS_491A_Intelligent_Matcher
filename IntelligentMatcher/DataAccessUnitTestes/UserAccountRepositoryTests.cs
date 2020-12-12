@@ -48,6 +48,7 @@ namespace DataAccessUnitTestes
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             //Act
+            await userAccount.CreateUserAccount(model);
             var actualAccount = await userAccount.GetAccountByUsername(username);
 
             //Assert
