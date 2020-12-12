@@ -1,15 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Logging
 {
     public class ConsoleLogTarget : ILogTarget
     {
-        public void LogToTarget(string message)
+        private StringWriter stringWriter;
+        private TextWriter originalOutput;
+
+        public void LogToTarget(string message , EventName eventname)
         {
-            throw new NotImplementedException();
+            Console.Write("New " + eventname.ToString() + ": " + message);
+
         }
+
+
 
     }
 }
+
+
+

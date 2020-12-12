@@ -27,8 +27,6 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                //based on error number
-                throw new UserNotFoundException("User not found");   
                 return null;
             }
             

@@ -13,7 +13,7 @@ namespace Logging
             _logTargets = logTargets;
         }
 
-        public void LogCritical(ILoggingEvent loggingEvent, Exception e, string message)
+        public void LogCritical<T>(ILoggingEvent loggingEvent, Exception e, string message)
         {
 
             Console.WriteLine("An error has occured");
@@ -32,6 +32,10 @@ namespace Logging
             throw new NotImplementedException();
         }
 
+        public void LogCritical(ILoggingEvent loggingEvent, Exception e, string message)
+        {
+            throw new NotImplementedException();
+        }
 
         public void LogDebug(ILoggingEvent loggingEvent, Exception e, string message)
         {
@@ -80,16 +84,8 @@ namespace Logging
 
         public void LogTrace(ILoggingEvent loggingEvent, Exception e, string message)
         {
-            var currentDateTime = GetCurrentDateTime();
-            var caller = SetCaller(typeof(T));
-
-            WriteToTargets(currentDateTime, caller, message, LogLevel.trace);
-
-            
-            
+            throw new NotImplementedException();
         }
-
-        
 
         public void LogTrace(ILoggingEvent loggingEvent, string message)
         {
@@ -121,37 +117,16 @@ namespace Logging
             return DateTime.UtcNow;
         }
 
-        private void WriteToTargets(DateTime dateTime, string caller, string message, LogLevel logLevel)
+        private void SetMessage(DateTime dateTime, T caller, DateTime date, string message)
         {
-            foreach (ILogTarget target in _logTargets)
-            {
-                Type targetType = target.GetType();
-
-                if (targetType == typeof(TextLogTarget))
-                {
-                    var builtMessage = $"{ dateTime } { logLevel.ToString() } { caller } { message }";
-                    ILogTarget logTarget = new TextLogTarget();
-                    logTarget.LogToTarget(builtMessage);
-                }
-
-
-                else if (targetType == typeof(JsonLogTarget))
-                {
-
-                }
-                else if (targetType == typeof(ConsoleLogTarget))
-                {
-
-                }
-            }
-
 
         }
-            
-        private string SetCaller(Type type)
+
+        private void WriteToTargets(List<ILogTarget> targets)
         {
-            return type.ToString();
+
         }
 
+       
     }
 }
