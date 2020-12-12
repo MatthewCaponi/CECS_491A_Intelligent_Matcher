@@ -394,20 +394,32 @@ namespace Logging
             Console.WriteLine(logPath);
             if (!File.Exists(logPath))
             {
-
-                using (StreamWriter writer = File.CreateText(logPath))
+                try
                 {
-                    writer.WriteLine(message);
+                    using (StreamWriter writer = File.CreateText(logPath))
+                    {
+                        writer.WriteLine(message);
+                    }
+                }
+                catch
+                {
+                    throw new IOException("Cannot Write To file");
                 }
             }
             //if file exists just write to the log file
             else
             {
-                using (StreamWriter writer = File.AppendText(logPath))
-                {
-                    writer.WriteLine(message);
+                try { 
+                    using (StreamWriter writer = File.AppendText(logPath))
+                    {
+                        writer.WriteLine(message);
+                    }
                 }
-            }
+                catch
+                {
+                    throw new IOException("Cannot Write To file");
+                }
+        }
 
 
         
