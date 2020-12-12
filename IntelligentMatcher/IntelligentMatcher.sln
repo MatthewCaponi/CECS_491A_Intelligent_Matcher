@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessUnitTestes", "DataAccessUnitTestes\DataAccessUnitTestes.csproj", "{B07072F3-D66B-42C5-9883-9EB1C90D4FF0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayerUnitTests", "BusinessLayerUnitTests\BusinessLayerUnitTests.csproj", "{A0DAAA98-0246-4763-9236-115307F5642C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{B07072F3-D66B-42C5-9883-9EB1C90D4FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B07072F3-D66B-42C5-9883-9EB1C90D4FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B07072F3-D66B-42C5-9883-9EB1C90D4FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0DAAA98-0246-4763-9236-115307F5642C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0DAAA98-0246-4763-9236-115307F5642C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0DAAA98-0246-4763-9236-115307F5642C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0DAAA98-0246-4763-9236-115307F5642C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
