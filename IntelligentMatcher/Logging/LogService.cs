@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -126,30 +127,95 @@ namespace Logging
 
                 if (targetType == typeof(TextLogTarget))
                 {
-                    var builtMessage = $"{ dateTime } { logLevel.ToString() } { caller } {loggingEvent.GetEventInfo()} {message}";
+                    var builtMessage = $"{ dateTime } { logLevel.ToString() } { caller } {loggingEvent.GetEventInfo()} { loggingEvent.GetEventInfo().ToString() } {message}";
                     ILogTarget logTarget = new TextLogTarget();
                     logTarget.LogToTarget(builtMessage, eventName);
                 }
 
                 else if (targetType == typeof(JsonLogTarget))
                 {
-                    var anonLog = new
+
+                    if (loggingEvent.GetEventName().ToString() == "UserEvent")
                     {
-                        DateTime = dateTime,
-                        LogLevel = logLevel.ToString(),
-                        Caller = caller,
-                        Message = message
-                    };
+                        string[] logginEventsSplit = loggingEvent.GetEventInfo().ToString().Split(' ');
 
-                    var builtMessage = JsonSerializer.Serialize(anonLog);
+                        string userID = logginEventsSplit[0];
+                        string ipAddress = logginEventsSplit[1];
+                        string logType = logginEventsSplit[2];
 
-                    ILogTarget logTarget = new JsonLogTarget();
+                        var anonLog = new
+                        {
+                            DateTime = dateTime,
+                            LogLevel = logLevel.ToString(),
+                            Caller = caller,
+                            Message = message,
+                            UserID = userID,
+                            IP = ipAddress,
+                            Type = logType
+                        };
 
-                    logTarget.LogToTarget(builtMessage, eventName);
+                        var builtMessage = JsonSerializer.Serialize(anonLog);
+
+                        ILogTarget logTarget = new JsonLogTarget();
+
+                        logTarget.LogToTarget(builtMessage, eventName);
+                    }
+                    else if (loggingEvent.GetEventName().ToString() == "NetworkEvent")
+                    {
+                        string[] logginEventsSplit = loggingEvent.GetEventInfo().ToString().Split(' ');
+
+                        string userID = logginEventsSplit[0];
+                        string ipAddress = logginEventsSplit[1];
+                        string pageRequest = logginEventsSplit[2];
+                        string urlReferrer = logginEventsSplit[3];
+                        string userAgent = logginEventsSplit[4];
+
+                        var anonLog = new
+                        {
+                            DateTime = dateTime,
+                            LogLevel = logLevel.ToString(),
+                            Caller = caller,
+                            Message = message,
+                            UserID = userID,
+                            IP = ipAddress,
+                            PageRequest = pageRequest,
+                            UrlRefferer = urlReferrer,
+                            UserAgent = userAgent
+                        };
+
+                        var builtMessage = JsonSerializer.Serialize(anonLog);
+
+                        ILogTarget logTarget = new JsonLogTarget();
+
+                        logTarget.LogToTarget(builtMessage, eventName);
+                    }
+                    else if (loggingEvent.GetEventName().ToString() == "SecurityEvent")
+                    {
+                        string[] logginEventsSplit = loggingEvent.GetEventInfo().ToString().Split(' ');
+
+                        string userID = logginEventsSplit[0];
+                        string url = logginEventsSplit[1];
+
+                        var anonLog = new
+                        {
+                            DateTime = dateTime,
+                            LogLevel = logLevel.ToString(),
+                            Caller = caller,
+                            Message = message,
+                            UserID = userID,
+                            URL = url
+                        };
+
+                        var builtMessage = JsonSerializer.Serialize(anonLog);
+
+                        ILogTarget logTarget = new JsonLogTarget();
+
+                        logTarget.LogToTarget(builtMessage, eventName);
+                    }
                 }
                 else if (targetType == typeof(ConsoleLogTarget))
                 {
-                    var builtMessage = $"{ logLevel.ToString() } : { dateTime } { caller } { message }";
+                    var builtMessage = $"{ logLevel.ToString() } : { dateTime } { caller } { loggingEvent.GetEventInfo().ToString() } { message }";
                     ILogTarget logTarget = new ConsoleLogTarget();
                     logTarget.LogToTarget(builtMessage, eventName);
                 }

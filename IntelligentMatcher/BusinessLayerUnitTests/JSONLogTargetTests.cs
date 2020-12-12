@@ -1,36 +1,37 @@
-using Logging;
+﻿using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace BusinessLayerUnitTests
 {
     [TestClass]
-    public class TextLogTargetTests
+    public class JOSNLogTargetTests
     {
         [TestInitialize()]
-       public void Init()
+        public void Init()
         {
 
-          
+
         }
 
         [TestCleanup()]
         public void CleanUp()
         {
 
-      
+
         }
 
-        
+
+
+
 
         [DataTestMethod]
-        [DataRow("DebugLogTest", EventName.UserEvent)]
-        public void LogToTarget_WriteUserEventToTextLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
+        [DataRow("TextLogTest", EventName.UserEvent)]
+        public void LogToTarget_WriteUserEventToJSONLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
         {
             // Arrange
-            ILogTarget logTarget = new TextLogTarget();
+            ILogTarget logTarget = new JsonLogTarget();
 
             string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
             string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
@@ -44,7 +45,6 @@ namespace BusinessLayerUnitTests
 
             //Assert
             string actualMessage = LogTargetHelper.ReadTestLog(logPath);
-            Debug.WriteLine("Message: " + actualMessage);
             Assert.IsTrue(actualMessage == expectedMessage.ToString());
 
         }
@@ -54,10 +54,10 @@ namespace BusinessLayerUnitTests
 
         [DataTestMethod]
         [DataRow("TextLogTest", EventName.SecurityEvent)]
-        public void LogToTarget_WriteSecurityEventToTextLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
+        public void LogToTarget_WriteSecurityEventToJSONLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
         {
             // Arrange
-            ILogTarget logTarget = new TextLogTarget();
+            ILogTarget logTarget = new JsonLogTarget();
 
             string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
             string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
@@ -77,10 +77,10 @@ namespace BusinessLayerUnitTests
 
         [DataTestMethod]
         [DataRow("TextLogTest", EventName.NetworkEvent)]
-        public void LogToTarget_WriteNetworkEventToTextLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
+        public void LogToTarget_WriteNetworkEventToJSONLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
         {
             // Arrange
-            ILogTarget logTarget = new TextLogTarget();
+            ILogTarget logTarget = new JsonLogTarget();
 
             string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
             string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
@@ -97,8 +97,6 @@ namespace BusinessLayerUnitTests
             Assert.IsTrue(actualMessage == expectedMessage.ToString());
 
         }
-
-
 
 
 
