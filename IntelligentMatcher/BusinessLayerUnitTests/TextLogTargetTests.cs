@@ -18,7 +18,9 @@ namespace BusinessLayerUnitTests
         [TestCleanup()]
         public void CleanUp()
         {
-
+            var disposer = new ConsoleOutputReader();
+            disposer.Dispose();
+      
         }
 
         
@@ -178,14 +180,51 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new ConsoleLogTarget();
 
-
-            // 
-
-
+            //act
             logTarget.LogToTarget(expectedMessage, eventName);
-            string actualMessage = expectedMessage;
+
+
             //Assert
-            Assert.IsTrue(actualMessage == expectedMessage.ToString());
+            string actualmessage = ConsoleLogTarget.GetConsoleOutput();
+            Assert.AreEqual(actualmessage, expectedMessage);
+
+
+        }
+
+
+        [DataTestMethod]
+        [DataRow("TextLogTest", EventName.SecurityEvent)]
+        public void LogToTarget_WriteSecurityEventToConsoleLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
+        {
+            // Arrange
+            ILogTarget logTarget = new ConsoleLogTarget();
+
+            //act
+            logTarget.LogToTarget(expectedMessage, eventName);
+
+
+            //Assert
+            string actualmessage = ConsoleLogTarget.GetConsoleOutput();
+            Assert.AreEqual(actualmessage, expectedMessage);
+
+
+        }
+
+        [DataTestMethod]
+        [DataRow("TextLogTest", EventName.UserEvent)]
+        public void LogToTarget_WriteUserEventToConsoleLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
+        {
+            // Arrange
+            ILogTarget logTarget = new ConsoleLogTarget();
+
+            //act
+            logTarget.LogToTarget(expectedMessage, eventName);
+
+
+            //Assert
+            string actualmessage = ConsoleLogTarget.GetConsoleOutput();
+            Assert.AreEqual(actualmessage, expectedMessage);
+
 
         }
     }

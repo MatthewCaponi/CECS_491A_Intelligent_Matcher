@@ -23,3 +23,27 @@ namespace BusinessLayerUnitTests
         }
     }
 }
+
+ public class ConsoleOutputReader : IDisposable
+    {
+        StringWriter sw;
+        TextWriter oo;
+
+        public ConsoleOutputReader()
+        {
+            sw = new StringWriter();
+        oo = Console.Out;
+            Console.SetOut(sw);
+        }
+
+        public string GetOuput()
+        {
+            return sw.ToString();
+        }
+
+        public void Dispose()
+        {
+            Console.SetOut(oo);
+            oo.Dispose();
+        }
+    }
