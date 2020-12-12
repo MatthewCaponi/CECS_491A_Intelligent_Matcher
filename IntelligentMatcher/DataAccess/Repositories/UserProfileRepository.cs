@@ -52,7 +52,7 @@ namespace DataAccess.Repositories
         public async Task<int> CreateUserProfile(UserProfileModel model)
         {
             var query = "insert into [UserProfile]([FirstName], [LastName], [DateOfBirth], [AccountCreationDate], [AccountType], [AccountStatus], [UserAccountId])" +
-                        "values (@FirstName, @LastName, @DateOfBirth, @AccountCreationDate, @AccountType, @AccountStatus, @UserAccountModel); set @Id = SCOPE_IDENTITY(); ";
+                        "values (@FirstName, @LastName, @DateOfBirth, @AccountCreationDate, @AccountType, @AccountStatus, @UserAccountId); set @Id = SCOPE_IDENTITY(); ";
             DynamicParameters p = new DynamicParameters();
 
             p.Add("FirstName", model.FirstName);
@@ -61,7 +61,7 @@ namespace DataAccess.Repositories
             p.Add("AccountCreationDate", model.AccountCreationDate);
             p.Add("AccountType", model.accountType);
             p.Add("AccountStatus", model.accountStatus);
-            p.Add("UserAccountId", model.userAccountModel);
+            p.Add("UserAccountId", model.userAccountModel.Id);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);

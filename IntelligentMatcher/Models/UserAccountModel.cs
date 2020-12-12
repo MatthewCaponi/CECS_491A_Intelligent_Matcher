@@ -22,5 +22,10 @@ namespace Models
             Password = password;
             EmailAddress = email;
         }
+
+        public UserAccountModel(int id)
+        {
+            this.Id = id;
+        }
     }
 }

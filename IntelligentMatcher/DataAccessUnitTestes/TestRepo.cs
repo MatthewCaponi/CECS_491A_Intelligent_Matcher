@@ -40,7 +40,7 @@ namespace DataAccessUnitTestes
         public async Task<int> InsertUserProfileTestRows(UserProfileModel model)
         {
             var query = "insert into [UserProfile]([FirstName], [LastName], [DateOfBirth], [AccountCreationDate], [AccountType], [AccountStatus], [UserAccountId])" +
-                        "values (@FirstName, @LastName, @DateOfBirth, @AccountCreationDate, @AccountType, @AccountStatus, @UserAccountModel); set @Id = SCOPE_IDENTITY(); ";
+                        "values (@FirstName, @LastName, @DateOfBirth, @AccountCreationDate, @AccountType, @AccountStatus, @UserAccountId); set @Id = SCOPE_IDENTITY(); ";
             DynamicParameters p = new DynamicParameters();
 
             p.Add("FirstName", model.FirstName);

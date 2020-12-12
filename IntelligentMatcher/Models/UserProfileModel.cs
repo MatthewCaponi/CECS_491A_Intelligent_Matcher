@@ -12,13 +12,13 @@ namespace Models
         public  DateTime DateOfBirth { get; set; }
         public DateTime AccountCreationDate { get; set; }
         public enum AccountType { Admin, User };
-        public AccountType accountType { get; set; }
+        public string accountType { get; set; }
         public enum AccountStatus { Active, Disabled, Suspended, Banned, Deleted}
-        public AccountStatus accountStatus { get; set; }
+        public string accountStatus { get; set; }
         public UserAccountModel userAccountModel { get; set; }
 
 
-        public UserProfileModel(string firstName, string lastName, DateTime dateOfBirth, DateTime accountCreationDate, AccountType accountType, AccountStatus accountStatus, UserAccountModel userAccountModel)
+        public UserProfileModel(string firstName, string lastName, DateTime dateOfBirth, DateTime accountCreationDate, string accountType, string accountStatus, UserAccountModel userAccountModel)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -28,6 +28,7 @@ namespace Models
             this.accountStatus = accountStatus;
             this.userAccountModel = userAccountModel;
         }
+
 
     }
 }
