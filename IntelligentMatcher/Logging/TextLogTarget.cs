@@ -9,16 +9,15 @@ namespace Logging
     {
         public void LogToTarget(string message, EventName eventname)
         {
-            if(eventname == EventName.SecurityEvent)
-            {
-                WriteSecurityLog(message, eventname);
-            }
+
+            WriteLog(message, eventname);
+            
 
         }
 
         //Writes to the security log folder
         //Checks to see if a log file alrady exists for the day if so appends if not create a new one and append to it
-        private void WriteSecurityLog(string message, , EventName eventname)
+        private void WriteLog(string message, EventName eventname)
         {
 
             string logPath = "logs/" + eventname.ToString() + "/" + eventname.ToString() + "-log- " + DateTime.Today + ".txt";
