@@ -15,7 +15,7 @@ namespace Logging
 
         public void LogCritical<T>(ILoggingEvent loggingEvent, Exception e, string message)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Hello");
         }
 
         public void LogCritical(ILoggingEvent loggingEvent, string message)
