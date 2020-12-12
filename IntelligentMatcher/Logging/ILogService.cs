@@ -4,7 +4,6 @@ using System.Text;
 
 namespace Logging
 {
-    public enum LogLevel { trace, debug, info, warning, error, critical}
     public interface ILogService
     {
         void LogTrace(ILoggingEvent loggingEvent, Exception e, string message);
