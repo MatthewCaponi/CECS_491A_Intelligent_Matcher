@@ -2,6 +2,6 @@
 {
     public interface ILogTarget
     {
-        void LogToTarget(string message, EventName eventName);
+        void LogToTarget(string message);
     }
 }
