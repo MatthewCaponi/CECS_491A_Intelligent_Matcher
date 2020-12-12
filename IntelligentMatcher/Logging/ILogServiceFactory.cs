@@ -13,7 +13,7 @@ namespace Logging
 
     public interface ILogServiceFactory
     {
-        ILogService CreateLogService<T>(List<ILogTarget> targets);
+        ILogService CreateLogService<T>();
 
         void AddTarget(TargetType targetType);
     }

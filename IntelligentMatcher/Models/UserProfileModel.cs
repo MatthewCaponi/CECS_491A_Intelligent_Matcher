@@ -17,6 +17,7 @@ namespace Models
         public string accountStatus { get; set; }
         public UserAccountModel userAccountModel { get; set; }
 
+<<<<<<< HEAD
 
         public UserProfileModel(string firstName, string lastName, DateTime dateOfBirth, DateTime accountCreationDate, string accountType, string accountStatus, UserAccountModel userAccountModel)
         {
@@ -30,5 +31,7 @@ namespace Models
         }
 
 
+=======
+>>>>>>> acafb279256d41be59c257ee0f2cd09db05bcad8
     }
 }

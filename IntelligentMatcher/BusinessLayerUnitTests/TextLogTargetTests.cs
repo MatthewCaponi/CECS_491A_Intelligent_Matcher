@@ -1,7 +1,6 @@
 using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Diagnostics;
 using System.IO;
 
 namespace BusinessLayerUnitTests
@@ -26,7 +25,7 @@ namespace BusinessLayerUnitTests
         
 
         [DataTestMethod]
-        [DataRow("DebugLogTest", EventName.UserEvent)]
+        [DataRow("TextLogTest", EventName.UserEvent)]
         public void LogToTarget_WriteUserEventToTextLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
         {
             // Arrange
@@ -44,7 +43,6 @@ namespace BusinessLayerUnitTests
 
             //Assert
             string actualMessage = LogTargetHelper.ReadTestLog(logPath);
-            Debug.WriteLine("Message: " + actualMessage);
             Assert.IsTrue(actualMessage == expectedMessage.ToString());
 
         }
