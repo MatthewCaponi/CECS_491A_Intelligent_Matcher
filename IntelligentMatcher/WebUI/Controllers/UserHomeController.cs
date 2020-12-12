@@ -9,11 +9,11 @@ using WebUI.Models;
 
 namespace WebUI.Controllers
 {
-    public class HomeController : Controller
+    public class UserHomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<UserHomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public UserHomeController(ILogger<UserHomeController> logger)
         {
             _logger = logger;
         }
