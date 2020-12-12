@@ -1,6 +1,7 @@
 ﻿using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace BusinessLayerUnitTests
@@ -33,7 +34,7 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new JsonLogTarget();
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
+            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
             string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
             string logPath = Path.Combine(directory, fileName);
 
@@ -45,7 +46,7 @@ namespace BusinessLayerUnitTests
 
             //Assert
             string actualMessage = LogTargetHelper.ReadTestLog(logPath);
-            Assert.IsTrue(actualMessage == expectedMessage.ToString());
+            StringAssert.Contains(actualMessage, expectedMessage.ToString());
 
         }
 
@@ -59,7 +60,7 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new JsonLogTarget();
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
+            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
             string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
             string logPath = Path.Combine(directory, fileName);
 
@@ -71,7 +72,7 @@ namespace BusinessLayerUnitTests
 
             //Assert
             string actualMessage = LogTargetHelper.ReadTestLog(logPath);
-            Assert.IsTrue(actualMessage == expectedMessage.ToString());
+            StringAssert.Contains(actualMessage, expectedMessage.ToString());
 
         }
 
@@ -82,7 +83,7 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new JsonLogTarget();
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
+            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
             string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
             string logPath = Path.Combine(directory, fileName);
 
@@ -94,7 +95,8 @@ namespace BusinessLayerUnitTests
 
             //Assert
             string actualMessage = LogTargetHelper.ReadTestLog(logPath);
-            Assert.IsTrue(actualMessage == expectedMessage.ToString());
+            Debug.WriteLine(expectedMessage);
+            StringAssert.Contains(actualMessage, expectedMessage.ToString());
 
         }
 
