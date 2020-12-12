@@ -36,7 +36,7 @@ namespace DataAccess.Repositories
 
         public async Task<UserProfileModel> GetUserProfileByAccountId(int accountId)
         {
-            var query = "select [Id], [FirstName], [LastName], [DateOfBirth], [AccountCreationType], [AccountType], [AccountStatus]" +
+            var query = "select [Id], [FirstName], [LastName], [DateOfBirth], [AccountCreationDate], [AccountType], [AccountStatus], [UserAccountId]" +
                         "from [UserProfile] where UserAccountId = @UserAccountId";
 
             var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
@@ -61,7 +61,7 @@ namespace DataAccess.Repositories
             p.Add("AccountCreationDate", model.AccountCreationDate);
             p.Add("AccountType", model.accountType);
             p.Add("AccountStatus", model.accountStatus);
-            p.Add("UserAccountId", model.userAccountModel.Id);
+            p.Add("UserAccountId", model.userAccountId);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);

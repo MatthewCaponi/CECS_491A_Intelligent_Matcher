@@ -15,11 +15,15 @@ namespace Models
         public string accountType { get; set; }
         public enum AccountStatus { Active, Disabled, Suspended, Banned, Deleted}
         public string accountStatus { get; set; }
-        public UserAccountModel userAccountModel { get; set; }
+        public int userAccountId { get; set; }
 
-<<<<<<< HEAD
 
-        public UserProfileModel(string firstName, string lastName, DateTime dateOfBirth, DateTime accountCreationDate, string accountType, string accountStatus, UserAccountModel userAccountModel)
+        public UserProfileModel()
+        {
+
+        }
+
+        public UserProfileModel(string firstName, string lastName, DateTime dateOfBirth, DateTime accountCreationDate, string accountType, string accountStatus, int userAccountId)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -27,11 +31,9 @@ namespace Models
             AccountCreationDate = accountCreationDate;
             this.accountType = accountType;
             this.accountStatus = accountStatus;
-            this.userAccountModel = userAccountModel;
+            this.userAccountId = userAccountId;
         }
 
 
-=======
->>>>>>> acafb279256d41be59c257ee0f2cd09db05bcad8
     }
 }

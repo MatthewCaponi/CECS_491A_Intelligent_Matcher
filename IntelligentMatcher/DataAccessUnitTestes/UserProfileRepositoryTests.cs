@@ -12,31 +12,26 @@ namespace DataAccessUnitTestes
     [TestClass]
     public class UserProfileRepositoryTests
     {
-        //[TestInitialize()]
-        //public async Task Init()
-        //{
-        //    var numTestRows = 10;
+        [TestInitialize()]
+        public async Task Init()
+        {
+            var numTestRows = 10;
 
-        //    IDataGateway dataGateway = new DataGateway();
-        //    IConnectionStringData connectionString = new ConnectionStringData();
-        //    ITestRepo testRepo = new TestRepo(dataGateway, connectionString);
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            ITestRepo testRepo = new TestRepo(dataGateway, connectionString);
 
-        //    for (int i = 1; i <= numTestRows; ++i)
-        //    {
-        //        UserAccountModel userAccountModel = new UserAccountModel("TestUser" + i, "TestPass" + i, "TestEmail" + i);
-        //        await testRepo.InsertUserAccountTestRows(userAccountModel); 
+            for (int i = 1; i <= numTestRows; ++i)
+            {
+                UserAccountModel userAccountModel = new UserAccountModel("TestUser" + i, "TestPass" + i, "TestEmail" + i);
+                userAccountModel.Id = await testRepo.InsertUserAccountTestRows(userAccountModel);
 
-        //        UserProfileModel model = new UserProfileModel($"FirstName {i}", $"LastName {i}", DateTime.Now, DateTime.Today.Date,
-        //             UserProfileModel.AccountType.User.ToString(), UserProfileModel.AccountStatus.Active.ToString(), userAccountModel);
-        //        await testRepo.InsertUserProfileTestRows(model);
+                UserProfileModel model = new UserProfileModel($"FirstName {i}", $"LastName {i}", DateTime.Now, DateTime.Today.Date,
+                     UserProfileModel.AccountType.User.ToString(), UserProfileModel.AccountStatus.Active.ToString(), userAccountModel.Id);
+                await testRepo.InsertUserProfileTestRows(model);
 
-        //    }
-
-
-
-
-
-        //}
+            }
+        }
 
         [TestCleanup()]
         public async Task CleanUp()
@@ -59,12 +54,13 @@ namespace DataAccessUnitTestes
         {
             //Arrange
             UserAccountModel userAccountModel = new UserAccountModel(username, password, email);
-            UserProfileModel profileModel = new UserProfileModel(firstName, lastName, DateTime.Now, DateTime.Today, accountType.ToString(), accountStatus.ToString(), userAccountModel);
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            userAccountModel.Id =  await userAccount.CreateUserAccount(userAccountModel);
             IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
-            await userAccount.CreateUserAccount(userAccountModel);
+            UserProfileModel profileModel = new UserProfileModel(firstName, lastName, DateTime.Now, DateTime.Today, accountType.ToString(), accountStatus.ToString(), userAccountModel.Id);
 
             //Act
+
             await userProfile.CreateUserProfile(profileModel);
             var actualAccount = await userProfile.GetUserProfileByAccountId(userAccountModel.Id);
 
