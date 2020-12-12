@@ -15,8 +15,8 @@ namespace Logging
 
         }
 
-        //Writes to the security log folder
-        //Checks to see if a log file alrady exists for the day if so appends if not create a new one and append to it
+        //Writes to the log folder and selects the correct folder baised on the enum value
+    
         private void WriteLog(string message, EventName eventname)
         {
 
@@ -38,11 +38,7 @@ namespace Logging
 
         }
 
-        //Writes to the network log folder
-        //Checks to see if a log file alrady exists for the day if so appends if not create a new one and append to it
-   
-        //Writes to the user log folder
-        //Checks to see if a log file alrady exists for the day if so appends if not create a new one and append to it
+     
  
     }
 }
