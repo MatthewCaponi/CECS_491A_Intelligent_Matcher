@@ -7,7 +7,7 @@ namespace Logging
     public class LogSeviceFactory : ILogServiceFactory
     {
         private TargetType _targetType;
-        private List<ILogTarget> _logTargets;
+        private List<ILogTarget> _logTargets = new List<ILogTarget>();
     
         public void AddTarget(TargetType targetType)
         {
@@ -33,7 +33,7 @@ namespace Logging
             }            
         }
 
-        public ILogService CreateLogService<T>(List<ILogTarget> targets)
+        public ILogService CreateLogService<T>()
         {
             return new LogService<T>(_logTargets);
         }
