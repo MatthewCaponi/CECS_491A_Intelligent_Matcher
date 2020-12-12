@@ -19,5 +19,20 @@ namespace UserManagement
 
             return false;         
         }
+
+        public async Task<bool> DeleteUser(int accountId)
+        {
+            if (await DeletionService.DeleteAccount(accountId))
+            {
+                if (await DeletionService.DeleteProfile(accountId))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        }
     }
 }
