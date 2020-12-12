@@ -17,5 +17,17 @@ namespace Models
         public AccountStatus accountStatus { get; set; }
         public UserAccountModel userAccountModel { get; set; }
 
+
+        public UserProfileModel(string firstName, string lastName, DateTime dateOfBirth, DateTime accountCreationDate, AccountType accountType, AccountStatus accountStatus, UserAccountModel userAccountModel)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
+            AccountCreationDate = accountCreationDate;
+            this.accountType = accountType;
+            this.accountStatus = accountStatus;
+            this.userAccountModel = userAccountModel;
+        }
+
     }
 }

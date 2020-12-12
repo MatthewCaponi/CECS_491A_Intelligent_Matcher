@@ -49,7 +49,7 @@ namespace DataAccessUnitTestes
             p.Add("AccountCreationDate", model.AccountCreationDate);
             p.Add("AccountType", model.accountType);
             p.Add("AccountStatus", model.accountStatus);
-            p.Add("UserAccountId", model.userAccountModel);
+            p.Add("UserAccountId", model.userAccountModel.Id);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
