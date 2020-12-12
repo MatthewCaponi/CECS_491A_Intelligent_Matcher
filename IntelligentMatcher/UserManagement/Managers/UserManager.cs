@@ -34,5 +34,47 @@ namespace UserManagement
 
             return false;
         }
+
+        public async Task<bool> DisableUser(int accountId)
+        {
+            if (await UserAccessService.DisableAccount(accountId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> BanUser(int accountId)
+        {
+            if (await UserAccessService.Ban(accountId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EnableUser(int accountId)
+        {
+            if (await UserAccessService.EnableAccount(accountId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> SuspendUser(int accountId)
+        {
+            if (await UserAccessService.Suspend(accountId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
     }
 }

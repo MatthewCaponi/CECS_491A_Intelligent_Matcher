@@ -17,12 +17,14 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             UserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             UserAccountModel userAccount = new UserAccountModel(model.Username, model.Password, model.email);
+            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
             var userAccountId = await userAccountRepository.CreateUserAccount(userAccount);
 
             UserProfileModel userProfileModel = 
                 new UserProfileModel(model.FirstName, model.LastName, DateTime.Parse(model.DateOfBirth), 
                 DateTime.Now, model.accountType.ToString(), "Active", userAccountId);
 
+            await userProfile.UpdateUserAccountStatus(userProfileModel.Id, AccountStatus.Active.ToString());
             return userAccountId;
         }
             

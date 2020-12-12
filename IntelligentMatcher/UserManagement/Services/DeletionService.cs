@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using static Models.UserProfileModel;
 
 namespace UserManagement.Services
 {
@@ -15,9 +16,11 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
 
             UserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
             if (await userAccount.DeleteUserAccountById(id) != 0)
             {
+                await userProfile.UpdateUserAccountStatus(id, AccountStatus.Deleted.ToString());
                 return true;
             }
 
