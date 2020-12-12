@@ -22,15 +22,3 @@ C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Data
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.csproj.CopyComplete
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.dll
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.pdb
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\DataAccess.deps.json
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\DataAccess.dll
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\DataAccess.pdb
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\Models.dll
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\Models.pdb
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.csprojAssemblyReference.cache
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.AssemblyInfoInputs.cache
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.AssemblyInfo.cs
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.csproj.CoreCompileInputs.cache
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.csproj.CopyComplete
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.dll
-C:\Users\shari\Documents\GitHub\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.pdb
