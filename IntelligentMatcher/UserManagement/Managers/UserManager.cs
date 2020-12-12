@@ -7,7 +7,7 @@ using UserManagement.Services;
 
 namespace UserManagement
 {
-    public class UserManager
+    public class UserManager : IUserManager
     {
         public async Task<bool> CreateUser(UserCreateModel model)
         {

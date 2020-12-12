@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using UserManagement;
 using WebUI.Models;
 
 namespace WebUI.Controllers
@@ -12,20 +13,21 @@ namespace WebUI.Controllers
     public class UserHomeController : Controller
     {
         private readonly ILogger<UserHomeController> _logger;
+        private readonly IUserManager _userManager;
+        private readonly IUserListManager _userListManager;
 
-        public UserHomeController(ILogger<UserHomeController> logger)
+        public UserHomeController(UserManagement.IUserManager userManager, IUserListManager userListManager)
         {
-            _logger = logger;
+            _userManager = userManager;
+            _userListManager = userListManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var userList = await _userListManager.PopulateListOfUsers();
 
-        public IActionResult Privacy()
-        {
-            return View();
+            
+            return View(userList);
         }
 
         public IActionResult UserInfo()

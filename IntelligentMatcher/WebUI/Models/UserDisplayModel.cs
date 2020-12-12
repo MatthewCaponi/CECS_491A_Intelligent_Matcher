@@ -17,6 +17,14 @@ namespace WebUI.Models
         {
 
         }
+        public UserDisplayModel(int userId, string username, string firstName, string lastName, DateTime accountCreationDate)
+        {
+            UserId = userId;
+            Username = username;
+            FirstName = FirstName;
+            LastName = LastName;
+            AccountCreationDate = AccountCreationDate;
+        }
 
     }
 }

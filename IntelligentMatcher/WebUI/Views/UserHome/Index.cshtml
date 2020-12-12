@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Models.UserListTransferModel>
+
+@{
     ViewData["Title"] = "User Management Home";
 }
 
@@ -22,72 +24,76 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Newcomer</td>
-                <td>Bear</td>
-                <td>Hugger</td>
-                <td>December 11, 2020</td>
-                <td>
-                    <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="userdrop">...</button>
-                        <div class="useractioncontent">
-                            <a href="#">Change Username</a>
-                            <a href="#">Change Password</a>
-                            <a href="#">Change E-Mail</a>
-                            <a href="#">Suspend User</a>
-                            <a href="#">Ban/Delete User</a>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Html.DisplayNameFor(model => model.Id)</td>
+                    <td>Html.DisplayNameFor(model => model.FirstName)</td>
+                    <td>Html.DisplayNameFor(model => model.LastName)</td>
+                    <td>Html.DisplayNameFor(model => model.AccoutnCreatoinDate)</td>
+                    <td>
+                        <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="userdrop">...</button>
+                            <div class="useractioncontent">
+                                <a href="#">Change Username</a>
+                                <a href="#">Change Password</a>
+                                <a href="#">Change E-Mail</a>
+                                <a href="#">Suspend User</a>
+                                <a href="#">Ban/Delete User</a>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Veteran</td>
-                <td>Great</td>
-                <td>Tiger</td>
-                <td>January 3, 2009</td>
-                <td>
-                    <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="userdrop">...</button>
-                        <div class="useractioncontent">
-                            <a href="#">Change Username</a>
-                            <a href="#">Change Password</a>
-                            <a href="#">Change E-Mail</a>
-                            <a href="#">Suspend User</a>
-                            <a href="#">Ban/Delete User</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Veteran</td>
+                    <td>Great</td>
+                    <td>Tiger</td>
+                    <td>January 3, 2009</td>
+                    <td>
+                        <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="userdrop">...</button>
+                            <div class="useractioncontent">
+                                <a href="#">Change Username</a>
+                                <a href="#">Change Password</a>
+                                <a href="#">Change E-Mail</a>
+                                <a href="#">Suspend User</a>
+                                <a href="#">Ban/Delete User</a>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Laziness</td>
-                <td>Robbie</td>
-                <td>Rotten</td>
-                <td>November 17, 2016</td>
-                <td>
-                    <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button class="userdrop">...</button>
-                        <div class="useractioncontent">
-                            <a href="#">Change Username</a>
-                            <a href="#">Change Password</a>
-                            <a href="#">Change E-Mail</a>
-                            <a href="#">Suspend User</a>
-                            <a href="#">Ban/Delete User</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Laziness</td>
+                    <td>Robbie</td>
+                    <td>Rotten</td>
+                    <td>November 17, 2016</td>
+                    <td>
+                        <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="userdrop">...</button>
+                            <div class="useractioncontent">
+                                <a href="#">Change Username</a>
+                                <a href="#">Change Password</a>
+                                <a href="#">Change E-Mail</a>
+                                <a href="#">Suspend User</a>
+                                <a href="#">Ban/Delete User</a>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            }
+
         </tbody>
     </table>
 </div>

@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "35v+XDKzwVoQn/t+Zd0phbKo727/qff8fkBPiGh+B8FF0vglxEej3wubQML9LD8vePukTyTvWbZdJAHnJlYELQ==",
-  "success": false,
+  "dgSpecHash": "Lslrum6c/miEZVXRhQa1L9keAiF+cRORlsAT8PfZyOVbsFQfP3eqZFRTWoMicCxeTGM96PFd+Gk6HK5gLZkcag==",
+  "success": true,
   "projectFilePath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Matt\\.nuget\\packages\\dapper\\2.0.78\\dapper.2.0.78.nupkg.sha512",
@@ -113,15 +113,5 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1201",
-      "level": "Error",
-      "message": "Project WebUI is not compatible with netstandard2.0 (.NETStandard,Version=v2.0). Project WebUI supports: netcoreapp3.1 (.NETCoreApp,Version=v3.1)",
-      "libraryId": "WebUI",
-      "targetGraphs": [
-        ".NETStandard,Version=v2.0"
-      ]
-    }
-  ]
+  "logs": []
 }

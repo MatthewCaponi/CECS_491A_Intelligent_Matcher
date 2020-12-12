@@ -1723,16 +1723,6 @@
         "runtime": {
           "bin/placeholder/Models.dll": {}
         }
-      },
-      "WebUI/1.0.0": {
-        "type": "project",
-        "framework": "Unsupported,Version=v0.0",
-        "compile": {
-          "bin/placeholder/WebUI.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/WebUI.dll": {}
-        }
       }
     }
   },
@@ -6269,11 +6259,6 @@
       "type": "project",
       "path": "../Models/Models.csproj",
       "msbuildProject": "../Models/Models.csproj"
-    },
-    "WebUI/1.0.0": {
-      "type": "project",
-      "path": "../WebUI/WebUI.csproj",
-      "msbuildProject": "../WebUI/WebUI.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -6281,8 +6266,7 @@
       "DataAccess >= 1.0.0",
       "Logging >= 1.0.0",
       "Models >= 1.0.0",
-      "NETStandard.Library >= 2.0.3",
-      "WebUI >= 1.0.0"
+      "NETStandard.Library >= 2.0.3"
     ]
   },
   "packageFolders": {
@@ -6326,9 +6310,6 @@
             },
             "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Models\\Models.csproj": {
               "projectPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Models\\Models.csproj"
-            },
-            "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj": {
-              "projectPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj"
             }
           }
         }
@@ -6362,16 +6343,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1201",
-      "level": "Error",
-      "message": "Project WebUI is not compatible with netstandard2.0 (.NETStandard,Version=v2.0). Project WebUI supports: netcoreapp3.1 (.NETCoreApp,Version=v3.1)",
-      "libraryId": "WebUI",
-      "targetGraphs": [
-        ".NETStandard,Version=v2.0"
-      ]
-    }
-  ]
+  }
 }

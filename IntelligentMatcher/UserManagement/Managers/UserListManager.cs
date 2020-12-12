@@ -9,12 +9,12 @@ using UserManagement.Services;
 
 namespace UserManagement
 {
-    public class UserListManager
+    public class UserListManager : IUserListManager
     {
-        public async Task<List<UserListTransferModel>> PopulateListOfUsers(UserListModel model)
+        public async Task<List<UserListTransferModel>> PopulateListOfUsers()
         {
             return await ListFetchService.FetchUsers();
-           
+
         }
     }
 }
