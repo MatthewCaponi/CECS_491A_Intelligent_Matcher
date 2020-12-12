@@ -17,7 +17,7 @@ namespace UserManagement
                 return true;
             }
 
-            return false;         
+            return false;
         }
 
         public async Task<bool> DeleteUser(int accountId)
