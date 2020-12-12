@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Logging
 {
-    public class LogService : ILogService
+    public class LogService<T> : ILogService
     {
         private readonly List<ILogTarget> _logTargets;
 
@@ -24,6 +24,11 @@ namespace Logging
         }
 
         public void LogCritical(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogCritical(ILoggingEvent loggingEvent, Exception e, string message)
         {
             throw new NotImplementedException();
         }
@@ -108,7 +113,7 @@ namespace Logging
             return DateTime.UtcNow;
         }
 
-        private void SetMessage(DateTime dateTime, string caller,)
+        private void SetMessage(DateTime dateTime, T caller, DateTime date, string message)
         {
 
         }
