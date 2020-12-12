@@ -27,5 +27,10 @@ namespace Logging
         {
             return _eventName;
         }
+
+        public string GetEventInfo()
+        {
+            return $"{_userId} {_ipAddress} {_pageRequest} {_urlReferrer} {_userAgent}";
+        }
     }
 }
