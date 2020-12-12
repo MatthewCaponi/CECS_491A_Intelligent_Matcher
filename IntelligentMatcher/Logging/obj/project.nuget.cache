@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "EZq/NHHMI9DrH4usczuSKtcvyboh87xupE8/pCERq7jCZNKaHydukSezXx/VL5zEiO/NB7QcJcHS+Zbas/tcWQ==",
+  "dgSpecHash": "EXbHSdlKxgruMIrY12LVdq8ANM2yBcLY/btKvlsf7/vdZZJsVCArBez3EVfaV3qqJK3O9ltUWLu5udqR1luDEg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Logging\\Logging.csproj",
+  "projectFilePath": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Logging\\Logging.csproj",
   "expectedPackageFiles": [
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+    "C:\\Users\\shari\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\shari\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
   ],
   "logs": []
 }

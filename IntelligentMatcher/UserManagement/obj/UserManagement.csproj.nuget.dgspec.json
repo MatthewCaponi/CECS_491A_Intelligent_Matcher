@@ -1,26 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj": {}
+    "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj": {
+    "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj",
+        "projectUniqueName": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj",
         "projectName": "UserManagement",
-        "projectPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj",
-        "packagesPath": "C:\\Users\\Matt\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\obj\\",
+        "projectPath": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\UserManagement.csproj",
+        "packagesPath": "C:\\Users\\shari\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\UserManagement\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Matt\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\shari\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -60,7 +55,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
