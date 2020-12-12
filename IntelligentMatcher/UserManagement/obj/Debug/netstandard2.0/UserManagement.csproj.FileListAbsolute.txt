@@ -7,3 +7,12 @@ C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstanda
 C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.csproj.CoreCompileInputs.cache
 C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.dll
 C:\Users\Matt\source\repos\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.pdb
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\bin\Debug\netstandard2.0\UserManagement.deps.json
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\bin\Debug\netstandard2.0\UserManagement.dll
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\bin\Debug\netstandard2.0\UserManagement.pdb
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.csprojAssemblyReference.cache
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.AssemblyInfoInputs.cache
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.AssemblyInfo.cs
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.csproj.CoreCompileInputs.cache
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.dll
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserManagement\obj\Debug\netstandard2.0\UserManagement.pdb
