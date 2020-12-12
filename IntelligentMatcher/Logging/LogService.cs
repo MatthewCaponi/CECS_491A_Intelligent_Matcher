@@ -15,7 +15,11 @@ namespace Logging
 
         public void LogCritical<T>(ILoggingEvent loggingEvent, Exception e, string message)
         {
+
+            Console.WriteLine("An error has occured");
+
             Console.WriteLine("Hello");
+
         }
 
         public void LogCritical(ILoggingEvent loggingEvent, string message)
