@@ -15,13 +15,14 @@ namespace Logging
             string logPath = Path.Combine(directory, fileName);
 
 
-            message = "{'message':'" + message + "'}";
+            message = "{'log':'" + message + "'}";
 
             //create the log directory under the user profile if it does not exist
             if (!Directory.Exists(directory))
             {
                 DirectoryInfo di = Directory.CreateDirectory(directory);
             }
+
 
             //create the file first then write
             Console.WriteLine(logPath);
