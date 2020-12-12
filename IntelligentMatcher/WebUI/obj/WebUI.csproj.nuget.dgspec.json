@@ -1,21 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj": {}
+    "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj": {
+    "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj",
+        "projectUniqueName": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj",
         "projectName": "WebUI",
-        "projectPath": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj",
-        "packagesPath": "C:\\Users\\shari\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shari\\Documents\\GitHub\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\obj\\",
+        "projectPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\WebUI.csproj",
+        "packagesPath": "C:\\Users\\Matt\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\WebUI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\shari\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Matt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -55,7 +60,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
     }
