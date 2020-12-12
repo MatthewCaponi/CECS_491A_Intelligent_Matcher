@@ -18,8 +18,7 @@ namespace BusinessLayerUnitTests
         [TestCleanup()]
         public void CleanUp()
         {
-            var disposer = new ConsoleOutputReader();
-            disposer.Dispose();
+
       
         }
 
@@ -178,54 +177,69 @@ namespace BusinessLayerUnitTests
         public void LogToTarget_WriteNetworkEventToConsoleLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
         {
             // Arrange
-            ILogTarget logTarget = new ConsoleLogTarget();
 
-            //act
-            logTarget.LogToTarget(expectedMessage, eventName);
+            var currentConsoleOut = Console.Out;
+
+            ConsoleLogTarget target = new ConsoleLogTarget();
 
 
-            //Assert
-            string actualmessage = ConsoleLogTarget.GetConsoleOutput();
-            Assert.AreEqual(actualmessage, expectedMessage);
+            using (var consoleOutput = new ConsoleOutputChecker())
+            {
+                target.LogToTarget(expectedMessage, eventName);
+                expectedMessage = "New " + eventName.ToString() + ": " + expectedMessage;
+                Assert.AreEqual(expectedMessage, consoleOutput.GetOuput());
+            }
+
+            Assert.AreEqual(currentConsoleOut, Console.Out);
 
 
         }
+        [DataTestMethod]
+        [DataRow("TextLogTest", EventName.UserEvent)]
+        public void LogToTarget_WriteUserEventToConsoleLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
+        {
+            // Arrange
 
+            var currentConsoleOut = Console.Out;
+
+            ConsoleLogTarget target = new ConsoleLogTarget();
+
+
+            using (var consoleOutput = new ConsoleOutputChecker())
+            {
+                target.LogToTarget(expectedMessage, eventName);
+                expectedMessage = "New " + eventName.ToString() + ": " + expectedMessage;
+                Assert.AreEqual(expectedMessage, consoleOutput.GetOuput());
+            }
+
+            Assert.AreEqual(currentConsoleOut, Console.Out);
+
+
+        }
 
         [DataTestMethod]
         [DataRow("TextLogTest", EventName.SecurityEvent)]
         public void LogToTarget_WriteSecurityEventToConsoleLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
         {
             // Arrange
-            ILogTarget logTarget = new ConsoleLogTarget();
 
-            //act
-            logTarget.LogToTarget(expectedMessage, eventName);
+            var currentConsoleOut = Console.Out;
 
-
-            //Assert
-            string actualmessage = ConsoleLogTarget.GetConsoleOutput();
-            Assert.AreEqual(actualmessage, expectedMessage);
+            ConsoleLogTarget target = new ConsoleLogTarget();
 
 
-        }
+            using (var consoleOutput = new ConsoleOutputChecker())
+            {
+                target.LogToTarget(expectedMessage, eventName);
+                expectedMessage = "New " + eventName.ToString() + ": " + expectedMessage;
+                Assert.AreEqual(expectedMessage, consoleOutput.GetOuput());
+            }
 
-        [DataTestMethod]
-        [DataRow("TextLogTest", EventName.UserEvent)]
-        public void LogToTarget_WriteUserEventToConsoleLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
-        {
-            // Arrange
-            ILogTarget logTarget = new ConsoleLogTarget();
-
-            //act
-            logTarget.LogToTarget(expectedMessage, eventName);
-
-
-            //Assert
-            string actualmessage = ConsoleLogTarget.GetConsoleOutput();
-            Assert.AreEqual(actualmessage, expectedMessage);
+            Assert.AreEqual(currentConsoleOut, Console.Out);
 
 
         }
+
+
     }
 }
