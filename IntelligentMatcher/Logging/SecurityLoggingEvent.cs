@@ -16,5 +16,10 @@ namespace Logging
             _userId = userId;
             _url = url;
         }
+
+        public EventName GetEventName()
+        {
+            return _eventName;
+        }
     }
 }

@@ -19,5 +19,10 @@ namespace Logging
             _userId = userId;
             _accountType = accountType;
         }
+
+        public EventName GetEventName()
+        {
+            return _eventName;
+        }
     }
 }

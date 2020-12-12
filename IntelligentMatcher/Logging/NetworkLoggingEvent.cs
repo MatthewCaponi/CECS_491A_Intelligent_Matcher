@@ -22,5 +22,10 @@ namespace Logging
             _urlReferrer = urlReferrer;
             _userAgent = userAgent;
         }
+
+        public EventName GetEventName()
+        {
+            return _eventName;
+        }
     }
 }
