@@ -10,18 +10,9 @@ namespace Logging
         public void LogToTarget(string message, EventName eventname)
         {
 
-            WriteLog(message, eventname);
-            
-
-        }
-
-        //Writes to the log folder and selects the correct folder baised on the enum value
-    
-        private void WriteLog(string message, EventName eventname)
-        {
-
             string logPath = "logs/" + eventname.ToString() + "/" + eventname.ToString() + "-log- " + DateTime.Today + ".txt";
-            if (!File.Exists(logPath)){
+            if (!File.Exists(logPath))
+            {
 
                 using (StreamWriter writer = File.CreateText(logPath))
                 {
@@ -38,7 +29,10 @@ namespace Logging
 
         }
 
-     
- 
+
     }
+
+    //Writes to the log folder and selects the correct folder baised on the enum value
+
+
 }
