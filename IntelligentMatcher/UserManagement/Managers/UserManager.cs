@@ -25,14 +25,9 @@ namespace UserManagement
         {
             if (await DeletionService.DeleteAccount(accountId))
             {
-                if (await DeletionService.DeleteProfile(accountId))
-                {
-                    return true;
-                }
-
-                return false;
+                return true;
             }
-
+           
             return false;
         }
 

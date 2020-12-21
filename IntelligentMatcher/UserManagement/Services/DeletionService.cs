@@ -17,14 +17,16 @@ namespace UserManagement.Services
 
             UserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
-
-            if (await userAccount.DeleteUserAccountById(id) != 0)
+            
+            try
             {
-                await userProfile.UpdateUserAccountStatus(id, AccountStatus.Deleted.ToString());
+                await userAccount.DeleteUserAccountById(id);
                 return true;
             }
-
-            return false;
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
         public static async Task<bool> DeleteProfile(int accountId)
@@ -34,12 +36,15 @@ namespace UserManagement.Services
 
             UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.DeleteUserProfileById(accountId) != 0)
+            try
             {
+                await userProfile.DeleteUserProfileById(accountId);
                 return true;
             }
-
-            return false;
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
     }

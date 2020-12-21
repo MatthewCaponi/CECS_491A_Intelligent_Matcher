@@ -16,7 +16,15 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             UserRepository userAccount = new UserRepository(dataGateway, connectionString);
 
-            return await userAccount.GetUserList();
+            try
+            {
+                return await userAccount.GetUserList();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
         }
         
     }

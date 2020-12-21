@@ -1,18 +1,23 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
+using DataAccessUnitTestes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using UserManagement.Services;
+using static Models.UserProfileModel;
 
-namespace DataAccessUnitTestes
+namespace BusinessLayerUnitTests.User_Management
 {
     [TestClass]
-    public class UserRepositoryTests
+    public class ListFetchServiceTests
     {
-        [TestInitialize()]
+        [TestInitialize]
         public async Task Init()
         {
             var numTestRows = 10;
@@ -29,7 +34,6 @@ namespace DataAccessUnitTestes
                 UserProfileModel model = new UserProfileModel($"FirstName{i}", $"LastName{i}", DateTime.Now, DateTime.Today.Date,
                      UserProfileModel.AccountType.User.ToString(), UserProfileModel.AccountStatus.Active.ToString(), userAccountModel.Id);
                 await testRepo.InsertUserProfileTestRows(model);
-
             }
         }
 
@@ -44,28 +48,33 @@ namespace DataAccessUnitTestes
             await testRepo.DeleteUserProfileTestRows();
         }
 
-        [DataTestMethod]
-        public async Task GetUserList()
+        [TestMethod]
+        public async Task FetchUsers_UsersExist_UsersFetched()
         {
             // Arrange
-            IUserRepository user = new UserRepository(new DataGateway(), new ConnectionStringData());
-
-
+            var userRepo = new UserRepository(new DataGateway(), new ConnectionStringData());
+            List<UserListTransferModel> users = null;
             // Act
-            List<UserListTransferModel> userList = new List<UserListTransferModel>();
-            userList = await user.GetUserList();
-
-            // Assert
-           for (int i = 0; i < 10; ++i)
+            try
             {
-                if (userList[i].Id != (i + 1))
+                users = await ListFetchService.FetchUsers();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Assert.IsTrue(false);
+            }
+
+            //Assert
+            for (int i = 0; i < users.Count; ++i)
+            {
+                if (users[i].Id != (i + 1))
                 {
                     Assert.IsTrue(false);
                 }
-            }
 
-            Assert.IsTrue(true);
-                
+                Assert.IsTrue(true);
+            }
         }
     }
 }

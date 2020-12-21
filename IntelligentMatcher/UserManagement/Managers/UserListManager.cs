@@ -14,7 +14,6 @@ namespace UserManagement
         public async Task<List<UserListTransferModel>> PopulateListOfUsers()
         {
             return await ListFetchService.FetchUsers();
-
         }
     }
 }
