@@ -14,7 +14,7 @@ namespace UserManagement.Services
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserRepository userAccount = new UserRepository(dataGateway, connectionString);
+            IUserRepository userAccount = new UserRepository(dataGateway, connectionString);
 
             try
             {

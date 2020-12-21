@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DataAccess;
+using DataAccess.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +66,36 @@ namespace UserManagement
         public async Task<bool> SuspendUser(int accountId)
         {
             if (await UserAccessService.Suspend(accountId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateUsername(int accountId, string newUsername)
+        {
+            if (await UserUpdateService.ChangeUsername(accountId, newUsername))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdatePassword(int accountId, string newPassword)
+        {
+            if (await UserUpdateService.ChangePassword(accountId, newPassword))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateEmail(int accountId, string newEmail)
+        {
+            if (await UserUpdateService.ChangeEmail(accountId, newEmail))
             {
                 return true;
             }

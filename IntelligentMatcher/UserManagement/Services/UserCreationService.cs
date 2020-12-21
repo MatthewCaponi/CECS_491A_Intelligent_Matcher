@@ -16,9 +16,9 @@ namespace UserManagement.Services
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
-            UserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             UserAccountModel userAccount = new UserAccountModel(model.Username, model.Password, model.email);
-            UserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
 
             try
             {

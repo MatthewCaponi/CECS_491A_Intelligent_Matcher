@@ -14,11 +14,16 @@ namespace UserManagement.Services
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
             try
             {
-                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString());
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
+
                 return true;
             }
             catch (Exception e)
@@ -31,11 +36,15 @@ namespace UserManagement.Services
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
             try
             {
-                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString());
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
                 return true;
             }
             catch (Exception e)
@@ -48,11 +57,15 @@ namespace UserManagement.Services
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
             try
             {
-                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString());
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
                 return true;
             }
             catch (Exception e)
@@ -65,11 +78,15 @@ namespace UserManagement.Services
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
             try
             {
-                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString());
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
                 return true;
             }
             catch (Exception e)

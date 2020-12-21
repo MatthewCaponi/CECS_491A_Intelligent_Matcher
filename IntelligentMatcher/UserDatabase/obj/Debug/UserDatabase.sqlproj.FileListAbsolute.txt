@@ -9,3 +9,4 @@ C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\User
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.pdb
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.dll
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.pdb
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.sqlprojAssemblyReference.cache

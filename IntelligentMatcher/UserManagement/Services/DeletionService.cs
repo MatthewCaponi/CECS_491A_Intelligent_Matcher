@@ -15,18 +15,24 @@ namespace UserManagement.Services
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
-            UserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
             
             try
             {
-                await userAccount.DeleteUserAccountById(id);
+                int returnValue =  await userAccount.DeleteUserAccountById(id);
+                if (returnValue == 0)
+                {
+                    return false;
+                }
                 return true;
             }
             catch(Exception e)
             {
                 return false;
             }
+
+
         }
 
         public static async Task<bool> DeleteProfile(int accountId)
@@ -34,7 +40,7 @@ namespace UserManagement.Services
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
             try
             {
