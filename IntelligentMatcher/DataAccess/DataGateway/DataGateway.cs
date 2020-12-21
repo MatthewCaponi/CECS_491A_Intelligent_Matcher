@@ -47,12 +47,20 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                return 0;
-            }
-            
-            
-
-            
+                if (e.Message.Contains("duplicate") && e.Message.Contains("Username"))
+                {
+                    throw new Exception("Username already exists", e.InnerException);
+                }
+                else if (e.Message.Contains("duplicate") && e.Message.Contains("EmailAddress"))
+                {
+                    throw new Exception("Email already exists", e.InnerException);
+                }
+                else
+                {
+                    throw new Exception("SqlException", e.InnerException);
+                }    
+                                  
+            }                 
         }
 
     }

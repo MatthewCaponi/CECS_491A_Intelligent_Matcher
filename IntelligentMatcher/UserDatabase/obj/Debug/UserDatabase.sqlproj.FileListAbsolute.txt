@@ -7,10 +7,5 @@ C:\Users\Matt\source\repos\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabas
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.dacpac
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.dll
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\bin\Debug\UserDatabase.pdb
-C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.sqlprojAssemblyReference.cache
-C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\Model.xml
-C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\refactor.xml
-C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\postdeploy.sql
-C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\predeploy.sql
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.dll
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\UserDatabase\obj\Debug\UserDatabase.pdb

@@ -16,12 +16,15 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString()) != 0)
+            try
             {
+                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString());
                 return true;
             }
-
-            return false; 
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public static async Task<bool> EnableAccount(int accountId)
@@ -30,12 +33,15 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString()) != 0)
+            try
             {
+                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString());
                 return true;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public static async Task<bool> Suspend(int accountId)
@@ -44,12 +50,15 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString()) != 0)
+            try
             {
+                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString());
                 return true;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                return false;
+            } 
         }
 
         public static async Task<bool> Ban(int accountId)
@@ -58,12 +67,15 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString()) != 0)
+            try
             {
+                await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString());
                 return true;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }
