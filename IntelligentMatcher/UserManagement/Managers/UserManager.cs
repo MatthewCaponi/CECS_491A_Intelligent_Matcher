@@ -9,15 +9,16 @@ namespace UserManagement
 {
     public class UserManager : IUserManager
     {
-        public async Task<bool> CreateUser(UserCreateModel model)
+        public async Task<int> CreateUser(UserCreateModel model)
         {
-            if (await SearchService.SearchUser(model.Username, model.email))
+            try
             {
-                await UserCreationService.CreateAccount(model);
-                return true;
+                return await UserCreationService.CreateAccount(model);
             }
-
-            return false;
+            catch(Exception e)
+            {
+                throw new Exception(e.Message, e.InnerException);
+            }     
         }
 
         public async Task<bool> DeleteUser(int accountId)
