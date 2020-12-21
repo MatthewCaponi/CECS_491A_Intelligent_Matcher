@@ -3,7 +3,6 @@ using DataAccess.Repositories;
 using Models;
 using System;
 using System.Threading.Tasks;
-using UserInterface.WebUI.Models;
 using UserManagement.Models;
 using static Models.UserProfileModel;
 

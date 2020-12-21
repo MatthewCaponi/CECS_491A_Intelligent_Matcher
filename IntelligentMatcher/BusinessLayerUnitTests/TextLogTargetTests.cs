@@ -8,22 +8,6 @@ namespace BusinessLayerUnitTests
     [TestClass]
     public class TextLogTargetTests
     {
-        [TestInitialize()]
-       public void Init()
-        {
-
-          
-        }
-
-        [TestCleanup()]
-        public void CleanUp()
-        {
-
-      
-        }
-
-        
-
         [DataTestMethod]
         [DataRow("TextLogTest", EventName.UserEvent)]
         public void LogToTarget_WriteUserEventToTextLog_ReadTextSucccessful(string expectedMessage, EventName eventName)
@@ -31,24 +15,13 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new TextLogTarget();
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
-
-
-
             // Act
             logTarget.LogToTarget(expectedMessage, eventName);
 
-
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Text);
             Assert.IsTrue(actualMessage == expectedMessage.ToString());
-
         }
-
-
-
 
         [DataTestMethod]
         [DataRow("TextLogTest", EventName.SecurityEvent)]
@@ -57,20 +30,12 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new TextLogTarget();
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
-
-
-
             // Act
             logTarget.LogToTarget(expectedMessage, eventName);
 
-
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Text);
             Assert.IsTrue(actualMessage == expectedMessage.ToString());
-
         }
 
         [DataTestMethod]
@@ -80,26 +45,12 @@ namespace BusinessLayerUnitTests
             // Arrange
             ILogTarget logTarget = new TextLogTarget();
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
-
-
-
             // Act
             logTarget.LogToTarget(expectedMessage, eventName);
 
-
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Text);
             Assert.IsTrue(actualMessage == expectedMessage.ToString());
-
         }
-
-
-
-
-
-
     }
 }

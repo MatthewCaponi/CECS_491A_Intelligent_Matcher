@@ -22,20 +22,15 @@ namespace BusinessLayerUnitTests
             targets.Add(new TextLogTarget());
             ILogService logService = new LogService<UserProfileModel>(targets);
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
-
             // Act
             logService.LogTrace(loggingEvent, message);
  
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Text);
             Debug.WriteLine("Message: " + actualMessage);
             StringAssert.Contains(actualMessage, message);
             StringAssert.Contains(actualMessage, ipAddress);
         }
-
 
         [DataTestMethod]
         [DataRow(EventName.UserEvent, "101.191.143.47", 12, UserProfileModel.AccountType.User, "User succesfully created")]
@@ -47,15 +42,11 @@ namespace BusinessLayerUnitTests
             targets.Add(new JsonLogTarget());
             ILogService logService = new LogService<UserProfileModel>(targets);
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
-
             // Act
             logService.LogTrace(loggingEvent, message);
 
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Json);
             Debug.WriteLine("Message: " + actualMessage);
             StringAssert.Contains(actualMessage, message);
         }
@@ -74,15 +65,11 @@ namespace BusinessLayerUnitTests
             targets.Add(new JsonLogTarget());
             ILogService logService = new LogService<UserProfileModel>(targets);
 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
-
             // Act
             logService.LogTrace(loggingEvent, message);
 
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Json);
             Debug.WriteLine("Message: " + actualMessage);
             StringAssert.Contains(actualMessage, message);
         }
@@ -95,20 +82,16 @@ namespace BusinessLayerUnitTests
             // Arrange
             Uri google = new Uri("http://www.google.com/");
 
-            ILoggingEvent loggingEvent = new NetworkLoggingEvent(eventName, userId, ipAddress, pageRequest, google, userAgent);
+            ILoggingEvent loggingEvent = new NetworkLoggingEvent(eventName, userId, ipAddress, pageRequest, "sampleUrl", userAgent);
             List<ILogTarget> targets = new List<ILogTarget>();
             targets.Add(new JsonLogTarget());
             ILogService logService = new LogService<UserProfileModel>(targets);
-
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
-            string logPath = Path.Combine(directory, fileName);
 
             // Act
             logService.LogTrace(loggingEvent, message);
 
             //Assert
-            string actualMessage = LogTargetHelper.ReadTestLog(logPath);
+            string actualMessage = LogTargetHelper.ReadTestLog(eventName, TargetType.Json);
             Debug.WriteLine("Message: " + actualMessage);
             StringAssert.Contains(actualMessage, message);
         }
@@ -127,8 +110,6 @@ namespace BusinessLayerUnitTests
             var currentConsoleOut = Console.Out;
 
             // Act
-
-
             using (var consoleOutput = new ConsoleOutputChecker())
             {
                 logService.LogTrace(loggingEvent, message);
@@ -136,8 +117,6 @@ namespace BusinessLayerUnitTests
 
                 StringAssert.Contains(consoleOutput.GetOuput(), message);
             }
-
-
             //Assert
 
             Assert.AreEqual(currentConsoleOut, Console.Out);

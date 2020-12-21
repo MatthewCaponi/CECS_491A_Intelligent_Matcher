@@ -10,10 +10,10 @@ namespace Logging
         private readonly int _userId;
         private readonly string _ipAddress;
         private readonly string _pageRequest;
-        private readonly Uri _urlReferrer;
+        private readonly string _urlReferrer;
         private readonly string _userAgent;
 
-        public NetworkLoggingEvent(EventName eventName, int userId, string ipAddress, string pageRequest, Uri urlReferrer, string userAgent)
+        public NetworkLoggingEvent(EventName eventName, int userId, string ipAddress, string pageRequest, string urlReferrer, string userAgent)
         {
             _eventName = eventName;
             _userId = userId;

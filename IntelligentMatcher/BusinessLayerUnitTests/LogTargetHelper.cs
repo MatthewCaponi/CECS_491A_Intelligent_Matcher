@@ -1,25 +1,34 @@
-﻿using System;
+﻿using Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace BusinessLayerUnitTests
 {
     public static class LogTargetHelper
     {
-        public static string ReadTestLog(string path)
+        public static string ReadTestLog(EventName eventName, TargetType targetType)
         {
-            string message = "";
-            using (StreamReader sr = File.OpenText(path))
+            string fileName = "";
+            switch (targetType)
             {
-                string s = "";
-                while ((s = sr.ReadLine()) != null)
-                {
-                    message = s;
-                }
+                case TargetType.Json:
+                     fileName = $"{eventName.ToString()}{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.json";
+                    break;
 
-                return message;
+                case TargetType.Text:
+                     fileName = $"{eventName.ToString()}{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
+                    break;
             }
+            
+            string directory = $"C:\\Users\\{Environment.UserName}\\logs\\{eventName.ToString()}";
+            string logPath = Path.Combine(directory, fileName);
+
+            var message = File.ReadLines(logPath).Last();
+
+            return message;
         }
     }
 }
