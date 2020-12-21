@@ -34,7 +34,6 @@ namespace WebUI
             services.AddSingleton<IUserListManager, UserListManager>();
             services.AddSingleton<IUserManager, UserManager>();
             services.AddSingleton<IDataGateway, DataGateway>();
-            
         }
 
 

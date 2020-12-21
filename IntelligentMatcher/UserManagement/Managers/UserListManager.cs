@@ -11,9 +11,17 @@ namespace UserManagement
 {
     public class UserListManager : IUserListManager
     {
-        public async Task<List<UserListTransferModel>> PopulateListOfUsers()
+        public async Task<List<UserListModel>> PopulateListOfUsers()
         {
-            return await ListFetchService.FetchUsers();
+            var users = await ListFetchService.FetchUsers();
+            List<UserListModel> userDtos = new List<UserListModel>();
+            foreach(UserListTransferModel user in users)
+            {
+                UserListModel userDto = new UserListModel(user.Id, user.Username, user.FirstName, user.LastName, user.AccountCreationDate);
+                userDtos.Add(userDto);
+            }
+
+            return userDtos;
         }
     }
 }

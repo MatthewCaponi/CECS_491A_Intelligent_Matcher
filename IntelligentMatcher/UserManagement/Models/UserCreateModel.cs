@@ -14,8 +14,9 @@ namespace UserManagement.Models
         public string DateOfBirth { get; set; }
         public AccountType accountType { get; set; }
         public string email { get; set; }
+        public DateTime AccountCreationDate { get; set; }
 
-        public UserCreateModel(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)
+        public UserCreateModel(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email, DateTime accountCreationDate)
         {
             Username = userName;
             Password = password;
@@ -24,6 +25,11 @@ namespace UserManagement.Models
             DateOfBirth = dateOfBirth;
             this.accountType = accountType;
             this.email = email;
+            AccountCreationDate = accountCreationDate;
+        }
+
+        public UserCreateModel()
+        {
         }
     }
 }

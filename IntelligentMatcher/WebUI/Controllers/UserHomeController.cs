@@ -4,15 +4,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using UserManagement;
+using UserManagement.Models;
 using WebUI.Models;
+using static Models.UserProfileModel;
 
 namespace WebUI.Controllers
 {
     public class UserHomeController : Controller
     {
-        private readonly ILogger<UserHomeController> _logger;
         private readonly IUserManager _userManager;
         private readonly IUserListManager _userListManager;
 
@@ -26,9 +28,42 @@ namespace WebUI.Controllers
         {
             var userList = await _userListManager.PopulateListOfUsers();
 
+            UserHomeModel model = new UserHomeModel();
+            userList.ForEach(x =>
+            {
+                model.UserList.Add(new UserListModel
+                {
+                    UserId = x.UserId,
+                    Username = x.Username,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    AccountCreationDate = x.AccountCreationDate
+                });
+            });
+
+            List<string> accountTypes = Enum.GetValues(typeof(AccountType)).Cast<AccountType>().Select(x => x.ToString()).ToList();
+
+            accountTypes.ForEach(x =>
+            {
+                model.AccountTypes.Add(new SelectListItem { Text = x });
+            });
             
-            return View(userList);
+            return View(model);  
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(UserCreateModel userCreateModel)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return View();
+            }
+
+            int id = await _userManager.CreateUser(userCreateModel);
+
+            return View();
+        }
+
 
         public IActionResult UserInfo()
         {
@@ -37,6 +72,7 @@ namespace WebUI.Controllers
 
         public IActionResult AddUser()
         {
+
             return View();
         }
 

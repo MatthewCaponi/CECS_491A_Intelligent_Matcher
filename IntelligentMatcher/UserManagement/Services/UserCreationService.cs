@@ -25,7 +25,7 @@ namespace UserManagement.Services
                 var userAccountId = await userAccountRepository.CreateUserAccount(userAccount);
                 UserProfileModel userProfileModel =
                 new UserProfileModel(model.FirstName, model.LastName, DateTime.Parse(model.DateOfBirth),
-                DateTime.Now, model.accountType.ToString(), "Active", userAccountId);
+                DateTime.Parse(model.AccountCreationDate.ToString()), model.accountType.ToString(), "Active", userAccountId);
                 await userProfileRepository.CreateUserProfile(userProfileModel);
 
                 return userAccountId;
@@ -33,7 +33,6 @@ namespace UserManagement.Services
             catch (Exception e)
             {
                 throw new Exception(e.Message, e.InnerException);
-                return 0;
             }   
         }
             

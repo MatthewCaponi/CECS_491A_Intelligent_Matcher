@@ -1,99 +1,131 @@
-﻿@model IEnumerable<Models.UserListTransferModel>
+﻿@model UserHomeModel
 
 @{
     ViewData["Title"] = "User Management Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">User List</h1>
-    <div class="search">
-        <input type="text" />
-        <input type="submit" />
-    </div>
-    <div class="adduser"><a asp-area="" asp-controller="UserHome" asp-action="AddUser">Add User</a></div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>User Name</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Account Creation Date</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Html.DisplayNameFor(model => model.Id)</td>
-                    <td>Html.DisplayNameFor(model => model.FirstName)</td>
-                    <td>Html.DisplayNameFor(model => model.LastName)</td>
-                    <td>Html.DisplayNameFor(model => model.AccoutnCreatoinDate)</td>
-                    <td>
-                        <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="userdrop">...</button>
-                            <div class="useractioncontent">
-                                <a href="#">Change Username</a>
-                                <a href="#">Change Password</a>
-                                <a href="#">Change E-Mail</a>
-                                <a href="#">Suspend User</a>
-                                <a href="#">Ban/Delete User</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Veteran</td>
-                    <td>Great</td>
-                    <td>Tiger</td>
-                    <td>January 3, 2009</td>
-                    <td>
-                        <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="userdrop">...</button>
-                            <div class="useractioncontent">
-                                <a href="#">Change Username</a>
-                                <a href="#">Change Password</a>
-                                <a href="#">Change E-Mail</a>
-                                <a href="#">Suspend User</a>
-                                <a href="#">Ban/Delete User</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Laziness</td>
-                    <td>Robbie</td>
-                    <td>Rotten</td>
-                    <td>November 17, 2016</td>
-                    <td>
-                        <a asp-area="" asp-controller="UserHome" asp-action="UserInfo">Edit</a>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="userdrop">...</button>
-                            <div class="useractioncontent">
-                                <a href="#">Change Username</a>
-                                <a href="#">Change Password</a>
-                                <a href="#">Change E-Mail</a>
-                                <a href="#">Suspend User</a>
-                                <a href="#">Ban/Delete User</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            }
+<h1>Users</h1>
 
-        </tbody>
-    </table>
+<button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AddUserModal">
+    AddUser
+</button>
+
+<div class="modal fade" id="AddUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="AddUser">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.accountType" class="control-label"></label>
+                        <select asp-for="UserSubmission.accountType" asp-items="Model.AccountTypes" class="form-control"></select>
+                        <span asp-validation-for="UserSubmission.accountType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.Username" class="control-label"></label>
+                        <input asp-for="UserSubmission.Username" class="form-control" />
+                        <span asp-validation-for="UserSubmission.Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.Password" class="control-label"></label>
+                        <input type="password" asp-for="UserSubmission.Password" class="form-control" />
+                        <span asp-validation-for="UserSubmission.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.FirstName" class="control-label"></label>
+                        <input asp-for="UserSubmission.FirstName" class="form-control" />
+                        <span asp-validation-for="UserSubmission.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.LastName" class="control-label"></label>
+                        <input asp-for="UserSubmission.LastName" class="form-control" />
+                        <span asp-validation-for="UserSubmission.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.email" class="control-label"></label>
+                        <input asp-for="UserSubmission.email" class="form-control" />
+                        <span asp-validation-for="UserSubmission.email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.DateOfBirth" class="control-label"></label>
+                        <input type="date" asp-for="UserSubmission.DateOfBirth" class="form-control" />
+                        <span asp-validation-for="UserSubmission.DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserSubmission.AccountCreationDate" class="control-label"></label>
+                        <input type="hidden" value="@DateTime.Today" asp-for="UserSubmission.AccountCreationDate" class="form-control" />
+                        <span asp-validation-for="UserSubmission.AccountCreationDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserList[0].UserId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserList[0].Username)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserList[0].FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserList[0].LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserList[0].AccountCreationDate)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.UserList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(modelItem => item.AccountCreationDate.ToString())
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{}
+}
+
