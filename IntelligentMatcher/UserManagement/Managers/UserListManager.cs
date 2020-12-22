@@ -17,7 +17,7 @@ namespace UserManagement
             List<UserListModel> userDtos = new List<UserListModel>();
             foreach(UserListTransferModel user in users)
             {
-                UserListModel userDto = new UserListModel(user.Id, user.Username, user.FirstName, user.LastName, user.AccountCreationDate);
+                UserListModel userDto = new UserListModel(user.Id, user.Username, user.FirstName, user.LastName, user.AccountCreationDate, user.accountStatus);
                 userDtos.Add(userDto);
             }
 

@@ -15,6 +15,7 @@ namespace Logging
     {
         private readonly List<ILogTarget> _logTargets;
 
+
         public LogService(List<ILogTarget> logTargets)
         {
             _logTargets = logTargets;

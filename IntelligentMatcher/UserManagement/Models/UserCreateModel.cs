@@ -12,11 +12,11 @@ namespace UserManagement.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DateOfBirth { get; set; }
-        public AccountType accountType { get; set; }
+        public string accountType { get; set; }
         public string email { get; set; }
         public DateTime AccountCreationDate { get; set; }
 
-        public UserCreateModel(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email, DateTime accountCreationDate)
+        public UserCreateModel(string userName, string password, string firstName, string lastName, string dateOfBirth, string accountType, string email, DateTime accountCreationDate)
         {
             Username = userName;
             Password = password;

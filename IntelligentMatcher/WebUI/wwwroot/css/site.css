@@ -19,11 +19,15 @@ a {
 }
 
 
+.btn-group {
+    width: 100%;
+}
+
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
@@ -35,6 +39,36 @@ html {
   html {
     font-size: 16px;
   }
+}
+
+#three-dot-button-box:focus {
+    outline: none;
+    box-shadow: none;
+    background-color: lightgrey;
+}
+
+#three-dot-button-box {
+    border: none;
+    background-color: transparent;
+    position: relative;
+    left: 30%;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+#three-dot-button-div:focus {
+    color: green;
+}
+
+#three-dot-button {
+    color: grey;
+}
+
+#three-dot-button:hover {
+    color: black;
 }
 
 .border-top {
@@ -74,6 +108,7 @@ body {
 
 /*Dropdown Menu Styles
 --------------------------------------------------- */
+
 .dropdown {
     position: relative;
     display: inline-block;

@@ -6,6 +6,10 @@ namespace Logging
 {
     public class JsonLogTarget : ILogTarget
     {
+        public JsonLogTarget()
+        {
+
+        }
         public void LogToTarget(string message, EventName eventName)
         {
 

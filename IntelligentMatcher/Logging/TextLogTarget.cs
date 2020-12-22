@@ -8,6 +8,10 @@ namespace Logging
 {
     public class TextLogTarget : ILogTarget
     {
+        public TextLogTarget()
+        {
+
+        }
         public void LogToTarget(string message, EventName eventName)
         {
             // Read the file as one string. 

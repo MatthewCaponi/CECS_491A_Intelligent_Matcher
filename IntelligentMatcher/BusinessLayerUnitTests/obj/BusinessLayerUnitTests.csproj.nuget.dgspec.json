@@ -196,6 +196,9 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
+              "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Logging\\Logging.csproj": {
+                "projectPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Logging\\Logging.csproj"
+              },
               "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Models\\Models.csproj": {
                 "projectPath": "C:\\Users\\Matt\\source\\repos\\CECS_491A_Intelligent_Matcher\\IntelligentMatcher\\Models\\Models.csproj"
               }

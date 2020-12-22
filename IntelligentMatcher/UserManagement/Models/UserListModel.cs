@@ -1,4 +1,5 @@
 ﻿using System;
+using static Models.UserProfileModel;
 
 namespace UserManagement
 {
@@ -10,13 +11,16 @@ namespace UserManagement
         public string LastName { get; set; }
         public DateTime AccountCreationDate { get; set; }
 
-        public UserListModel(int userId, string username, string firstName, string lastName, DateTime accountCreationDate)
+        public AccountStatus accountStatus { get; set; }
+
+        public UserListModel(int userId, string username, string firstName, string lastName, DateTime accountCreationDate, AccountStatus accountStatus)
         {
             UserId = userId;
             Username = username;
             FirstName = firstName;
             LastName = lastName;
             AccountCreationDate = accountCreationDate;
+            this.accountStatus = accountStatus;
         }
 
         public UserListModel()

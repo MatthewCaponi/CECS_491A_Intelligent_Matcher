@@ -1,16 +1,27 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
+using Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services;
+using static Models.UserProfileModel;
 
 namespace UserManagement
 {
     public class UserManager : IUserManager
     {
+        ILogService _logger;
+        public UserManager()
+        {
+            ILogServiceFactory factory = new LogSeviceFactory();
+            factory.AddTarget(TargetType.Text);
+
+            _logger = factory.CreateLogService<UserManager>();
+        }
+
         public async Task<int> CreateUser(UserCreateModel model)
         {
             try
@@ -19,6 +30,7 @@ namespace UserManagement
             }
             catch(Exception e)
             {
+                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
                 throw new Exception(e.Message, e.InnerException);
             }     
         }
