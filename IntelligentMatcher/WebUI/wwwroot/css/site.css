@@ -41,11 +41,13 @@ html {
   }
 }
 
+#add-user-button {
+    margin-bottom: 1%;
+}
 #three-dot-button-box:focus {
     outline: none;
     box-shadow: none;
-    background-color: lightgrey;
-    color: grey;
+    background-color: grey;
     
 }
 
@@ -60,14 +62,20 @@ html {
     display: inline-block;
 }
 
+#dynamic-row:hover{
+    background-color: lightgrey;
+}
 
+#three-dot-button:hover {
+    color: black;
+}
 
 #three-dot-button {
     color: transparent;
 }
 
-#three-dot-button:hover {
-    color: black;
+#page-title {
+    
 }
 
 .border-top {
@@ -79,6 +87,10 @@ html {
 
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+#table-shadow {
+    box-shadow: 5px 5px 8px 3px #888888;
 }
 
 button.accept-policy {

@@ -4,9 +4,8 @@
     ViewData["Title"] = "User Management Home";
 }
 
-<h1>Users</h1>
 
-<button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AddUserModal">
+<button type="button" id="add-user-button" class="btn btn-outline-dark" data-toggle="modal" data-target="#AddUserModal">
     AddUser
 </button>
 
@@ -92,7 +91,7 @@
 <div class="row">
     <div class="container-fluid">
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table id="table-shadow" class="table box-shadow">
                 <thead class="thead-dark">
                     <tr>
                         <th>User Id</></th>
@@ -127,7 +126,8 @@
                                 @Html.DisplayFor(modelItem => Model.UserList[i].accountStatus)
                             </td>
                             <td id="lastDynamicIndex"class="btn-group dropright">
-                                <button type="button" id="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" id="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  
+                                        onmouseover="onMouseOverDots()" onmouseout="onMouseOutDots(this)">
                                     <div id="three-dot-button-div">
                                         <i class="fas fa-ellipsis-v" id="three-dot-button"></i>
                                     </div>
@@ -154,12 +154,30 @@
 }
 
 <script>
+    var mouseOverDots = false;
+    var mouseOutDots = true;
     function mouseOverRow(id, i) {
-        document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "grey";
+        if (mouseOverDots) {
+            document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "black";
+        }
+        else {
+            document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "grey";
+        }
     }
 
     function mouseOutRow(id, i) {
         document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "transparent";
     }
+
+    function onMouseOverDots() {
+        mouseOverDots = true;
+        mouseOutDots = false;
+    }
+
+    function onMouseOutDots(id) {
+        mouseOverDots = false;
+        mouseOutDots = true;
+    }
+
 </script>
 
