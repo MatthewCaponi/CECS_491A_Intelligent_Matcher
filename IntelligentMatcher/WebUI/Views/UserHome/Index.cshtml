@@ -104,29 +104,29 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model.UserList)
-                    {
-                        <tr>
+                <tbody id="dynamic-body">
+                    @for (int i = 0; i < Model.UserList.Count; ++i)
+                    {                     
+                        <tr id="dynamic-row" onmouseover="mouseOverRow(this, @i)" onmouseout="mouseOutRow(this, @i)">                           
                             <td>
-                                @Html.DisplayFor(modelItem => item.UserId)
+                                @Html.DisplayFor(modelItem => Model.UserList[i].UserId)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Username)
+                                @Html.DisplayFor(modelItem => Model.UserList[i].Username)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FirstName)
+                                @Html.DisplayFor(modelItem => Model.UserList[i].FirstName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.LastName)
+                                @Html.DisplayFor(modelItem => Model.UserList[i].LastName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.AccountCreationDate)
+                                @Html.DisplayFor(modelItem => Model.UserList[i].AccountCreationDate)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.accountStatus)
+                                @Html.DisplayFor(modelItem => Model.UserList[i].accountStatus)
                             </td>
-                            <td class="btn-group dropright">
+                            <td id="lastDynamicIndex"class="btn-group dropright">
                                 <button type="button" id="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div id="three-dot-button-div">
                                         <i class="fas fa-ellipsis-v" id="three-dot-button"></i>
@@ -152,4 +152,14 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{}
 }
+
+<script>
+    function mouseOverRow(id, i) {
+        document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "grey";
+    }
+
+    function mouseOutRow(id, i) {
+        document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "transparent";
+    }
+</script>
 
