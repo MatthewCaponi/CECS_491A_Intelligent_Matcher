@@ -19,22 +19,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                @*<form asp-action="DumDum">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Popcorn" class="control-label"></label>
-                            <input asp-for="Popcorn" class="form-control" />
-                            <span asp-validation-for="Popcorn" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="User.Username" class="control-label"></label>
-                            <input asp-for="User.Username" class="form-control" />
-                            <span asp-validation-for="User.Username" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-primary" />
-                        </div>
-                    </form>*@
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
@@ -88,6 +72,30 @@
     </div>
 </div>
 
+<div class="modal fade" id="DeleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="h4">
+                    Are you sure you want to delete the selected user?
+                </div>
+                <form asp-action="Delete">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="container-fluid">
         <div class="table-responsive">
@@ -106,7 +114,7 @@
                 <tbody id="dynamic-body">
                     @for (int i = 0; i < Model.UserList.Count; ++i)
                     {                     
-                        <tr id="dynamic-row" onmouseover="mouseOverRow(this, @i)" onmouseout="mouseOutRow(this, @i)">                           
+                        <tr class="dynamic-row" id="@Model.UserList[i].UserId" >                           
                             <td>
                                 @Html.DisplayFor(modelItem => Model.UserList[i].UserId)
                             </td>
@@ -126,17 +134,16 @@
                                 @Html.DisplayFor(modelItem => Model.UserList[i].accountStatus)
                             </td>
                             <td id="lastDynamicIndex"class="btn-group dropright">
-                                <button type="button" id="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  
-                                        onmouseover="onMouseOverDots()" onmouseout="onMouseOutDots(this)">
+                                <button type="button" id="three-dot-button-box" class="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  >
                                     <div id="three-dot-button-div">
-                                        <i class="fas fa-ellipsis-v" id="three-dot-button"></i>
+                                        <i class="fas fa-ellipsis-v" id="three-dot-button-@Model.UserList[i].UserId" style="display: none;"></i>
                                     </div>
 
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Reset Password</a>
+                                    <a class="dropdown-item">Reset Password</a>
                                     <a class="dropdown-item" href="#">Disable User</a>
-                                    <a class="dropdown-item" href="#">Delete Account</a>
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#DeleteUserModal">Delete Account</a>
                                 </div>
                             </td>
                         </tr>
@@ -153,31 +160,4 @@
     @{}
 }
 
-<script>
-    var mouseOverDots = false;
-    var mouseOutDots = true;
-    function mouseOverRow(id, i) {
-        if (mouseOverDots) {
-            document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "black";
-        }
-        else {
-            document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "grey";
-        }
-    }
-
-    function mouseOutRow(id, i) {
-        document.getElementById("dynamic-body").children[i].querySelector("i").style.color = "transparent";
-    }
-
-    function onMouseOverDots() {
-        mouseOverDots = true;
-        mouseOutDots = false;
-    }
-
-    function onMouseOutDots(id) {
-        mouseOverDots = false;
-        mouseOutDots = true;
-    }
-
-</script>
 
