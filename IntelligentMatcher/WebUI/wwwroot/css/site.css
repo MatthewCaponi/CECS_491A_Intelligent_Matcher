@@ -50,7 +50,7 @@ html {
 }
 
 .row-highlight {
-    background-color: lightgrey;
+   background-color: lightgrey;
 }
 
 #three-dot-button-box {
@@ -65,7 +65,9 @@ html {
     outline: none;
 }
 
-
+.disabled-row {
+    background-color: darkgrey;
+}
 
 .border-top {
     border-top: 1px solid #e5e5e5;

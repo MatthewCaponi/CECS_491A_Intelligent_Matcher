@@ -54,7 +54,7 @@ namespace BusinessLayerUnitTests.User_Management
         public async Task CreateUser_UserDoesNotExist_UserCreated(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)
         {
             //Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType, email);
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
             UserManager userManager = new UserManager();
             string actualUsername = null;

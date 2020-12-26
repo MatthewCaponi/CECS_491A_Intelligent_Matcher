@@ -90,20 +90,42 @@ namespace WebUI.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult DumDum(string Popcorn)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            if (ModelState.IsValid == false)
-            {
-                return RedirectToAction("Index");
-            }
-
-            _logService.LogDebug($"Popcorn is: {Popcorn}");
+            _logService.LogDebug($"User Id from Delete Modal: {id}");
+            await _userManager.DeleteUser(id);
 
             return RedirectToAction("Index");
         }
 
-     
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(int id, string password)
+        {
+            _logService.LogDebug($"ID: {id} \nPassword: {password}");
+            await _userManager.UpdatePassword(id, password);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisableUser(int id)
+        {
+            _logService.LogDebug($"ID: {id} status: disabled");
+            await _userManager.DisableUser(id);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnableUser(int id)
+        {
+            _logService.LogDebug($"ID: {id} status: enabled");
+            await _userManager.EnableUser(id);
+
+            return RedirectToAction("Index");
+        }
+
+
 
 
         public IActionResult UserInfo()

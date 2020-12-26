@@ -76,7 +76,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -85,8 +85,8 @@
                 <div class="h4">
                     Are you sure you want to delete the selected user?
                 </div>
-                <form asp-action="Delete">
-                    <input type="submit" value="Delete" class="btn btn-danger" />
+                <form>
+                    <a asp-action="DeleteUser" name="deleteUserId" asp-route-id="10003" class="btn btn-danger">Delete</a>
                 </form>
             </div>
             <div class="modal-footer">
@@ -95,6 +95,94 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="UpdatePasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reset Pasword</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="h4">
+                    Please enter the new password
+                </div>
+                <form asp-action="ResetPassword">
+                    <div class="form-group">
+                        <input name="id" value="" type="hidden" />
+                        <input type="password" name="password" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Submit" class="btn btn-primary" />
+                    </div>                
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="DisableUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Disable User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="h4">
+                    Are you sure you wish to disable the user? They will be unable to access their account.
+                </div>
+                <form asp-action="DisableUser">
+                    <div class="form-group">
+                        <input name="id" value="" type="hidden" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" id="user-disabled" value="Submit" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="EnableUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enable User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="h4">
+                    Are you sure you wish to enable the user? They will be able to access their account again.
+                </div>
+                <form asp-action="EnableUser">
+                    <div class="form-group">
+                        <input name="id" value="" type="hidden" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" id="user-enabled" value="Submit" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="row">
     <div class="container-fluid">
@@ -113,8 +201,8 @@
                 </thead>
                 <tbody id="dynamic-body">
                     @for (int i = 0; i < Model.UserList.Count; ++i)
-                    {                     
-                        <tr class="dynamic-row" id="@Model.UserList[i].UserId" >                           
+                    {
+                        <tr class="dynamic-row @(Model.UserList[i].accountStatus == Models.UserProfileModel.AccountStatus.Disabled ? "disabled-row" : "")" id="@Model.UserList[i].UserId">
                             <td>
                                 @Html.DisplayFor(modelItem => Model.UserList[i].UserId)
                             </td>
@@ -133,17 +221,25 @@
                             <td>
                                 @Html.DisplayFor(modelItem => Model.UserList[i].accountStatus)
                             </td>
-                            <td id="lastDynamicIndex"class="btn-group dropright">
-                                <button type="button" id="three-dot-button-box" class="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  >
+                            <td id="lastDynamicIndex" class="btn-group dropright">
+                                <button type="button" id="three-dot-button-box" class="three-dot-button-box" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <div id="three-dot-button-div">
                                         <i class="fas fa-ellipsis-v" id="three-dot-button-@Model.UserList[i].UserId" style="display: none;"></i>
                                     </div>
 
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item">Reset Password</a>
-                                    <a class="dropdown-item" href="#">Disable User</a>
-                                    <a class="dropdown-item" data-toggle="modal" data-target="#DeleteUserModal">Delete Account</a>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#UpdatePasswordModal" data-user-id="@Model.UserList[i].UserId">Reset Password</button>
+                                    @if (Model.UserList[i].accountStatus == Models.UserProfileModel.AccountStatus.Disabled)
+                                    {
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#EnableUserModal" data-user-id="@Model.UserList[i].UserId">Enable User</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="dropdown-item" data-toggle="modal" data-target="#DisableUserModal" data-user-id="@Model.UserList[i].UserId">Disable User</button>
+                                    }
+
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#DeleteUserModal" data-user-id="@Model.UserList[i].UserId">Delete Account</button>
                                 </div>
                             </td>
                         </tr>
@@ -151,7 +247,7 @@
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 </div>
 
