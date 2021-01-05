@@ -14,56 +14,85 @@ namespace UserManagement.Services
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString()) != 0)
+            try
             {
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
+
                 return true;
             }
-
-            return false; 
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public static async Task<bool> EnableAccount(int accountId)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString()) != 0)
+            try
             {
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
                 return true;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public static async Task<bool> Suspend(int accountId)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString()) != 0)
+            try
             {
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
                 return true;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                return false;
+            } 
         }
 
         public static async Task<bool> Ban(int accountId)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString()) != 0)
+            try
             {
+                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString());
+                if (returned == 0)
+                {
+                    return false;
+                }
                 return true;
             }
-
-            return false;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
     }
 }

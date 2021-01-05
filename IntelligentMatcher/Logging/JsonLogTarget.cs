@@ -6,23 +6,25 @@ namespace Logging
 {
     public class JsonLogTarget : ILogTarget
     {
+        public JsonLogTarget()
+        {
+
+        }
         public void LogToTarget(string message, EventName eventName)
         {
 
             // Read the file as one string. 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".json";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
+            string fileName = $"{eventName}{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.json";
+            string directory = $"C:\\Users\\{ Environment.UserName}\\logs\\{ eventName.ToString()}";
             string logPath = Path.Combine(directory, fileName);
 
-
-            message = "{'log':'" + message + "'}";
+            message = "{'log':" + message + "}";
 
             //create the log directory under the user profile if it does not exist
             if (!Directory.Exists(directory))
             {
                 DirectoryInfo di = Directory.CreateDirectory(directory);
             }
-
 
             //create the file first then write
             Console.WriteLine(logPath);

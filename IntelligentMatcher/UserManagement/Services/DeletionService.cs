@@ -15,16 +15,24 @@ namespace UserManagement.Services
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
-            UserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
-
-            if (await userAccount.DeleteUserAccountById(id) != 0)
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            
+            try
             {
-                await userProfile.UpdateUserAccountStatus(id, AccountStatus.Deleted.ToString());
+                int returnValue =  await userAccount.DeleteUserAccountById(id);
+                if (returnValue == 0)
+                {
+                    return false;
+                }
                 return true;
             }
+            catch(Exception e)
+            {
+                return false;
+            }
 
-            return false;
+
         }
 
         public static async Task<bool> DeleteProfile(int accountId)
@@ -32,14 +40,17 @@ namespace UserManagement.Services
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
-            UserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfile = new UserProfileRepository(dataGateway, connectionString);
 
-            if (await userProfile.DeleteUserProfileById(accountId) != 0)
+            try
             {
+                await userProfile.DeleteUserProfileById(accountId);
                 return true;
             }
-
-            return false;
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
     }

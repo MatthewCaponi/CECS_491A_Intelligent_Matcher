@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
+    <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
   </ItemGroup>
 
 </Project>

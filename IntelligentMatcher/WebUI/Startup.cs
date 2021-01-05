@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess;
+using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UserManagement;
+using WebUI.Controllers;
 
 namespace WebUI
 {
@@ -34,7 +36,7 @@ namespace WebUI
             services.AddSingleton<IUserListManager, UserListManager>();
             services.AddSingleton<IUserManager, UserManager>();
             services.AddSingleton<IDataGateway, DataGateway>();
-            
+            services.AddSingleton<ILogServiceFactory, LogSeviceFactory>();
         }
 
 

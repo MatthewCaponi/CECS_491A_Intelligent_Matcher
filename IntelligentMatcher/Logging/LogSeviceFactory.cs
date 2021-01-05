@@ -8,7 +8,11 @@ namespace Logging
     {
         private TargetType _targetType;
         private List<ILogTarget> _logTargets = new List<ILogTarget>();
-    
+
+        public LogSeviceFactory()
+        {
+
+        }
         public void AddTarget(TargetType targetType)
         {
             switch (targetType)

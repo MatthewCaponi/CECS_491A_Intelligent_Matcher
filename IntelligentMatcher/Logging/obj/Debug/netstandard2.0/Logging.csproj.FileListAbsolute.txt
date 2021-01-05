@@ -18,3 +18,4 @@ C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Logg
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Logging\obj\Debug\netstandard2.0\Logging.csproj.CopyComplete
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Logging\obj\Debug\netstandard2.0\Logging.dll
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Logging\obj\Debug\netstandard2.0\Logging.pdb
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Logging\obj\Debug\netstandard2.0\Logging.csproj.CoreCompileInputs.cache

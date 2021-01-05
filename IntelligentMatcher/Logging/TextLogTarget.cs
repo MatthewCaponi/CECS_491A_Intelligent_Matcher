@@ -8,14 +8,15 @@ namespace Logging
 {
     public class TextLogTarget : ILogTarget
     {
-        public void LogToTarget(string message, EventName eventName)
+        public TextLogTarget()
         {
 
-
-
+        }
+        public void LogToTarget(string message, EventName eventName)
+        {
             // Read the file as one string. 
-            string fileName = eventName + (DateTime.Today.Date).ToString(@"yyyy-MM-dd") + ".txt";
-            string directory = "C:\\Users\\" + Environment.UserName + "\\logs\\" + eventName.ToString();
+            string fileName = $"{eventName}{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
+            string directory = $"C:\\Users\\{ Environment.UserName}\\logs\\{ eventName.ToString()}";
             string logPath = Path.Combine(directory, fileName);
 
             //create the log directory under the user profile if it does not exist
@@ -28,7 +29,6 @@ namespace Logging
             Console.WriteLine(logPath);
             if (!File.Exists(logPath))
             {
-
                 using (StreamWriter writer = File.CreateText(logPath))
                 {
                     writer.WriteLine(message);
@@ -42,15 +42,9 @@ namespace Logging
                     writer.WriteLine(message);
                 }
             }
-
-
         }
-
-
- 
     }
 
-    //Writes to the log folder and selects the correct folder baised on the enum value
 
 
 }

@@ -10,6 +10,11 @@ namespace Logging
         private StringWriter stringWriter;
         private TextWriter originalOutput;
 
+        public ConsoleLogTarget()
+        {
+
+        }
+
         public void LogToTarget(string message , EventName eventname)
         {
             Console.Write("New " + eventname.ToString() + ": " + message);

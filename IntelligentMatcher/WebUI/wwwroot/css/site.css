@@ -18,10 +18,16 @@ a {
   border-color: #1861ac;
 }
 
+
+.btn-group {
+    width: 100%;
+}
+
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
@@ -35,8 +41,36 @@ html {
   }
 }
 
+#add-user-button {
+    margin-bottom: 1%;
+}
+.pressed-color{
+    background-color: grey;
+    
+}
+
+.row-highlight {
+   background-color: lightgrey;
+}
+
+#three-dot-button-box {
+    border: none;
+    background-color: transparent;
+    position: relative;
+    left: 30%;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    display: inline-block;
+    outline: none;
+}
+
+.disabled-row {
+    background-color: darkgrey;
+}
+
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
@@ -44,6 +78,10 @@ html {
 
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+#table-shadow {
+    box-shadow: 5px 5px 8px 3px #888888;
 }
 
 button.accept-policy {
@@ -72,6 +110,7 @@ body {
 
 /*Dropdown Menu Styles
 --------------------------------------------------- */
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -85,6 +124,7 @@ body {
     min-width: 200px;
     z-index: 1;
 }
+
 
 .useractioncontent a {
     color: black;

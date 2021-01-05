@@ -22,3 +22,5 @@ C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\Data
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.csproj.CopyComplete
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.dll
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\obj\Debug\netstandard2.0\DataAccess.pdb
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\Logging.dll
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\DataAccess\bin\Debug\netstandard2.0\Logging.pdb

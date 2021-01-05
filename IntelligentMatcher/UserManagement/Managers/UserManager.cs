@@ -1,37 +1,80 @@
-﻿using System;
+﻿using DataAccess;
+using DataAccess.Repositories;
+using Logging;
+using Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services;
+using static Models.UserProfileModel;
 
 namespace UserManagement
 {
     public class UserManager : IUserManager
     {
-        public async Task<bool> CreateUser(UserCreateModel model)
+        ILogService _logger;
+        public UserManager()
         {
-            if (await SearchService.SearchUser(model.Username, model.email))
-            {
-                await UserCreationService.CreateAccount(model);
-                return true;
-            }
+            ILogServiceFactory factory = new LogSeviceFactory();
+            factory.AddTarget(TargetType.Text);
 
-            return false;
+            _logger = factory.CreateLogService<UserManager>();
+        }
+
+        public async Task<UserInfoModel> GetUserInfo(int id)
+        {
+            UserAccountModel userAccount = new UserAccountModel();
+            UserProfileModel userProfile = new UserProfileModel();
+            UserInfoModel userInfo = new UserInfoModel();
+            try
+            {
+                userAccount = await ListFetchService.FetchUserAccount(id);
+                userProfile = await ListFetchService.FetchUserProfile(id);
+
+                userInfo.AccountCreationDate = userProfile.AccountCreationDate;
+                userInfo.accountStatus = userProfile.accountStatus;
+                userInfo.DateOfBirth = userProfile.DateOfBirth;
+                userInfo.email = userAccount.EmailAddress;
+                userInfo.FirstName = userProfile.FirstName;
+                userInfo.LastName = userProfile.LastName;
+                userInfo.Password = userAccount.Password;
+                userInfo.UserId = userAccount.Id;
+                userInfo.Username = userAccount.Username;
+                userInfo.accountType = userProfile.accountType;
+
+                return userInfo;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
+                throw new Exception(e.Message, e.InnerException);
+            }
+        }
+
+   
+
+        public async Task<int> CreateUser(UserCreateModel model)
+        {
+            try
+            {
+                return await UserCreationService.CreateAccount(model);
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
+                throw new Exception(e.Message, e.InnerException);
+            }     
         }
 
         public async Task<bool> DeleteUser(int accountId)
         {
             if (await DeletionService.DeleteAccount(accountId))
             {
-                if (await DeletionService.DeleteProfile(accountId))
-                {
-                    return true;
-                }
-
-                return false;
+                return true;
             }
-
+           
             return false;
         }
 
@@ -68,6 +111,36 @@ namespace UserManagement
         public async Task<bool> SuspendUser(int accountId)
         {
             if (await UserAccessService.Suspend(accountId))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateUsername(int accountId, string newUsername)
+        {
+            if (await UserUpdateService.ChangeUsername(accountId, newUsername))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdatePassword(int accountId, string newPassword)
+        {
+            if (await UserUpdateService.ChangePassword(accountId, newPassword))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateEmail(int accountId, string newEmail)
+        {
+            if (await UserUpdateService.ChangeEmail(accountId, newEmail))
             {
                 return true;
             }

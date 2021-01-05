@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 

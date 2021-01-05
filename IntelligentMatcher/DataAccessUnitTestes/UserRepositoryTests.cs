@@ -58,13 +58,9 @@ namespace DataAccessUnitTestes
             // Assert
            for (int i = 0; i < 10; ++i)
             {
-                if (userList[i].LastName == $"LastName{i+1}")
+                if (userList[i].Id != (i + 1))
                 {
-
-                }
-                else
-                {
-                    Assert.IsFalse(true);
+                    Assert.IsTrue(false);
                 }
             }
 

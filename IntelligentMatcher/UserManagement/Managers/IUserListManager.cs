@@ -6,6 +6,6 @@ namespace UserManagement
 {
     public interface IUserListManager
     {
-        Task<List<UserListTransferModel>> PopulateListOfUsers();
+        Task<List<UserListModel>> PopulateListOfUsers();
     }
 }

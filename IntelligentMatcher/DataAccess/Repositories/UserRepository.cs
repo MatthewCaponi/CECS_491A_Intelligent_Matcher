@@ -19,7 +19,7 @@ namespace DataAccess.Repositories
 
         public async Task<List<UserListTransferModel>> GetUserList()
         {
-            var query = "select UserAccount.[Id], [FirstName], [LastName], [Username], [AccountCreationDate]" +
+            var query = "select UserAccount.[Id], [FirstName], [LastName], [Username], [AccountCreationDate], [AccountStatus]" +
                         "from [UserAccount] inner join [UserProfile]" +
                         "on UserAccount.Id = UserProfile.UserAccountId;";
 
