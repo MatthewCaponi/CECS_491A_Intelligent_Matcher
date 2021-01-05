@@ -76,5 +76,51 @@ namespace BusinessLayerUnitTests.User_Management
                 Assert.IsTrue(true);
             }
         }
+
+        [DataTestMethod]
+        [DataRow(3)]
+        public async Task FetchUserAccount_AccountExists_IdMatches(int id)
+        {
+            // Arrange
+            UserAccountModel userAccount = new UserAccountModel();
+            int actualId = 0; ;
+            // Act
+            try
+            {
+                userAccount = await ListFetchService.FetchUserAccount(id);
+                actualId = userAccount.Id;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Assert.IsTrue(false);
+            }
+
+            //Assert
+            Assert.IsTrue(actualId == id);
+        }
+
+        [DataTestMethod]
+        [DataRow(8)]
+        public async Task FetchUserProfile_ProfileExists_IdMatches(int id)
+        {
+            // Arrange
+            UserProfileModel userProfile = new UserProfileModel();
+            int actualId = 0;
+            // Act
+            try
+            {
+                userProfile = await ListFetchService.FetchUserProfile(id);
+                actualId = userProfile.Id;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                Assert.IsTrue(false);
+            }
+
+            //Assert
+            Assert.IsTrue(actualId == id);
+        }
     }
 }

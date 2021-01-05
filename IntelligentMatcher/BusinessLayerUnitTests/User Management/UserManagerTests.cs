@@ -48,7 +48,24 @@ namespace BusinessLayerUnitTests.User_Management
             await testRepo.DeleteUserAccountTestRows();
             await testRepo.DeleteUserProfileTestRows();
         }
-        
+
+        [DataTestMethod]
+        [DataRow(2)]
+        public async Task GetUserInfo_UserExists_UsernameAccurate(int userId)
+        {
+            // Arrange
+            var userManager = new UserManager();
+            IUserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+
+            var userInfo = await userManager.GetUserInfo(userId);
+            var expectedAccount = await userAccountRepo.GetUserAccountById(userId);
+            var expectedUsername = expectedAccount.Username;
+            var actualUsername = userInfo.Username;
+
+            //Assert
+            Assert.IsTrue(expectedUsername == actualUsername);
+        }
+
         [DataTestMethod]
         [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, "john@gmail.com")]
         public async Task CreateUser_UserDoesNotExist_UserCreated(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)

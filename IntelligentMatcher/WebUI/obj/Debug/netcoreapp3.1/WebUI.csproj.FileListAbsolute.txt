@@ -184,3 +184,4 @@ C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\WebU
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\WebUI\bin\Debug\netcoreapp3.1\Logging.pdb
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\UserHome\AddUser.cshtml.g.cs
 C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\UserHome\UserInfo.cshtml.g.cs
+C:\Users\Matt\source\repos\CECS_491A_Intelligent_Matcher\IntelligentMatcher\WebUI\obj\Debug\netcoreapp3.1\Razor\Views\User\UserProfile.cshtml.g.cs

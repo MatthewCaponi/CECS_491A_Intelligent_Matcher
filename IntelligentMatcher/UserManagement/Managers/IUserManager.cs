@@ -14,6 +14,7 @@ namespace UserManagement
         Task<bool> UpdateUsername(int accountId, string newUsername);
         Task<bool> UpdatePassword(int accountId, string newPassword);
         Task<bool> UpdateEmail(int accountId, string newEmail);
+        Task<UserInfoModel> GetUserInfo(int id);
 
 
     }

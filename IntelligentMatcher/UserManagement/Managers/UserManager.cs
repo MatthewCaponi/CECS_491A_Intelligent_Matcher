@@ -1,6 +1,7 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
 using Logging;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +22,38 @@ namespace UserManagement
 
             _logger = factory.CreateLogService<UserManager>();
         }
+
+        public async Task<UserInfoModel> GetUserInfo(int id)
+        {
+            UserAccountModel userAccount = new UserAccountModel();
+            UserProfileModel userProfile = new UserProfileModel();
+            UserInfoModel userInfo = new UserInfoModel();
+            try
+            {
+                userAccount = await ListFetchService.FetchUserAccount(id);
+                userProfile = await ListFetchService.FetchUserProfile(id);
+
+                userInfo.AccountCreationDate = userProfile.AccountCreationDate;
+                userInfo.accountStatus = userProfile.accountStatus;
+                userInfo.DateOfBirth = userProfile.DateOfBirth;
+                userInfo.email = userAccount.EmailAddress;
+                userInfo.FirstName = userProfile.FirstName;
+                userInfo.LastName = userProfile.LastName;
+                userInfo.Password = userAccount.Password;
+                userInfo.UserId = userAccount.Id;
+                userInfo.Username = userAccount.Username;
+                userInfo.accountType = userProfile.accountType;
+
+                return userInfo;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
+                throw new Exception(e.Message, e.InnerException);
+            }
+        }
+
+   
 
         public async Task<int> CreateUser(UserCreateModel model)
         {
