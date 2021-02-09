@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\IntelligentMatcher",
+    "\\IntelligentMatcher\\Logging",
+    "\\IntelligentMatcher\\UserAccessControl",
+    "\\IntelligentMatcher\\UserAccessControl\\DataGateway",
+    "\\IntelligentMatcher\\UserAccessControl\\Repositories"
+  ],
+  "SelectedNode": "\\IntelligentMatcher\\UserDatabase",
+  "PreviewInSolutionExplorer": false
+}
