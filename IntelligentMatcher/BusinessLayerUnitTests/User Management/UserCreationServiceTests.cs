@@ -49,11 +49,12 @@ namespace BusinessLayerUnitTests.User_Management
         }
 
         [DataTestMethod]
-        [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, "john@gmail.com")]
-        public async Task CreateAccount_NoAccountExists_AccountCreated(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)
+        [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, AccountStatus.Suspended, "john@gmail.com")]
+        public async Task CreateAccount_NoAccountExists_AccountCreated(string userName, string password, string firstName, string lastName, string dateOfBirth, 
+            AccountType accountType, AccountStatus accountStatus, string email)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today);
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
 
@@ -68,11 +69,11 @@ namespace BusinessLayerUnitTests.User_Management
         }
 
         [DataTestMethod]
-        [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, "john@gmail.com")]
-        public async Task CreateAccount_NoAccountExists_UsernameCorrect(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)
+        [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, AccountStatus.Active, "john@gmail.com")]
+        public async Task CreateAccount_NoAccountExists_UsernameCorrect(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today);
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
         
             // Act
@@ -85,12 +86,12 @@ namespace BusinessLayerUnitTests.User_Management
         }
 
         [DataTestMethod]
-        [DataRow("TestUser3", "234John", "John", "Peterson", "2-05-94", AccountType.User, "john@gmail.com", "Username already exists")]
+        [DataRow("TestUser3", "234John", "John", "Peterson", "2-05-94", AccountType.User, AccountStatus.Banned, "john@gmail.com", "Username already exists")]
         public async Task CreateAccount_UsernameExists_ExceptionMessageProper(string userName, string password, string firstName, string lastName,
-            string dateOfBirth, AccountType accountType, string email, string expectedMessage)
+            string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email, string expectedMessage)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today );
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today );
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
@@ -113,12 +114,12 @@ namespace BusinessLayerUnitTests.User_Management
         }
 
         [DataTestMethod]
-        [DataRow("JohnZulousky", "234John", "John", "Peterson", "2-05-94", AccountType.User, "TestEmail7", "Email already exists")]
+        [DataRow("JohnZulousky", "234John", "John", "Peterson", "2-05-94", AccountType.User, AccountStatus.Deleted, "TestEmail7", "Email already exists")]
         public async Task CreateAccount_EmailExists_ExceptionMessageProper(string userName, string password, string firstName, string lastName,
-            string dateOfBirth, AccountType accountType, string email, string expectedMessage)
+            string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email, string expectedMessage)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today);
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
@@ -141,11 +142,12 @@ namespace BusinessLayerUnitTests.User_Management
         }
 
         [DataTestMethod]
-        [DataRow("John015", "234John", "John", "Peterson", "2-05-94", AccountType.User, "john33@gmail.com")]
-        public async Task CreateAccount_NoAccountExists_FirstNameCorrect(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)
+        [DataRow("John015", "234John", "John", "Peterson", "2-05-94", AccountType.User, AccountStatus.Disabled, "john33@gmail.com")]
+        public async Task CreateAccount_NoAccountExists_FirstNameCorrect(string userName, string password, string firstName, string lastName, string dateOfBirth, 
+            AccountType accountType, AccountStatus accountStatus, string email)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today);
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             var userProfileRepo = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
             // Act

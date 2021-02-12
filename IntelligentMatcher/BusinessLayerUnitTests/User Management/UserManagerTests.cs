@@ -67,11 +67,11 @@ namespace BusinessLayerUnitTests.User_Management
         }
 
         [DataTestMethod]
-        [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, "john@gmail.com")]
-        public async Task CreateUser_UserDoesNotExist_UserCreated(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, string email)
+        [DataRow("John014", "234John", "John", "Peterson", "2-05-94", AccountType.User, AccountStatus.Active, "john@gmail.com")]
+        public async Task CreateUser_UserDoesNotExist_UserCreated(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email)
         {
             //Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), email, DateTime.Today);
+            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
             UserManager userManager = new UserManager();
             string actualUsername = null;

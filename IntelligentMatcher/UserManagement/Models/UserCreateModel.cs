@@ -12,19 +12,22 @@ namespace UserManagement.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DateOfBirth { get; set; }
-        public string accountType { get; set; }
-        public string email { get; set; }
+        public string AccountType { get; set; }
+        public string AccountStatus { get; set; }
+        public string Email { get; set; }
         public DateTime AccountCreationDate { get; set; }
 
-        public UserCreateModel(string userName, string password, string firstName, string lastName, string dateOfBirth, string accountType, string email, DateTime accountCreationDate)
+        public UserCreateModel(string userName, string password, string firstName, string lastName, 
+            string dateOfBirth, string accountType, string accountStatus, string email, DateTime accountCreationDate)
         {
             Username = userName;
             Password = password;
             FirstName = firstName;
             LastName = lastName;
             DateOfBirth = dateOfBirth;
-            this.accountType = accountType;
-            this.email = email;
+            AccountType = accountType;
+            AccountStatus = accountStatus;
+            Email = email;
             AccountCreationDate = accountCreationDate;
         }
 

@@ -68,7 +68,7 @@ namespace WebUI.Controllers
             }
 
             _logService.LogInfo($"Username: { user.Username} \nPassword: {user.Password}" +
-                $" \nEmail: {user.email} \nFirst Name: {user.FirstName} \nLastName: {user.LastName}" +
+                $" \nEmail: {user.Email} \nFirst Name: {user.FirstName} \nLastName: {user.LastName}" +
                 $" \nDate of Birth: {user.DateOfBirth} \nAccount Creation Date {user.AccountCreationDate}");
             int id = await _userManager.CreateUser(user);
             

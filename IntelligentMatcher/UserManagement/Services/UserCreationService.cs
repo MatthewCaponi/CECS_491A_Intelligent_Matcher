@@ -24,7 +24,7 @@ namespace UserManagement.Services
             IConnectionStringData connectionString = new ConnectionStringData();
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            UserAccountModel userAccount = new UserAccountModel(model.Username, model.Password, model.email);
+            UserAccountModel userAccount = new UserAccountModel(model.Username, model.Password, model.Email);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
 
             try
@@ -32,7 +32,7 @@ namespace UserManagement.Services
                 var userAccountId = await userAccountRepository.CreateUserAccount(userAccount);
                 UserProfileModel userProfileModel =
                 new UserProfileModel(model.FirstName, model.LastName, DateTime.Parse(model.DateOfBirth),
-                model.AccountCreationDate, model.accountType.ToString(), "Active", userAccountId);
+                model.AccountCreationDate, model.AccountType.ToString(), model.AccountStatus, userAccountId);
                 await userProfileRepository.CreateUserProfile(userProfileModel);
 
                 return userAccountId;
