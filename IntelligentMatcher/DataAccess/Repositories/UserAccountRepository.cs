@@ -34,7 +34,20 @@ namespace DataAccess.Repositories
 
             return row.FirstOrDefault();
         }
+        public async Task<string> GetSaltById(int id)
+        {
+            var query = "select [Salt]" +
+                        "from [UserAccount] where Id = @Id";
 
+            var row = await _dataGateway.LoadData<string, dynamic>(query,
+                new
+                {
+                    Id = id
+                },
+                _connectionString.SqlConnectionString);
+
+            return row.FirstOrDefault();
+        }
         public async Task<UserAccountModel> GetAccountByUsername(string username)
         {
             var query = "select [Id], [Username], [Password], [EmailAddress]" +
@@ -118,7 +131,18 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
+        public Task<int> UpdateAccountSalt(int id, string salt)
+        {
+            var query = "update [UserAccount] set Salt = @Salt where Id = @Id;";
 
+            return _dataGateway.SaveData(query,
+                                         new
+                                         {
+                                             Id = id,
+                                             Salt = salt
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
         public Task<int> UpdateAccountEmail(int id, string email)
         {
             var query = "update [UserAccount] set EmailAddress = @EmailAddress where Id = @Id;";

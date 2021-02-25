@@ -1,18 +1,51 @@
-﻿using System;
+﻿using DataAccess;
+using DataAccess.Repositories;
+using System;
+using static Models.UserProfileModel;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace Security
 {
     class ICryptographyService
     {
 
-        private string createSalt(int UserID)
+        private async Task<String> CreateSalt(int UserID)
         {
-            return "Salt";
+
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] buffer = new byte[1024];
+
+            rng.GetBytes(buffer);
+
+            string salt = BitConverter.ToString(buffer); IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+
+            try
+            {
+                var returned = await userAccount.UpdateAccountSalt(UserID, salt);
+            }
+            catch (Exception e)
+            {
+            }
+
+            return salt;
+
         }
 
         private string retreiveSalt(int UserID)
         {
-            return "Salt";
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            string salt = userAccount.GetSaltById(UserID).ToString();
+
+            return salt;
+
+
         }
         private string encrypt(string SaltedPassword)
         {
@@ -23,7 +56,7 @@ namespace Security
 
         public Boolean newPasswordEncrypt(string Password, int UserID)
         {
-            string SaltedPassword = Password + createSalt(UserID);
+            string SaltedPassword = Password + CreateSalt(UserID);
             string encryptedPassword = encrypt(SaltedPassword);
             return (true);
         }
