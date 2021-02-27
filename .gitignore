@@ -1,2 +1,5 @@
 
 *.dll
+*.v2
+*.testlog
+*.dll
