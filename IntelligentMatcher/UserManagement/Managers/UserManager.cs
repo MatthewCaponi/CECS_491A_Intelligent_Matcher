@@ -1,69 +1,45 @@
-﻿using DataAccess;
-using DataAccess.Repositories;
-using Logging;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using System.Linq;
 using UserManagement.Models;
-using UserManagement.Services;
-using static Models.UserProfileModel;
 
-namespace UserManagement
+namespace IntelligentMatcher.UserManagement
 {
     public class UserManager : IUserManager
     {
-        ILogService _logger;
-        public UserManager()
-        {
-            ILogServiceFactory factory = new LogSeviceFactory();
-            factory.AddTarget(TargetType.Text);
+        private readonly UserService _userService;
+        private readonly UserAccountService _userAccountService;
+        private readonly UserAccessService _userAccessService;
 
-            _logger = factory.CreateLogService<UserManager>();
+        public UserManager(UserService userService, UserAccountService userAccountService, UserAccessService userAccessService)
+        {
+            _userService = userService;
+            _userAccountService = userAccountService;
+            _userAccessService = userAccessService;
         }
 
-        public async Task<UserInfoModel> GetUserInfo(int id)
+        public async Task<UserModel> GetUser(int id)
         {
-            UserAccountModel userAccount = new UserAccountModel();
-            UserProfileModel userProfile = new UserProfileModel();
-            UserInfoModel userInfo = new UserInfoModel();
+            return await _userService.GetUser(id);
+        }
+
+        public async Task<int> CreateUser(UserAccountModel accountModel, UserModel userModel)
+        {
+            var users = _userAccountService.GetAllUserAccounts();
+            if (users.Any(x => users.Username == x.Username))
+            {
+
+            }
             try
             {
-                userAccount = await ListFetchService.FetchUserAccount(id);
-                userProfile = await ListFetchService.FetchUserProfile(id);
-
-                userInfo.AccountCreationDate = userProfile.AccountCreationDate;
-                userInfo.accountStatus = userProfile.accountStatus;
-                userInfo.DateOfBirth = userProfile.DateOfBirth;
-                userInfo.email = userAccount.EmailAddress;
-                userInfo.FirstName = userProfile.FirstName;
-                userInfo.LastName = userProfile.LastName;
-                userInfo.Password = userAccount.Password;
-                userInfo.UserId = userAccount.Id;
-                userInfo.Username = userAccount.Username;
-                userInfo.accountType = userProfile.accountType;
-
-                return userInfo;
+                var accountCreated = await _userAccountService.CreateAccount(accountModel);
+                if (accountCreated)
+                {
+                    return await _userService.CreateUser(userModel);
+                }
             }
             catch(Exception e)
             {
-                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
-                throw new Exception(e.Message, e.InnerException);
-            }
-        }
-
-   
-
-        public async Task<int> CreateUser(UserCreateModel model)
-        {
-            try
-            {
-                return await UserCreationService.CreateAccount(model);
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
                 throw new Exception(e.Message, e.InnerException);
             }     
         }
@@ -88,29 +64,9 @@ namespace UserManagement
             return false;
         }
 
-        public async Task<bool> BanUser(int accountId)
-        {
-            if (await UserAccessService.Ban(accountId))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public async Task<bool> EnableUser(int accountId)
         {
             if (await UserAccessService.EnableAccount(accountId))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task<bool> SuspendUser(int accountId)
-        {
-            if (await UserAccessService.Suspend(accountId))
             {
                 return true;
             }
@@ -147,7 +103,4 @@ namespace UserManagement
 
             return false;
         }
-
-
-    }
 }

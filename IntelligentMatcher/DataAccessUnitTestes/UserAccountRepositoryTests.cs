@@ -48,7 +48,7 @@ namespace DataAccessUnitTestes
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             //Act
-            await userAccount.CreateUserAccount(model);
+            await userAccount.CreateAccount(model);
             var actualAccount = await userAccount.GetAccountByUsername(username);
 
             //Assert
@@ -71,7 +71,7 @@ namespace DataAccessUnitTestes
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
-            var userAccountModel = await userAccount.GetUserAccountById(expectedId);
+            var userAccountModel = await userAccount.GetAccountById(expectedId);
             var actualId = userAccountModel.Id;
 
             // Assert
@@ -95,7 +95,7 @@ namespace DataAccessUnitTestes
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
-            var userAccountModel = await userAccount.GetUserAccountById(id);
+            var userAccountModel = await userAccount.GetAccountById(id);
             var actualUsername = userAccountModel.Username;
 
             // Assert
@@ -217,7 +217,7 @@ namespace DataAccessUnitTestes
 
             // Act
             var userAccountModel = await userAccount.UpdateAccountPassword(id, expectedPassword);
-            var retrievedAccount = await userAccount.GetUserAccountById(id);
+            var retrievedAccount = await userAccount.GetAccountById(id);
             var actualPassword = retrievedAccount.Password;
 
             // Assert
@@ -242,7 +242,7 @@ namespace DataAccessUnitTestes
 
             // Act
             var userAccountModel = await userAccount.UpdateAccountUsername(id, expectedUsername);
-            var retrievedAccount = await userAccount.GetUserAccountById(id);
+            var retrievedAccount = await userAccount.GetAccountById(id);
             var actualUsername = retrievedAccount.Username;
 
             // Assert
@@ -267,7 +267,7 @@ namespace DataAccessUnitTestes
 
             // Act
             var userAccountModel = await userAccount.UpdateAccountEmail(id, expectedEmail);
-            var retrievedAccount = await userAccount.GetUserAccountById(id);
+            var retrievedAccount = await userAccount.GetAccountById(id);
             var actualEmail = retrievedAccount.EmailAddress;
 
             // Assert
@@ -290,8 +290,8 @@ namespace DataAccessUnitTestes
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
-            var userAccountModel = await userAccount.DeleteUserAccountById(id);
-            var retrievedAccount = await userAccount.GetUserAccountById(id);
+            var userAccountModel = await userAccount.DeleteAccountById(id);
+            var retrievedAccount = await userAccount.GetAccountById(id);
 
             // Assert
             Assert.IsNull(retrievedAccount);

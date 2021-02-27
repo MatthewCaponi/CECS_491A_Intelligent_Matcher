@@ -60,7 +60,8 @@
   <ItemGroup>
     <Build Include="UserAccount.sql" />
     <Build Include="UserProfile.sql" />
-    <Build Include="SecurityQuestions.sql" />
+    <Build Include="GenericEntity.sql" />
+    <Build Include="UserInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

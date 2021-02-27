@@ -44,7 +44,7 @@ namespace DataAccessUnitTestes
             DynamicParameters p = new DynamicParameters();
 
             p.Add("FirstName", model.FirstName);
-            p.Add("LastName", model.LastName);
+            p.Add("LastName", model.Surname);
             p.Add("DateOfBirth", model.DateOfBirth);
             p.Add("AccountCreationDate", model.AccountCreationDate);
             p.Add("AccountType", model.accountType);

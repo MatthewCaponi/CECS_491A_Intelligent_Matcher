@@ -53,7 +53,7 @@ namespace BusinessLayerUnitTests.User_Management
 
             // Act
             await userAccountRepo.UpdateAccountUsername(userId, newUsername);
-            var modifiedAccount = await userAccountRepo.GetUserAccountById(userId);
+            var modifiedAccount = await userAccountRepo.GetAccountById(userId);
             var actualUsername = modifiedAccount.Username;
 
             //Assert
@@ -69,7 +69,7 @@ namespace BusinessLayerUnitTests.User_Management
 
             // Act
             await userAccountRepo.UpdateAccountPassword(userId, newPassword);
-            var modifiedAccount = await userAccountRepo.GetUserAccountById(userId);
+            var modifiedAccount = await userAccountRepo.GetAccountById(userId);
             var actualPassword = modifiedAccount.Password;
 
             //Assert
@@ -85,7 +85,7 @@ namespace BusinessLayerUnitTests.User_Management
 
             // Act
             await userAccountRepo.UpdateAccountEmail(userId, newEmail);
-            var modifiedAccount = await userAccountRepo.GetUserAccountById(userId);
+            var modifiedAccount = await userAccountRepo.GetAccountById(userId);
             var actualEmail = modifiedAccount.EmailAddress;
 
             //Assert
