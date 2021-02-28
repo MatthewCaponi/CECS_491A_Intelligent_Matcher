@@ -7,4 +7,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Surname" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c0329a87-1219-441d-b5c3-c16af08810dd" ChangeDateTime="02/28/2021 00:38:55">
+    <Property Name="ElementName" Value="[dbo].[UserProfile].[UserAccountId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserProfile]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DateOfBirth" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e4517731-75e9-4f9d-bf76-9b9779826241" ChangeDateTime="02/28/2021 00:54:46">
+    <Property Name="ElementName" Value="[dbo].[UserProfile].[EmailAddress]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserProfile]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="EmailAddres" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6ceffdb7-2476-4187-8838-042d7a8ed9ef" ChangeDateTime="02/28/2021 00:54:51">
+    <Property Name="ElementName" Value="[dbo].[UserProfile].[EmailAddres]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserProfile]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserAccountId" />
+  </Operation>
 </Operations>

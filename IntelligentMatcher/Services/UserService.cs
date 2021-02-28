@@ -19,7 +19,7 @@ namespace UserManagement.Services
             _userRepository = userRepository;
         }
 
-        public static async Task<List<UserModel>> GetAllUsers()
+        public static async Task<List<Models.UserProfileModel>> GetAllUsers()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace UserManagement.Services
             }        
         }     
 
-        public async Task<UserProfileModel> GetUser(int id)
+        public async Task<global::Models.UserProfileModel> GetUser(int id)
         {
 
             try
@@ -44,13 +44,13 @@ namespace UserManagement.Services
             }
         }
 
-        public async Task<int> CreateUser(UserModel model)
+        public async Task<int> CreateUser(Models.UserProfileModel model)
         {
             try
             {
                 var userAccountId = await userAccountRepository.CreateUserAccount(userAccount);
-                UserProfileModel userProfileModel =
-                new UserProfileModel(model.FirstName, model.Surname, DateTime.Parse(model.DateOfBirth),
+                global::Models.UserProfileModel userProfileModel =
+                new global::Models.UserProfileModel(model.FirstName, model.Surname, DateTime.Parse(model.DateOfBirth),
                 model.AccountCreationDate, model.AccountType.ToString(), model.AccountStatus, userAccountId);
                 await userProfileRepository.CreateUserProfile(userProfileModel);
 

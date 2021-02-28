@@ -5,7 +5,7 @@ namespace IntelligentMatcher.UserManagement
 {
     public interface IUserManager
     {
-        Task<int> CreateUser(UserModel model);
+        Task<int> CreateUser(UserProfileModel model);
         Task<bool> DeleteUser(int accountId);
         Task<bool> DisableUser(int accountId);
         Task<bool> EnableUser(int accountId);

@@ -31,7 +31,8 @@ namespace DataAccess.Repositories
 
         public async Task<UserAccountModel> GetAccountById(int id)
         {
-            var query = "select [Id], [Username], [Password], [EmailAddress]" +
+            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
+                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
                         "from [UserAccount] where Id = @Id";
 
             var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
@@ -46,13 +47,30 @@ namespace DataAccess.Repositories
 
         public async Task<UserAccountModel> GetAccountByUsername(string username)
         {
-            var query = "select [Id], [Username], [Password], [EmailAddress]" +
+            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
+                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
                         "from [UserAccount] where Username = @Username";
 
             var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
                 new
                 {
                     Username = username
+                },
+                _connectionString.SqlConnectionString);
+
+            return row.FirstOrDefault();
+        }
+
+        public async Task<UserProfileModel> GetAccountByEmail(string email)
+        {
+            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
+                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
+                        "from [UserAccount] where EmailAddress = @EmailAddress";
+
+            var row = await _dataGateway.LoadData < UserProfileModel, dynamic>(query,
+                new
+                {
+                    EmailAddress = email
                 },
                 _connectionString.SqlConnectionString);
 
@@ -76,12 +94,21 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateAccount(UserAccountModel model)
         {
-            var query = "insert into [UserAccount]([Username], [Salt], [EmailAddress])" +
-                        "values (@Username, @Salt); set @Id = SCOPE_IDENTITY(); ";
+            var query = "insert into [UserAccount]([Username], [Password], [Salt], [EmailAddress], " +
+                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate])" +
+                        "values (@Username, @Password, @Salt, @EmailAddress, " +
+                        "@AccountType, @AccountStatus, @CreationDate, @UpdationDate); " +
+                        "set @Id = SCOPE_IDENTITY(); ";
             DynamicParameters p = new DynamicParameters();
 
             p.Add("Username", model.Username);
+            p.Add("Password", model.Password);
             p.Add("Salt", model.Salt);
+            p.Add("EmailAddress", model.EmailAddress);
+            p.Add("AccountType", model.AccountType);
+            p.Add("AccountStatus", model.AccountStatus);
+            p.Add("CreationDate", model.CreationDate);
+            p.Add("UpdationDate", model.UpdationDate);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
@@ -113,6 +140,33 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
+
+        public Task<int> UpdateAccountEmail(int id, string email)
+        {
+            var query = "update [UserAccount] set EmailAddress = @EmailAddress where Id = @Id;";
+
+            return _dataGateway.SaveData(query,
+                                         new
+                                         {
+                                             Id = id,
+                                             EmailAddress = email
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
+
+        public Task<int> UpdateAccountPassword(int id, string password)
+        {
+            var query = "update [UserAccount] set Password = @Password where Id = @Id;";
+
+            return _dataGateway.SaveData(query,
+                                         new
+                                         {
+                                             Id = id,
+                                             Password = password
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
+
         public Task<int> UpdateAccountSalt(int id, string salt)
         {
             var query = "update [UserAccount] set Salt = @Salt where Id = @Id;";

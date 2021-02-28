@@ -18,12 +18,12 @@ namespace IntelligentMatcher.UserManagement
             _userAccessService = userAccessService;
         }
 
-        public async Task<UserModel> GetUser(int id)
+        public async Task<UserProfileModel> GetUser(int id)
         {
             return await _userService.GetUser(id);
         }
 
-        public async Task<int> CreateUser(UserAccountModel accountModel, UserModel userModel)
+        public async Task<int> CreateUser(UserAccountModel accountModel, UserProfileModel userModel)
         {
             var users = _userAccountService.GetAllUserAccounts();
             if (users.Any(x => users.Username == x.Username))
