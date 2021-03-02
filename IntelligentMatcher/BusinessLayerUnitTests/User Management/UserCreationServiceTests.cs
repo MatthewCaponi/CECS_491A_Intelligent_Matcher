@@ -31,8 +31,8 @@ namespace BusinessLayerUnitTests.User_Management
                 UserAccountModel userAccountModel = new UserAccountModel("TestUser" + i, "TestPass" + i, "TestEmail" + i);
                 userAccountModel.Id = await testRepo.InsertUserAccountTestRows(userAccountModel);
 
-                UserProfileModel model = new UserProfileModel($"FirstName{i}", $"LastName{i}", DateTime.Now, DateTime.Today.Date,
-                     UserProfileModel.AccountType.User.ToString(), UserProfileModel.AccountStatus.Active.ToString(), userAccountModel.Id);
+                Models.UserProfileModel model = new Models.UserProfileModel($"FirstName{i}", $"LastName{i}", DateTime.Now, DateTime.Today.Date,
+                     Models.UserProfileModel.AccountType.User.ToString(), Models.UserProfileModel.AccountStatus.Active.ToString(), userAccountModel.Id);
                 await testRepo.InsertUserProfileTestRows(model);
             }
         }
@@ -54,7 +54,7 @@ namespace BusinessLayerUnitTests.User_Management
             AccountType accountType, AccountStatus accountStatus, string email)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
+            UserManagement.Models.WebUserProfileModel model = new UserManagement.Models.WebUserProfileModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
 
@@ -73,7 +73,7 @@ namespace BusinessLayerUnitTests.User_Management
         public async Task CreateAccount_NoAccountExists_UsernameCorrect(string userName, string password, string firstName, string lastName, string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
+            UserManagement.Models.WebUserProfileModel model = new UserManagement.Models.WebUserProfileModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
         
             // Act
@@ -91,7 +91,7 @@ namespace BusinessLayerUnitTests.User_Management
             string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email, string expectedMessage)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today );
+            UserManagement.Models.WebUserProfileModel model = new UserManagement.Models.WebUserProfileModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today );
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
@@ -119,7 +119,7 @@ namespace BusinessLayerUnitTests.User_Management
             string dateOfBirth, AccountType accountType, AccountStatus accountStatus, string email, string expectedMessage)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
+            UserManagement.Models.WebUserProfileModel model = new UserManagement.Models.WebUserProfileModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
@@ -147,7 +147,7 @@ namespace BusinessLayerUnitTests.User_Management
             AccountType accountType, AccountStatus accountStatus, string email)
         {
             // Arrange
-            UserCreateModel model = new UserCreateModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
+            UserManagement.Models.WebUserProfileModel model = new UserManagement.Models.WebUserProfileModel(userName, password, firstName, lastName, dateOfBirth, accountType.ToString(), accountStatus.ToString(), email, DateTime.Today);
             var userProfileRepo = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
             // Act

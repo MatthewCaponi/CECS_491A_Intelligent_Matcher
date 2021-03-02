@@ -1,15 +1,15 @@
 ﻿using Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
     public interface IUserProfileRepository
     {
-        Task<int> CreateUserProfile(UserProfileModel model);
-        Task<int> DeleteUserProfileById(int id);
-        Task<UserProfileModel> GetUserProfileByAccountId(int accountId);
+        Task<IEnumerable<UserProfileModel>> GetAllUserProfiles();
         Task<UserProfileModel> GetUserProfileById(int id);
-        Task<int> UpdateUserAccountStatus(int id, string accountStatus);
-        Task<int> UpdateUserAccountType(int id, string accountType);
+        Task<UserProfileModel> GetUserProfileByAccountId(int accountId);
+        Task<int> CreateUserProfile(UserProfileModel model);
+        Task<int> DeleteUserProfile(int id);         
     }
 }

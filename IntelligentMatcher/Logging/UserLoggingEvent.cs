@@ -10,9 +10,9 @@ namespace Logging
         private readonly EventName _eventName;
         private readonly string _ipAddress;
         private readonly int _userId;
-        private readonly UserProfileModel.AccountType _accountType;
+        private readonly string _accountType;
 
-        public UserLoggingEvent(EventName eventName, string ipAddress, int userId, UserProfileModel.AccountType accountType)
+        public UserLoggingEvent(EventName eventName, string ipAddress, int userId, string accountType)
         {
             _eventName = eventName;
             _ipAddress = ipAddress;

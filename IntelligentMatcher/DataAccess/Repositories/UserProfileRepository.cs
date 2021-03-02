@@ -3,8 +3,7 @@ using Models;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
-
-
+using System.Collections.Generic;
 
 namespace DataAccess.Repositories
 {
@@ -19,9 +18,19 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
+        public async Task<IEnumerable<UserProfileModel>> GetAllUserProfiles()
+        {
+            var query = "select [Id], [FirstName], [Surname], [DateOfBirth], " +
+                "[UserAccountId] from [UserProfile]";
+
+            return await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
+                                                                          new { },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
         public async Task<UserProfileModel> GetUserProfileById(int id)
         {
-            var query = "select [Id], [FirstName], [LastName], [DateOfBirth], [AccountCreationType], [AccountType], [AccountStatus]" +
+            var query = "select [Id], [FirstName], [Surname], [DateOfBirth], [UserAccountId]" +
                         "from [UserProfile] where Id = @Id";
 
             var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
@@ -36,7 +45,7 @@ namespace DataAccess.Repositories
 
         public async Task<UserProfileModel> GetUserProfileByAccountId(int accountId)
         {
-            var query = "select [Id], [FirstName], [LastName], [DateOfBirth], [AccountCreationDate], [AccountType], [AccountStatus], [UserAccountId]" +
+            var query = "select [Id], [FirstName], [Surname], [DateOfBirth], [UserAccountId]" +
                         "from [UserProfile] where UserAccountId = @UserAccountId";
 
             var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
@@ -51,63 +60,32 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateUserProfile(UserProfileModel model)
         {
-            var query = "insert into [UserProfile]([FirstName], [LastName], [DateOfBirth], [AccountCreationDate], [AccountType], [AccountStatus], [UserAccountId])" +
-                        "values (@FirstName, @LastName, @DateOfBirth, @AccountCreationDate, @AccountType, @AccountStatus, @UserAccountId); set @Id = SCOPE_IDENTITY(); ";
+            var query = "insert into [UserProfile]([FirstName], [Surname], [DateOfBirth], [UserAccountId])" +
+                        "values (@FirstName, @Surname, @DateOfBirth, @UserAccountId); " +
+                        "set @Id = SCOPE_IDENTITY(); ";
+
             DynamicParameters p = new DynamicParameters();
 
             p.Add("FirstName", model.FirstName);
-            p.Add("LastName", model.LastName);
+            p.Add("Surname", model.Surname);
             p.Add("DateOfBirth", model.DateOfBirth);
-            p.Add("AccountCreationDate", model.AccountCreationDate);
-            p.Add("AccountType", model.accountType);
-            p.Add("AccountStatus", model.accountStatus);
-            p.Add("UserAccountId", model.userAccountId);
+            p.Add("UserAccountId", model.UserAccountId);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
-
             return p.Get<int>("Id");
         }
 
-        public Task<int> UpdateUserAccountType(int id, string accountType)
+        public Task<int> DeleteUserProfile(int id)
         {
-            var query = "update [UserProfile] set AccountType = @AccountType where UserAccountId = @UserAccountId;";
+            var query = "delete from [UserProfile] where UserAccountId = @Id";
 
             return _dataGateway.SaveData(query,
                                          new
                                          {
-                                             AccountType = accountType.ToString(),
-                                             UserAccountId = id
-                                             
-                                         },
-                                         _connectionString.SqlConnectionString); 
-        }
-
-        public Task<int> UpdateUserAccountStatus(int id, string accountStatus)
-        {
-            var query = "update [UserProfile] set AccountStatus = @AccountStatus where UserAccountId = @UserAccountId;";
-
-            return _dataGateway.SaveData(query,
-                                         new
-                                         {                                   
-                                             AccountStatus = accountStatus.ToString(),
-                                             UserAccountId = id
-                                         },
-                                         _connectionString.SqlConnectionString); 
-        }
-
-        public Task<int> DeleteUserProfileById(int id)
-        {
-            var query = "delete from [UserProfile] where UserAccountId = @UserAccountId";
-
-            return _dataGateway.SaveData(query,
-                                         new
-                                         {
-                                             UserAccountId = id
+                                             Id = id
                                          },
                                          _connectionString.SqlConnectionString);
         }
-
-
     }
 }

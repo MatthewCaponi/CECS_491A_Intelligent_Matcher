@@ -57,7 +57,7 @@ namespace DataAccessUnitTestes
             //Arrange
             UserAccountModel userAccountModel = new UserAccountModel(username, password, email);
             IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
-            userAccountModel.Id =  await userAccount.CreateUserAccount(userAccountModel);
+            userAccountModel.Id =  await userAccount.CreateAccount(userAccountModel);
             IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
             UserProfileModel profileModel = new UserProfileModel(firstName, lastName, DateTime.Now, DateTime.Today, accountType.ToString(), accountStatus.ToString(), userAccountModel.Id);
 
@@ -67,7 +67,7 @@ namespace DataAccessUnitTestes
             var actualAccount = await userProfile.GetUserProfileByAccountId(userAccountModel.Id);
 
             //Assert
-            Assert.IsTrue(actualAccount.LastName == lastName);
+            Assert.IsTrue(actualAccount.Surname == lastName);
         }
 
         [DataTestMethod]
@@ -84,7 +84,7 @@ namespace DataAccessUnitTestes
 
             // Act
             var userProfileModel = await userProfile.GetUserProfileByAccountId(accountId);
-            var actualLastName = userProfileModel.LastName;
+            var actualLastName = userProfileModel.Surname;
 
             // Assert
             Assert.IsTrue(actualLastName == expectedLastName);
@@ -136,7 +136,7 @@ namespace DataAccessUnitTestes
             IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
             // Act
-            var userProfileModel = await userProfile.DeleteUserProfileById(accountId);
+            var userProfileModel = await userProfile.DeleteUserProfile(accountId);
             var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
 
             // Assert

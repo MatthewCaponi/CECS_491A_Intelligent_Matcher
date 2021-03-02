@@ -22,9 +22,9 @@
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="User.accountType" class="control-label"></label>
-                        <select asp-for="User.accountType" asp-items="Model.AccountTypes" class="form-control"></select>
-                        <span asp-validation-for="User.accountType" class="text-danger"></span>
+                        <label asp-for="User.AccountType" class="control-label"></label>
+                        <select asp-for="User.AccountType" asp-items="Model.AccountTypes" class="form-control"></select>
+                        <span asp-validation-for="User.AccountType" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="User.Username" class="control-label"></label>
@@ -47,9 +47,9 @@
                         <span asp-validation-for="User.LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="User.email" class="control-label"></label>
-                        <input asp-for="User.email" class="form-control" />
-                        <span asp-validation-for="User.email" class="text-danger"></span>
+                        <label asp-for="User.Email" class="control-label"></label>
+                        <input asp-for="User.Email" class="form-control" />
+                        <span asp-validation-for="User.Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="User.DateOfBirth" class="control-label"></label>
@@ -59,6 +59,10 @@
                     <div class="form-group">
                         <input type="hidden" value="@DateTime.Today" asp-for="User.AccountCreationDate" class="form-control" />
                         <span asp-validation-for="User.AccountCreationDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" value="Active" asp-for="User.AccountStatus" class="form-control" />
+                        <span asp-validation-for="User.AccountStatus" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Submit" class="btn btn-primary" />

@@ -1,153 +1,201 @@
-﻿using DataAccess;
-using DataAccess.Repositories;
-using Logging;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using System.Linq;
 using UserManagement.Models;
 using UserManagement.Services;
-using static Models.UserProfileModel;
+using IntelligentMatcher.Services;
+using BusinessModels;
+using Services;
+using System.Collections.Generic;
 
-namespace UserManagement
+namespace IntelligentMatcher.UserManagement
 {
     public class UserManager : IUserManager
     {
-        ILogService _logger;
-        public UserManager()
-        {
-            ILogServiceFactory factory = new LogSeviceFactory();
-            factory.AddTarget(TargetType.Text);
+        private UserAccountService _userAccountService;
+        private UserProfileService _userProfileService;
+        private UserAccessService _userAccessService;
+        private readonly ValidationService _validationService;
 
-            _logger = factory.CreateLogService<UserManager>();
+        public UserManager(UserAccountService userAccountService, UserProfileService userProfileService,
+            UserAccessService userAccessService, ValidationService validationService)
+        {
+            _userAccountService = userAccountService;
+            _userProfileService = userProfileService;
+            _userAccessService = userAccessService;
+            _validationService = validationService;
         }
 
-        public async Task<UserInfoModel> GetUserInfo(int id)
+        public async Task<Tuple<bool, ResultModel<WebUserProfileModel>>> GetUserProfile(int id)
         {
-            UserAccountModel userAccount = new UserAccountModel();
-            UserProfileModel userProfile = new UserProfileModel();
-            UserInfoModel userInfo = new UserInfoModel();
-            try
+            ResultModel<WebUserProfileModel> resultModel = new ResultModel<WebUserProfileModel>();
+            if (!await _validationService.UserExists(id))
             {
-                userAccount = await ListFetchService.FetchUserAccount(id);
-                userProfile = await ListFetchService.FetchUserProfile(id);
-
-                userInfo.AccountCreationDate = userProfile.AccountCreationDate;
-                userInfo.accountStatus = userProfile.accountStatus;
-                userInfo.DateOfBirth = userProfile.DateOfBirth;
-                userInfo.email = userAccount.EmailAddress;
-                userInfo.FirstName = userProfile.FirstName;
-                userInfo.LastName = userProfile.LastName;
-                userInfo.Password = userAccount.Password;
-                userInfo.UserId = userAccount.Id;
-                userInfo.Username = userAccount.Username;
-                userInfo.accountType = userProfile.accountType;
-
-                return userInfo;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<WebUserProfileModel>>(false, resultModel);
             }
-            catch(Exception e)
-            {
-                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
-                throw new Exception(e.Message, e.InnerException);
-            }
+
+            resultModel.Result = await _userProfileService.GetUser(id);
+            return new Tuple<bool, ResultModel<WebUserProfileModel>>(true, resultModel);
         }
 
-   
-
-        public async Task<int> CreateUser(UserCreateModel model)
+        public async Task<Tuple<bool, ResultModel<List<WebUserProfileModel>>>> GetAllUserProfiles()
         {
-            try
+            ResultModel<List<WebUserProfileModel>> resultModel = new ResultModel<List<WebUserProfileModel>>();
+            if (await _validationService.ListIsEmpty(typeof(WebUserProfileModel)))
             {
-                return await UserCreationService.CreateAccount(model);
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
-                throw new Exception(e.Message, e.InnerException);
-            }     
-        }
-
-        public async Task<bool> DeleteUser(int accountId)
-        {
-            if (await DeletionService.DeleteAccount(accountId))
-            {
-                return true;
-            }
-           
-            return false;
-        }
-
-        public async Task<bool> DisableUser(int accountId)
-        {
-            if (await UserAccessService.DisableAccount(accountId))
-            {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.NoUsersExist;
+                return new Tuple<bool, ResultModel<List<WebUserProfileModel>>>(false, resultModel);
             }
 
-            return false;
+            resultModel.Result = await _userProfileService.GetAllUsers();
+            return new Tuple<bool, ResultModel<List<WebUserProfileModel>>>(true, resultModel);
         }
 
-        public async Task<bool> BanUser(int accountId)
+        public async Task<Tuple<bool, ResultModel<WebUserAccountModel>>> GetUserAccount(int id)
         {
-            if (await UserAccessService.Ban(accountId))
+            ResultModel<WebUserAccountModel> resultModel = new ResultModel<WebUserAccountModel>();
+            if (!await _validationService.UserExists(id))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<WebUserAccountModel>>(false, resultModel);
             }
 
-            return false;
+            resultModel.Result = await _userAccountService.GetUserAccount(id);
+            return new Tuple<bool, ResultModel<WebUserAccountModel>>(true, resultModel);
         }
 
-        public async Task<bool> EnableUser(int accountId)
+        public async Task<Tuple<bool, ResultModel<List<WebUserAccountModel>>>> GetAllUserAccounts()
         {
-            if (await UserAccessService.EnableAccount(accountId))
+            ResultModel<List<WebUserAccountModel>> resultModel = new ResultModel<List<WebUserAccountModel>>();
+            if (await _validationService.ListIsEmpty(typeof(WebUserAccountModel)))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.NoUsersExist;
+                return new Tuple<bool, ResultModel<List<WebUserAccountModel>>>(false, resultModel);
             }
 
-            return false;
+            resultModel.Result = await _userAccountService.GetAllUserAccounts();
+            return new Tuple<bool, ResultModel<List<WebUserAccountModel>>>(true, resultModel);
         }
 
-        public async Task<bool> SuspendUser(int accountId)
+        public async Task<Tuple<bool, ResultModel<int>>> CreateUser(WebUserAccountModel webUserAccountModel, WebUserProfileModel webUserProfileModel)
         {
-            if (await UserAccessService.Suspend(accountId))
+            ResultModel<int> resultModel = new ResultModel<int>();
+            if (_validationService.IsNull(webUserAccountModel))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.Null;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+            if (await _validationService.UsernameExists(webUserAccountModel))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UsernameExists;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+            if (await _validationService.EmailExists(webUserAccountModel))
+            {
+                resultModel.ErrorMessage = ErrorMessage.EmailExists;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            var userAccountID = await _userAccountService.CreateAccount(webUserAccountModel);
+            webUserProfileModel.UserAccountId = userAccountID;
+            await _userProfileService.CreateUser(webUserProfileModel);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> UpdateUsername(int accountId, string newUsername)
+        public async Task<Tuple<bool, ResultModel<int>>> DeleteUser(int accountId)
         {
-            if (await UserUpdateService.ChangeUsername(accountId, newUsername))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            await _userAccountService.DeleteAccount(accountId);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> UpdatePassword(int accountId, string newPassword)
+        public async Task<Tuple<bool, ResultModel<int>>> DisableUser(int accountId)
         {
-            if (await UserUpdateService.ChangePassword(accountId, newPassword))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+            if (!await _validationService.UserIsActive(accountId))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserIsNotActive;
             }
 
-            return false;
+            await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Disabled);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> UpdateEmail(int accountId, string newEmail)
+        public async Task<Tuple<bool, ResultModel<int>>> EnableUser(int accountId)
         {
-            if (await UserUpdateService.ChangeEmail(accountId, newEmail))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (await _validationService.UserIsActive(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserIsActive;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Active);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
+        public async Task<Tuple<bool, ResultModel<int>>> UpdateUsername(int accountId, string newUsername)
+        {
+            ResultModel<int> resultModel = new ResultModel<int>();
 
+            if (!await _validationService.UserExists(accountId))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+
+            await _userAccountService.ChangeUsername(accountId, newUsername);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
+        }
+
+        public async Task<Tuple<bool, ResultModel<int>>> UpdatePassword(int accountId, string newPassword)
+        {
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+
+            await _userAccountService.ChangeUsername(accountId, newPassword);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
+        }
+
+        public async Task<Tuple<bool, ResultModel<int>>> UpdateEmail(int accountId, string newEmail)
+        {
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+
+            await _userAccountService.ChangeEmail(accountId, newEmail);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
+        }
     }
 }
