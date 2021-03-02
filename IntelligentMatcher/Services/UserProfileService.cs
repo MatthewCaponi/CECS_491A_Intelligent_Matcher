@@ -1,11 +1,7 @@
-﻿using DataAccess;
-using DataAccess.Repositories;
-using DataAccess.Repositories.App_Specific_Repositories;
+﻿using DataAccess.Repositories;
 using Models;
-using System;
+using Services;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Models;
 
@@ -20,45 +16,30 @@ namespace UserManagement.Services
             _userProfileRepository = userProfileRepository;
         }
 
-        public async Task<List<Models.WebUserProfileModel>> GetAllUsers()
+        public async Task<List<WebUserProfileModel>> GetAllUsers()
         {
             var userProfiles = await _userProfileRepository.GetAllUserProfiles();
-
-            var webUserProfiles = userProfiles.Select(x => new WebUserProfileModel()
+            List<WebUserProfileModel> webUserProfiles = new List<WebUserProfileModel>();
+            foreach (var userProfileModel in userProfiles)
             {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                Surname = x.Surname,
-                DateOfBirth = x.DateOfBirth,
-                UserAccountId = x.UserAccountId
-            }).ToList();
+                var webUserProfileModel = ModelConverterService.ConvertTo(userProfileModel, new WebUserProfileModel());
+                webUserProfiles.Add(webUserProfileModel);
+            }
 
             return webUserProfiles;
         }     
 
         public async Task<WebUserProfileModel> GetUser(int id)
         {
-            var userProfileModel = await _userProfileRepository.GetUserProfileByAccountId(id);
+            var userProfileModel = await _userProfileRepository.GetUserProfileById(id);
+            var webUserProfileModel = ModelConverterService.ConvertTo(userProfileModel, new WebUserProfileModel());
 
-            var webUserProfileModel = new WebUserProfileModel();
-            var propOne = userProfileModel.GetType().GetProperties();
-            foreach (var item in propOne)
-            {
-                webUserProfileModel.GetType().GetProperty(item.Name).SetValue(item.GetValue(userProfileModel, null), null);
-            }
-
-            return webUserProfileModel;          
+            return webUserProfileModel;
         }
 
         public async Task<int> CreateUser(WebUserProfileModel webUserProfileModel)
         {
-            var propOne = webUserProfileModel.GetType().GetProperties();
-            var userProfileModel = new UserProfileModel();
-            foreach (var item in propOne)
-            {
-                userProfileModel.GetType().GetProperty(item.Name).SetValue(item.GetValue(webUserProfileModel, null), null);
-            }
-
+            var userProfileModel = ModelConverterService.ConvertTo(webUserProfileModel, new UserProfileModel());
             return await _userProfileRepository.CreateUserProfile(userProfileModel);
         }
 
@@ -67,6 +48,5 @@ namespace UserManagement.Services
             await _userProfileRepository.DeleteUserProfile(accountId);
             return true;
         }
-
     }
 }

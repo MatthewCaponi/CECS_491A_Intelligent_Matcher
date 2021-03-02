@@ -1,8 +1,7 @@
 ﻿using DataAccess.Repositories;
 using Models;
-using System;
+using Services;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Models;
 
@@ -17,46 +16,30 @@ namespace IntelligentMatcher.Services
             _userAccountRepository = userAccountRepository;
         }
 
-        public async Task<WebUserAccountModel> GetUserAccount(int id)
-        {
-            var userAccountModel = await _userAccountRepository.GetAccountById(id);
-            var webUserAccountModel = new WebUserAccountModel();
-            var propOne = userAccountModel.GetType().GetProperties();
-            foreach (var item in propOne)
-            {
-                webUserAccountModel.GetType().GetProperty(item.Name).SetValue(item.GetValue(userAccountModel, null), null);
-            }
-
-            return webUserAccountModel;        
-        }
-
         public async Task<List<WebUserAccountModel>> GetAllUserAccounts()
         {
             var userAccounts = await _userAccountRepository.GetAllAccounts();
-
-            var webUserAccounts = userAccounts.Select(x => new WebUserAccountModel()
+            List<WebUserAccountModel> webUserAccounts = new List<WebUserAccountModel>();
+            foreach (var userAccountModel in userAccounts)
             {
-                Id = x.Id,
-                Username = x.Username,
-                EmailAddress = x.EmailAddress,
-                AccountType = x.AccountType,
-                AccountStatus = x.AccountStatus,
-                CreationDate = x.CreationDate,
-                UpdationDate = x.UpdationDate
-            }).ToList();
+                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                webUserAccounts.Add(webUserAccountModel);
+            }
 
             return webUserAccounts;
         }
 
+        public async Task<WebUserAccountModel> GetUserAccount(int id)
+        {
+            var userAccountModel = await _userAccountRepository.GetAccountById(id);
+            var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+
+            return webUserAccountModel;        
+        }
+
         public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
         {
-            var propOne = webUserAccountModel.GetType().GetProperties();
-            var userAccountModel = new UserAccountModel();
-            foreach (var item in propOne)
-            {
-                userAccountModel.GetType().GetProperty(item.Name).SetValue(item.GetValue(webUserAccountModel, null), null);
-            }
-
+            var userAccountModel = ModelConverterService.ConvertTo(webUserAccountModel, new UserAccountModel());
             var userAccountId = await _userAccountRepository.CreateAccount(userAccountModel);
 
             return userAccountId;

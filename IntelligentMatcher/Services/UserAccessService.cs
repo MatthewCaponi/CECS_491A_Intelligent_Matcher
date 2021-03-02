@@ -17,73 +17,11 @@ namespace IntelligentMatcher.Services
         {
             _userAccountRepository = userAccountRepository;
         }
-        public async Task<bool> DisableAccount(int accountId)
-        {
-            try
-            {
-                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Disabled.ToString());
-                if (returned == 0)
-                {
-                    return false;
-                }
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> EnableAccount(int accountId)
+        public async Task<bool> ChangeAccountStatus(int accountId, AccountStatus accountStatus)
         {
-            try
-            {
-                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Active.ToString());
-                if (returned == 0)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> Suspend(int accountId)
-        {
-            try
-            {
-                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Suspended.ToString());
-                if (returned == 0)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            } 
-        }
-
-        public async Task<bool> Ban(int accountId)
-        {
-            try
-            {
-                var returned = await userProfile.UpdateUserAccountStatus(accountId, AccountStatus.Banned.ToString());
-                if (returned == 0)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+            var returned = await _userAccountRepository.UpdateAccountStatus(accountId, accountStatus.ToString());
+            return true;
         }
     }
 }
