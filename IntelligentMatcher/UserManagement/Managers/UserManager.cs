@@ -14,33 +14,36 @@ namespace IntelligentMatcher.UserManagement
         private UserAccountService _userAccountService;
         private UserProfileService _userProfileService;
         private UserAccessService _userAccessService;
+        private readonly ValidationService _validationService;
 
-        public UserManager(UserAccountService userAccountService, UserProfileService userProfileService, UserAccessService userAccessService)
+        public UserManager(UserAccountService userAccountService, UserProfileService userProfileService,
+            UserAccessService userAccessService, ValidationService validationService)
         {
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _userAccessService = userAccessService;
+            _validationService = validationService;
         }
 
         public async Task<WebUserProfileModel> GetUserProfile(int id)
         {
-            return await _userService.GetUser(id);
+            return await _userProfileService.GetUser(id);
         }
 
-        public async Task<Tuple<bool, ResultModel<int>>> CreateUser(ValidationService validationService, WebUserAccountModel webUserAccountModel, WebUserProfileModel webUserProfileModel)
+        public async Task<Tuple<bool, ResultModel<int>>> CreateUser(WebUserAccountModel webUserAccountModel, WebUserProfileModel webUserProfileModel)
         {
             ResultModel<int> resultModel = new ResultModel<int>();
-            if (validationService.IsNull(webUserAccountModel))
+            if (_validationService.IsNull(webUserAccountModel))
             {
                 resultModel.ErrorMessage = ErrorMessage.Null;
                 return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
-            if (await validationService.UsernameExists())
+            if (await _validationService.UsernameExists(webUserAccountModel))
             {
                 resultModel.ErrorMessage = ErrorMessage.UsernameExists;
                 return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
-            if (await validationService.EmailExists())
+            if (await _validationService.EmailExists(webUserAccountModel))
             {
                 resultModel.ErrorMessage = ErrorMessage.EmailExists;
                 return new Tuple<bool, ResultModel<int>>(false, resultModel);
@@ -49,18 +52,23 @@ namespace IntelligentMatcher.UserManagement
             var userAccountID = await _userAccountService.CreateAccount(webUserAccountModel);
             webUserProfileModel.UserAccountId = userAccountID;
             await _userProfileService.CreateUser(webUserProfileModel);
-
+            
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> DeleteUser(int accountId)
+        public async Task<Tuple<bool, ResultModel<int>>> DeleteUser(int accountId)
         {
-            if (await DeletionService.DeleteAccount(accountId))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
-           
-            return false;
+
+            await _userAccountService.DeleteAccount(accountId);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
         public async Task<bool> DisableUser(int accountId)

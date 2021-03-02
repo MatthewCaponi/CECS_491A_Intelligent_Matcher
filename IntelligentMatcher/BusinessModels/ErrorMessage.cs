@@ -10,5 +10,6 @@ namespace BusinessModels
         Null,
         UsernameExists,
         EmailExists,
+        UserDoesNotExist
     }
 }

@@ -9,12 +9,10 @@ namespace Services
     public class ValidationService
     {
         private readonly UserAccountService _userAccountService;
-        private readonly WebUserAccountModel _webUserAccountModel;
 
-        public ValidationService(UserAccountService userAccountService, WebUserAccountModel webUserAccountModel)
+        public ValidationService(UserAccountService userAccountService)
         {
             _userAccountService = userAccountService;
-            _webUserAccountModel = webUserAccountModel;
         }
 
         public bool IsNull(object obj)
@@ -27,10 +25,10 @@ namespace Services
             return true;
         }
 
-        public async Task<bool> UsernameExists()
+        public async Task<bool> UserExists(int id)
         {
-            var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.Username == _webUserAccountModel.Username))
+            var userAccounts = await (_userAccountService.GetAllUserAccounts());
+            if (userAccounts.Any(x => x.Id == id))
             {
                 return true;
             }
@@ -38,10 +36,21 @@ namespace Services
             return false;
         }
 
-        public async Task<bool> EmailExists()
+        public async Task<bool> UsernameExists(WebUserAccountModel webUserAccountModel)
         {
             var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.Username == _webUserAccountModel.Username))
+            if (userAccounts.Any(x => x.Username == webUserAccountModel.Username))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EmailExists(WebUserAccountModel webUserAccountModel)
+        {
+            var userAccounts = await _userAccountService.GetAllUserAccounts();
+            if (userAccounts.Any(x => x.Username == webUserAccountModel.Username))
             {
                 return true;
             }
