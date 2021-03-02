@@ -4,48 +4,53 @@ using System.Linq;
 using UserManagement.Models;
 using UserManagement.Services;
 using IntelligentMatcher.Services;
+using BusinessModels;
+using Services;
 
 namespace IntelligentMatcher.UserManagement
 {
     public class UserManager : IUserManager
     {
-        private readonly UserProfileService _userService;
-        private readonly UserAccountService _userAccountService;
-        private readonly UserAccessService _userAccessService;
+        private UserAccountService _userAccountService;
+        private UserProfileService _userProfileService;
+        private UserAccessService _userAccessService;
 
-        public UserManager(UserProfileService userService, UserAccountService userAccountService, UserAccessService userAccessService)
+        public UserManager(UserAccountService userAccountService, UserProfileService userProfileService, UserAccessService userAccessService)
         {
-            _userService = userService;
             _userAccountService = userAccountService;
+            _userProfileService = userProfileService;
             _userAccessService = userAccessService;
         }
 
-        public async Task<WebUserProfileModel> GetUser(int id)
+        public async Task<WebUserProfileModel> GetUserProfile(int id)
         {
-            
-            var userProfileModel = await _userService.GetUser(id);
-
+            return await _userService.GetUser(id);
         }
 
-        public async Task<int> CreateUser(WebUserAccountModel accountModel, WebUserProfileModel userModel)
+        public async Task<Tuple<bool, ResultModel<int>>> CreateUser(ValidationService validationService, WebUserAccountModel webUserAccountModel, WebUserProfileModel webUserProfileModel)
         {
-            var users = _userAccountService.GetAllUserAccounts();
-            if (users.Any(x => users.Username == x.Username))
+            ResultModel<int> resultModel = new ResultModel<int>();
+            if (validationService.IsNull(webUserAccountModel))
             {
+                resultModel.ErrorMessage = ErrorMessage.Null;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+            if (await validationService.UsernameExists())
+            {
+                resultModel.ErrorMessage = ErrorMessage.UsernameExists;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+            if (await validationService.EmailExists())
+            {
+                resultModel.ErrorMessage = ErrorMessage.EmailExists;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
 
-            }
-            try
-            {
-                var accountCreated = await _userAccountService.CreateAccount(accountModel);
-                if (accountCreated)
-                {
-                    return await _userService.CreateUser(userModel);
-                }
-            }
-            catch(Exception e)
-            {
-                throw new Exception(e.Message, e.InnerException);
-            }     
+            var userAccountID = await _userAccountService.CreateAccount(webUserAccountModel);
+            webUserProfileModel.UserAccountId = userAccountID;
+            await _userProfileService.CreateUser(webUserProfileModel);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
         public async Task<bool> DeleteUser(int accountId)
