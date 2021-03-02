@@ -2,7 +2,9 @@ using DataAccess;
 using DataAccess.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
+using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DataAccessUnitTestes
 {
@@ -16,12 +18,22 @@ namespace DataAccessUnitTestes
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            ITestRepo testRepo = new TestRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             for (int i = 1; i <= numTestRows; ++i)
             {
-                UserAccountModel model = new UserAccountModel("TestUser" + i, "TestPass" + i, "TestEmail" + i);
-                await testRepo.InsertUserAccountTestRows(model);
+                UserAccountModel userAccountModel = new UserAccountModel();
+                userAccountModel.Id = i;
+                userAccountModel.Username = "TestUser" + i;
+                userAccountModel.Password = "TestPassword" + i;
+                userAccountModel.Salt = "TestSalt" + i;
+                userAccountModel.EmailAddress = "TestEmailAddress" + i;
+                userAccountModel.AccountType = "TestAccountType" + i;
+                userAccountModel.AccountStatus = "TestAccountStatus" + i;
+                userAccountModel.CreationDate = DateTimeOffset.UtcNow;
+                userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
+
+                await userAccountRepository.CreateAccount(userAccountModel);
             }
         }
 
@@ -30,9 +42,12 @@ namespace DataAccessUnitTestes
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            ITestRepo testRepo = new TestRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = userAccountRepository.GetAllAccounts();
 
-            await testRepo.DeleteUserAccountTestRows();
+            accounts.Select(x => userAccountRepository.DeleteAccountById(x.Id));
+            
+            
         }
 
 
