@@ -20,7 +20,7 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
-        public async Task<List<UserAccountModel>> GetAllAccounts()
+        public async Task<IEnumerable<UserAccountModel>> GetAllAccounts()
         {
             var query = "select * from [UserAccount]";
 

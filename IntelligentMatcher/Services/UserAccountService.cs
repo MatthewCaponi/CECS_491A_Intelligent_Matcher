@@ -1,9 +1,8 @@
-﻿using DataAccess;
-using DataAccess.Repositories;
-using DataAccess.Repositories.App_Specific_Repositories;
+﻿using DataAccess.Repositories;
+using Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Models;
 
@@ -11,124 +10,81 @@ namespace IntelligentMatcher.Services
 {
     public class UserAccountService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserAccountRepository _userAccountRepository;
 
-        public UserAccountService(IUserRepository userRepository)
+        public UserAccountService(IUserAccountRepository userAccountRepository)
         {
-            _userRepository = userRepository;
-        }
-        public async Task<UserAccountModel> GetUserAccount(UserAccountModel userAccountModel, int id)
-        {
-            try
-            {
-                return await userAccountModel.GetUserAccountById(id);
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            _userAccountRepository = userAccountRepository;
         }
 
-        public async List<UserAccountModel> GetAllUserAccounts()
+        public async Task<WebUserAccountModel> GetUserAccount(int id)
         {
-            return Task.FromResult(_userRepository.GetAllAccounts());
+            var userAccountModel = await _userAccountRepository.GetAccountById(id);
+            var webUserAccountModel = new WebUserAccountModel();
+            var propOne = userAccountModel.GetType().GetProperties();
+            foreach (var item in propOne)
+            {
+                webUserAccountModel.GetType().GetProperty(item.Name).SetValue(item.GetValue(userAccountModel, null), null);
+            }
+
+            return webUserAccountModel;        
         }
 
-        public async Task<int> CreateAccount(UserAccountModel userAccountModel)
+        public async Task<List<WebUserAccountModel>> GetAllUserAccounts()
         {
-            UserAccountModel userAccount = new UserAccountModel(userAccountModel.Username, userAccountModel.Password, userAccountModel.EmailAddress);
+            var userAccounts = await _userAccountRepository.GetAllAccounts();
 
-            try
+            var webUserAccounts = userAccounts.Select(x => new WebUserAccountModel()
             {
-                var userAccountId = await userAccountRepository.CreateUserAccount(userAccount);
-                UserProfileModel userProfileModel =
-                new UserProfileModel(userAccountModel.FirstName, userAccountModel.Surname, DateTime.Parse(userAccountModel.DateOfBirth),
-                userAccountModel.AccountCreationDate, userAccountModel.AccountType.ToString(), userAccountModel.AccountStatus, userAccountId);
-                await userProfileRepository.CreateUserProfile(userProfileModel);
+                Id = x.Id,
+                Username = x.Username,
+                EmailAddress = x.EmailAddress,
+                AccountType = x.AccountType,
+                AccountStatus = x.AccountStatus,
+                CreationDate = x.CreationDate,
+                UpdationDate = x.UpdationDate
+            }).ToList();
 
-                return userAccountId;
-            }
-            catch (Exception e)
+            return webUserAccounts;
+        }
+
+        public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
+        {
+            var propOne = webUserAccountModel.GetType().GetProperties();
+            var userAccountModel = new UserAccountModel();
+            foreach (var item in propOne)
             {
-                throw new Exception(e.Message, e.InnerException);
+                userAccountModel.GetType().GetProperty(item.Name).SetValue(item.GetValue(webUserAccountModel, null), null);
             }
+
+            var userAccountId = await _userAccountRepository.CreateAccount(userAccountModel);
+
+            return userAccountId;
         }
 
         public async Task<bool> DeleteAccount(int id)
         {
+            int returnValue = await _userAccountRepository.DeleteAccountById(id);
 
-            try
-            {
-                int returnValue = await userAccount.DeleteUserAccountById(id);
-                if (returnValue == 0)
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-
-
+            return true;
         }
 
         public async Task<bool> ChangeUsername(int accountId, string newUsername)
         {
-            try
-            {
-                var returned = await userAccount.UpdateAccountUsername(accountId, newUsername);
-                var user = userAccount.GetUserAccountById(accountId);
-                if (returned == 0)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
+            var returned = await _userAccountRepository.UpdateAccountUsername(accountId, newUsername);
+            return true;
         }
 
         public async Task<bool> ChangePassword(int accountId, string newPassword)
         {
-            try
-            {
-                var returned = await userAccount.UpdateAccountPassword(accountId, newPassword);
-                var user = userAccount.GetUserAccountById(accountId);
-                if (returned == 0)
-                {
-                    return false;
-                }
-
+                var returned = await _userAccountRepository.UpdateAccountPassword(accountId, newPassword);
                 return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
         }
 
         public async Task<bool> ChangeEmail(int accountId, string newEmail)
         {
-            try
-            {
-                var returned = await userAccount.UpdateAccountEmail(accountId, newEmail);
-                var user = userAccount.GetUserAccountById(accountId);
-                if (returned == 0)
-                {
-                    return false;
-                }
-
+                var returned = await _userAccountRepository.UpdateAccountEmail(accountId, newEmail);
                 return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
         }
     }
 }

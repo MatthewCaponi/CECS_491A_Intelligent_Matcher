@@ -60,7 +60,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserProfileModel user)
+        public async Task<IActionResult> Create(WebUserProfileModel user)
         {
             if (ModelState.IsValid == false)
             {
@@ -77,7 +77,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult UsernameTest(UserProfileModel model)
+        public IActionResult UsernameTest(WebUserProfileModel model)
         {
             if (ModelState.IsValid == false)
             {

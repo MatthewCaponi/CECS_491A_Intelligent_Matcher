@@ -2,7 +2,7 @@
 
 namespace UserManagement.Models
 {
-    public class UserProfileModel
+    public class WebUserProfileModel
     {
         public string Id { get; set; }
         public string FirstName { get; set; }

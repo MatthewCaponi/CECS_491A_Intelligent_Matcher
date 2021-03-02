@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using System.Linq;
 using UserManagement.Models;
+using UserManagement.Services;
+using IntelligentMatcher.Services;
 
 namespace IntelligentMatcher.UserManagement
 {
@@ -18,12 +20,14 @@ namespace IntelligentMatcher.UserManagement
             _userAccessService = userAccessService;
         }
 
-        public async Task<UserProfileModel> GetUser(int id)
+        public async Task<WebUserProfileModel> GetUser(int id)
         {
-            return await _userService.GetUser(id);
+            
+            var userProfileModel = await _userService.GetUser(id);
+
         }
 
-        public async Task<int> CreateUser(UserAccountModel accountModel, UserProfileModel userModel)
+        public async Task<int> CreateUser(WebUserAccountModel accountModel, WebUserProfileModel userModel)
         {
             var users = _userAccountService.GetAllUserAccounts();
             if (users.Any(x => users.Username == x.Username))
@@ -103,4 +107,4 @@ namespace IntelligentMatcher.UserManagement
 
             return false;
         }
-}
+    }

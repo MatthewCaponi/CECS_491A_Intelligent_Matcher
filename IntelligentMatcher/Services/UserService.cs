@@ -19,7 +19,7 @@ namespace UserManagement.Services
             _userRepository = userRepository;
         }
 
-        public static async Task<List<Models.UserProfileModel>> GetAllUsers()
+        public static async Task<List<Models.WebUserProfileModel>> GetAllUsers()
         {
             try
             {
@@ -44,7 +44,7 @@ namespace UserManagement.Services
             }
         }
 
-        public async Task<int> CreateUser(Models.UserProfileModel model)
+        public async Task<int> CreateUser(Models.WebUserProfileModel model)
         {
             try
             {
