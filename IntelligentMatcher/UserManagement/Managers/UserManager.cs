@@ -6,6 +6,7 @@ using UserManagement.Services;
 using IntelligentMatcher.Services;
 using BusinessModels;
 using Services;
+using System.Collections.Generic;
 
 namespace IntelligentMatcher.UserManagement
 {
@@ -25,9 +26,56 @@ namespace IntelligentMatcher.UserManagement
             _validationService = validationService;
         }
 
-        public async Task<WebUserProfileModel> GetUserProfile(int id)
+        public async Task<Tuple<bool, ResultModel<WebUserProfileModel>>> GetUserProfile(int id)
         {
-            return await _userProfileService.GetUser(id);
+            ResultModel<WebUserProfileModel> resultModel = new ResultModel<WebUserProfileModel>();
+            if (!await _validationService.UserExists(id))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<WebUserProfileModel>>(false, resultModel);
+            }
+
+            resultModel.Result = await _userProfileService.GetUser(id);
+            return new Tuple<bool, ResultModel<WebUserProfileModel>>(true, resultModel);
+        }
+
+        public async Task<Tuple<bool, ResultModel<List<WebUserProfileModel>>>> GetAllUserProfiles()
+        {
+            ResultModel<List<WebUserProfileModel>> resultModel = new ResultModel<List<WebUserProfileModel>>();
+            if (await _validationService.ListIsEmpty(typeof(WebUserProfileModel)))
+            {
+                resultModel.ErrorMessage = ErrorMessage.NoUsersExist;
+                return new Tuple<bool, ResultModel<List<WebUserProfileModel>>>(false, resultModel);
+            }
+
+            resultModel.Result = await _userProfileService.GetAllUsers();
+            return new Tuple<bool, ResultModel<List<WebUserProfileModel>>>(true, resultModel);
+        }
+
+        public async Task<Tuple<bool, ResultModel<WebUserAccountModel>>> GetUserAccount(int id)
+        {
+            ResultModel<WebUserAccountModel> resultModel = new ResultModel<WebUserAccountModel>();
+            if (!await _validationService.UserExists(id))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<WebUserAccountModel>>(false, resultModel);
+            }
+
+            resultModel.Result = await _userAccountService.GetUserAccount(id);
+            return new Tuple<bool, ResultModel<WebUserAccountModel>>(true, resultModel);
+        }
+
+        public async Task<Tuple<bool, ResultModel<List<WebUserAccountModel>>>> GetAllUserAccounts()
+        {
+            ResultModel<List<WebUserAccountModel>> resultModel = new ResultModel<List<WebUserAccountModel>>();
+            if (await _validationService.ListIsEmpty(typeof(WebUserAccountModel)))
+            {
+                resultModel.ErrorMessage = ErrorMessage.NoUsersExist;
+                return new Tuple<bool, ResultModel<List<WebUserAccountModel>>>(false, resultModel);
+            }
+
+            resultModel.Result = await _userAccountService.GetAllUserAccounts();
+            return new Tuple<bool, ResultModel<List<WebUserAccountModel>>>(true, resultModel);
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> CreateUser(WebUserAccountModel webUserAccountModel, WebUserProfileModel webUserProfileModel)
@@ -52,7 +100,7 @@ namespace IntelligentMatcher.UserManagement
             var userAccountID = await _userAccountService.CreateAccount(webUserAccountModel);
             webUserProfileModel.UserAccountId = userAccountID;
             await _userProfileService.CreateUser(webUserProfileModel);
-            
+
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
@@ -71,53 +119,83 @@ namespace IntelligentMatcher.UserManagement
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> DisableUser(int accountId)
+        public async Task<Tuple<bool, ResultModel<int>>> DisableUser(int accountId)
         {
-            if (await UserAccessService.DisableAccount(accountId))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+            }
+            if (!await _validationService.UserIsActive(accountId))
+            {
+                resultModel.ErrorMessage = ErrorMessage.UserIsNotActive;
             }
 
-            return false;
+            await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Disabled);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> EnableUser(int accountId)
+        public async Task<Tuple<bool, ResultModel<int>>> EnableUser(int accountId)
         {
-            if (await UserAccessService.EnableAccount(accountId))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (await _validationService.UserIsActive(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserIsActive;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Active);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> UpdateUsername(int accountId, string newUsername)
+        public async Task<Tuple<bool, ResultModel<int>>> UpdateUsername(int accountId, string newUsername)
         {
-            if (await UserUpdateService.ChangeUsername(accountId, newUsername))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            await _userAccountService.ChangeUsername(accountId, newUsername);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> UpdatePassword(int accountId, string newPassword)
+        public async Task<Tuple<bool, ResultModel<int>>> UpdatePassword(int accountId, string newPassword)
         {
-            if (await UserUpdateService.ChangePassword(accountId, newPassword))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            await _userAccountService.ChangeUsername(accountId, newPassword);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<bool> UpdateEmail(int accountId, string newEmail)
+        public async Task<Tuple<bool, ResultModel<int>>> UpdateEmail(int accountId, string newEmail)
         {
-            if (await UserUpdateService.ChangeEmail(accountId, newEmail))
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            if (!await _validationService.UserExists(accountId))
             {
-                return true;
+                resultModel.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
 
-            return false;
+            await _userAccountService.ChangeEmail(accountId, newEmail);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
     }
+}
