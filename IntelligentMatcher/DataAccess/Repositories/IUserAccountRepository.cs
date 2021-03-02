@@ -6,7 +6,7 @@ namespace DataAccess.Repositories
 {
     public interface IUserAccountRepository
     {
-        Task<List<UserAccountModel>> GetAllAccounts();
+        Task<IEnumerable<UserAccountModel>> GetAllAccounts();
         Task<UserAccountModel> GetAccountById(int id);
         Task<UserAccountModel> GetAccountByUsername(string username);
         Task<UserProfileModel> GetAccountByEmail(string email);

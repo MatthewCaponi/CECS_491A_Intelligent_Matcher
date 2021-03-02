@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
-        public async Task<List<UserProfileModel>> GetAllUserProfiles()
+        public async Task<IEnumerable<UserProfileModel>> GetAllUserProfiles()
         {
             var query = "select [Id], [FirstName], [Surname], [DateOfBirth], " +
                 "[UserAccountId] from [UserProfile]";
@@ -78,7 +78,7 @@ namespace DataAccess.Repositories
 
         public Task<int> DeleteUserProfile(int id)
         {
-            var query = "delete from [UserProfile] where Id = @Id";
+            var query = "delete from [UserProfile] where UserAccountId = @Id";
 
             return _dataGateway.SaveData(query,
                                          new

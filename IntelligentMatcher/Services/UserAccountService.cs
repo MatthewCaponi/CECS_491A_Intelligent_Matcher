@@ -10,7 +10,7 @@ namespace IntelligentMatcher.Services
 {
     public class UserAccountService
     {
-        private readonly IUserAccountRepository _userAccountRepository;
+        private IUserAccountRepository _userAccountRepository;
 
         public UserAccountService(IUserAccountRepository userAccountRepository)
         {

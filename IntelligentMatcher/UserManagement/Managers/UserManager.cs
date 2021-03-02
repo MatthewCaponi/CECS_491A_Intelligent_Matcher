@@ -9,11 +9,11 @@ namespace IntelligentMatcher.UserManagement
 {
     public class UserManager : IUserManager
     {
-        private readonly UserService _userService;
+        private readonly UserProfileService _userService;
         private readonly UserAccountService _userAccountService;
         private readonly UserAccessService _userAccessService;
 
-        public UserManager(UserService userService, UserAccountService userAccountService, UserAccessService userAccessService)
+        public UserManager(UserProfileService userService, UserAccountService userAccountService, UserAccessService userAccessService)
         {
             _userService = userService;
             _userAccountService = userAccountService;

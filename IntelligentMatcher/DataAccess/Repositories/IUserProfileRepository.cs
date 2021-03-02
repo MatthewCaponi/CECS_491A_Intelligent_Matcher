@@ -6,7 +6,7 @@ namespace DataAccess.Repositories
 {
     public interface IUserProfileRepository
     {
-        Task<List<UserProfileModel>> GetAllUserProfiles();
+        Task<IEnumerable<UserProfileModel>> GetAllUserProfiles();
         Task<UserProfileModel> GetUserProfileById(int id);
         Task<UserProfileModel> GetUserProfileByAccountId(int accountId);
         Task<int> CreateUserProfile(UserProfileModel model);
