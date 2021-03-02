@@ -8,6 +8,6 @@ namespace Registration
 {
     public interface IRegistrationManager
     {
-        Task<int> RegisterNewAccount(UserCreateModel model);
+        Task<int> RegisterNewAccount(webUserAccountModel accountModel, webUserProfileModel usermodel);
     }
 }

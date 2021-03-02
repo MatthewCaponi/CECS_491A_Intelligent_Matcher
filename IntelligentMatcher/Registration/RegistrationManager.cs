@@ -23,11 +23,25 @@ namespace Registration
             _logger = factory.CreateLogService<RegistrationManager>();
         }
 
-        public async Task<int> RegisterNewAccount(UserCreateModel model)
+        public async Task<int> RegisterNewAccount(webUserAccountModel accountModel, webUserProfileModel userModel)
         {
+            var accounts = UserAccountService.GetAllUserAccounts();
+            foreach (webUserAccountModel i in accounts){
+                if(i.Username == accountModel.Username)
+                {
+                    return false;
+                }
+                if(i.EmailAddress == accountModel.EmailAddress)
+                {
+                    return false;
+                }
+            }
+
             try
             {
-                return await UserCreationService.CreateAccount(model);
+                return await UserAccountService.CreateAccount(accountModel);
+                return await UserProfileService.CreateProfile(userModel);
+                return await EmailVerificationService.SendEmail(accountModel);
             }
             catch (Exception e)
             {

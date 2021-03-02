@@ -21,7 +21,7 @@ namespace Registration
         public async Task<bool> LinkExpired(int accountId)
         {
             // Place Holder
-            if (await DeletionService.DeleteAccount(accountId))
+            if (await webUserAccountService.DeleteAccount(accountId))
             {
                 return true;
             }
