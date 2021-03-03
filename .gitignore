@@ -1,4 +1,5 @@
 
-*.dbmdl
-IntelligentMatcher/UserDatabase/UserDatabase.dbmdl
-IntelligentMatcher/UserDatabase/UserDatabase.jfm
+*.dll
+*.v2
+*.testlog
+*.dll

@@ -57,7 +57,7 @@ namespace BusinessLayerUnitTests.User_Management
             // Act
             try
             {
-                users = await ListFetchService.FetchUsers();
+                users = await UserProfileService.FetchUsers();
             }
             catch (Exception e)
             {
@@ -87,7 +87,7 @@ namespace BusinessLayerUnitTests.User_Management
             // Act
             try
             {
-                userAccount = await ListFetchService.FetchUserAccount(id);
+                userAccount = await UserProfileService.GetUser(id);
                 actualId = userAccount.Id;
             }
             catch (Exception e)
@@ -110,7 +110,7 @@ namespace BusinessLayerUnitTests.User_Management
             // Act
             try
             {
-                userProfile = await ListFetchService.FetchUserProfile(id);
+                userProfile = await UserProfileService.GetUser(id);
                 actualId = userProfile.Id;
             }
             catch (Exception e)

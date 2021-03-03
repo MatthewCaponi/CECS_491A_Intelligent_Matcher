@@ -14,15 +14,6 @@ namespace DataAccess
 {
     public class DataGateway : IDataGateway
     {
-        private ILogService _logger;
-        public DataGateway()
-        {
-            ILogServiceFactory factory = new LogSeviceFactory();
-            factory.AddTarget(TargetType.Text);
-
-            _logger = factory.CreateLogService<DataGateway>();
-        }
-
         public async Task<List<T>> LoadData<T, U>(string query, U parameters, string connectionString)
         {
     
@@ -38,7 +29,6 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
                 return null;
             }
     
@@ -60,17 +50,14 @@ namespace DataAccess
             {
                 if (e.Message.Contains("duplicate") && e.Message.Contains("Username"))
                 {
-                    _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
                     throw new Exception("Username already exists", e.InnerException);
                 }
                 else if (e.Message.Contains("duplicate") && e.Message.Contains("EmailAddress"))
                 {
-                    _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
                     throw new Exception("Email already exists", e.InnerException);
                 }
                 else
                 {
-                    _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, AccountType.User), e, $"Exception: {e.Message}");
                     throw new Exception("SqlException", e.InnerException);
                 }    
                                   

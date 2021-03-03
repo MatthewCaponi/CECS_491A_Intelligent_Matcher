@@ -72,7 +72,7 @@ namespace BusinessLayerUnitTests.User_Management
                 //Assert
                 try
                 {
-                    var userAccount = await userAccountRepo.GetUserAccountById(userId);
+                    var userAccount = await userAccountRepo.GetAccountById(userId);
                     var id = userAccount.Id;
                     Debug.WriteLine(id);
                     Assert.IsTrue(false);
