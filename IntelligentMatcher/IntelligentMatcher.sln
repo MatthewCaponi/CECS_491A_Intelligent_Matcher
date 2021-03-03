@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessModels", "BusinessM
 		{C3C33B62-51A3-4448-8D21-355601903FE0} = {C3C33B62-51A3-4448-8D21-355601903FE0}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailVerification", "EmailVerification\EmailVerification.csproj", "{B224F819-DE16-4CE6-9A3F-2A418CDDB52B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{683879BC-A735-421B-B164-6E3AE56FB39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{683879BC-A735-421B-B164-6E3AE56FB39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{683879BC-A735-421B-B164-6E3AE56FB39C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B224F819-DE16-4CE6-9A3F-2A418CDDB52B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B224F819-DE16-4CE6-9A3F-2A418CDDB52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B224F819-DE16-4CE6-9A3F-2A418CDDB52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B224F819-DE16-4CE6-9A3F-2A418CDDB52B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -61,13 +61,13 @@ namespace DataAccess.Repositories
             return row.FirstOrDefault();
         }
 
-        public async Task<UserProfileModel> GetAccountByEmail(string email)
+        public async Task<UserAccountModel> GetAccountByEmail(string email)
         {
             var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
                         "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
                         "from [UserAccount] where EmailAddress = @EmailAddress";
 
-            var row = await _dataGateway.LoadData < UserProfileModel, dynamic>(query,
+            var row = await _dataGateway.LoadData < UserAccountModel, dynamic>(query,
                 new
                 {
                     EmailAddress = email
@@ -116,11 +116,11 @@ namespace DataAccess.Repositories
             return p.Get<int>("Id");
         }
 
-        public Task<int> DeleteAccountById(int id)
+        public async Task<int> DeleteAccountById(int id)
         {
             var query = "delete from [UserAccount] where Id = @Id";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              Id = id
@@ -128,11 +128,11 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public Task<int> UpdateAccountUsername(int id, string username)
+        public async Task<int> UpdateAccountUsername(int id, string username)
         {
             var query = "update [UserAccount] set Username = @Username where Id = @Id;";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              Id = id,
@@ -141,11 +141,11 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public Task<int> UpdateAccountEmail(int id, string email)
+        public async Task<int> UpdateAccountEmail(int id, string email)
         {
             var query = "update [UserAccount] set EmailAddress = @EmailAddress where Id = @Id;";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              Id = id,
@@ -154,11 +154,11 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public Task<int> UpdateAccountPassword(int id, string password)
+        public async Task<int> UpdateAccountPassword(int id, string password)
         {
             var query = "update [UserAccount] set Password = @Password where Id = @Id;";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              Id = id,
@@ -167,11 +167,11 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public Task<int> UpdateAccountSalt(int id, string salt)
+        public async Task<int> UpdateAccountSalt(int id, string salt)
         {
             var query = "update [UserAccount] set Salt = @Salt where Id = @Id;";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              Id = id,
@@ -181,11 +181,11 @@ namespace DataAccess.Repositories
         }
 
 
-        public Task<int> UpdateAccountStatus(int id, string accountStatus)
+        public async Task<int> UpdateAccountStatus(int id, string accountStatus)
         {
             var query = "update [UserProfile] set AccountStatus = @AccountStatus where UserAccountId = @UserAccountId;";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              AccountStatus = accountStatus.ToString(),
@@ -194,11 +194,11 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public Task<int> UpdateAccountType(int id, string accountType)
+        public async Task<int> UpdateAccountType(int id, string accountType)
         {
             var query = "update [UserAccount] set AccountType = @AccountType where Id = @Id;";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              AccountType = accountType.ToString(),

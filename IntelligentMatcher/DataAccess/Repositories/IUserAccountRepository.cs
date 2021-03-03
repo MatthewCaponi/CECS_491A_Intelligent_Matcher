@@ -9,7 +9,7 @@ namespace DataAccess.Repositories
         Task<IEnumerable<UserAccountModel>> GetAllAccounts();
         Task<UserAccountModel> GetAccountById(int id);
         Task<UserAccountModel> GetAccountByUsername(string username);
-        Task<UserProfileModel> GetAccountByEmail(string email);
+        Task<UserAccountModel> GetAccountByEmail(string email);
         Task<string> GetSaltById(int id);
         Task<int> CreateAccount(UserAccountModel model);
         Task<int> DeleteAccountById(int id);             

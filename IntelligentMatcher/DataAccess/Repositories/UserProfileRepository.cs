@@ -76,11 +76,11 @@ namespace DataAccess.Repositories
             return p.Get<int>("Id");
         }
 
-        public Task<int> DeleteUserProfile(int id)
+        public async Task<int> DeleteUserProfile(int id)
         {
             var query = "delete from [UserProfile] where UserAccountId = @Id";
 
-            return _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              Id = id
