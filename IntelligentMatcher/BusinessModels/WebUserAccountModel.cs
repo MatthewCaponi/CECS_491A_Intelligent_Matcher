@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Models
+namespace UserManagement.Models
 {
-    public class UserAccountModel
+    public class WebUserAccountModel
     {
         public int Id { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
-        public string Salt { get; set; }
         public string EmailAddress { get; set; }
         public string AccountType { get; set; }
         public string AccountStatus { get; set; }

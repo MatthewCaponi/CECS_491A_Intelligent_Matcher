@@ -60,7 +60,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserCreateModel user)
+        public async Task<IActionResult> Create(WebUserProfileModel user)
         {
             if (ModelState.IsValid == false)
             {
@@ -68,7 +68,7 @@ namespace WebUI.Controllers
             }
 
             _logService.LogInfo($"Username: { user.Username} \nPassword: {user.Password}" +
-                $" \nEmail: {user.Email} \nFirst Name: {user.FirstName} \nLastName: {user.LastName}" +
+                $" \nEmail: {user.EmailAddress} \nFirst Name: {user.FirstName} \nLastName: {user.Surname}" +
                 $" \nDate of Birth: {user.DateOfBirth} \nAccount Creation Date {user.AccountCreationDate}");
             int id = await _userManager.CreateUser(user);
             
@@ -77,7 +77,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult UsernameTest(UserCreateModel model)
+        public IActionResult UsernameTest(WebUserProfileModel model)
         {
             if (ModelState.IsValid == false)
             {

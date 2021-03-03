@@ -13,7 +13,7 @@ namespace WebUI.Models
     {
         public List<UserListModel> UserList { get; set; } = new List<UserListModel>();
 
-        public UserCreateModel User { get; set; } = new UserCreateModel();
+        public WebUserProfileModel User { get; set; } = new WebUserProfileModel();
 
         public List<SelectListItem> AccountTypes { get; set; } = new List<SelectListItem>();
 
