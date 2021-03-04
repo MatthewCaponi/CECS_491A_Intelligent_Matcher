@@ -8,7 +8,7 @@ using Security;
 namespace UserAccountSettings
 {
 
-    public class IAccountSettingsController : IAccountSettingsManager
+    public class AccountSettingsManager : IAccountSettingsManager
     {
         public async Task<bool> CreateUserAccountSettings(UserAccountSettingsModel model)
         {

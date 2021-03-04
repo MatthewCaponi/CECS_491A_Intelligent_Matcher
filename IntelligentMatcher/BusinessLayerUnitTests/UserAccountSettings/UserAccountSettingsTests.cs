@@ -76,7 +76,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.FontStyle = "Time New Roman";
             userAccountSettingsModel.ThemeColor = "White";
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             await accountSettingsConroller.CreateUserAccountSettings(userAccountSettingsModel);
         }
@@ -110,7 +110,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             await accountSettingsConroller.CreateDefaultUserAccountSettings(UserId);
 
@@ -120,7 +120,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
 
-            IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             UserAccountSettingsModel model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);
 
@@ -148,7 +148,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         {
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             await accountSettingsConroller.ChangeFontSize(userId, FontSize);
 
@@ -158,7 +158,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
 
-            IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             string newFontSize = await userAccountSettingsRepository.GetFontSizeByID(userId);
 
@@ -184,7 +184,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         {
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             await accountSettingsConroller.ChangeThemeColor(userId, ThemeColor);
 
@@ -194,7 +194,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
 
-            IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             string newThemeColor = await userAccountSettingsRepository.GetThemeColorByID(userId);
 
@@ -220,7 +220,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         {
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             await accountSettingsConroller.ChangeFontStyleAsync(userId, fontStyle);
 
@@ -230,7 +230,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
 
-            IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             string newFontStyle = await userAccountSettingsRepository.GetFontStyleByID(userId);
 
@@ -257,7 +257,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             string result = await accountSettingsConroller.DeleteAccountByUserIDAsync(userId, password);
 
@@ -294,7 +294,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             string result = await accountSettingsConroller.ChangeEmail(password, email, userId);
 
@@ -332,7 +332,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
 
-            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
             string result = await accountSettingsConroller.ChangePassword(password, newPassword, userId);
 
