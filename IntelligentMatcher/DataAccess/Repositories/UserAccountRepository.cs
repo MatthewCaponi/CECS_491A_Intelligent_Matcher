@@ -183,13 +183,13 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountStatus(int id, string accountStatus)
         {
-            var query = "update [UserProfile] set AccountStatus = @AccountStatus where UserAccountId = @UserAccountId;";
+            var query = "update [UserAccount] set AccountStatus = @AccountStatus where Id = @Id;";
 
             return await _dataGateway.SaveData(query,
                                          new
                                          {
-                                             AccountStatus = accountStatus.ToString(),
-                                             UserAccountId = id
+                                             AccountStatus = accountStatus,
+                                             Id = id
                                          },
                                          _connectionString.SqlConnectionString);
         }
@@ -202,7 +202,7 @@ namespace DataAccess.Repositories
                                          new
                                          {
                                              AccountType = accountType.ToString(),
-                                             UserAccountId = id
+                                             Id = id
 
                                          },
                                          _connectionString.SqlConnectionString);

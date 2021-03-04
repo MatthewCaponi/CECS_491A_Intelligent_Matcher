@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UserManagement.Services;
 using static Models.UserProfileModel;
 
+/*
 namespace BusinessLayerUnitTests.User_Management
 {
     [TestClass]
@@ -133,4 +134,4 @@ namespace BusinessLayerUnitTests.User_Management
             }
         }
     }
-}
+}*/

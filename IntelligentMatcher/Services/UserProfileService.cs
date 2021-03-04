@@ -29,7 +29,7 @@ namespace UserManagement.Services
             return webUserProfiles;
         }     
 
-        public async Task<WebUserProfileModel> GetUser(int id)
+        public async Task<WebUserProfileModel> GetUserProfile(int id)
         {
             var userProfileModel = await _userProfileRepository.GetUserProfileById(id);
             var webUserProfileModel = ModelConverterService.ConvertTo(userProfileModel, new WebUserProfileModel());
@@ -37,7 +37,7 @@ namespace UserManagement.Services
             return webUserProfileModel;
         }
 
-        public async Task<int> CreateUser(WebUserProfileModel webUserProfileModel)
+        public async Task<int> CreateUserProfile(WebUserProfileModel webUserProfileModel)
         {
             var userProfileModel = ModelConverterService.ConvertTo(webUserProfileModel, new UserProfileModel());
             return await _userProfileRepository.CreateUserProfile(userProfileModel);
@@ -45,7 +45,7 @@ namespace UserManagement.Services
 
         public async Task<bool> DeleteProfile(int accountId)
         {
-            await _userProfileRepository.DeleteUserProfile(accountId);
+            await _userProfileRepository.DeleteUserProfileByAccountId(accountId);
             return true;
         }
     }

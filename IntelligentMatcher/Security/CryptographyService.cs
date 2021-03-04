@@ -9,38 +9,44 @@ using System.Security.Cryptography;
 
 namespace Security
 {
-    class CryptographyService : ICryptographyService
+    public class CryptographyService : ICryptographyService
     {
-        private async Task<String> CreateSalt(int UserID)
+        private async Task<bool> CreateSalt(int UserID)
         {
 
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buffer = new byte[1024];
+            int length = 10;
 
-            rng.GetBytes(buffer);
+            // creating a StringBuilder object()
+            StringBuilder str_build = new StringBuilder();
+            Random random = new Random();
 
-            string salt = BitConverter.ToString(buffer); IDataGateway dataGateway = new DataGateway();
+            char letter;
+
+            for (int i = 0; i < length; i++)
+            {
+                double flt = random.NextDouble();
+                int shift = Convert.ToInt32(Math.Floor(25 * flt));
+                letter = Convert.ToChar(shift + 65);
+                str_build.Append(letter);
+            }
+
+            string salt = str_build.ToString();
+            IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
-            try
-            {
-                var returned = await userAccount.UpdateAccountSalt(UserID, salt);
-            }
-            catch (Exception e)
-            {
-            }
+            await userAccountRepository.UpdateAccountSalt(UserID, salt);
 
-            return salt;
+            return (true);
 
         }
 
-        private string retreiveSalt(int UserID)
+        private async Task<string> retreiveSaltAsync(int UserID)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            string salt = userAccount.GetSaltById(UserID).ToString();
+            string salt = await userAccount.GetSaltById(UserID);
 
             return salt;
 
@@ -53,16 +59,30 @@ namespace Security
             return (System.Text.Encoding.ASCII.GetString(Data).ToString());
         }
 
-        public Boolean newPasswordEncrypt(string Password, int UserID)
+        public async Task<bool> newPasswordEncryptAsync(string Password, int UserID)
         {
-            string SaltedPassword = Password + CreateSalt(UserID);
+
+            bool salted = await CreateSalt(UserID);
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            string salt = await userAccount.GetSaltById(UserID);
+            string SaltedPassword = Password + salt;
             string encryptedPassword = encrypt(SaltedPassword);
+
+            await userAccount.UpdateAccountPassword(UserID, encryptedPassword);
+
             return (true);
         }
 
-        public string encryptPassword(string Password, int UserID)
+        public async Task<string> encryptPasswordAsync(string Password, int UserID)
         {
-            string SaltedPassword = Password + retreiveSalt(UserID);
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            string salt = await userAccount.GetSaltById(UserID);
+            string SaltedPassword = Password + salt;
             string encryptedPassword = encrypt(SaltedPassword);
             return (encryptedPassword);
         }

@@ -17,9 +17,9 @@ namespace Security
          string retreiveSalt(int UserID);
          string encrypt(string SaltedPassword);
 
-         Boolean newPasswordEncrypt(string Password, int UserID);
+         Task<Boolean> newPasswordEncryptAsync(string Password, int UserID);
 
-         string encryptPassword(string Password, int UserID);
+         Task<string> encryptPasswordAsync(string Password, int UserID);
 
     }
 }

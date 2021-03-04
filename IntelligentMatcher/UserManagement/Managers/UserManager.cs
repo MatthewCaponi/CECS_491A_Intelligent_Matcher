@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Linq;
 using UserManagement.Models;
 using UserManagement.Services;
 using IntelligentMatcher.Services;
@@ -35,7 +34,7 @@ namespace IntelligentMatcher.UserManagement
                 return new Tuple<bool, ResultModel<WebUserProfileModel>>(false, resultModel);
             }
 
-            resultModel.Result = await _userProfileService.GetUser(id);
+            resultModel.Result = await _userProfileService.GetUserProfile(id);
             return new Tuple<bool, ResultModel<WebUserProfileModel>>(true, resultModel);
         }
 
@@ -94,13 +93,14 @@ namespace IntelligentMatcher.UserManagement
             if (await _validationService.EmailExists(webUserAccountModel))
             {
                 resultModel.ErrorMessage = ErrorMessage.EmailExists;
-                return new Tuple<bool, ResultModel<int>>(false, resultModel);
+                return new Tuple<bool, ResultModel<int>>(false, resultModel);      
             }
 
             var userAccountID = await _userAccountService.CreateAccount(webUserAccountModel);
             webUserProfileModel.UserAccountId = userAccountID;
-            await _userProfileService.CreateUser(webUserProfileModel);
+            await _userProfileService.CreateUserProfile(webUserProfileModel);
 
+            resultModel.Result = userAccountID;
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
