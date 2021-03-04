@@ -20,7 +20,50 @@ namespace BusinessLayerUnitTests.Security
     public class CyrptographyTests
     {
         
-     
+        [TestInitialize()]
+        public async Task Init()
+        {
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            var settings = await userAccountSettingsRepository.GetAllSettings();
+
+            foreach (var setting in settings)
+            {
+                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = await userAccountRepository.GetAllAccounts();
+  
+            foreach (var account in accounts)
+            {
+                await userAccountRepository.DeleteAccountById(account.Id);
+            }
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+
+
+
+            int i = 1;
+                UserAccountModel userAccountModel = new UserAccountModel();
+                userAccountModel.Id = i;
+                userAccountModel.Username = "TestUser" + i;
+                userAccountModel.Password = "" + i;
+                userAccountModel.Salt = "" + i;
+                userAccountModel.EmailAddress = "TestEmailAddress" + i;
+                userAccountModel.AccountType = "TestAccountType" + i;
+                userAccountModel.AccountStatus = "TestAccountStatus" + i;
+                userAccountModel.CreationDate = DateTimeOffset.UtcNow;
+                userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
+
+                await userAccountRepository.CreateAccount(userAccountModel);
+            
+        }
+
     
 
         [DataTestMethod]
