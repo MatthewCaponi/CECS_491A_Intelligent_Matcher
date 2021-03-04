@@ -9,5 +9,9 @@ namespace Security
     public interface IAuthenticationService
     {
         Task<bool> AuthenticatePasswordWithUserId(string password, int userId);
+
+        Task<bool> AuthenticatePasswordWithEmail(string password, string email);
+
+        Task<bool> AuthenticatePasswordWithUsename(string password, string userName);
     }
 }

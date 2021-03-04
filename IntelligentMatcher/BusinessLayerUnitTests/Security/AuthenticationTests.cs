@@ -51,12 +51,12 @@ namespace BusinessLayerUnitTests.Security
             int i = 1;
             UserAccountModel userAccountModel = new UserAccountModel();
             userAccountModel.Id = i;
-            userAccountModel.Username = "TestUser" + i;
+            userAccountModel.Username = "TestUser";
             userAccountModel.Password = "" + i;
             userAccountModel.Salt = "" + i;
-            userAccountModel.EmailAddress = "TestEmailAddress" + i;
-            userAccountModel.AccountType = "TestAccountType" + i;
-            userAccountModel.AccountStatus = "TestAccountStatus" + i;
+            userAccountModel.EmailAddress = "TestEmailAddress";
+            userAccountModel.AccountType = "TestAccountType";
+            userAccountModel.AccountStatus = "TestAccountStatus";
             userAccountModel.CreationDate = DateTimeOffset.UtcNow;
             userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
 
@@ -66,8 +66,90 @@ namespace BusinessLayerUnitTests.Security
             await CryptographyService.newPasswordEncryptAsync("Password", 1);
         }
 
+        [DataTestMethod]
+        [DataRow("Password", "TestUser")]
+        public async Task testUserNameAuthenticaiton(string password, string username)
+        {
 
 
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUsename(password, username);
+
+            if (AuthenticationToken == true)
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false);
+            }
+
+
+
+        }
+        [DataTestMethod]
+        [DataRow("WrongPassword", "TestUser")]
+        public async Task testUserNameAuthenticaitonWrongPassword(string password, string username)
+        {
+
+
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUsename(password, username);
+
+            if (AuthenticationToken == true)
+            {
+                Assert.IsTrue(false);
+            }
+            else
+            {
+                Assert.IsTrue(true);
+            }
+
+
+
+        }
+        [DataTestMethod]
+        [DataRow("Password", "TestEmailAddress")]
+        public async Task testEmailAuthenticaiton(string password, string email)
+        {
+
+
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithEmail(password, email);
+
+            if (AuthenticationToken == true)
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false);
+            }
+
+
+
+        }
+        [DataTestMethod]
+        [DataRow("WrongPassword", "TestEmailAddress")]
+        public async Task testEmailAuthenticaitonWrongPassword(string password, string email)
+        {
+
+
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithEmail(password, email);
+
+            if (AuthenticationToken == true)
+            {
+                Assert.IsTrue(false);
+            }
+            else
+            {
+                Assert.IsTrue(true);
+            }
+
+
+
+        }
         [DataTestMethod]
         [DataRow("Password", 1)]
         public async Task testAuthenticationTrue(string password, int userId)

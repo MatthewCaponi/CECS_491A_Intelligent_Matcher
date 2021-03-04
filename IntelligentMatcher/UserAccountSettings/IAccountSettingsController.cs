@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using System.Threading.Tasks;
 using Security;
 using Models;
+using Security;
 namespace UserAccountSettings
 {
 
@@ -47,9 +48,10 @@ namespace UserAccountSettings
         }
         public async Task<string> ChangePassword(string oldPassword, string newPassword, int UserID)
         {
-            bool authenticated = true;//add here when I get autheniticator done
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(oldPassword, UserID);
 
-            if (authenticated == true)
+            if (AuthenticationToken == true)
             {
                 IDataGateway dataGateway = new DataGateway();
                 IConnectionStringData connectionString = new ConnectionStringData();
@@ -75,9 +77,10 @@ namespace UserAccountSettings
 
         public async Task<string> ChangeEmail(string oldPassword, string email, int UserID)
         {
-            bool authenticated = true;//add here when I get autheniticator done
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(oldPassword, UserID);
 
-            if (authenticated == true)
+            if (AuthenticationToken == true)
             {
                 IDataGateway dataGateway = new DataGateway();
                 IConnectionStringData connectionString = new ConnectionStringData();
@@ -100,23 +103,19 @@ namespace UserAccountSettings
         }
         public async Task<string> DeleteAccountByUserIDAsync(int UserID, string password)
         {
-            bool authenticated = true;//add here when I get autheniticator done
+            IAuthenticationService authenticationService = new AuthenticationService();
+            bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(password, UserID);
 
-            if (authenticated == true)
+            if (AuthenticationToken == true)
             {
                 IDataGateway dataGateway = new DataGateway();
                 IConnectionStringData connectionString = new ConnectionStringData();
                 IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
-                try
-                {
                     await userAccountRepository.UpdateAccountStatus(UserID, "Deleted");
                     return "Update Succeeded";
-                }
-                catch
-                {
-                    return "Updated Failed";
-                }
+           
+                
             }
             else
             {

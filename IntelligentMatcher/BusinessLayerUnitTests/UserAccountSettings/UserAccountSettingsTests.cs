@@ -65,7 +65,9 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             await userAccountRepository.CreateAccount(userAccountModel);
 
+            ICryptographyService CryptographyService = new CryptographyService();
 
+            await CryptographyService.newPasswordEncryptAsync("Password", 1);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -248,5 +250,119 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         }
 
+        [DataTestMethod]
+        [DataRow(1, "Password")]
+        public async Task DeleteAccountTest(int userId, string password)
+        {
+
+
+
+            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+
+            string result = await accountSettingsConroller.DeleteAccountByUserIDAsync(userId, password);
+
+            
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+
+            UserAccountModel model = await userAccountRepository.GetAccountById(userId);
+
+
+
+            if (model.AccountStatus == "Deleted")
+            {
+                Assert.IsTrue(true);
+
+            }
+            else
+            {
+                Assert.IsTrue(false);
+
+            }
+
+            //Asser
+
+
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "Password", "NewEmail")]
+        public async Task ChangeEmailTest(int userId, string password, string email)
+        {
+
+
+
+            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+
+            string result = await accountSettingsConroller.ChangeEmail(password, email, userId);
+
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+
+            UserAccountModel model = await userAccountRepository.GetAccountById(userId);
+
+
+
+            if (model.EmailAddress == email)
+            {
+                Assert.IsTrue(true);
+
+            }
+            else
+            {
+                Assert.IsTrue(false);
+
+            }
+
+            //Asser
+
+
+        }
+
+
+        [DataTestMethod]
+        [DataRow(1, "Password", "NewPassword")]
+        public async Task ChangePasswordTest(int userId, string password, string newPassword)
+        {
+
+
+
+            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+
+            string result = await accountSettingsConroller.ChangePassword(password, newPassword, userId);
+
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+
+            UserAccountModel model = await userAccountRepository.GetAccountById(userId);
+
+
+            ICryptographyService cryptographyService = new CryptographyService();
+            string encryptedNewPassword = await cryptographyService.encryptPasswordAsync(newPassword, userId);
+
+
+            if (model.Password == encryptedNewPassword)
+            {
+                Assert.IsTrue(true);
+
+            }
+            else
+            {
+                Assert.IsTrue(false);
+
+            }
+
+            //Asser
+
+
+        }
     }
 }
