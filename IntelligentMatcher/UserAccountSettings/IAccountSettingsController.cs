@@ -24,6 +24,27 @@ namespace UserAccountSettings
             return (true);
             
         }
+
+        public async Task<bool> CreateDefaultUserAccountSettings(int UserId)
+        {
+            UserAccountSettingsModel model = new UserAccountSettingsModel();
+            model.UserId = UserId;
+            model.FontSize = 12;
+            model.FontStyle = "Defualt Font Style";
+            model.ThemeColor = "Default Theme Color";
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+
+
+
+
+
+            await userAccountSettingsRepository.CreateUserAccountSettings(model);
+
+            return (true);
+
+        }
         public async Task<string> ChangePassword(string oldPassword, string newPassword, int UserID)
         {
             bool authenticated = true;//add here when I get autheniticator done
@@ -109,15 +130,10 @@ namespace UserAccountSettings
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
-            try
-            {
+        
                 await userAccountSettingsRepository.UpdateFontSize(UserID, FontSize);
                 return true;
-            }
-            catch
-            {
-                return false;
-            }
+       
         }
 
         public async Task<bool> ChangeThemeColor(int UserID, string ThemeColor)
@@ -126,17 +142,11 @@ namespace UserAccountSettings
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
-            try
-            {
+       
                 await userAccountSettingsRepository.UpdateThemeColor(UserID, ThemeColor);
                 return true;
-            }
-            catch
-            {
-                return false;
-            }
+     
         }
-
 
         public async Task<bool> ChangeFontStyleAsync(int UserID, string FontStyle)
         {

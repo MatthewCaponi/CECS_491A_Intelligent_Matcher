@@ -91,6 +91,20 @@ namespace DataAccess.Repositories
 
             return row.FirstOrDefault();
         }
+        public async Task<string> GetPasswordById(int id)
+        {
+            var query = "select [Password]" +
+                       "from [UserAccount] where Id = @Id";
+
+            var row = await _dataGateway.LoadData<string, dynamic>(query,
+                new
+                {
+                    Id = id
+                },
+                _connectionString.SqlConnectionString);
+
+            return row.FirstOrDefault();
+        }
 
         public async Task<int> CreateAccount(UserAccountModel model)
         {

@@ -8,6 +8,7 @@ namespace UserAccountSettings
     public interface IAccountSettingsManager
     {
         Task<bool> CreateUserAccountSettings(UserAccountSettingsModel model);
+        Task<bool> CreateDefaultUserAccountSettings(int UserId);
 
         Task<string> ChangePassword(string oldPassword, string newPassword, int UserID);
         Task<string> ChangeEmail(string oldPassword, string email, int UserID);

@@ -99,7 +99,7 @@ namespace Security
 
         string ICryptographyService.encrypt(string SaltedPassword)
         {
-            throw new NotImplementedException();
+             throw new NotImplementedException();
         }
     }
 }

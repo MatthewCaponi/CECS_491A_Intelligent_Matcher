@@ -19,5 +19,7 @@ namespace DataAccess.Repositories
         Task<int> UpdateAccountSalt(int id, string salt);
         Task<int> UpdateAccountStatus(int id, string accountStatus);
         Task<int> UpdateAccountType(int id, string accountType);
+
+        Task<string> GetPasswordById(int id);
     }
 }

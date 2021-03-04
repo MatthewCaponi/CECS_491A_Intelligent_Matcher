@@ -20,6 +20,8 @@ namespace BusinessLayerUnitTests.UserAccountSettings
     [TestClass]
     public class UserAccountSettingsTests
     {
+
+        
         
         [TestInitialize()]
         public async Task Init()
@@ -82,7 +84,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(2, 12, "White", "Times-New-Roman")]
-        public async Task newUserAccountSettingsTest(int UserId, int FontSize, string ThemeColor, string FontStyle)
+        public async Task newDefaultUserAccountSettingsTest(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
@@ -104,15 +106,11 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
-            userAccountSettingsModel.Id = UserId;
-            userAccountSettingsModel.UserId = UserId;
-            userAccountSettingsModel.FontSize = FontSize;
-            userAccountSettingsModel.FontStyle = FontStyle;
-            userAccountSettingsModel.ThemeColor = ThemeColor;
+
 
             IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
 
-            await accountSettingsConroller.CreateUserAccountSettings(userAccountSettingsModel);
+            await accountSettingsConroller.CreateDefaultUserAccountSettings(UserId);
 
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
@@ -125,7 +123,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             UserAccountSettingsModel model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);
 
             
-            if(model.UserId == UserId && model.FontSize == FontSize && model.FontStyle == FontStyle && model.ThemeColor == ThemeColor)
+            if(model.UserId == UserId && model.FontSize == 12 && model.FontStyle == "Defualt Font Style" && model.ThemeColor == "Default Theme Color")
             {
                 Assert.IsTrue(true);
 
@@ -147,14 +145,15 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         public async Task ChangeFontSize(int userId, int FontSize)
         {
 
+
+            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+
+            await accountSettingsConroller.ChangeFontSize(userId, FontSize);
+
+
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-
-
-
-
-            await userAccountSettingsRepository.UpdateFontSize(userId, FontSize);
 
 
             IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
@@ -172,15 +171,82 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             }
 
+            //Asser
+
+
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "Black")]
+        public async Task ChangeThemeColor(int userId, string ThemeColor)
+        {
+
+
+            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
+
+            await accountSettingsConroller.ChangeThemeColor(userId, ThemeColor);
+
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+
+
+            IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
+
+            string newThemeColor = await userAccountSettingsRepository.GetThemeColorByID(userId);
+
+            if (ThemeColor == newThemeColor)
+            {
+                Assert.IsTrue(true);
+
+            }
+            else
+            {
+                Assert.IsTrue(false);
+
+            }
 
             //Asser
 
 
         }
 
+        [DataTestMethod]
+        [DataRow(1, "Helvetica")]
+        public async Task ChangeFontStyle(int userId, string fontStyle)
+        {
 
 
+            IAccountSettingsManager accountSettingsConroller = new IAccountSettingsController();
 
+            await accountSettingsConroller.ChangeFontStyleAsync(userId, fontStyle);
+
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+
+
+            IAccountSettingsManager accountSettingsController = new IAccountSettingsController();
+
+            string newFontStyle = await userAccountSettingsRepository.GetFontStyleByID(userId);
+
+            if (fontStyle == newFontStyle)
+            {
+                Assert.IsTrue(true);
+
+            }
+            else
+            {
+                Assert.IsTrue(false);
+
+            }
+
+            //Asser
+
+
+        }
 
     }
 }

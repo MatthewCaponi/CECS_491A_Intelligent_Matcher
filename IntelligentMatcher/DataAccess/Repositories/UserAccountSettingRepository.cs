@@ -86,41 +86,42 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
-        public async Task<int> UpdateFontStyle(int id, string fontStyle)
+        public async Task<int> UpdateFontStyle(int userId, string fontStyle)
         {
-            var query = "update [UserAccountSettings] set FontStyle = @FontStyle where UserId = @Id;";
+            var query = "update [UserAccountSettings] set FontStyle = @FontStyle where UserId = @UserId;";
 
             return await _dataGateway.SaveData(query,
                                          new
                                          {
-                                             Id = id,
+                                             UserId = userId,
                                              FontStyle = fontStyle
                                          },
                                          _connectionString.SqlConnectionString);
         }
 
-        public async Task<int> UpdateThemeColor(int id, string themeColor)
+        public async Task<int> UpdateThemeColor(int userId, string themeColor)
         {
-            var query = "update [UserAccountSettings] set ThemeColor = @Theme where UserId = @Id;";
+            var query = "update [UserAccountSettings] set ThemeColor = @ThemeColor where UserId = @UserId;";
 
             return await _dataGateway.SaveData(query,
                                          new
                                          {
-                                             Id = id,
-                                             ThemeColor = themeColor
+                                             ThemeColor = themeColor,
+
+                                             UserId = userId
                                          },
                                          _connectionString.SqlConnectionString);
         }
 
-        public async Task<string> GetThemeColorByID(int id)
+        public async Task<string> GetThemeColorByID(int userId)
         {
             var query = "select [ThemeColor]" +
-                       "from [UserAccountSettings] where UserId = @Id";
+                       "from [UserAccountSettings] where UserId = @UserId";
 
             var row = await _dataGateway.LoadData<string, dynamic>(query,
                 new
                 {
-                    Id = id
+                    UserId = userId
                 },
                 _connectionString.SqlConnectionString);
 
