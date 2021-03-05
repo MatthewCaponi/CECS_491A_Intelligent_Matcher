@@ -41,11 +41,6 @@ namespace IntelligentMatcher.UserManagement
         public async Task<Tuple<bool, ResultModel<List<WebUserProfileModel>>>> GetAllUserProfiles()
         {
             ResultModel<List<WebUserProfileModel>> resultModel = new ResultModel<List<WebUserProfileModel>>();
-            if (await _validationService.ListIsEmpty(typeof(WebUserProfileModel)))
-            {
-                resultModel.ErrorMessage = ErrorMessage.NoUsersExist;
-                return new Tuple<bool, ResultModel<List<WebUserProfileModel>>>(false, resultModel);
-            }
 
             resultModel.Result = await _userProfileService.GetAllUsers();
             return new Tuple<bool, ResultModel<List<WebUserProfileModel>>>(true, resultModel);
@@ -67,11 +62,6 @@ namespace IntelligentMatcher.UserManagement
         public async Task<Tuple<bool, ResultModel<List<WebUserAccountModel>>>> GetAllUserAccounts()
         {
             ResultModel<List<WebUserAccountModel>> resultModel = new ResultModel<List<WebUserAccountModel>>();
-            if (await _validationService.ListIsEmpty(typeof(WebUserAccountModel)))
-            {
-                resultModel.ErrorMessage = ErrorMessage.NoUsersExist;
-                return new Tuple<bool, ResultModel<List<WebUserAccountModel>>>(false, resultModel);
-            }
 
             resultModel.Result = await _userAccountService.GetAllUserAccounts();
             return new Tuple<bool, ResultModel<List<WebUserAccountModel>>>(true, resultModel);
@@ -85,12 +75,12 @@ namespace IntelligentMatcher.UserManagement
                 resultModel.ErrorMessage = ErrorMessage.Null;
                 return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
-            if (await _validationService.UsernameExists(webUserAccountModel))
+            if (await _validationService.UsernameExists(webUserAccountModel.Username))
             {
                 resultModel.ErrorMessage = ErrorMessage.UsernameExists;
                 return new Tuple<bool, ResultModel<int>>(false, resultModel);
             }
-            if (await _validationService.EmailExists(webUserAccountModel))
+            if (await _validationService.EmailExists(webUserAccountModel.EmailAddress))
             {
                 resultModel.ErrorMessage = ErrorMessage.EmailExists;
                 return new Tuple<bool, ResultModel<int>>(false, resultModel);      
