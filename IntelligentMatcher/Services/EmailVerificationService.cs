@@ -18,7 +18,7 @@ namespace Registration.Services
 				TrackOpens = true,
 				Subject = "Verify Your Email",
 				TextBody = "You have Successfully Registered! Click on the link to verify your email!",
-				HtmlBody = "<a href='index.cshtml'>Verify Email</a> <strong>Link Expires 24 hours after Registering.</strong>",
+				HtmlBody = "<a href='index.cshtml'>Verify Email!</a> <strong>Link Expires 24 hours after Registering.</strong>",
 				MessageStream = "outbound",
 				Tag = "Verifcation"
 			};
