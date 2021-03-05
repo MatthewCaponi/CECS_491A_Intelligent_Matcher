@@ -19,9 +19,49 @@ namespace BusinessLayerUnitTests.Security
     [TestClass]
     public class CyrptographyTests
     {
-        
-     
-    
+
+        // Insert test rows before every test case
+        [TestInitialize()]
+        public async Task Init()
+        {
+            var numTestRows = 20;
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+            for (int i = 1; i <= numTestRows; ++i)
+            {
+                UserAccountModel userAccountModel = new UserAccountModel();
+                userAccountModel.Id = i;
+                userAccountModel.Username = "TestUser" + i;
+                userAccountModel.Password = "TestPassword" + i;
+                userAccountModel.Salt = "TestSalt" + i;
+                userAccountModel.EmailAddress = "TestEmailAddress" + i;
+                userAccountModel.AccountType = "TestAccountType" + i;
+                userAccountModel.AccountStatus = "TestAccountStatus" + i;
+                userAccountModel.CreationDate = DateTimeOffset.UtcNow;
+                userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
+
+                await userAccountRepository.CreateAccount(userAccountModel);
+            }
+        }
+
+        // Remove test rows and reset id counter after every test case
+        [TestCleanup()]
+        public async Task CleanUp()
+        {
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = await userAccountRepository.GetAllAccounts();
+
+            foreach (var account in accounts)
+            {
+                await userAccountRepository.DeleteAccountById(account.Id);
+            }
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+        }
 
         [DataTestMethod]
         [DataRow("Password", 1)]
@@ -52,13 +92,7 @@ namespace BusinessLayerUnitTests.Security
 
             //Assert
             Assert.IsTrue(testPassword == encryptedPassword);
-
-
-
         }
-
-
-
 
         [DataTestMethod]
         [DataRow("Password", 1)]
