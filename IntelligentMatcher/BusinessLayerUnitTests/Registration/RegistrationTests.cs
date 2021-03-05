@@ -13,6 +13,8 @@ using UserManagement.Services;
 using UserManagement.Models;
 using IntelligentMatcher.UserManagement;
 using Registration;
+using Registration.Services;
+using BusinessModels;
 
 namespace BusinessLayerUnitTests.Registration
 {
@@ -46,13 +48,13 @@ namespace BusinessLayerUnitTests.Registration
 
                 UserProfileModel userProfileModel = new UserProfileModel();
                 userProfileModel.Id = i;
-                userProfileModel.FirstName = "TestName" + i;
+                userProfileModel.FirstName = "TestFirstName" + i;
                 userProfileModel.Surname = "TestSurname" + i;
                 userProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
                 userProfileModel.UserAccountId = userAccountModel.Id;
                 await userProfileRepository.CreateUserProfile(userProfileModel);
-            }
 
+            }
         }
 
         // Remove test rows and reset id counter after every test case
@@ -72,32 +74,143 @@ namespace BusinessLayerUnitTests.Registration
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
         }
 
-        [TestMethod]
-        [DataRow(21, "TestUser1", "TestPassword21", "TestSalt21", "TestEmailAddress21", "TestAccountType21", 
-            "TestAccountStatus21", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00")]
+        [DataTestMethod]
+        [DataRow(21, "TestUser1", "TestPassword11", "TestSalt11", "TestEmailAddress11", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
+            "TestSurname11", ErrorMessage.UsernameExists)]
         public async Task RegisterUser_UserNameExists(int expectedId, string username, string password, string salt,
-            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate)
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
+            string firstName, string lastName, ErrorMessage error)
         {
             //Arrange
-            WebUserAccountModel userAccountModel = new WebUserAccountModel();
-            userAccountModel.Id = expectedId;
-            userAccountModel.Username = username;
-            userAccountModel.Password = password;
-            userAccountModel.Salt = salt;
-            userAccountModel.EmailAddress = emailAddress;
-            userAccountModel.AccountType = accountType;
-            userAccountModel.AccountStatus = accountStatus;
-            userAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
-            userAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+            EmailVerificationService emailVerificationService = new EmailVerificationService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
 
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            WebUserProfileModel webUserProfileModel = new WebUserProfileModel();
+            webUserProfileModel.Id = expectedId;
+            webUserProfileModel.FirstName = firstName;
+            webUserProfileModel.Surname = lastName;
+            webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
+            webUserProfileModel.UserAccountId = webUserAccountModel.Id;
+
+            ResultModel<int> registry = new ResultModel<int>();
+            registry.ErrorMessage = error;
+            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+
+            RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
+                userAccountService, userProfileService, validationService);
 
             //Act
-            var result = await ValidationService.UsernameExists(userAccountModel);
-            var actualAccount = await userAccountRepository.GetAccountByUsername(username);
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false);
 
             //Assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(actualResult == expectedResult);
+        }
+
+        [DataTestMethod]
+        [DataRow(11, "TestUser11", "TestPassword21", "TestSalt11", "TestEmailAddress1", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
+            "TestSurname11", ErrorMessage.EmailExists)]
+        public async Task RegisterUser_EmailExists(int expectedId, string username, string password, string salt,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
+            string firstName, string lastName, ErrorMessage error)
+        {
+            //Arrange
+            EmailVerificationService emailVerificationService = new EmailVerificationService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            WebUserProfileModel webUserProfileModel = new WebUserProfileModel();
+            webUserProfileModel.Id = expectedId;
+            webUserProfileModel.FirstName = firstName;
+            webUserProfileModel.Surname = lastName;
+            webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
+            webUserProfileModel.UserAccountId = webUserAccountModel.Id;
+
+            ResultModel<int> registry = new ResultModel<int>();
+            registry.ErrorMessage = error;
+            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+
+            RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
+                userAccountService, userProfileService, validationService);
+
+            //Act
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false);
+
+            //Assert
+            Assert.IsTrue(actualResult == expectedResult);
+        }
+
+        [DataTestMethod]
+        [DataRow(21, "TestUser11", "TestPassword11", "TestSalt11", "TestEmailAddress11", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
+            "TestSurname11", ErrorMessage.EmailNotSent)]
+        public async Task RegisterUser_EmailNotSent(int expectedId, string username, string password, string salt,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
+            string firstName, string lastName, ErrorMessage error)
+        {
+            //Arrange
+            EmailVerificationService emailVerificationService = new EmailVerificationService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            WebUserProfileModel webUserProfileModel = new WebUserProfileModel();
+            webUserProfileModel.Id = expectedId;
+            webUserProfileModel.FirstName = firstName;
+            webUserProfileModel.Surname = lastName;
+            webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
+            webUserProfileModel.UserAccountId = webUserAccountModel.Id;
+
+            ResultModel<int> registry = new ResultModel<int>();
+            registry.Result = expectedId;
+            registry.ErrorMessage = error;
+            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+
+            RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
+                userAccountService, userProfileService, validationService);
+
+            //Act
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false);
+
+            //Assert
+            Assert.IsTrue(actualResult == expectedResult);
         }
 
     }

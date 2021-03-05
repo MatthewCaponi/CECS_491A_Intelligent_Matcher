@@ -9,11 +9,11 @@ namespace Registration.Services
 {
     public class EmailVerificationService
     {
-        public async Task<bool> SendVerificationEmail(WebUserAccountModel accountModel)
+        public async Task<bool> SendVerificationEmail(string emailAddress)
         {
 			var message = new PostmarkMessage()
 			{
-				To = accountModel.EmailAddress,
+				To = emailAddress,
 				From = "support@infinimuse.com",
 				TrackOpens = true,
 				Subject = "Verify Your Email",
@@ -23,15 +23,14 @@ namespace Registration.Services
 				Tag = "Verifcation"
 			};
 
-			var client = new PostmarkClient("7e3947d6-ad88-41aa-91ae-8166ae128b21");
-			var sendResult = await client.SendMessageAsync(message);
-
-			if (sendResult.Status == PostmarkStatus.Success)
-			{
+			var client = new PostmarkClient("7e3947d6-ad88-41aa-91ae-8166ae128b21");			
+            try
+            {
+				var sendResult = await client.SendMessageAsync(message);
 				return true;
-			}
-			else
-			{
+			} 
+			catch
+            {
 				return false;
 			}
         }

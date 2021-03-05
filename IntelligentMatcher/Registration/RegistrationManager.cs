@@ -22,7 +22,8 @@ namespace Registration
         private UserProfileService _userProfileService;
         private readonly ValidationService _validationService;
 
-        public RegistrationManager(EmailVerificationService emailVerificationService, UserAccountService userAccountService, UserProfileService userProfileService, ValidationService validationService)
+        public RegistrationManager(EmailVerificationService emailVerificationService, UserAccountService userAccountService,
+            UserProfileService userProfileService, ValidationService validationService)
         {
             _emailVerificationService = emailVerificationService;
             _userAccountService = userAccountService;
@@ -35,7 +36,8 @@ namespace Registration
             _logger = factory.CreateLogService<RegistrationManager>();
         }
 
-        public async Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel, WebUserProfileModel userModel)
+        public async Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel,
+            WebUserProfileModel userModel, bool emailIsActive)
         {
             ResultModel<int> registry = new ResultModel<int>();
             if (await _validationService.UsernameExists(accountModel))
@@ -55,20 +57,23 @@ namespace Registration
             // Create User Profile with the Passed on Account ID
             await _userProfileService.CreateUserProfile(userModel);
 
-            //Return the Result
-            for(int i = 0; i < 5; i++)
+            //Send Verification Email
+            while (!(await _emailVerificationService.SendVerificationEmail(accountModel.EmailAddress)) && emailIsActive)
             {
-                //Send Verification Email
-                var sent = await _emailVerificationService.SendVerificationEmail(accountModel);
-                if (sent)
-                {
-                    registry.Result = registerID;
-                    return new Tuple<bool, ResultModel<int>>(true, registry);
-                }
+                continue;
             }
-
-            registry.ErrorMessage = ErrorMessage.EmailNotSent;
-            return new Tuple<bool, ResultModel<int>>(false, registry);
+            //Return the Result (Pass or Fail)
+            if (emailIsActive)
+            {
+                registry.Result = registerID;
+                return new Tuple<bool, ResultModel<int>>(true, registry);
+            }
+            else
+            {
+                registry.Result = registerID;
+                registry.ErrorMessage = ErrorMessage.EmailNotSent;
+                return new Tuple<bool, ResultModel<int>>(false, registry);
+            }
 
         }
 
