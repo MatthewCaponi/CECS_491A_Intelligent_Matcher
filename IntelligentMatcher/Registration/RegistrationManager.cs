@@ -42,12 +42,12 @@ namespace Registration
             WebUserProfileModel userModel, bool emailIsActive, string password)
         {
             ResultModel<int> registry = new ResultModel<int>();
-            if (await _validationService.UsernameExists(accountModel))
+            if (await _validationService.UsernameExists(accountModel.Username))
             {
                 registry.ErrorMessage = ErrorMessage.UsernameExists;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
             }
-            if (await _validationService.EmailExists(accountModel))
+            if (await _validationService.EmailExists(accountModel.EmailAddress))
             {
                 registry.ErrorMessage = ErrorMessage.EmailExists;
                 return new Tuple<bool, ResultModel<int>>(false, registry);

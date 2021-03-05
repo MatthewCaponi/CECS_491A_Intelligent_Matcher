@@ -28,7 +28,7 @@ namespace Registration
 
         public async Task<bool> LinkExpired(int accountId)
         {
-            // Place Holder
+            // Returns the result from deleting the account after the link expires
             if (await _userAccountService.DeleteAccount(accountId))
             {
                 return true;
@@ -39,7 +39,7 @@ namespace Registration
 
         public async Task<bool> VerifyEmail(int accountId)
         {
-            // Place Holder
+            // Returns the result from changing the Account after verifying the email
             if (await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Active))
             {
                 return true;

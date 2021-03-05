@@ -1,4 +1,5 @@
 ﻿using PostmarkDotNet;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +8,7 @@ using UserManagement.Models;
 
 namespace Registration.Services
 {
-    public class EmailVerificationService
+    public class EmailVerificationService : IEmailVerificationService
     {
         public async Task<bool> SendVerificationEmail(string emailAddress)
         {
