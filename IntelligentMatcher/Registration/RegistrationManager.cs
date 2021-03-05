@@ -55,18 +55,21 @@ namespace Registration
             // Create User Profile with the Passed on Account ID
             await _userProfileService.CreateUserProfile(userModel);
 
-            //Send Verification Email
-            await _emailVerificationService.SendVerificationEmail(accountModel);
-
             //Return the Result
-            registry.Result = registerID;
-            return new Tuple<bool, ResultModel<int>>(true, registry);
+            for(int i = 0; i < 5; i++)
+            {
+                //Send Verification Email
+                var sent = await _emailVerificationService.SendVerificationEmail(accountModel);
+                if (sent)
+                {
+                    registry.Result = registerID;
+                    return new Tuple<bool, ResultModel<int>>(true, registry);
+                }
+            }
 
- //           catch (Exception e)
- //           {
- //               _logger.LogError(new UserLoggingEvent(EventName.UserEvent, "", 0, "User"), e, $"Exception: {e.Message}");
- //               throw new Exception(e.Message, e.InnerException);
- //           }
+            registry.ErrorMessage = ErrorMessage.EmailNotSent;
+            return new Tuple<bool, ResultModel<int>>(false, registry);
+
         }
 
     }

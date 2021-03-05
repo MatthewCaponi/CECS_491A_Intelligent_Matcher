@@ -13,6 +13,7 @@ namespace BusinessModels
         UserDoesNotExist,
         UserIsNotActive,
         UserIsActive,
-        NoUsersExist
+        NoUsersExist,
+        EmailNotSent
     }
 }

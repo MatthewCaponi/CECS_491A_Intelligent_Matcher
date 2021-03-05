@@ -1,17 +1,25 @@
-﻿using Logging;
+﻿using IntelligentMatcher.Services;
+using Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UserManagement.Services;
+using UserManagement.Models;
+using System.Threading.Tasks;
 
 namespace Registration
 {
     public class VerificationManager : IVerificationManager
     {
         ILogService _logger;
+        private UserAccountService _userAccountService;
+        private UserAccessService _userAccessService;
 
-        public VerificationManager()
+        public VerificationManager(UserAccountService userAccountService, UserAccessService userAccessService)
         {
+            _userAccountService = userAccountService;
+            _userAccessService = userAccessService;
+
             ILogServiceFactory factory = new LogSeviceFactory();
             factory.AddTarget(TargetType.Text);
 
@@ -21,7 +29,7 @@ namespace Registration
         public async Task<bool> LinkExpired(int accountId)
         {
             // Place Holder
-            if (await webUserAccountService.DeleteAccount(accountId))
+            if (await _userAccountService.DeleteAccount(accountId))
             {
                 return true;
             }
@@ -29,10 +37,10 @@ namespace Registration
             return false;
         }
 
-        public async Task<bool> VerifyEmail(int AccountId)
+        public async Task<bool> VerifyEmail(int accountId)
         {
             // Place Holder
-            if (await UserAccessService.EnableAccount(accountId))
+            if (await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Active))
             {
                 return true;
             }

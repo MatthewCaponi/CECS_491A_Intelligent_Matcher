@@ -7,7 +7,7 @@ namespace Registration
 {
     public interface IVerificationManager
     {
-        Task<bool> LinkExpired(int AccountId);
-        Task<bool> VerifyEmail(int AccountId);
+        Task<bool> LinkExpired(int accountId);
+        Task<bool> VerifyEmail(int accountId);
     }
 }
