@@ -54,7 +54,7 @@ namespace Services
         public async Task<bool> EmailExists(WebUserAccountModel webUserAccountModel)
         {
             var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.Username == webUserAccountModel.Username))
+            if (userAccounts.Any(x => x.EmailAddress == webUserAccountModel.EmailAddress))
             {
                 return true;
             }

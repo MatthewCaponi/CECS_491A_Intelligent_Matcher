@@ -15,6 +15,7 @@ using IntelligentMatcher.UserManagement;
 using Registration;
 using Registration.Services;
 using BusinessModels;
+using Security;
 
 namespace BusinessLayerUnitTests.Registration
 {
@@ -75,10 +76,10 @@ namespace BusinessLayerUnitTests.Registration
         }
 
         [DataTestMethod]
-        [DataRow(21, "TestUser1", "TestPassword11", "TestSalt11", "TestEmailAddress11", "TestAccountType11",
+        [DataRow(11, "TestUser1", "TestPassword11", "TestEmailAddress11", "TestAccountType11",
             "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
             "TestSurname11", ErrorMessage.UsernameExists)]
-        public async Task RegisterUser_UserNameExists(int expectedId, string username, string password, string salt,
+        public async Task RegisterUser_UserNameExists(int expectedId, string username, string password,
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
             string firstName, string lastName, ErrorMessage error)
         {
@@ -89,6 +90,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService();
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -111,20 +113,21 @@ namespace BusinessLayerUnitTests.Registration
             var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
-                userAccountService, userProfileService, validationService);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             //Act
-            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false);
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false, password);
 
             //Assert
-            Assert.IsTrue(actualResult == expectedResult);
+            Assert.IsTrue((actualResult.Item1 == expectedResult.Item1) &&
+                (actualResult.Item2.ErrorMessage == expectedResult.Item2.ErrorMessage));
         }
 
         [DataTestMethod]
-        [DataRow(11, "TestUser11", "TestPassword21", "TestSalt11", "TestEmailAddress1", "TestAccountType11",
+        [DataRow(11, "TestUser11", "TestPassword11", "TestEmailAddress1", "TestAccountType11",
             "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
             "TestSurname11", ErrorMessage.EmailExists)]
-        public async Task RegisterUser_EmailExists(int expectedId, string username, string password, string salt,
+        public async Task RegisterUser_EmailExists(int expectedId, string username, string password,
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
             string firstName, string lastName, ErrorMessage error)
         {
@@ -135,6 +138,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService();
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -157,20 +161,21 @@ namespace BusinessLayerUnitTests.Registration
             var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
-                userAccountService, userProfileService, validationService);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             //Act
-            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false);
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false, password);
 
             //Assert
-            Assert.IsTrue(actualResult == expectedResult);
+            Assert.IsTrue((actualResult.Item1 == expectedResult.Item1) &&
+                (actualResult.Item2.ErrorMessage == expectedResult.Item2.ErrorMessage));
         }
 
         [DataTestMethod]
-        [DataRow(21, "TestUser11", "TestPassword11", "TestSalt11", "TestEmailAddress11", "TestAccountType11",
+        [DataRow(11, "TestUser11", "TestPassword11", "TestEmailAddress11", "TestAccountType11",
             "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
-            "TestSurname11", ErrorMessage.EmailNotSent)]
-        public async Task RegisterUser_EmailNotSent(int expectedId, string username, string password, string salt,
+            "TestSurname11", ErrorMessage.EmailNotSent),]
+        public async Task RegisterUser_EmailNotSent(int expectedId, string username, string password,
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
             string firstName, string lastName, ErrorMessage error)
         {
@@ -181,6 +186,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService();
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -204,13 +210,62 @@ namespace BusinessLayerUnitTests.Registration
             var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
-                userAccountService, userProfileService, validationService);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             //Act
-            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false);
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, false, password);
 
             //Assert
-            Assert.IsTrue(actualResult == expectedResult);
+            Assert.IsTrue((actualResult.Item1 == expectedResult.Item1) &&
+                (actualResult.Item2.ErrorMessage == expectedResult.Item2.ErrorMessage));
+        }
+
+        [DataTestMethod]
+        [DataRow(11, "TestUser11", "TestPassword11", "shariffshaan@gmail.com", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
+            "TestSurname11"),]
+        public async Task RegisterUser_Success(int expectedId, string username, string password,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
+            string firstName, string lastName)
+        {
+            //Arrange
+            EmailVerificationService emailVerificationService = new EmailVerificationService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService();
+
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            WebUserProfileModel webUserProfileModel = new WebUserProfileModel();
+            webUserProfileModel.Id = expectedId;
+            webUserProfileModel.FirstName = firstName;
+            webUserProfileModel.Surname = lastName;
+            webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
+            webUserProfileModel.UserAccountId = webUserAccountModel.Id;
+
+            ResultModel<int> registry = new ResultModel<int>();
+            registry.Result = expectedId;
+            var expectedResult = new Tuple<bool, ResultModel<int>>(true, registry);
+
+            RegistrationManager registrationManager = new RegistrationManager(emailVerificationService,
+                userAccountService, userProfileService, validationService, cryptographyService);
+
+            //Act
+            var actualResult = await registrationManager.RegisterNewAccount(webUserAccountModel, webUserProfileModel, true, password);
+
+            //Assert
+            Assert.IsTrue((actualResult.Item1 == expectedResult.Item1) &&
+                (actualResult.Item2.Result == expectedResult.Item2.Result));
         }
 
     }

@@ -10,6 +10,7 @@ using Services;
 using System.Threading.Tasks;
 using UserManagement.Services;
 using Registration.Services;
+using Security;
 
 namespace Registration
 {
@@ -21,15 +22,16 @@ namespace Registration
         private UserAccountService _userAccountService;
         private UserProfileService _userProfileService;
         private readonly ValidationService _validationService;
+        private readonly ICryptographyService _cryptographyService;
 
         public RegistrationManager(EmailVerificationService emailVerificationService, UserAccountService userAccountService,
-            UserProfileService userProfileService, ValidationService validationService)
+            UserProfileService userProfileService, ValidationService validationService, ICryptographyService cryptographyService)
         {
             _emailVerificationService = emailVerificationService;
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _validationService = validationService;
-
+            _cryptographyService = cryptographyService;
             ILogServiceFactory factory = new LogSeviceFactory();
             factory.AddTarget(TargetType.Text);
 
@@ -37,7 +39,7 @@ namespace Registration
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel,
-            WebUserProfileModel userModel, bool emailIsActive)
+            WebUserProfileModel userModel, bool emailIsActive, string password)
         {
             ResultModel<int> registry = new ResultModel<int>();
             if (await _validationService.UsernameExists(accountModel))
@@ -52,6 +54,8 @@ namespace Registration
             }
             // Creates User Account and gets Account ID
             var registerID = await _userAccountService.CreateAccount(accountModel);
+            // Sets the password for the new Account
+            var passwordEncrypted = await _cryptographyService.newPasswordEncryptAsync(password, registerID);
             // Passes on the Account ID to the User Profile Model
             userModel.UserAccountId = registerID;
             // Create User Profile with the Passed on Account ID
