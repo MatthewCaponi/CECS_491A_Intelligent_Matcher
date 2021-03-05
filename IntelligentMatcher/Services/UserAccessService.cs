@@ -4,7 +4,7 @@ using UserManagement.Models;
 
 namespace IntelligentMatcher.Services
 {
-    public class UserAccessService
+    public class UserAccessService : IUserAccessService
     {
         private readonly IUserAccountRepository _userAccountRepository;
 

@@ -7,7 +7,7 @@ using UserManagement.Models;
 
 namespace IntelligentMatcher.Services
 {
-    public class UserAccountService
+    public class UserAccountService : IUserAccountService
     {
         private IUserAccountRepository _userAccountRepository;
 
@@ -34,7 +34,7 @@ namespace IntelligentMatcher.Services
             var userAccountModel = await _userAccountRepository.GetAccountById(id);
             var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
 
-            return webUserAccountModel;        
+            return webUserAccountModel;
         }
 
         public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
@@ -60,14 +60,14 @@ namespace IntelligentMatcher.Services
 
         public async Task<bool> ChangePassword(int accountId, string newPassword)
         {
-                var returned = await _userAccountRepository.UpdateAccountPassword(accountId, newPassword);
-                return true;
+            var returned = await _userAccountRepository.UpdateAccountPassword(accountId, newPassword);
+            return true;
         }
 
         public async Task<bool> ChangeEmail(int accountId, string newEmail)
         {
-                var returned = await _userAccountRepository.UpdateAccountEmail(accountId, newEmail);
-                return true;
+            var returned = await _userAccountRepository.UpdateAccountEmail(accountId, newEmail);
+            return true;
         }
     }
 }

@@ -7,7 +7,7 @@ using UserManagement.Models;
 
 namespace UserManagement.Services
 {
-    public class UserProfileService
+    public class UserProfileService : IUserProfileService
     {
         private IUserProfileRepository _userProfileRepository;
 
@@ -27,7 +27,7 @@ namespace UserManagement.Services
             }
 
             return webUserProfiles;
-        }     
+        }
 
         public async Task<WebUserProfileModel> GetUserProfile(int id)
         {
