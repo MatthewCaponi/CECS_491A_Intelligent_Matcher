@@ -2,8 +2,8 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [Username] NVARCHAR(50) NOT NULL, 
-    [Password] NVARCHAR(50) NOT NULL, 
-    [Salt] NVARCHAR(100) NOT NULL, 
+    [Password] NVARCHAR(50) NULL, 
+    [Salt] NVARCHAR(100) NULL, 
     [EmailAddress] NVARCHAR(50) NOT NULL, 
     [AccountType] NVARCHAR(50) NOT NULL, 
     [AccountStatus] NVARCHAR(50) NOT NULL, 
