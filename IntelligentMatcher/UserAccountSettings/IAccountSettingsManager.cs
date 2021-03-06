@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using DataAccess;
+using DataAccess.Repositories;
 using System.Threading.Tasks;
+using Security;
 using Models;
 namespace UserAccountSettings
 {
     public interface IAccountSettingsManager
     {
-        Task<bool> CreateUserAccountSettings(UserAccountSettingsModel model);
-        Task<bool> CreateDefaultUserAccountSettings(int UserId);
+
 
         Task<string> ChangePassword(string oldPassword, string newPassword, int UserID);
         Task<string> ChangeEmail(string oldPassword, string email, int UserID);

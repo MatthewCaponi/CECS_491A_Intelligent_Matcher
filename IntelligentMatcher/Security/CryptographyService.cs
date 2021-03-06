@@ -11,6 +11,12 @@ namespace Security
 {
     public class CryptographyService : ICryptographyService
     {
+        private readonly IUserAccountRepository _userAccountRepository;
+
+        public CryptographyService(IUserAccountRepository userAccountRepository)
+        {
+            _userAccountRepository = userAccountRepository;
+        }
         private async Task<bool> CreateSalt(int UserID)
         {
 
@@ -31,11 +37,9 @@ namespace Security
             }
 
             string salt = str_build.ToString();
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
-            await userAccountRepository.UpdateAccountSalt(UserID, salt);
+
+            await _userAccountRepository.UpdateAccountSalt(UserID, salt);
 
             return (true);
 
@@ -43,10 +47,8 @@ namespace Security
 
         private async Task<string> retreiveSaltAsync(int UserID)
         {
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            string salt = await userAccount.GetSaltById(UserID);
+
+            string salt = await _userAccountRepository.GetSaltById(UserID);
 
             return salt;
 
@@ -64,24 +66,20 @@ namespace Security
 
             bool salted = await CreateSalt(UserID);
 
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            string salt = await userAccount.GetSaltById(UserID);
+
+            string salt = await _userAccountRepository.GetSaltById(UserID);
             string SaltedPassword = Password + salt;
             string encryptedPassword = encrypt(SaltedPassword);
 
-            await userAccount.UpdateAccountPassword(UserID, encryptedPassword);
+            await _userAccountRepository.UpdateAccountPassword(UserID, encryptedPassword);
 
             return (true);
         }
 
         public async Task<string> encryptPasswordAsync(string Password, int UserID)
         {
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            string salt = await userAccount.GetSaltById(UserID);
+
+            string salt = await _userAccountRepository.GetSaltById(UserID);
             string SaltedPassword = Password + salt;
             string encryptedPassword = encrypt(SaltedPassword);
             return (encryptedPassword);

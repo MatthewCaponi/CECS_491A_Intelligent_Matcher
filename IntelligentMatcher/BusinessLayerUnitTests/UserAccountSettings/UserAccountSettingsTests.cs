@@ -65,9 +65,10 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             await userAccountRepository.CreateAccount(userAccountModel);
 
-            ICryptographyService CryptographyService = new CryptographyService();
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            await CryptographyService.newPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -76,9 +77,13 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.FontStyle = "Time New Roman";
             userAccountSettingsModel.ThemeColor = "White";
 
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
 
-            await accountSettingsConroller.CreateUserAccountSettings(userAccountSettingsModel);
+             dataGateway = new DataGateway();
+             connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepo= new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsController accountSettingsController = new AccountSettingsController(userAccountSettingsRepo);
+
+            await accountSettingsController.CreateUserAccountSettings(userAccountSettingsModel);
         }
 
 
@@ -86,7 +91,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(2, 12, "White", "Times-New-Roman")]
-        public async Task newDefaultUserAccountSettingsTest(int UserId, int FontSize, string ThemeColor, string FontStyle)
+        public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
@@ -110,9 +115,13 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
 
 
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
+            dataGateway = new DataGateway();
+            connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepo = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsController accountSettingsController = new AccountSettingsController(userAccountSettingsRepo);
 
-            await accountSettingsConroller.CreateDefaultUserAccountSettings(UserId);
+
+            await accountSettingsController.CreateDefaultUserAccountSettings(UserId);
 
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
@@ -120,7 +129,6 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
 
-            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             UserAccountSettingsModel model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);
 
@@ -144,21 +152,18 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(1, 15)]
-        public async Task ChangeFontSize(int userId, int FontSize)
+        public async Task ChangeFontSize_UsersFontSizeIsChanged_FontSizeSuccessfullyChanges(int userId, int FontSize)
         {
-
-
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
-
-            await accountSettingsConroller.ChangeFontSize(userId, FontSize);
-
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+
+            await userAccountSettingsManager.ChangeFontSize(userId, FontSize);
 
 
-            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             string newFontSize = await userAccountSettingsRepository.GetFontSizeByID(userId);
 
@@ -180,21 +185,20 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(1, "Black")]
-        public async Task ChangeThemeColor(int userId, string ThemeColor)
+        public async Task ChangeThemeColor_UsersThemeColorChanges_UsersThemeColorIsChangedSuccessfully(int userId, string ThemeColor)
         {
-
-
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
-
-            await accountSettingsConroller.ChangeThemeColor(userId, ThemeColor);
 
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+
+            await userAccountSettingsManager.ChangeThemeColor(userId, ThemeColor);
 
 
-            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
+
 
             string newThemeColor = await userAccountSettingsRepository.GetThemeColorByID(userId);
 
@@ -216,21 +220,19 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(1, "Helvetica")]
-        public async Task ChangeFontStyle(int userId, string fontStyle)
+        public async Task ChangeFontStyleAsync_UserFontStyleChange_UsersFontStyleChanges(int userId, string fontStyle)
         {
 
-
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
-
-            await accountSettingsConroller.ChangeFontStyleAsync(userId, fontStyle);
 
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
 
+            await userAccountSettingsManager.ChangeFontStyleAsync(userId, fontStyle);
 
-            IAccountSettingsManager accountSettingsController = new AccountSettingsManager();
 
             string newFontStyle = await userAccountSettingsRepository.GetFontStyleByID(userId);
 
@@ -252,20 +254,21 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(1, "Password")]
-        public async Task DeleteAccountTest(int userId, string password)
+        public async Task DeleteAccountByUserIDAsync_UserAccountIsDelted_UserAccountSuccessfulyDeletes(int userId, string password)
         {
 
 
 
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
-
-            string result = await accountSettingsConroller.DeleteAccountByUserIDAsync(userId, password);
-
-            
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
 
+            string result = await userAccountSettingsManager.DeleteAccountByUserIDAsync(userId, password);
+
+            
+        
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
 
@@ -289,19 +292,18 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(1, "Password", "NewEmail")]
-        public async Task ChangeEmailTest(int userId, string password, string email)
+        public async Task ChangeEmail_UserEmailChanges_EmailChangeCompletes(int userId, string password, string email)
         {
 
-
-
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
-
-            string result = await accountSettingsConroller.ChangeEmail(password, email, userId);
 
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+
+            string result = await userAccountSettingsManager.ChangeEmail(password, email, userId);
 
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
@@ -327,25 +329,25 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
         [DataTestMethod]
         [DataRow(1, "Password", "NewPassword")]
-        public async Task ChangePasswordTest(int userId, string password, string newPassword)
+        public async Task ChangePasswordTest_UserPasswordChanges_PasswordChangeCompletes(int userId, string password, string newPassword)
         {
 
 
-
-            IAccountSettingsManager accountSettingsConroller = new AccountSettingsManager();
-
-            string result = await accountSettingsConroller.ChangePassword(password, newPassword, userId);
 
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
 
+            string result = await userAccountSettingsManager.ChangePassword(password, newPassword, userId);
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
 
 
-            ICryptographyService cryptographyService = new CryptographyService();
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
             string encryptedNewPassword = await cryptographyService.encryptPasswordAsync(newPassword, userId);
 
 

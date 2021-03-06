@@ -9,18 +9,29 @@ namespace Security
 {
     public class AuthenticationService : IAuthenticationService
     {
+
+
+        private readonly IUserAccountRepository _userAccountRepository;
+
+        public AuthenticationService(IUserAccountRepository userAccountRepository)
+        {
+            _userAccountRepository = userAccountRepository;
+        }
         public async Task<bool> AuthenticatePasswordWithEmail(string password, string email)
         {
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-
-            UserAccountModel model = await userAccount.GetAccountByEmail(email);
 
 
-            string UserHash = await userAccount.GetPasswordById(model.Id);
+            UserAccountModel model = await _userAccountRepository.GetAccountByEmail(email);
 
-            ICryptographyService cryptographyService = new CryptographyService();
+
+            string UserHash = await _userAccountRepository.GetPasswordById(model.Id);
+
+
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+
+
+            // Act
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
             string EnteredHash = await cryptographyService.encryptPasswordAsync(password, model.Id);
             if (UserHash == EnteredHash)
@@ -35,16 +46,15 @@ namespace Security
 
         public async Task<bool> AuthenticatePasswordWithUsename(string password, string userName)
         {
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-
-            UserAccountModel model = await userAccount.GetAccountByUsername(userName);
 
 
-            string UserHash = await userAccount.GetPasswordById(model.Id);
+            UserAccountModel model = await _userAccountRepository.GetAccountByUsername(userName);
 
-            ICryptographyService cryptographyService = new CryptographyService();
+
+            string UserHash = await _userAccountRepository.GetPasswordById(model.Id);
+
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
             string EnteredHash = await cryptographyService.encryptPasswordAsync(password, model.Id);
             if (UserHash == EnteredHash)
@@ -59,12 +69,12 @@ namespace Security
 
         public async Task<bool> AuthenticatePasswordWithUserId(string password, int userId)
         {
-            IDataGateway dataGateway = new DataGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            string UserHash = await userAccount.GetPasswordById(userId);
 
-            ICryptographyService cryptographyService = new CryptographyService();
+            string UserHash = await _userAccountRepository.GetPasswordById(userId);
+
+
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
             string EnteredHash = await cryptographyService.encryptPasswordAsync(password, userId);
             if(UserHash == EnteredHash)

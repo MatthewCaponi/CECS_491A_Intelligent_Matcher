@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services;
 using Services;
+
+using Moq;
 namespace BusinessLayerUnitTests.Security
 {
     [TestClass]
@@ -61,18 +63,21 @@ namespace BusinessLayerUnitTests.Security
             userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
 
             await userAccountRepository.CreateAccount(userAccountModel);
-            ICryptographyService CryptographyService = new CryptographyService();
-
-            await CryptographyService.newPasswordEncryptAsync("Password", 1);
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
         }
 
         [DataTestMethod]
         [DataRow("Password", "TestUser")]
-        public async Task testUserNameAuthenticaiton(string password, string username)
+        public async Task AuthenticatePasswordWithUsename_UserAuthentication_UsernameAndPasswordAuthenticateSuccesfully(string password, string username)
         {
 
 
-            IAuthenticationService authenticationService = new AuthenticationService();
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccount); 
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUsename(password, username);
 
             if (AuthenticationToken == true)
@@ -89,11 +94,14 @@ namespace BusinessLayerUnitTests.Security
         }
         [DataTestMethod]
         [DataRow("WrongPassword", "TestUser")]
-        public async Task testUserNameAuthenticaitonWrongPassword(string password, string username)
+        public async Task AuthenticatePasswordWithUsename_UserAuthentication_UsernameAndPasswordDoNotAuthenticateSuccesfully(string password, string username)
         {
 
 
-            IAuthenticationService authenticationService = new AuthenticationService();
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUsename(password, username);
 
             if (AuthenticationToken == true)
@@ -110,11 +118,14 @@ namespace BusinessLayerUnitTests.Security
         }
         [DataTestMethod]
         [DataRow("Password", "TestEmailAddress")]
-        public async Task testEmailAuthenticaiton(string password, string email)
+        public async Task AuthenticatePasswordWithEmail_EmailAuthentication_EmailAndPasswordAuthenticateSuccesfully(string password, string email)
         {
 
 
-            IAuthenticationService authenticationService = new AuthenticationService();
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithEmail(password, email);
 
             if (AuthenticationToken == true)
@@ -131,11 +142,14 @@ namespace BusinessLayerUnitTests.Security
         }
         [DataTestMethod]
         [DataRow("WrongPassword", "TestEmailAddress")]
-        public async Task testEmailAuthenticaitonWrongPassword(string password, string email)
+        public async Task AuthenticatePasswordWithEmail_EmailAuthentication_EmailAndPasswordDoNotAuthenticateSuccesfully(string password, string email)
         {
 
 
-            IAuthenticationService authenticationService = new AuthenticationService();
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithEmail(password, email);
 
             if (AuthenticationToken == true)
@@ -152,11 +166,14 @@ namespace BusinessLayerUnitTests.Security
         }
         [DataTestMethod]
         [DataRow("Password", 1)]
-        public async Task testAuthenticationTrue(string password, int userId)
+        public async Task AuthenticatePasswordWithUserId_UserIDAuthentication_EmailAndPasswordAuthenticateSuccesfully(string password, int userId)
         {
 
 
-            IAuthenticationService authenticationService = new AuthenticationService();
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(password, userId);
 
             if(AuthenticationToken == true)
@@ -173,11 +190,14 @@ namespace BusinessLayerUnitTests.Security
         }
         [DataTestMethod]
         [DataRow("WrongPassword", 1)]
-        public async Task testAuthenticationWithWrongpassword(string password, int userId)
+        public async Task AuthenticatePasswordWithUserId_UserIDAuthentication_EmailAndPasswordDoNotAuthenticateSuccesfully(string password, int userId)
         {
 
 
-            IAuthenticationService authenticationService = new AuthenticationService();
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccount); 
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(password, userId);
 
             if (AuthenticationToken == true)

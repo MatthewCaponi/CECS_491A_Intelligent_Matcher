@@ -68,7 +68,7 @@ namespace BusinessLayerUnitTests.Security
 
         [DataTestMethod]
         [DataRow("Password", 1)]
-        public async Task newPasswordTest(string password, int UserID)
+        public async Task newPasswordEncryptAsync_EncryptNewPassword_NewPasswordEncryptSuccessful(string password, int UserID)
         {
 
 
@@ -76,7 +76,7 @@ namespace BusinessLayerUnitTests.Security
 
 
             // Act
-            ICryptographyService CryptographyService = new CryptographyService();
+            ICryptographyService CryptographyService = new CryptographyService(userAccountRepo);
 
             await CryptographyService.newPasswordEncryptAsync(password, UserID);
 
@@ -105,7 +105,7 @@ namespace BusinessLayerUnitTests.Security
 
         [DataTestMethod]
         [DataRow("Password", 1)]
-        public async Task oldPasswordTest(string password, int UserID)
+        public async Task encryptPasswordAsync_EncryptPassword_EncryptPasswordSuccessful(string password, int UserID)
         {
 
 
@@ -113,7 +113,7 @@ namespace BusinessLayerUnitTests.Security
 
 
             // Act
-            ICryptographyService CryptographyService = new CryptographyService();
+            ICryptographyService CryptographyService = new CryptographyService(userAccountRepo);
 
             string encryptedPassedPassword = await CryptographyService.encryptPasswordAsync(password, UserID);
 
