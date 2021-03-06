@@ -60,6 +60,7 @@
   <ItemGroup>
     <Build Include="UserAccount.sql" />
     <Build Include="UserProfile.sql" />
+    <Build Include="UserAccountSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

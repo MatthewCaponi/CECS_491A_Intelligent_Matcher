@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
@@ -80,6 +80,20 @@ namespace DataAccess.Repositories
         public async Task<string> GetSaltById(int id)
         {
             var query = "select [Salt]" +
+                       "from [UserAccount] where Id = @Id";
+
+            var row = await _dataGateway.LoadData<string, dynamic>(query,
+                new
+                {
+                    Id = id
+                },
+                _connectionString.SqlConnectionString);
+
+            return row.FirstOrDefault();
+        }
+        public async Task<string> GetPasswordById(int id)
+        {
+            var query = "select [Password]" +
                        "from [UserAccount] where Id = @Id";
 
             var row = await _dataGateway.LoadData<string, dynamic>(query,
@@ -183,13 +197,13 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountStatus(int id, string accountStatus)
         {
-            var query = "update [UserAccount] set AccountStatus = @AccountStatus where Id = @Id;";
+            var query = "update [UserAccount] set AccountStatus = @AccountStatus where Id = @UserAccountId;";
 
             return await _dataGateway.SaveData(query,
                                          new
                                          {
                                              AccountStatus = accountStatus,
-                                             Id = id
+                                             UserAccountId = id
                                          },
                                          _connectionString.SqlConnectionString);
         }
@@ -202,7 +216,7 @@ namespace DataAccess.Repositories
                                          new
                                          {
                                              AccountType = accountType.ToString(),
-                                             Id = id
+                                             UserAccountId = id
 
                                          },
                                          _connectionString.SqlConnectionString);
