@@ -3,7 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using UserAccountSettings;
+using DataAccess;
+using Security;
 using Models;
+using UserManagement;
+using DataAccess.Repositories;
+
 namespace IntelligentMatcherUserInterface.Controllers
 {
     [Produces("application/json")]
@@ -13,7 +18,6 @@ namespace IntelligentMatcherUserInterface.Controllers
     public class UserAccountSettingsController : ControllerBase
     {
 
-        IAccountSettingsManager accountSettingsManager = new AccountSettingsManager();
 
         public UserAccountSettingsController()
         {
@@ -21,9 +25,19 @@ namespace IntelligentMatcherUserInterface.Controllers
 
         [HttpPut]
         [Route("api/UserAccountSettings/ChangeEmail")]
-        public int Edit(string oldPassword, string email, string userId)
+        public bool Edit(string oldPassword, string email, int userId)
         {
-            return CreatedAtAction("Get", accountSettingsManager.ChangeEmail(oldPassword, email, userId));
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+
+            CreatedAtAction("Get", userAccountSettingsManager.ChangeEmail(oldPassword, email, userId));
+
+            return true;
         }
 
   
