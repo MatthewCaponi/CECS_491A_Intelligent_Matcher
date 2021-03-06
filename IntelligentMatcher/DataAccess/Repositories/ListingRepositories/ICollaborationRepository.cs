@@ -5,7 +5,8 @@ namespace TraditionalListings.Services
 {
     public interface ICollaborationRepository
     {
-        Task<int> CreateListing(DALListingModel dalCollaborationModel);
+        Task<int> CreateListing(DALCollaborationModel dalCollaborationModel);
         Task<DALCollaborationModel> GetListing(int id);
+        Task<int> UpdateListing(DALListingModel dalListingModel);
     }
 }

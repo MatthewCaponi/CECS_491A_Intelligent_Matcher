@@ -6,8 +6,9 @@ namespace Models.DALListingModels
 {
     public class DALCollaborationModel : DALListingModel
     {
-        public String CollaborationType { get; set; }
-        public String InvolvementType { get; set; }
-        public String Experience { get; set; }
+        public string CollaborationType { get; set; }
+        public string InvolvementType { get; set; }
+        public string Experience { get; set; }
+        public int ListingId { get; set; }
     }
 }

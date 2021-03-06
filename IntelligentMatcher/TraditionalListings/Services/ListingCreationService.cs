@@ -1,10 +1,5 @@
-﻿using DataAccess;
-using DataAccess.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DataAccess.Repositories;
 using System.Threading.Tasks;
-using Models;
 using Models.DALListingModels;
 using BusinessModels.ListingModels;
 using Services;
@@ -19,8 +14,8 @@ namespace TraditionalListings.Services
         private IDatingRepository _datingRepository;
         private ITeamModelRepository _teamModelRepository;
 
-        public ListingCreationService(IListingRepository listingRepository,ICollaborationRepository collaborationRepository,IRelationshipRepository relationshipRepository,
-           ITeamModelRepository teamModelRepository, IDatingRepository datingRepository )
+        public ListingCreationService(IListingRepository listingRepository, ICollaborationRepository collaborationRepository, IRelationshipRepository relationshipRepository,
+           ITeamModelRepository teamModelRepository, IDatingRepository datingRepository)
         {
             _listingRepository = listingRepository;
             _collaborationRepository = collaborationRepository;
@@ -31,15 +26,14 @@ namespace TraditionalListings.Services
 
         public async Task<int> CreateListing(BusinessListingModel businessListingmodel)
         {
-          
-           if(businessListingmodel is BusinessCollaborationModel)
+
+            if (businessListingmodel is BusinessCollaborationModel)
             {
-                //Step 1
-                BusinessCollaborationModel newBusinessCollaborationModel = (BusinessCollaborationModel)businessListingmodel; 
+                // Step 1: Create businessListingModel
+                BusinessCollaborationModel newBusinessCollaborationModel = (BusinessCollaborationModel)businessListingmodel;
                 BusinessListingModel newBusinessListingModel = new BusinessListingModel();
 
-                //Step 2
-                /*newBusinessListingModel.Id = newBusinessCollaborationModel.Id;
+                // Step 2: Access parent props of collaboration Model to the step 1 model 
                 newBusinessListingModel.Title = newBusinessCollaborationModel.Title;
                 newBusinessListingModel.Details = newBusinessCollaborationModel.Details;
                 newBusinessListingModel.City= newBusinessCollaborationModel.City;
@@ -47,48 +41,82 @@ namespace TraditionalListings.Services
                 newBusinessListingModel.NumberOfParticipants = newBusinessCollaborationModel.NumberOfParticipants;
                 newBusinessListingModel.InPersonOrRemote = newBusinessCollaborationModel.InPersonOrRemote;
                 newBusinessListingModel.UserAccountId= newBusinessCollaborationModel.UserAccountId;
-                */
-                ModelConverterService.ConvertTo(newBusinessCollaborationModel, newBusinessListingModel);
 
-                //Step 3
-                var dalListingModel = ModelConverterService.ConvertTo(newBusinessListingModel, new DALListingModel());
-                var dalCollaborationModel = ModelConverterService.ConvertTo(newBusinessCollaborationModel, new DALListingModel());
 
-                //Step4
-               var result = await _listingRepository.CreateListing(dalListingModel);
-              
-               await _collaborationRepository.CreateListing(dalCollaborationModel); //collaboration repo instead of listing repo 
+                DALListingModel dALListingModel = new DALListingModel();
+                DALCollaborationModel dALCollaborationModel = new DALCollaborationModel();
+
+                // Step 3 : Convert both originalBusinessListingModel and step 1 created model to DALListingModel and DALCollaboration model 
+                var dalListingModel = ModelConverterService.ConvertTo(newBusinessListingModel, dALListingModel);
+                var dalCollaborationModel = ModelConverterService.ConvertTo(newBusinessCollaborationModel, dALCollaborationModel);
+
+                // Step 4 : Call ListingRepo pass in DalListing Model, call CollaborationRepo pass in CollaborationModel to both create Functions in the repo 
+                var result = await _listingRepository.CreateListing(dalListingModel);
+                dalCollaborationModel.ListingId = result;
+
+                await _collaborationRepository.CreateListing(dalCollaborationModel); //collaboration repo instead of listing repo 
 
                 return result;
-    
-                //Step 1: create businessListingModel
-                //Step 2: access parent props of collaboration Model to the step 1 model 
-                //Step 3: convert both originalBusinessListingModel and step 1 created model to DALListingModel and DALCollaboration model 
-                //Step 4: Call ListingRepo pass in DalListing Model, call CollaborationRepo pass in CollaborationModel to both create Functions in the repo 
             }
+          
+                
+            
             else if(businessListingmodel is BusinessRelationshipModel)
             {
-                //ditto 
+                // Same steps as is BusinessCollaborationModel 
+                // Step 1: Create businessListingModel
+                BusinessRelationshipModel newBusinessRelationshipModel = (BusinessRelationshipModel)businessListingmodel;
+                BusinessListingModel newBusinessListingModel = new BusinessListingModel();
+
+                // Step 2: Access parent props of collaboration Model to the step 1 model 
+                newBusinessListingModel.Title = newBusinessRelationshipModel.Title;
+                newBusinessListingModel.Details = newBusinessRelationshipModel.Details;
+                newBusinessListingModel.City = newBusinessRelationshipModel.City;
+                newBusinessListingModel.State = newBusinessRelationshipModel.State;
+                newBusinessListingModel.NumberOfParticipants = newBusinessRelationshipModel.NumberOfParticipants;
+                newBusinessListingModel.InPersonOrRemote = newBusinessRelationshipModel.InPersonOrRemote;
+                newBusinessListingModel.UserAccountId = newBusinessRelationshipModel.UserAccountId;
+
+                DALListingModel dALListingModel = new DALListingModel();
+                DALRelationshipModel dALRelationshipModel = new DALRelationshipModel();
+
+                //Step 3: Convert both originalBusinessListingModel and step 1 created model to DALListingModel and DALCollaboration model 
+                var dalListingModel = ModelConverterService.ConvertTo(newBusinessListingModel, dALListingModel);
+                var dalRelationshipModel = ModelConverterService.ConvertTo(newBusinessRelationshipModel, dALRelationshipModel);
+
+                // Step 4 : Call ListingRepo pass in DalListing Model, call CollaborationRepo pass in CollaborationModel to both create Functions in the repo 
+                var result = await _listingRepository.CreateListing(dalListingModel);
+                dalRelationshipModel.ListingId = result;
+
+                await _relationshipRepository.CreateListing(dalRelationshipModel); //collaboration repo instead of listing repo 
+
+                return result;
+
+
+
+
             }
             else if(businessListingmodel is BusinessDatingModel)
             {
-                //Create ListingModel, RelationshipModel, DatingModel 
-                //
+                // Create ListingModel, RelationshipModel, DatingModel 
+                // Same steps but instead of 2 models to be created, i need to create 3 
                 
             }
             else if(businessListingmodel is BusinessTeamModel)
             {
-                //ditto 
+                // Same steps as is BusinessCollaborationModel
             }
 
             return 0;
           
+               
         }
+
     }
 
 
-   
 
+    
 
 
 }

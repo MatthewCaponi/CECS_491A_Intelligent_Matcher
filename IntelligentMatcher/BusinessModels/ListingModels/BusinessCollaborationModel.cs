@@ -6,9 +6,9 @@ namespace BusinessModels.ListingModels
 {
     public class BusinessCollaborationModel : BusinessListingModel 
     {
-        public String CollaborationType { get; set; }
-        public String InvolvementType { get; set; }
-        public String Experience { get; set; }
+        public string CollaborationType { get; set; }
+        public string InvolvementType { get; set; }
+        public string Experience { get; set; }
 
     }
 }

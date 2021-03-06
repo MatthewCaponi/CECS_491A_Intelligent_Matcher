@@ -18,11 +18,11 @@ namespace TraditionalListings.Services
             _listingRepository = listingRepository;
         }
 
-        public async Task<bool> UpdateListing(BusinessListingModel businessListingModel)
+        public Task<bool> UpdateListing(BusinessListingModel businessListingModel)
         {
-            int returnValue = await _listingRepository.UpdateTitle(id,title);
 
-            return true;
+
+            return Task.FromResult(true);
         }
 
         

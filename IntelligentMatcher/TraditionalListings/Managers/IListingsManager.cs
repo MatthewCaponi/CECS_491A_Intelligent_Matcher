@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Models;
-using TraditionalListings.Models;
+using BusinessModels.ListingModels;
 
 namespace TraditionalListings.Managers
 {
@@ -12,14 +12,15 @@ namespace TraditionalListings.Managers
 
     {
    
-        Task<Tuple<bool, ResultModel<int>>> EditListingTitle(int accountId, string update);
-        Task<Tuple<bool, ResultModel<int>>> EditListingDetails(int accountId, string update);
+        Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel);
+       
 
-        Task<Tuple<bool, ResultModel<int>>> DeleteListing(int accountId);
-        Task<bool> CreateListing(WebUserProfileModel webUserProfileModel, CollaborationModel businessListingModels);
-        Task<bool> GetTitle(string title);
-        Task<Tuple<bool, ResultModel<int>>> GetDetails(int id);
-        Task<bool> GetPresets();
+        Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id);
+        Task<bool> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels);
+        Task<bool> GetListing(int Id);
+        Task<bool> UpdateListing(BusinessListingModel businessListingModel);
+        
+       
 
 
     }

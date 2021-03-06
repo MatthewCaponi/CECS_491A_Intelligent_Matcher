@@ -10,7 +10,7 @@ using System.Data;
 
 namespace DataAccess.Repositories
 {
-    class ListingRepository : IListingRepository
+    public class ListingRepository : IListingRepository
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
@@ -34,6 +34,7 @@ namespace DataAccess.Repositories
             p.Add("State", dalListingModel.State);
             p.Add("NumberOfParticipants", dalListingModel.NumberOfParticipants);
             p.Add("InPersonOrRemote", dalListingModel.InPersonOrRemote);
+            p.Add("UserAccountId", dalListingModel.UserAccountId);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
@@ -91,8 +92,20 @@ namespace DataAccess.Repositories
         }
 
 
+        public async Task<List<DALListingModel>> GetAllListing() //change to DALListingModel dalListingModel 
+        {
+            var query = "Select * from Listing ";
 
-        
+            var row = await _dataGateway.LoadData<DALListingModel, dynamic>(query,
+                new
+                {
+                   
+                },
+                _connectionString.SqlConnectionString);
+
+            return row;
+        }
+
     }
         
 }

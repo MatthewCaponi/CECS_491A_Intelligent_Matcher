@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models.DALListingModels
 {
-    public class DALTeamModel : DALListingModels
+    public class DALTeamModel : DALListingModel
     {
         public String TeamType { get; set; }
         public String GameType { get; set; }

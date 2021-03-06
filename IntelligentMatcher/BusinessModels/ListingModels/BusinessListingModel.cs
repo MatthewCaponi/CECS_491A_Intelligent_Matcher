@@ -8,13 +8,13 @@ namespace BusinessModels.ListingModels
     public class BusinessListingModel
     {
         public int Id { get; set; }
-        public String Title { get; set; }
-        public String Details { get; set; }
-        public String City { get; set; }
-        public String State { get; set; }
+        public string Title { get; set; }
+        public string Details { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
         public int NumberOfParticipants { get; set; }
-        public String InPersonOrRemote { get; set; }
-        public WebUserAccountModel UserAccountId { get; set; }
+        public string InPersonOrRemote { get; set; }
+        public int UserAccountId { get; set; }
         
 
     }

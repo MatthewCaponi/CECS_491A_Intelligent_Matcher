@@ -58,7 +58,7 @@ namespace DataAccess
                 }
                 else
                 {
-                    throw new Exception("SqlException", e.InnerException);
+                    throw new Exception(e.Message.ToString());
                 }    
                                   
             }                 
