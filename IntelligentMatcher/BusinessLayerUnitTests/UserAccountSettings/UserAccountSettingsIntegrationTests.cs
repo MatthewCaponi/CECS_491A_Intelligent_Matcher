@@ -83,10 +83,37 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         }
 
 
+        [TestCleanup()]
+        public async Task CleanUp()
+        {
 
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+
+            var settings = await userAccountSettingsRepository.GetAllSettings();
+
+            foreach (var setting in settings)
+            {
+                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = await userAccountRepository.GetAllAccounts();
+
+            foreach (var account in accounts)
+            {
+                await userAccountRepository.DeleteAccountById(account.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+
+        }
 
         [DataTestMethod]
-        [DataRow(2, 12, "Defualt Font Style", "Default Theme Color")]
+        [DataRow(2, 12, "Default Theme Color", "Defualt Font Style")]
         public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
             IDataGateway dataGateway = new DataGateway();
@@ -119,7 +146,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.FontSize = FontSize;
             userAccountSettingsModel.FontStyle = FontStyle;
             userAccountSettingsModel.ThemeColor = ThemeColor;
-            await userAccountSettingsManager.CreateDefaultUserAccountSettings(model);
+            await userAccountSettingsManager.CreateDefaultUserAccountSettings(userAccountSettingsModel);
             model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);         
             if(model.UserId == UserId && model.FontSize == 12 && model.FontStyle == "Defualt Font Style" && model.ThemeColor == "Default Theme Color")
             {

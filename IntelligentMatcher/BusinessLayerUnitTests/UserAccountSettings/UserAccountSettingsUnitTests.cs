@@ -52,7 +52,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.FontSize = FontSize;
             userAccountSettingsModel.FontStyle = FontStyle;
             userAccountSettingsModel.ThemeColor = ThemeColor;
-            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettings(model);
+            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettings(userAccountSettingsModel);
 
             if (result == true)
             {
