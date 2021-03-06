@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessLayerUnitTests.User_Management
+namespace BusinessLayerUnitTests.Services
 {
     [TestClass]
-    public class UserAccountServiceTest
+    public class UserAccountServiceTests
     {
     }
 }

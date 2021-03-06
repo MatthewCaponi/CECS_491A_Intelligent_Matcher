@@ -1,15 +1,10 @@
-﻿using DataAccess;
-using DataAccess.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DataAccess.Repositories;
 using System.Threading.Tasks;
 using UserManagement.Models;
-using static Models.UserProfileModel;
 
 namespace IntelligentMatcher.Services
 {
-    public class UserAccessService
+    public class UserAccessService : IUserAccessService
     {
         private readonly IUserAccountRepository _userAccountRepository;
 

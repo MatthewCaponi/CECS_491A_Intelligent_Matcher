@@ -5,15 +5,15 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
-using static Models.UserProfileModel;
 
 namespace DataAccessUnitTestes
 {
     [TestClass]
     public class UserProfileRepositoryTests
     {
+        #region Test Setup
+        // Insert test rows before every test case
         [TestInitialize()]
         public async Task Init()
         {
@@ -46,9 +46,9 @@ namespace DataAccessUnitTestes
                 userProfileModel.UserAccountId = userAccountModel.Id;
                 await userProfileRepository.CreateUserProfile(userProfileModel);
             }
-
         }
 
+        // Remove test rows and reset id counter after every test case
         [TestCleanup()]
         public async Task CleanUp()
         {
@@ -64,105 +64,234 @@ namespace DataAccessUnitTestes
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
         }
+        #endregion
+
+        #region Functional Tests
+        [TestMethod]
+        public async Task GetAllUserProfiles_AtLeastTwoProfilesExist_ReturnsCorrectUserAccountIds()
+        {
+            // Arrange
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            // Act
+            IEnumerable<UserProfileModel> userProfiles = await userProfileRepository.GetAllUserProfiles();
+
+            // Assert
+            int i = 1;
+            foreach (UserProfileModel profile in userProfiles)
+            {
+                if (profile.UserAccountId == i)
+                {
+                    ++i;
+                    continue;
+                }
+
+                Assert.IsTrue(false);
+                return;
+            }
+
+            Assert.IsTrue(true);
+        }
 
         [DataTestMethod]
-        [DataRow("TestFirstName21", "TestSurname21", 21)]
-        public async Task CreateUserProfile_UserProfileDoesNotExist_ReturnsCorrectId(string firstName, string surname,
-            int id)
+        [DataRow(20)]
+        public async Task GetAllUserProfiles_AtLeastTwoProfilesExist_ReturnsCorrectNumberOfRows(int numRows)
         {
-            /*
+            // Arrange
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            // Act
+            IEnumerable<UserProfileModel> userProfiles = await userProfileRepository.GetAllUserProfiles();
+
+            // Assert
+            int i = 1;
+            foreach (UserProfileModel profile in userProfiles)
+            {
+                if (profile.UserAccountId == i)
+                {
+                    ++i;
+                    continue;
+                }
+            }
+
+            if (i == numRows + 1)
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow("TestFirstName21", "TestSurname21", 21, "TestUser21", "TestPassword11", "TestSalt11", "TestEmail21", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00")]
+        public async Task CreateUserProfile_UserProfileDoesNotExist_ReturnsCorrectId(string firstName, string surname,
+            int id, string username, string password, string salt,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate)
+        {
             //Arrange
             UserAccountModel userAccountModel = new UserAccountModel();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
-            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            userAccountModel.Id = id;
+            userAccountModel.Username = username;
+            userAccountModel.Password = password;
+            userAccountModel.Salt = salt;
+            userAccountModel.EmailAddress = emailAddress;
+            userAccountModel.AccountType = accountType;
+            userAccountModel.AccountStatus = accountStatus;
+            userAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            userAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
             UserProfileModel userProfileModel = new UserProfileModel();
             userProfileModel.FirstName = firstName;
             userProfileModel.Surname = surname;
             userProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             userProfileModel.UserAccountId = id;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            
             //Act
-
-            await userProfileModel.CreateUserProfile(userProfileModel);
-            var actualAccount = await userProfile.GetUserProfileByAccountId(userAccountModel.Id);
+            await userAccountRepository.CreateAccount(userAccountModel);
+            await userProfileRepository.CreateUserProfile(userProfileModel);
+            var actualUserProfile = await userProfileRepository.GetUserProfileByAccountId(userAccountModel.Id);
 
             //Assert
-            Assert.IsTrue(actualAccount.Surname == lastName);*/
+            Assert.IsTrue(actualUserProfile.UserAccountId == id);
         }
 
         [DataTestMethod]
         [DataRow(1, "TestSurname1")]
         [DataRow(2, "TestSurname2")]
         [DataRow(3, "TestSurname3")]
-        [DataRow(4, "TestSurname4")]
-        public async Task GetUserProfileByAccountId_UseProfileExists_ReturnCorrectUsername(int accountId, string expectedLastName)
+        public async Task GetUserProfileByAccountId_UserProfileExists_ReturnCorrectUsername(int accountId, string expectedSurname)
         {
             // Arrange
             IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
-
-
             // Act
             var userProfileModel = await userProfile.GetUserProfileByAccountId(accountId);
-            var actualLastName = userProfileModel.Surname;
+            var actualSurname = userProfileModel.Surname;
 
             // Assert
-            Assert.IsTrue(actualLastName == expectedLastName);
-
+            Assert.IsTrue(actualSurname == expectedSurname);
         }
 
-        //    [DataTestMethod]
-        //    [DataRow(1, AccountType.Admin)]
-        //    [DataRow(3, AccountType.Admin)]
-        //    public async Task UpdateUserAccountType(int accountId, AccountType accountType)
-        //    {
-        //        // Arrange
-        //        IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+        [DataTestMethod]
+        [DataRow(1, "TestSurname1")]
+        [DataRow(2, "TestSurname2")]
+        [DataRow(3, "TestSurname3")]
+        public async Task GetUserProfileById(int id, string expectedSurname)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
-        //        // Act
-        //        var userProfileModel = await userProfile.UpdateUserAccountType(accountId, accountType.ToString());
-        //        var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
-        //        var actualAccountType = retrievedAccount.accountType;
+            // Act
+            var userProfileModel = await userProfile.GetUserProfileById(id);
+            var actualSurname = userProfileModel.Surname;
 
-        //        // Assert
-        //        Assert.IsTrue(accountType.ToString() == actualAccountType);
-        //    }
+            // Assert
+            Assert.IsTrue(actualSurname == expectedSurname);
+        }
 
-        //    [DataTestMethod]
-        //    [DataRow(1, AccountStatus.Suspended)]
-        //    [DataRow(2, AccountStatus.Disabled)]
-        //    public async Task UpdateUserAccountStatus(int accountId, AccountStatus accountStatus)
-        //    {
-        //        // Arrange
-        //        IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+        [DataTestMethod]
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        public async Task DeleteUserProfileByAccountId_UserProfileExists_ReturnsNull(int accountId)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
-        //        // Act
-        //        var userProfileModel = await userProfile.UpdateUserAccountStatus(accountId, accountStatus.ToString());
-        //        var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
-        //        var actualAccountStatus = retrievedAccount.accountStatus;
+            // Act
+            await userProfile.DeleteUserProfileByAccountId(accountId);
+            var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
 
-        //        // Assert
-        //        Assert.IsTrue(accountStatus.ToString() == actualAccountStatus);
-        //    }
+            // Assert
+            Assert.IsNull(retrievedAccount);
+        }
+        #endregion
 
-        //    [DataTestMethod]
-        //    [DataRow(1)]
-        //    [DataRow(2)]
-        //    [DataRow(3)]
-        //    [DataRow(4)]
-        //    public async Task DeleteUserProfileById(int accountId)
-        //    {
-        //        // Arrange
-        //        IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+        #region Non-Functional Tests
+        [DataTestMethod]
+        [DataRow(400)]
+        public async Task GetAllUserProfiles_AtLeastTwoProfilesExist_ExecutionTimeLessThan400Milliseconds(long expectedMaxExecutionTime)
+        {
+            // Arrange
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
 
-        //        // Act
-        //        var userProfileModel = await userProfile.DeleteUserProfile(accountId);
-        //        var retrievedAccount = await userProfile.GetUserProfileByAccountId(accountId);
+            // Act
+            var timer = Stopwatch.StartNew();
+            await userProfileRepository.GetAllUserProfiles();
+            timer.Stop();
 
-        //        // Assert
-        //        Assert.IsNull(retrievedAccount);
-        //    }
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            // Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestFirstName21", "TestSurname21", 21, "TestUser21", "TestPassword11", "TestSalt11", "TestEmail21", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", 400)]
+        public async Task CreateUserProfile_UserProfileDoesNotExist_ExecutionTimeLessThan400Milliseconds(string firstName, string surname,
+            int id, string username, string password, string salt,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate, long expectedMaxExecutionTime)
+        {
+            //Arrange
+            UserAccountModel userAccountModel = new UserAccountModel();
+            userAccountModel.Id = id;
+            userAccountModel.Username = username;
+            userAccountModel.Password = password;
+            userAccountModel.Salt = salt;
+            userAccountModel.EmailAddress = emailAddress;
+            userAccountModel.AccountType = accountType;
+            userAccountModel.AccountStatus = accountStatus;
+            userAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            userAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            UserProfileModel userProfileModel = new UserProfileModel();
+            userProfileModel.FirstName = firstName;
+            userProfileModel.Surname = surname;
+            userProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
+            userProfileModel.UserAccountId = id;
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            //Act
+            await userAccountRepository.CreateAccount(userAccountModel);
+            var timer = Stopwatch.StartNew();
+            await userProfileRepository.CreateUserProfile(userProfileModel);
+            timer.Stop();
+
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            //Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 400)]
+        public async Task DeleteUserProfileByAccountId_UserProfileExists_ExecutionTimeLessThan400Milliseconds(int accountId, long expectedMaxExecutionTime)
+        {
+            // Arrange
+            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+
+            // Act
+            var timer = Stopwatch.StartNew();
+            await userProfile.DeleteUserProfileByAccountId(accountId);
+            timer.Stop();
+
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            // Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
+        #endregion
     }
-
-
 }
