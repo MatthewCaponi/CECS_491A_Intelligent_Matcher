@@ -36,7 +36,6 @@ namespace DataAccess
 
         public async Task<int> SaveData<T>(string query, T parameters, string connectionString)
         {
-            
             try
             {
                 using (IDbConnection connection = new SqlConnection(connectionString))
@@ -58,11 +57,9 @@ namespace DataAccess
                 }
                 else
                 {
-                    throw new Exception("SqlException", e.InnerException);
-                }    
-                                  
+                    throw new Exception(e.Message);
+                }                                 
             }                 
         }
-
     }
 }

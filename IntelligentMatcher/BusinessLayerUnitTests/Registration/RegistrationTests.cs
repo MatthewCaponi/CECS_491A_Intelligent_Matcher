@@ -194,7 +194,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
-            ICryptographyService cryptographyService = new CryptographyService();
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new DataGateway(), new ConnectionStringData()));
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -243,7 +243,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
-            ICryptographyService cryptographyService = new CryptographyService();
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new DataGateway(), new ConnectionStringData()));
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -292,7 +292,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
-            ICryptographyService cryptographyService = new CryptographyService();
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new DataGateway(), new ConnectionStringData()));
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -342,7 +342,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
-            ICryptographyService cryptographyService = new CryptographyService();
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new DataGateway(), new ConnectionStringData()));
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
@@ -393,7 +393,7 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new DataGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
-            ICryptographyService cryptographyService = new CryptographyService();
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new DataGateway(), new ConnectionStringData()));
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
