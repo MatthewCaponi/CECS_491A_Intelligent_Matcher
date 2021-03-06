@@ -215,8 +215,8 @@ namespace DataAccess.Repositories
             return await _dataGateway.SaveData(query,
                                          new
                                          {
-                                             AccountType = accountType.ToString(),
-                                             UserAccountId = id
+                                             AccountType = accountType,
+                                             Id = id
 
                                          },
                                          _connectionString.SqlConnectionString);
