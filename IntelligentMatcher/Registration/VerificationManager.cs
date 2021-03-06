@@ -13,11 +13,14 @@ namespace Registration
     {
         ILogService _logger;
         private UserAccountService _userAccountService;
+        private UserProfileService _userProfileService;
         private UserAccessService _userAccessService;
 
-        public VerificationManager(UserAccountService userAccountService, UserAccessService userAccessService)
+        public VerificationManager(UserAccountService userAccountService, UserProfileService userProfileService, 
+            UserAccessService userAccessService)
         {
             _userAccountService = userAccountService;
+            _userProfileService = userProfileService;
             _userAccessService = userAccessService;
 
             ILogServiceFactory factory = new LogSeviceFactory();
@@ -29,8 +32,9 @@ namespace Registration
         public async Task<bool> LinkExpired(int accountId)
         {
             // Returns the result from deleting the account after the link expires
-            if (await _userAccountService.DeleteAccount(accountId))
+            if (await _userAccountService.DeleteAccount(accountId)) 
             {
+                await _userProfileService.DeleteProfile(accountId);
                 return true;
             }
 

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using UserManagement.Services;
 
 namespace BusinessLayerUnitTests.Registration
 {
@@ -68,10 +69,13 @@ namespace BusinessLayerUnitTests.Registration
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
 
-            VerificationManager verificationManager = new VerificationManager(userAccountService, userAccessService);
+            VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
+                userAccessService);
 
             //Arrange
             var actualResult = await verificationManager.LinkExpired(accountId);
@@ -87,10 +91,13 @@ namespace BusinessLayerUnitTests.Registration
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
 
-            VerificationManager verificationManager = new VerificationManager(userAccountService, userAccessService);
+            VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
+                userAccessService);
 
             //Arrange
             var actualResult = await verificationManager.VerifyEmail(accountId);
@@ -108,10 +115,13 @@ namespace BusinessLayerUnitTests.Registration
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
 
-            VerificationManager verificationManager = new VerificationManager(userAccountService, userAccessService);
+            VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
+                userAccessService);
 
             //Arrange
             var timer = Stopwatch.StartNew();
@@ -132,10 +142,13 @@ namespace BusinessLayerUnitTests.Registration
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new DataGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
                 (new DataGateway(), new ConnectionStringData()));
 
-            VerificationManager verificationManager = new VerificationManager(userAccountService, userAccessService);
+            VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
+                userAccessService);
 
             //Arrange
             var timer = Stopwatch.StartNew();

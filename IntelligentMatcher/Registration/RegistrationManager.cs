@@ -18,16 +18,16 @@ namespace Registration
     {
 
         ILogService _logger;
-        private EmailVerificationService _emailVerificationService;
-        private UserAccountService _userAccountService;
-        private UserProfileService _userProfileService;
-        private readonly ValidationService _validationService;
+        private IEmailService _emailService;
+        private IUserAccountService _userAccountService;
+        private IUserProfileService _userProfileService;
+        private readonly IValidationService _validationService;
         private readonly ICryptographyService _cryptographyService;
 
-        public RegistrationManager(EmailVerificationService emailVerificationService, UserAccountService userAccountService,
-            UserProfileService userProfileService, ValidationService validationService, ICryptographyService cryptographyService)
+        public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
+            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService)
         {
-            _emailVerificationService = emailVerificationService;
+            _emailService = emailService;
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _validationService = validationService;
@@ -39,41 +39,57 @@ namespace Registration
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel,
-            WebUserProfileModel userModel, bool emailIsActive, string password)
+            WebUserProfileModel userModel, bool emailIsActive, string password, string ipAddress)
         {
             ResultModel<int> registry = new ResultModel<int>();
+            ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
+                    accountModel.Id, AccountType.User.ToString());
             if (await _validationService.UsernameExists(accountModel.Username))
             {
+                _logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
                 registry.ErrorMessage = ErrorMessage.UsernameExists;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
             }
             if (await _validationService.EmailExists(accountModel.EmailAddress))
             {
+                _logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
                 registry.ErrorMessage = ErrorMessage.EmailExists;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
             }
             // Creates User Account and gets Account ID
             var registerID = await _userAccountService.CreateAccount(accountModel);
+
             // Sets the password for the new Account
             var passwordEncrypted = await _cryptographyService.newPasswordEncryptAsync(password, registerID);
+
             // Passes on the Account ID to the User Profile Model
             userModel.UserAccountId = registerID;
+
             // Create User Profile with the Passed on Account ID
             await _userProfileService.CreateUserProfile(userModel);
 
+            // Create New Email Model
+            var emailModel = new EmailModel(accountModel.EmailAddress, "support@infinimuse.com", true, "Welcome!",
+                "Welcome to InfiniMuse!", "Thank you for registering! " +
+                "Please <a href='index.cshtml'>Enter the Site!</a> " +
+                "<strong>You now have access to the features.</strong>", "outbound", "Welcome");
+
             //Send Verification Email
-            while (!(await _emailVerificationService.SendVerificationEmail(accountModel.EmailAddress)) && emailIsActive)
+            while (!(await _emailService.SendEmail(emailModel)) && emailIsActive)
             {
                 continue;
             }
             //Return the Result (Pass or Fail)
             if (emailIsActive)
             {
+                _logger.LogInfo(_loggingEvent, "Email Sent");
+                _logger.LogInfo(_loggingEvent, "User Registered");
                 registry.Result = registerID;
                 return new Tuple<bool, ResultModel<int>>(true, registry);
             }
             else
             {
+                _logger.LogInfo(_loggingEvent, ErrorMessage.EmailNotSent.ToString());
                 registry.Result = registerID;
                 registry.ErrorMessage = ErrorMessage.EmailNotSent;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
