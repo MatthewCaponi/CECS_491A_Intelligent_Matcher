@@ -1,4 +1,5 @@
 ﻿
+using BusinessModels.ListingModels;
 using DataAccess;
 using DataAccess.Repositories;
 using System;
@@ -17,20 +18,14 @@ namespace TraditionalListings.Services
             _listingRepository = listingRepository;
         }
 
-        public async Task<bool> UpdateTitle(int id, string title)
+        public async Task<bool> UpdateListing(BusinessListingModel businessListingModel)
         {
             int returnValue = await _listingRepository.UpdateTitle(id,title);
 
             return true;
         }
 
-        public async Task<bool> UpdateDetails(int id, string details)
-        {
-            int returnValue = await _listingRepository.UpdateDetails(id, details);
-             
-            return true;
-        }
-
+        
     }
 }
 

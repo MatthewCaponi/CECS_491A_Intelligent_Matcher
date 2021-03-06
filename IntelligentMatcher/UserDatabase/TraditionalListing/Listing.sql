@@ -9,4 +9,5 @@
     [InPersonOrRemote] NVARCHAR(50) NOT NULL, 
     [UserAccountID] INT NOT NULL, 
     CONSTRAINT [Listing_UserAccount_FK] FOREIGN KEY ([Id]) REFERENCES [UserAccount]([Id]) 
+    ON DELETE CASCADE
 )

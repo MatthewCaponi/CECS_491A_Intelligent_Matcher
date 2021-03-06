@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using UserManagement.Models;
 
-namespace BusinessModels.ListingModels
+namespace Models.DALListingModels
 {
-    public class BusinessListingModel
+    public class DALListingModel
     {
         public int Id { get; set; }
         public String Title { get; set; }
@@ -14,8 +13,8 @@ namespace BusinessModels.ListingModels
         public String State { get; set; }
         public int NumberOfParticipants { get; set; }
         public String InPersonOrRemote { get; set; }
-        public WebUserAccountModel UserAccountId { get; set; }
-        
+        public UserAccountModel UserAccountId { get; set; }
+
 
     }
 }

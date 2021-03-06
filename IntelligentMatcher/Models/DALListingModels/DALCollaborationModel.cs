@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessModels.ListingModels
+namespace Models.DALListingModels
 {
-    public class BusinessCollaborationModel : BusinessListingModel 
+    public class DALCollaborationModel : DALListingModel
     {
         public String CollaborationType { get; set; }
         public String InvolvementType { get; set; }
         public String Experience { get; set; }
-
     }
 }

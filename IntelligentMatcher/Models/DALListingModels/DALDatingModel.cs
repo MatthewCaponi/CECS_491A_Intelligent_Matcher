@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessModels.ListingModels
+namespace Models.DALListingModels
 {
-    public class BusinessDatingModel : BusinessRelationshipModel
+    public class DALDatingModel : DALRelationshipModel
     {
         public String LookingFor { get; set; }
         public String SexualOrientationPreference { get; set; }

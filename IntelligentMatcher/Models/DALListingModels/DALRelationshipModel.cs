@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessModels.ListingModels
+namespace Models.DALListingModels
 {
-    public class BusinessRelationshipModel : BusinessListingModel
-
+    public class DALRelationshipModel : DALListingModels
     {
         public String RelationshipType { get; set; }
         public int Age { get; set; }
         public String Interests { get; set; }
         public String GenderPreference { get; set; }
-
     }
 }
