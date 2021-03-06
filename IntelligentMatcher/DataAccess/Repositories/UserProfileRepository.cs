@@ -76,7 +76,7 @@ namespace DataAccess.Repositories
             return p.Get<int>("Id");
         }
 
-        public async Task<int> DeleteUserProfile(int id)
+        public async Task<int> DeleteUserProfileByAccountId(int id)
         {
             var query = "delete from [UserProfile] where UserAccountId = @Id";
 

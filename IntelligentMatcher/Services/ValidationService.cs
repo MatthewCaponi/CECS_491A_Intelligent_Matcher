@@ -7,25 +7,26 @@ using UserManagement.Services;
 
 namespace Services
 {
-    public class ValidationService
+    public class ValidationService : IValidationService
     {
-        private readonly UserAccountService _userAccountService;
-        private readonly UserProfileService _userProfileService;
+        private readonly IUserAccountService _userAccountService;
+        private readonly IUserProfileService _userProfileService;
 
-        public ValidationService(UserAccountService userAccountService, UserProfileService userProfileService)
+        public ValidationService(IUserAccountService userAccountService, IUserProfileService userProfileService)
         {
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
         }
 
+        //come back to this
         public bool IsNull(object obj)
         {
-            if (obj is null)
+            if (!(obj is null))
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public async Task<bool> UserExists(int id)
@@ -39,10 +40,10 @@ namespace Services
             return false;
         }
 
-        public async Task<bool> UsernameExists(WebUserAccountModel webUserAccountModel)
+        public async Task<bool> UsernameExists(string username)
         {
             var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.Username == webUserAccountModel.Username))
+            if (userAccounts.Any(x => x.Username == username))
             {
                 return true;
             }
@@ -50,10 +51,10 @@ namespace Services
             return false;
         }
 
-        public async Task<bool> EmailExists(WebUserAccountModel webUserAccountModel)
+        public async Task<bool> EmailExists(string emailAddress)
         {
             var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.Username == webUserAccountModel.Username))
+            if (userAccounts.Any(x => x.EmailAddress == emailAddress))
             {
                 return true;
             }
@@ -65,17 +66,6 @@ namespace Services
         {
             var userAccount = await _userAccountService.GetUserAccount(id);
             if (userAccount.AccountStatus == AccountStatus.Active.ToString())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task<bool> ListIsEmpty(Type type)
-        {
-            var userProfiles = await _userProfileService.GetAllUsers();
-            if (userProfiles.Count() == 0)
             {
                 return true;
             }
