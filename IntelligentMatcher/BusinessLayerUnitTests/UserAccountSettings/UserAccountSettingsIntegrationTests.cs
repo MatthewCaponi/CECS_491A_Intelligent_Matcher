@@ -113,9 +113,14 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
-
-            await userAccountSettingsManager.CreateDefaultUserAccountSettings(UserId, FontSize, ThemeColor, FontStyle);
-            UserAccountSettingsModel model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);         
+            UserAccountSettingsModel model = new UserAccountSettingsModel();
+            userAccountSettingsModel.Id = 0;
+            userAccountSettingsModel.UserId = UserId;
+            userAccountSettingsModel.FontSize = FontSize;
+            userAccountSettingsModel.FontStyle = FontStyle;
+            userAccountSettingsModel.ThemeColor = ThemeColor;
+            await userAccountSettingsManager.CreateDefaultUserAccountSettings(model);
+            model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);         
             if(model.UserId == UserId && model.FontSize == 12 && model.FontStyle == "Defualt Font Style" && model.ThemeColor == "Default Theme Color")
             {
                 Assert.IsTrue(true);

@@ -10,17 +10,17 @@ namespace UserAccountSettings
     {
 
 
-        Task<bool> ChangePassword(string oldPassword, string newPassword, int UserID);
-        Task<bool> ChangeEmail(string oldPassword, string email, int UserID);
-        Task<bool> DeleteAccountByUserIDAsync(int UserID, string password);
-        Task<bool> ChangeFontSize(int UserID, int FontSize);
+        Task<bool> ChangePassword(string oldPassword, string newPassword, int userID);
+        Task<bool> ChangeEmail(string oldPassword, string email, int userID);
+        Task<bool> DeleteAccountByUserIDAsync(int userID, string password);
+        Task<bool> ChangeFontSize(int userID, int fontSize);
 
-        Task<bool> ChangeThemeColor(int UserID, string ThemeColor);
+        Task<bool> ChangeThemeColor(int userID, string themeColor);
 
 
         Task<bool> CreateUserAccountSettings(UserAccountSettingsModel model);
-        Task<bool> CreateDefaultUserAccountSettings(int UserId, int fontSize, string fontStyle, string themeColor);
-        Task<bool> ChangeFontStyleAsync(int UserID, string FontStyle);
+        Task<bool> CreateDefaultUserAccountSettings(UserAccountSettingsModel model);
+        Task<bool> ChangeFontStyleAsync(int userID, string fontStyle);
 
 
 

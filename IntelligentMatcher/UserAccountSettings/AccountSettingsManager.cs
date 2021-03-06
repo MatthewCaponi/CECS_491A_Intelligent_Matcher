@@ -1,10 +1,8 @@
-﻿using System;
-using DataAccess;
-using DataAccess.Repositories;
+﻿using DataAccess.Repositories;
 using System.Threading.Tasks;
 using Security;
 using Models;
-using Security;
+
 namespace UserAccountSettings
 {
 
@@ -29,21 +27,16 @@ namespace UserAccountSettings
 
             await _userAccountSettingRepository.CreateUserAccountSettings(model);
 
-            return (true);
+            return true;
 
         }
 
-        public async Task<bool> CreateDefaultUserAccountSettings(int UserId, int fontSize, string fontStyle, string themeColor)
+        public async Task<bool> CreateDefaultUserAccountSettings(UserAccountSettingsModel model)
         {
-            UserAccountSettingsModel model = new UserAccountSettingsModel();
-            model.UserId = UserId;
-            model.FontSize = fontSize;
-            model.FontStyle = fontStyle;
-            model.ThemeColor = themeColor;
 
             await _userAccountSettingRepository.CreateUserAccountSettings(model);
 
-            return (true);
+            return true;
 
         }
 

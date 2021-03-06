@@ -1,6 +1,5 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
-using DataAccessUnitTestes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Moq;
@@ -8,6 +7,7 @@ using Security;
 using System;
 using System.Threading.Tasks;
 using UserAccountSettings;
+
 namespace BusinessLayerUnitTests.UserAccountSettings
 {
     [TestClass]
@@ -46,10 +46,15 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
+            UserAccountSettingsModel model = new UserAccountSettingsModel();
+            userAccountSettingsModel.Id = 0;
+            userAccountSettingsModel.UserId = UserId;
+            userAccountSettingsModel.FontSize = FontSize;
+            userAccountSettingsModel.FontStyle = FontStyle;
+            userAccountSettingsModel.ThemeColor = ThemeColor;
+            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettings(model);
 
-            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettings(UserId, 12, "Defualt Font Style", "Default Theme Color");
-
-            if(result == true)
+            if (result == true)
             {
                 Assert.IsTrue(true);
             }
