@@ -15,22 +15,20 @@ using UserManagement.Models;
 using UserManagement.Services;
 using Services;
 using UserAccountSettings;
+using Moq;
 namespace BusinessLayerUnitTests.UserAccountSettings
 {
     [TestClass]
-    public class UserAccountSettingsTests
-    {
-
-        
-        
+    public class UserAccountSettingsIntegrationTests
+    {       
         [TestInitialize()]
         public async Task Init()
         {
 
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            
             var settings = await userAccountSettingsRepository.GetAllSettings();
 
             foreach (var setting in settings)
@@ -40,7 +38,6 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
-
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             var accounts = await userAccountRepository.GetAllAccounts();
 
@@ -48,8 +45,8 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             {
                 await userAccountRepository.DeleteAccountById(account.Id);
             }
-            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
 
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
 
             int i = 1;
             UserAccountModel userAccountModel = new UserAccountModel();
@@ -78,25 +75,26 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.ThemeColor = "White";
 
 
-             dataGateway = new DataGateway();
-             connectionString = new ConnectionStringData();
-            IUserAccountSettingsRepository userAccountSettingsRepo= new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsController accountSettingsController = new AccountSettingsController(userAccountSettingsRepo);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-            await accountSettingsController.CreateUserAccountSettings(userAccountSettingsModel);
+
+            await userAccountSettingsManager.CreateUserAccountSettings(userAccountSettingsModel);
         }
 
 
 
 
         [DataTestMethod]
-        [DataRow(2, 12, "White", "Times-New-Roman")]
+        [DataRow(2, 12, "Defualt Font Style", "Default Theme Color")]
         public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            
             int i = 2;
+           
             UserAccountModel userAccountModel = new UserAccountModel();
             userAccountModel.Id = i;
             userAccountModel.Username = "TestUser" + i;
@@ -107,47 +105,25 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountModel.AccountStatus = "TestAccountStatus" + i;
             userAccountModel.CreationDate = DateTimeOffset.UtcNow;
             userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
-
             await userAccountRepository.CreateAccount(userAccountModel);
-
-
-
+            
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
 
-
-            dataGateway = new DataGateway();
-            connectionString = new ConnectionStringData();
-            IUserAccountSettingsRepository userAccountSettingsRepo = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsController accountSettingsController = new AccountSettingsController(userAccountSettingsRepo);
-
-
-            await accountSettingsController.CreateDefaultUserAccountSettings(UserId);
-
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-
-
-
-
-
-            UserAccountSettingsModel model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);
-
-            
+            await userAccountSettingsManager.CreateDefaultUserAccountSettings(UserId, FontSize, ThemeColor, FontStyle);
+            UserAccountSettingsModel model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);         
             if(model.UserId == UserId && model.FontSize == 12 && model.FontStyle == "Defualt Font Style" && model.ThemeColor == "Default Theme Color")
             {
                 Assert.IsTrue(true);
-
             }
             else
             {
                 Assert.IsTrue(false);
-
             }
-
-
-            //Asser
-
-
         }
 
         [DataTestMethod]
@@ -159,27 +135,21 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             await userAccountSettingsManager.ChangeFontSize(userId, FontSize);
 
-
-
             string newFontSize = await userAccountSettingsRepository.GetFontSizeByID(userId);
-
             if (FontSize.ToString() == newFontSize)
             {
                 Assert.IsTrue(true);
-
             }
             else
             {
                 Assert.IsTrue(false);
-
             }
-
-            //Asser
-
 
         }
 
@@ -193,46 +163,37 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             await userAccountSettingsManager.ChangeThemeColor(userId, ThemeColor);
-
-
-
 
             string newThemeColor = await userAccountSettingsRepository.GetThemeColorByID(userId);
 
             if (ThemeColor == newThemeColor)
             {
                 Assert.IsTrue(true);
-
             }
             else
             {
                 Assert.IsTrue(false);
-
             }
-
-            //Asser
-
-
         }
 
         [DataTestMethod]
         [DataRow(1, "Helvetica")]
         public async Task ChangeFontStyleAsync_UserFontStyleChange_UsersFontStyleChanges(int userId, string fontStyle)
         {
-
-
-
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             await userAccountSettingsManager.ChangeFontStyleAsync(userId, fontStyle);
-
 
             string newFontStyle = await userAccountSettingsRepository.GetFontStyleByID(userId);
 
@@ -247,68 +208,49 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             }
 
-            //Asser
-
-
         }
 
         [DataTestMethod]
         [DataRow(1, "Password")]
         public async Task DeleteAccountByUserIDAsync_UserAccountIsDelted_UserAccountSuccessfulyDeletes(int userId, string password)
         {
-
-
-
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-            string result = await userAccountSettingsManager.DeleteAccountByUserIDAsync(userId, password);
-
-            
-        
+            bool result = await userAccountSettingsManager.DeleteAccountByUserIDAsync(userId, password);
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
-
-
 
             if (model.AccountStatus == "Deleted")
             {
                 Assert.IsTrue(true);
-
             }
             else
             {
                 Assert.IsTrue(false);
-
             }
-
-            //Asser
-
-
         }
 
         [DataTestMethod]
         [DataRow(1, "Password", "NewEmail")]
         public async Task ChangeEmail_UserEmailChanges_EmailChangeCompletes(int userId, string password, string email)
         {
-
-
-
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-            string result = await userAccountSettingsManager.ChangeEmail(password, email, userId);
-
+            bool result = await userAccountSettingsManager.ChangeEmail(password, email, userId);
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
-
-
 
             if (model.EmailAddress == email)
             {
@@ -320,10 +262,6 @@ namespace BusinessLayerUnitTests.UserAccountSettings
                 Assert.IsTrue(false);
 
             }
-
-            //Asser
-
-
         }
 
 
@@ -331,40 +269,29 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(1, "Password", "NewPassword")]
         public async Task ChangePasswordTest_UserPasswordChanges_PasswordChangeCompletes(int userId, string password, string newPassword)
         {
-
-
-
-
             IDataGateway dataGateway = new DataGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-            string result = await userAccountSettingsManager.ChangePassword(password, newPassword, userId);
+            bool result = await userAccountSettingsManager.ChangePassword(password, newPassword, userId);
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
-
-
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
+                       
             string encryptedNewPassword = await cryptographyService.encryptPasswordAsync(newPassword, userId);
-
 
             if (model.Password == encryptedNewPassword)
             {
                 Assert.IsTrue(true);
-
             }
             else
             {
                 Assert.IsTrue(false);
-
             }
-
-            //Asser
-
-
         }
     }
 }
