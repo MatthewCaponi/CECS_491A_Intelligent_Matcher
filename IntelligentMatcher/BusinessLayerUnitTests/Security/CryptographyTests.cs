@@ -64,7 +64,37 @@ namespace BusinessLayerUnitTests.Security
             
         }
 
-    
+
+
+        [TestCleanup()]
+        public async Task CleanUp()
+        {
+
+            IDataGateway dataGateway = new DataGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+
+            var settings = await userAccountSettingsRepository.GetAllSettings();
+
+            foreach (var setting in settings)
+            {
+                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = await userAccountRepository.GetAllAccounts();
+
+            foreach (var account in accounts)
+            {
+                await userAccountRepository.DeleteAccountById(account.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+
+        }
+
 
         [DataTestMethod]
         [DataRow("Password", 1)]
