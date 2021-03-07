@@ -41,33 +41,26 @@ namespace Registration
         public async Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel,
             WebUserProfileModel userModel, bool emailIsActive, string password, string ipAddress)
         {
+            // Create ResultModel to determine what page or message the view should display next
             ResultModel<int> registry = new ResultModel<int>();
+            // Clarify the logging event
             ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountModel.Id, AccountType.User.ToString());
+
             if (await _validationService.UsernameExists(accountModel.Username))
             {
+                // Log and return Username existing result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
                 registry.ErrorMessage = ErrorMessage.UsernameExists;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
             }
             if (await _validationService.EmailExists(accountModel.EmailAddress))
             {
+                // Log and return Email existing result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
                 registry.ErrorMessage = ErrorMessage.EmailExists;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
             }
-            // Creates User Account and gets Account ID
-            var registerID = await _userAccountService.CreateAccount(accountModel);
-
-            // Sets the password for the new Account
-            var passwordEncrypted = await _cryptographyService.newPasswordEncryptAsync(password, registerID);
-
-            // Passes on the Account ID to the User Profile Model
-            userModel.UserAccountId = registerID;
-
-            // Create User Profile with the Passed on Account ID
-            await _userProfileService.CreateUserProfile(userModel);
-
             // Create New Email Model
             var emailModel = new EmailModel(accountModel.EmailAddress, "support@infinimuse.com", true, "Welcome!",
                 "Welcome to InfiniMuse!", "Thank you for registering! " +
@@ -82,20 +75,32 @@ namespace Registration
             //Return the Result (Pass or Fail)
             if (emailIsActive)
             {
+                //Log Email Result
                 _logger.LogInfo(_loggingEvent, "Email Sent");
+                // Creates User Account and gets Account ID to pass along
+                var registerID = await _userAccountService.CreateAccount(accountModel);
+
+                // Sets the password for the new Account
+                var passwordEncrypted = await _cryptographyService.newPasswordEncryptAsync(password, registerID);
+
+                // Passes on the Account ID to the User Profile Model
+                userModel.UserAccountId = registerID;
+
+                // Create User Profile with the Passed on Account ID
+                await _userProfileService.CreateUserProfile(userModel);
+
+                //Log and Return result
                 _logger.LogInfo(_loggingEvent, "User Registered");
                 registry.Result = registerID;
                 return new Tuple<bool, ResultModel<int>>(true, registry);
             }
             else
             {
+                //Log Email Result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.EmailNotSent.ToString());
-                registry.Result = registerID;
                 registry.ErrorMessage = ErrorMessage.EmailNotSent;
                 return new Tuple<bool, ResultModel<int>>(false, registry);
             }
-
         }
-
     }
 }
