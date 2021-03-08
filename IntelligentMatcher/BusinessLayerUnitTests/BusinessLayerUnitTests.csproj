@@ -17,7 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\Registration\Registration.csproj" />
     <ProjectReference Include="..\Security\Security.csproj" />
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
     <ProjectReference Include="..\UserManagement\UserManagement.csproj" />

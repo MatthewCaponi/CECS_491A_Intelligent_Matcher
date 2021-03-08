@@ -17,7 +17,7 @@ using Registration.Services;
 using BusinessModels;
 using Security;
 using System.Diagnostics;
-
+/*
 namespace BusinessLayerUnitTests.Registration
 {
     [TestClass]
@@ -432,4 +432,4 @@ namespace BusinessLayerUnitTests.Registration
         }
         #endregion
     }
-}
+}*/

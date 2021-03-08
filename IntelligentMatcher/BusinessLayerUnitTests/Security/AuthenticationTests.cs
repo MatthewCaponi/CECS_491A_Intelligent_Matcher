@@ -65,7 +65,7 @@ namespace BusinessLayerUnitTests.Security
             await userAccountRepository.CreateAccount(userAccountModel);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
-            await cryptographyService.newPasswordEncryptAsync("Password", 1);
+            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
         }
 
 
