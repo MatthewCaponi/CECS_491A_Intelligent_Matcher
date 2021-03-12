@@ -21,7 +21,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(2, 12, "White", "Times-New-Roman")]
         public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 

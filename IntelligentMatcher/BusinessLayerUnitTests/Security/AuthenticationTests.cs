@@ -25,7 +25,7 @@ namespace BusinessLayerUnitTests.Security
         [TestInitialize()]
         public async Task Init()
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -63,7 +63,7 @@ namespace BusinessLayerUnitTests.Security
             userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
 
             await userAccountRepository.CreateAccount(userAccountModel);
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
             await cryptographyService.newPasswordEncryptAsync("Password", 1);
         }
@@ -73,7 +73,7 @@ namespace BusinessLayerUnitTests.Security
         public async Task CleanUp()
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
@@ -104,7 +104,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             IAuthenticationService authenticationService = new AuthenticationService(userAccount); 
@@ -128,7 +128,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             IAuthenticationService authenticationService = new AuthenticationService(userAccount);
@@ -152,7 +152,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             IAuthenticationService authenticationService = new AuthenticationService(userAccount);
@@ -176,7 +176,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             IAuthenticationService authenticationService = new AuthenticationService(userAccount);
@@ -200,7 +200,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             IAuthenticationService authenticationService = new AuthenticationService(userAccount);
@@ -224,7 +224,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
             IAuthenticationService authenticationService = new AuthenticationService(userAccount); 

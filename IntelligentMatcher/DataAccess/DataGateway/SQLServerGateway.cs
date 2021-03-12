@@ -12,16 +12,16 @@ using static Models.UserProfileModel;
 
 namespace DataAccess
 {
-    public class DataGateway : IDataGateway
+    public class SQLServerGateway : IDataGateway
     {
-        public async Task<List<T>> LoadData<T, U>(string query, U parameters, string connectionString)
+        public async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionString)
         {
     
             try
             {
                 using (IDbConnection connection = new SqlConnection(connectionString))
                 {
-                    var rows = await connection.QueryAsync<T>(query,
+                    var rows = await connection.QueryAsync<T>(storedProcedure,
                                                                 parameters);
 
                     return rows.ToList();
@@ -34,13 +34,13 @@ namespace DataAccess
     
         }
 
-        public async Task<int> SaveData<T>(string query, T parameters, string connectionString)
+        public async Task<int> SaveData<T>(string storedProcedure, T parameters, string connectionString)
         {
             try
             {
                 using (IDbConnection connection = new SqlConnection(connectionString))
                 {
-                    return await connection.ExecuteAsync(query,
+                    return await connection.ExecuteAsync(storedProcedure,
                                                             parameters);
 
                 }
