@@ -22,7 +22,7 @@ namespace DataAccess
                 using (IDbConnection connection = new SqlConnection(connectionString))
                 {
                     var rows = await connection.QueryAsync<T>(storedProcedure,
-                                                                parameters);
+                                                                parameters, commandType: CommandType.StoredProcedure);
 
                     return rows.ToList();
                 }
@@ -41,7 +41,7 @@ namespace DataAccess
                 using (IDbConnection connection = new SqlConnection(connectionString))
                 {
                     return await connection.ExecuteAsync(storedProcedure,
-                                                            parameters);
+                                                            parameters, commandType: CommandType.StoredProcedure);
 
                 }
             }

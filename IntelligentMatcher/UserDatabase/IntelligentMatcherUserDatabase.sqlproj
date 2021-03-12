@@ -56,11 +56,28 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="StoredProcedures\UserAccount" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
     <Build Include="UserProfile.sql" />
     <Build Include="UserAccountSettings.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Create.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Get_ByEmail.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Get_ByUsername.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_GetPassword_ById.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_GetSalt_ById.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_AccountStatus.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_AccountType.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_Email.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_Password.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_Salt.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_Username.sql" />
+    <Build Include="StoredProcedures\Testing_Reseed.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
