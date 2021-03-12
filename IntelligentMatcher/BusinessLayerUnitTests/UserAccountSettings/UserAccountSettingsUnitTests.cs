@@ -21,24 +21,6 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(2, 12, "White", "Times-New-Roman")]
         public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-
-            int i = 2;
-
-            UserAccountModel userAccountModel = new UserAccountModel();
-            userAccountModel.Id = i;
-            userAccountModel.Username = "TestUser" + i;
-            userAccountModel.Password = "" + i;
-            userAccountModel.Salt = "" + i;
-            userAccountModel.EmailAddress = "TestEmailAddress" + i;
-            userAccountModel.AccountType = "TestAccountType" + i;
-            userAccountModel.AccountStatus = "TestAccountStatus" + i;
-            userAccountModel.CreationDate = DateTimeOffset.UtcNow;
-            userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
-            await userAccountRepository.CreateAccount(userAccountModel);
-
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
 
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();

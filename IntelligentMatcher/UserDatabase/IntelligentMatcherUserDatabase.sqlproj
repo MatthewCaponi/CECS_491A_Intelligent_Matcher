@@ -58,6 +58,8 @@
     <Folder Include="Properties" />
     <Folder Include="StoredProcedures" />
     <Folder Include="StoredProcedures\UserAccount" />
+    <Folder Include="StoredProcedures\UserProfile" />
+    <Folder Include="StoredProcedures\UserAccountSettings" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -78,6 +80,21 @@
     <Build Include="StoredProcedures\UserAccount\UserAccount_Update_Salt.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_Update_Username.sql" />
     <Build Include="StoredProcedures\Testing_Reseed.sql" />
+    <Build Include="StoredProcedures\UserProfile\UserProfile_Get_All.sql" />
+    <Build Include="StoredProcedures\UserProfile\UserProfile_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserProfile\UserProfile_Get_ByAccountId.sql" />
+    <Build Include="StoredProcedures\UserProfile\UserProfile_Create.sql" />
+    <Build Include="StoredProcedures\UserProfile\UserProfile_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Create.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Update_FontSize.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Update_FontStyle.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_Update_ThemeColor.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
