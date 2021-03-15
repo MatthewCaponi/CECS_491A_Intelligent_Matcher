@@ -32,7 +32,15 @@ namespace Registration.Services
             try
             {
 				var sendResult = await client.SendMessageAsync(message);
-				return true;
+				System.Threading.Thread.Sleep(500);
+				if(sendResult.Status == PostmarkStatus.Success)
+                {
+					return true;
+				}
+                else
+                {
+					return false;
+				}
 			} 
 			catch
             {
