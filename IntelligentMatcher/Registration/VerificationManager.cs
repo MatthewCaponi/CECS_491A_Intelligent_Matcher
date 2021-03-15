@@ -31,25 +31,47 @@ namespace Registration
 
         public async Task<bool> LinkExpired(int accountId)
         {
-            // Returns the result from deleting the account after the link expires
-            if (await _userAccountService.DeleteAccount(accountId)) 
+            try
             {
-                await _userProfileService.DeleteProfile(accountId);
-                return true;
+                // Returns the result from deleting the account after the link expires
+                // Conditionals check if the profile and account were deleted
+                if (await _userProfileService.DeleteProfile(accountId))
+                {
+                    if(await _userAccountService.DeleteAccount(accountId))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
-
-            return false;
+            catch
+            {
+                return false;
+            }
+            
         }
 
         public async Task<bool> VerifyEmail(int accountId)
         {
-            // Returns the result from changing the Account after verifying the email
-            if (await _userAccessService.ChangeAccountStatus(accountId, AccountStatus.Active))
+            try
             {
-                return true;
-            }
+                // Returns the result from changing the Account after verifying the email
+                // Conditional checks if the change was successful
+                var accountStatusHasChangedToActive = await _userAccessService.ChangeAccountStatus(accountId,
+                    AccountStatus.Active);
 
-            return false;
+                if (accountStatusHasChangedToActive)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+            
         }
     }
 }

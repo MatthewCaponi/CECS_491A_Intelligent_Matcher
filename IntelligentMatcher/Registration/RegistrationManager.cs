@@ -38,69 +38,88 @@ namespace Registration
             _logger = factory.CreateLogService<RegistrationManager>();
         }
 
-        public async Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel,
-            WebUserProfileModel userModel, bool emailIsActive, string password, string ipAddress)
+        public async Task<Tuple<bool, ResultModel<int>>> RegisterAccount(WebUserAccountModel accountModel,
+            WebUserProfileModel userModel, string password, string ipAddress)
         {
-            // Create ResultModel to determine what page or message the view should display next
-            ResultModel<int> registry = new ResultModel<int>();
+            // Create Tuple to determine the result and message the UI will present
+            Tuple<bool,ResultModel<int>> resultModel = new Tuple<bool, ResultModel<int>>(false, new ResultModel<int>());
             // Clarify the logging event
             ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountModel.Id, AccountType.User.ToString());
 
-            if (await _validationService.UsernameExists(accountModel.Username))
+            var usernameAlreadyExists = await _validationService.UsernameExists(accountModel.Username);
+
+            if (usernameAlreadyExists)
             {
                 // Log and return Username existing result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
-                registry.ErrorMessage = ErrorMessage.UsernameExists;
-                return new Tuple<bool, ResultModel<int>>(false, registry);
+                resultModel.Item2.ErrorMessage = ErrorMessage.UsernameExists;
+
+                return resultModel;
             }
-            if (await _validationService.EmailExists(accountModel.EmailAddress))
+
+            var emailAlreadyExists = await _validationService.EmailExists(accountModel.EmailAddress);
+
+            if (emailAlreadyExists)
             {
                 // Log and return Email existing result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
-                registry.ErrorMessage = ErrorMessage.EmailExists;
-                return new Tuple<bool, ResultModel<int>>(false, registry);
+                resultModel.Item2.ErrorMessage = ErrorMessage.EmailExists;
+
+                return resultModel;
             }
+
+            // Creates User Account and gets Account ID to pass along
+            var accountID = await _userAccountService.CreateAccount(accountModel);
+
+            // Sets the password for the new Account
+            await _cryptographyService.newPasswordEncryptAsync(password, accountID);
+
+            // Passes on the Account ID to the User Profile Model
+            userModel.UserAccountId = accountID;
+
+            // Create User Profile with the Passed on Account ID
+            await _userProfileService.CreateUserProfile(userModel);
+
             // Create New Email Model
-            var emailModel = new EmailModel(accountModel.EmailAddress, "support@infinimuse.com", true, "Welcome!",
-                "Welcome to InfiniMuse!", "Thank you for registering! " +
+            var emailModel = new EmailModel();
+
+            //Log and Return result
+            _logger.LogInfo(_loggingEvent, "User Registered");
+            resultModel.Item2.Result = accountID;
+
+            // Set the Email Model Attributes
+            emailModel.Recipient = accountModel.EmailAddress;
+            emailModel.Sender = "support@infinimuse.com";
+            emailModel.TrackOpens = true;
+            emailModel.Subject = "Welcome!";
+            emailModel.TextBody = "Welcome to InfiniMuse!";
+            emailModel.HtmlBody = "Thank you for registering! " +
                 "Please <a href='index.cshtml'>Enter the Site!</a> " +
-                "<strong>You now have access to the features.</strong>", "outbound", "Welcome");
+                "<strong>You now have access to the features.</strong>";
+            emailModel.MessageStream = "outbound";
+            emailModel.Tag = "Welcome";
 
             //Send Verification Email
-            while (!(await _emailService.SendEmail(emailModel)) && emailIsActive)
+            if(!await _emailService.SendEmail(emailModel))
             {
-                continue;
+                if(!await _emailService.SendEmail(emailModel))
+                {
+                    //Log Email Result
+                    _logger.LogInfo(_loggingEvent, ErrorMessage.EmailNotSent.ToString());
+                    resultModel.Item2.ErrorMessage = ErrorMessage.EmailNotSent;
+
+                    // First items of these tuples are immutable
+                    // A new one must be returned for the success conditional
+                    return new Tuple<bool, ResultModel<int>>(true, resultModel.Item2);
+                }
             }
-            //Return the Result (Pass or Fail)
-            if (emailIsActive)
-            {
-                //Log Email Result
-                _logger.LogInfo(_loggingEvent, "Email Sent");
-                // Creates User Account and gets Account ID to pass along
-                var registerID = await _userAccountService.CreateAccount(accountModel);
+            //Log Email Result
+            _logger.LogInfo(_loggingEvent, "Email Sent");
 
-                // Sets the password for the new Account
-                var passwordEncrypted = await _cryptographyService.newPasswordEncryptAsync(password, registerID);
-
-                // Passes on the Account ID to the User Profile Model
-                userModel.UserAccountId = registerID;
-
-                // Create User Profile with the Passed on Account ID
-                await _userProfileService.CreateUserProfile(userModel);
-
-                //Log and Return result
-                _logger.LogInfo(_loggingEvent, "User Registered");
-                registry.Result = registerID;
-                return new Tuple<bool, ResultModel<int>>(true, registry);
-            }
-            else
-            {
-                //Log Email Result
-                _logger.LogInfo(_loggingEvent, ErrorMessage.EmailNotSent.ToString());
-                registry.ErrorMessage = ErrorMessage.EmailNotSent;
-                return new Tuple<bool, ResultModel<int>>(false, registry);
-            }
+            // First items of these tuples are immutable
+            // A new one must be returned for the success conditional
+            return new Tuple<bool, ResultModel<int>>(true,resultModel.Item2);
         }
     }
 }
