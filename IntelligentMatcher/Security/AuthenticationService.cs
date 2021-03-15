@@ -27,7 +27,7 @@ namespace Security
             string UserHash = await _userAccountRepository.GetPasswordById(model.Id);
 
 
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
 
             // Act
@@ -53,7 +53,7 @@ namespace Security
 
             string UserHash = await _userAccountRepository.GetPasswordById(model.Id);
 
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
             string EnteredHash = await cryptographyService.encryptPasswordAsync(password, model.Id);
@@ -73,7 +73,7 @@ namespace Security
             string UserHash = await _userAccountRepository.GetPasswordById(userId);
 
 
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
             string EnteredHash = await cryptographyService.encryptPasswordAsync(password, userId);

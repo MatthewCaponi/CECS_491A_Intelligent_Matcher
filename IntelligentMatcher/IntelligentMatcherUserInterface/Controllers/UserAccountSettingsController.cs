@@ -27,7 +27,7 @@ namespace IntelligentMatcherUserInterface.Controllers
         [Route("api/UserAccountSettings/ChangeEmail")]
         public bool Edit(string oldPassword, string email, int userId)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);

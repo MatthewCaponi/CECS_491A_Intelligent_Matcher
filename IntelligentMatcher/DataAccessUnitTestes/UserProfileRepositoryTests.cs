@@ -19,7 +19,7 @@ namespace DataAccessUnitTestes
         {
             var numTestRows = 20;
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
@@ -52,7 +52,7 @@ namespace DataAccessUnitTestes
         [TestCleanup()]
         public async Task CleanUp()
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             var accounts = await userAccountRepository.GetAllAccounts();
@@ -71,7 +71,7 @@ namespace DataAccessUnitTestes
         public async Task GetAllUserProfiles_AtLeastTwoProfilesExist_ReturnsCorrectUserAccountIds()
         {
             // Arrange
-            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             IEnumerable<UserProfileModel> userProfiles = await userProfileRepository.GetAllUserProfiles();
@@ -98,7 +98,7 @@ namespace DataAccessUnitTestes
         public async Task GetAllUserProfiles_AtLeastTwoProfilesExist_ReturnsCorrectNumberOfRows(int numRows)
         {
             // Arrange
-            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             IEnumerable<UserProfileModel> userProfiles = await userProfileRepository.GetAllUserProfiles();
@@ -149,8 +149,8 @@ namespace DataAccessUnitTestes
             userProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             userProfileModel.UserAccountId = id;
 
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
-            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
             
             //Act
             await userAccountRepository.CreateAccount(userAccountModel);
@@ -168,7 +168,7 @@ namespace DataAccessUnitTestes
         public async Task GetUserProfileByAccountId_UserProfileExists_ReturnCorrectUsername(int accountId, string expectedSurname)
         {
             // Arrange
-            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfile = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userProfileModel = await userProfile.GetUserProfileByAccountId(accountId);
@@ -185,7 +185,7 @@ namespace DataAccessUnitTestes
         public async Task GetUserProfileById(int id, string expectedSurname)
         {
             // Arrange
-            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfile = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userProfileModel = await userProfile.GetUserProfileById(id);
@@ -202,7 +202,7 @@ namespace DataAccessUnitTestes
         public async Task DeleteUserProfileByAccountId_UserProfileExists_ReturnsNull(int accountId)
         {
             // Arrange
-            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfile = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userProfile.DeleteUserProfileByAccountId(accountId);
@@ -219,7 +219,7 @@ namespace DataAccessUnitTestes
         public async Task GetAllUserProfiles_AtLeastTwoProfilesExist_ExecutionTimeLessThan400Milliseconds(long expectedMaxExecutionTime)
         {
             // Arrange
-            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var timer = Stopwatch.StartNew();
@@ -258,8 +258,8 @@ namespace DataAccessUnitTestes
             userProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             userProfileModel.UserAccountId = id;
 
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
-            IUserProfileRepository userProfileRepository = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             await userAccountRepository.CreateAccount(userAccountModel);
@@ -279,7 +279,7 @@ namespace DataAccessUnitTestes
         public async Task DeleteUserProfileByAccountId_UserProfileExists_ExecutionTimeLessThan400Milliseconds(int accountId, long expectedMaxExecutionTime)
         {
             // Arrange
-            IUserProfileRepository userProfile = new UserProfileRepository(new DataGateway(), new ConnectionStringData());
+            IUserProfileRepository userProfile = new UserProfileRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var timer = Stopwatch.StartNew();

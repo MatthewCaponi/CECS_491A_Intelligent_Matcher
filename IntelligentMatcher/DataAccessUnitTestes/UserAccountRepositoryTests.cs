@@ -20,7 +20,7 @@ namespace DataAccessUnitTestes
         {
             var numTestRows = 20;
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
@@ -45,7 +45,7 @@ namespace DataAccessUnitTestes
         [TestCleanup()]
         public async Task CleanUp()
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             var accounts = await userAccountRepository.GetAllAccounts();
@@ -64,7 +64,7 @@ namespace DataAccessUnitTestes
         public async Task GetAllAccounts_AtLeastTwoAccountsExist_ReturnsCorrectIds()
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             IEnumerable<UserAccountModel> userAccounts = await userAccountRepository.GetAllAccounts();
@@ -91,7 +91,7 @@ namespace DataAccessUnitTestes
         public async Task GetAllAccounts_AtLeastTwoAccountsExist_ReturnsCorrectNumberOfAccounts(int numAccounts)
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             IEnumerable<UserAccountModel> userAccounts = await userAccountRepository.GetAllAccounts();
@@ -139,7 +139,7 @@ namespace DataAccessUnitTestes
             userAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
             userAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             await userAccountRepository.CreateAccount(userAccountModel);
@@ -168,7 +168,7 @@ namespace DataAccessUnitTestes
             userAccountModel.CreationDate = DateTimeOffset.Parse(expectedCreationDate);
             userAccountModel.UpdationDate = DateTimeOffset.Parse(expectedUpdationDate);
 
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             await userAccountRepository.CreateAccount(userAccountModel);
@@ -193,7 +193,7 @@ namespace DataAccessUnitTestes
         public async Task GetUserAccountById_UserAccountExists_ReturnsUserAccount(int expectedId)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userAccountModel = await userAccount.GetAccountById(expectedId);
@@ -210,7 +210,7 @@ namespace DataAccessUnitTestes
         public async Task GetUserAccountById_UserAccountExists_UsernameCorrect(int id, string expectedUsername)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userAccountModel = await userAccount.GetAccountById(id);
@@ -227,7 +227,7 @@ namespace DataAccessUnitTestes
         public async Task GetAccountByUsername_UserAccountExists_ReturnsUserAccount(int expectedId, string username)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userAccountModel = await userAccount.GetAccountByUsername(username);
@@ -244,7 +244,7 @@ namespace DataAccessUnitTestes
         public async Task GetAccountByUsername_UserAccountExists_UsernameCorrect(string expectedUserName)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userAccountModel = await userAccount.GetAccountByUsername(expectedUserName);
@@ -261,7 +261,7 @@ namespace DataAccessUnitTestes
         public async Task GetAccountByEmail_AccountExists_ReturnsAccount(int expectedId, string emailAddress)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var userAccountModel = await userAccount.GetAccountByEmail(emailAddress);
@@ -278,7 +278,7 @@ namespace DataAccessUnitTestes
         public async Task GetAccountByEmail_AccountExists_EmailIsCorrect(string expectedEmailAddress)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             UserAccountModel userAccountModel = await userAccount.GetAccountByEmail(expectedEmailAddress);
@@ -295,7 +295,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountUsername(int id, string expectedUsername)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userAccount.UpdateAccountUsername(id, expectedUsername);
@@ -313,7 +313,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountPassword(int id, string expectedPassword)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userAccount.UpdateAccountPassword(id, expectedPassword);
@@ -331,7 +331,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountSalt_AccountPasswordHashed_SaltIsAccurate(int id, string expectedSalt)
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             await userAccountRepository.UpdateAccountSalt(id, expectedSalt);
@@ -349,7 +349,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountEmail(int id, string expectedEmail)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userAccount.UpdateAccountEmail(id, expectedEmail);
@@ -367,7 +367,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountType_AccountExists_AccountTypeAccurate(int accountId, string expectedAccountType)
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userAccountRepository.UpdateAccountType(accountId, expectedAccountType);
@@ -388,7 +388,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountStatus_AccountExists_AccountStatusAccurate(int accountId, string expectedAccountStatus)
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userAccountRepository.UpdateAccountStatus(accountId, expectedAccountStatus);
@@ -406,7 +406,7 @@ namespace DataAccessUnitTestes
         public async Task DeleteUserAccountById_AccountExists_AccountIsNull(int id)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             await userAccount.DeleteAccountById(id);
@@ -423,7 +423,7 @@ namespace DataAccessUnitTestes
         public async Task GetAllAccounts_AtLeastTwoAccountsExist_ExecutiionTimeLessThan400Milliseconds(long expectedMaxExecutionTime)
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var timer = Stopwatch.StartNew();
@@ -456,7 +456,7 @@ namespace DataAccessUnitTestes
             userAccountModel.CreationDate = DateTimeOffset.Parse(expectedCreationDate);
             userAccountModel.UpdationDate = DateTimeOffset.Parse(expectedUpdationDate);
 
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             var timer = Stopwatch.StartNew();
@@ -475,7 +475,7 @@ namespace DataAccessUnitTestes
         public async Task UpdateAccountSalt_AccountPasswordHashed_ExecutiionTimeLessThan400Milliseconds(int id, string expectedSalt, long expectedMaxExecutionTime)
         {
             // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             var timer = Stopwatch.StartNew();
@@ -494,7 +494,7 @@ namespace DataAccessUnitTestes
         public async Task DeleteUserAccountById_AccountExists_ExecutiionTimeLessThan400Milliseconds(int id, long expectedMaxExecutionTime)
         {
             // Arrange
-            IUserAccountRepository userAccount = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            IUserAccountRepository userAccount = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             // Act
             var timer = Stopwatch.StartNew();

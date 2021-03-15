@@ -25,7 +25,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         public async Task Init()
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             
@@ -62,7 +62,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             await userAccountRepository.CreateAccount(userAccountModel);
 
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
             await cryptographyService.newPasswordEncryptAsync("Password", 1);
@@ -87,7 +87,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         public async Task CleanUp()
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
@@ -116,7 +116,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(2, 12, "Default Theme Color", "Defualt Font Style")]
         public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             
@@ -163,7 +163,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         public async Task ChangeFontSize_UsersFontSizeIsChanged_FontSizeSuccessfullyChanges(int userId, int FontSize)
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -191,7 +191,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         {
 
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -217,7 +217,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(1, "Helvetica")]
         public async Task ChangeFontStyleAsync_UserFontStyleChange_UsersFontStyleChanges(int userId, string fontStyle)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -246,7 +246,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(1, "Password")]
         public async Task DeleteAccountByUserIDAsync_UserAccountIsDelted_UserAccountSuccessfulyDeletes(int userId, string password)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -272,7 +272,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(1, "Password", "NewEmail")]
         public async Task ChangeEmail_UserEmailChanges_EmailChangeCompletes(int userId, string password, string email)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -301,7 +301,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [DataRow(1, "Password", "NewPassword")]
         public async Task ChangePasswordTest_UserPasswordChanges_PasswordChangeCompletes(int userId, string password, string newPassword)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -312,7 +312,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             bool result = await userAccountSettingsManager.ChangePassword(password, newPassword, userId);
 
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
                        
             string encryptedNewPassword = await cryptographyService.encryptPasswordAsync(newPassword, userId);
 

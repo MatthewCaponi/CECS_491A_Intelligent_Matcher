@@ -20,20 +20,18 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<UserProfileModel>> GetAllUserProfiles()
         {
-            var query = "select [Id], [FirstName], [Surname], [DateOfBirth], " +
-                "[UserAccountId] from [UserProfile]";
+            var storedProcedure = "dbo.UserProfile_Get_All";
 
-            return await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
+            return await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
                                                                           new { },
                                                                           _connectionString.SqlConnectionString);
         }
 
         public async Task<UserProfileModel> GetUserProfileById(int id)
         {
-            var query = "select [Id], [FirstName], [Surname], [DateOfBirth], [UserAccountId]" +
-                        "from [UserProfile] where Id = @Id";
+            var storedProcedure = "dbo.UserProfile_Get_ById";
 
-            var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
+            var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
@@ -45,10 +43,9 @@ namespace DataAccess.Repositories
 
         public async Task<UserProfileModel> GetUserProfileByAccountId(int accountId)
         {
-            var query = "select [Id], [FirstName], [Surname], [DateOfBirth], [UserAccountId]" +
-                        "from [UserProfile] where UserAccountId = @UserAccountId";
+            var storedProcedure = "dbo.UserProfile_Get_ByAccountId";
 
-            var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(query,
+            var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
                 new
                 {
                     UserAccountId = accountId
@@ -60,9 +57,7 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateUserProfile(UserProfileModel model)
         {
-            var query = "insert into [UserProfile]([FirstName], [Surname], [DateOfBirth], [UserAccountId])" +
-                        "values (@FirstName, @Surname, @DateOfBirth, @UserAccountId); " +
-                        "set @Id = SCOPE_IDENTITY(); ";
+            var storedProcedure = "dbo.UserProfile_Create";
 
             DynamicParameters p = new DynamicParameters();
 
@@ -72,18 +67,18 @@ namespace DataAccess.Repositories
             p.Add("UserAccountId", model.UserAccountId);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
+            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
             return p.Get<int>("Id");
         }
 
-        public async Task<int> DeleteUserProfileByAccountId(int id)
+        public async Task<int> DeleteUserProfileByAccountId(int userAccountId)
         {
-            var query = "delete from [UserProfile] where UserAccountId = @Id";
+            var storedProcedure = "dbo.UserProfile_Delete_ById";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
-                                             Id = id
+                                             UserAccountId = userAccountId
                                          },
                                          _connectionString.SqlConnectionString);
         }

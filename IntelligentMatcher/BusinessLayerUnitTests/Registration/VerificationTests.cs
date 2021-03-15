@@ -23,7 +23,7 @@ namespace BusinessLayerUnitTests.Registration
         {
             var numTestRows = 10;
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
@@ -48,7 +48,7 @@ namespace BusinessLayerUnitTests.Registration
         [TestCleanup()]
         public async Task CleanUp()
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             var accounts = await userAccountRepository.GetAllAccounts();
@@ -68,11 +68,11 @@ namespace BusinessLayerUnitTests.Registration
         {
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
 
             VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
                 userAccessService);
@@ -90,11 +90,11 @@ namespace BusinessLayerUnitTests.Registration
         {
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
 
             VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
                 userAccessService);
@@ -114,11 +114,11 @@ namespace BusinessLayerUnitTests.Registration
         {
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
 
             VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
                 userAccessService);
@@ -141,11 +141,11 @@ namespace BusinessLayerUnitTests.Registration
         {
             //Arrange
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
             UserAccessService userAccessService = new UserAccessService(new UserAccountRepository
-                (new DataGateway(), new ConnectionStringData()));
+                (new SQLServerGateway(), new ConnectionStringData()));
 
             VerificationManager verificationManager = new VerificationManager(userAccountService, userProfileService,
                 userAccessService);

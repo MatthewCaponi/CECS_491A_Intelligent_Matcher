@@ -21,9 +21,9 @@ namespace DataAccess.Repositories
         }
         public async Task<int> DeleteUserAccountSettingsByUserId(int userId)
         {
-            var query = "delete from [UserAccountSettings] where UserId = @UserId";
+            var storedProcedure = "dbo.UserAccountSettings_Delete_ById";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              UserId = userId
@@ -32,18 +32,16 @@ namespace DataAccess.Repositories
         }
         public async Task<IEnumerable<UserAccountSettingsModel>> GetAllSettings()
         {
-            var query = "select * from [UserAccountSettings]";
+            var storedProcedure = "dbo.UserAccountSettings_Get_All";
 
-            return await _dataGateway.LoadData<UserAccountSettingsModel, dynamic>(query,
+            return await _dataGateway.LoadData<UserAccountSettingsModel, dynamic>(storedProcedure,
                                                                           new { },
                                                                           _connectionString.SqlConnectionString);
         }
         public async Task<bool> CreateUserAccountSettings(UserAccountSettingsModel model)
         {
-            
-                var query = "insert into [UserAccountSettings]([UserId], [FontSize], [FontStyle], [ThemeColor])" +
-                            "values (@UserId, @FontSize, @FontStyle, @ThemeColor); " +
-                            "set @Id = SCOPE_IDENTITY(); ";
+
+            var storedProcedure = "dbo.UserAccountSettings_Create";
 
                 DynamicParameters p = new DynamicParameters();
 
@@ -53,7 +51,7 @@ namespace DataAccess.Repositories
                 p.Add("ThemeColor", model.ThemeColor);
                 p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
+                await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
                 return true;            
 
         }
@@ -61,10 +59,9 @@ namespace DataAccess.Repositories
         public async Task<UserAccountSettingsModel> GetUserAccountSettingsByUserId(int userId)
         {
 
-            var query = "select [Id], [UserId], [FontSize], [FontStyle], [ThemeColor] " +
-                        "from [UserAccountSettings] where UserId = @UserId;";
+            var storedProcedure = "dbo.UserAccountSettings_Get_ById";
 
-            var row = await _dataGateway.LoadData<UserAccountSettingsModel, dynamic>(query,
+            var row = await _dataGateway.LoadData<UserAccountSettingsModel, dynamic>(storedProcedure,
                 new
                 {
                     UserId = userId
@@ -76,21 +73,21 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateFontSize(int id, int fontSize)
         {
-            var query = "update [UserAccountSettings] set FontSize = @FontSize where UserId = @Id;";
+            var storedProcedure = "dbo.UserAccountSettings_Update_FontSize";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
-                                             Id = id,
+                                             UserId = id,
                                              FontSize = fontSize
                                          },
                                          _connectionString.SqlConnectionString);
         }
         public async Task<int> UpdateFontStyle(int userId, string fontStyle)
         {
-            var query = "update [UserAccountSettings] set FontStyle = @FontStyle where UserId = @UserId;";
+            var storedProcedure = "dbo.UserAccountSettings_Update_FontStyle";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              UserId = userId,
@@ -101,13 +98,12 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateThemeColor(int userId, string themeColor)
         {
-            var query = "update [UserAccountSettings] set ThemeColor = @ThemeColor where UserId = @UserId;";
+            var storedProcedure = "dbo.UserAccountSettings_Update_ThemeColor";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              ThemeColor = themeColor,
-
                                              UserId = userId
                                          },
                                          _connectionString.SqlConnectionString);
@@ -115,10 +111,9 @@ namespace DataAccess.Repositories
 
         public async Task<string> GetThemeColorByID(int userId)
         {
-            var query = "select [ThemeColor]" +
-                       "from [UserAccountSettings] where UserId = @UserId";
+            var storedProcedure = "dbo.UserAccountSettings_GetThemeColor_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(query,
+            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
                     UserId = userId
@@ -130,13 +125,12 @@ namespace DataAccess.Repositories
 
         public async Task<string> GetFontStyleByID(int id)
         {
-            var query = "select [FontStyle]" +
-                       "from [UserAccountSettings] where UserId = @Id";
+            var storedProcedure = "dbo.UserAccountSettings_GetFontStyle_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(query,
+            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
-                    Id = id
+                    UserId = id
                 },
                 _connectionString.SqlConnectionString);
 
@@ -145,13 +139,12 @@ namespace DataAccess.Repositories
 
         public async Task<string> GetFontSizeByID(int id)
         {
-            var query = "select [FontSize]" +
-                       "from [UserAccountSettings] where UserId = @Id";
+            var storedProcedure = "dbo.UserAccountSettings_GetFontSize_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(query,
+            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
-                    Id = id
+                    UserId = id
                 },
                 _connectionString.SqlConnectionString);
 
