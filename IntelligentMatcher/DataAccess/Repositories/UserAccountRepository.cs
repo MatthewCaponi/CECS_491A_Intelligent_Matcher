@@ -22,20 +22,18 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<UserAccountModel>> GetAllAccounts()
         {
-            var query = "select * from [UserAccount]";
+            string storedProcedure = "dbo.UserAccount_Get_All";
 
-            return await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
+            return await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                                                                           new { },
                                                                           _connectionString.SqlConnectionString);
         }
 
         public async Task<UserAccountModel> GetAccountById(int id)
         {
-            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
-                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
-                        "from [UserAccount] where Id = @Id";
+            string storedProcedure = "dbo.UserAccount_Get_ById";
 
-            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
+            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
@@ -47,11 +45,9 @@ namespace DataAccess.Repositories
 
         public async Task<UserAccountModel> GetAccountByUsername(string username)
         {
-            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
-                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
-                        "from [UserAccount] where Username = @Username";
+            var storedProcedure = "dbo.UserAccount_Get_ByUsername";
 
-            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
+            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                 new
                 {
                     Username = username
@@ -63,11 +59,9 @@ namespace DataAccess.Repositories
 
         public async Task<UserAccountModel> GetAccountByEmail(string email)
         {
-            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
-                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
-                        "from [UserAccount] where EmailAddress = @EmailAddress";
+            var storedProcedure = "dbo.UserAccount_Get_ByEmail";
 
-            var row = await _dataGateway.LoadData < UserAccountModel, dynamic>(query,
+            var row = await _dataGateway.LoadData < UserAccountModel, dynamic>(storedProcedure,
                 new
                 {
                     EmailAddress = email
@@ -79,10 +73,9 @@ namespace DataAccess.Repositories
 
         public async Task<string> GetSaltById(int id)
         {
-            var query = "select [Salt]" +
-                       "from [UserAccount] where Id = @Id";
+            var storedProcedure = "dbo.UserAccount_GetSalt_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(query,
+            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
@@ -93,10 +86,9 @@ namespace DataAccess.Repositories
         }
         public async Task<string> GetPasswordById(int id)
         {
-            var query = "select [Password]" +
-                       "from [UserAccount] where Id = @Id";
+            var storedProcedure = "dbo.UserAccount_GetPassword_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(query,
+            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
@@ -108,11 +100,8 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateAccount(UserAccountModel model)
         {
-            var query = "insert into [UserAccount]([Username], [Password], [Salt], [EmailAddress], " +
-                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate])" +
-                        "values (@Username, @Password, @Salt, @EmailAddress, " +
-                        "@AccountType, @AccountStatus, @CreationDate, @UpdationDate); " +
-                        "set @Id = SCOPE_IDENTITY(); ";
+            var storedProcedure = "dbo.UserAccount_Create";
+
             DynamicParameters p = new DynamicParameters();
 
             p.Add("Username", model.Username);
@@ -125,16 +114,16 @@ namespace DataAccess.Repositories
             p.Add("UpdationDate", model.UpdationDate);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
+            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
         }
 
         public async Task<int> DeleteAccountById(int id)
         {
-            var query = "delete from [UserAccount] where Id = @Id";
+            var storedProcedure = "dbo.UserAccount_Delete_ById";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              Id = id
@@ -144,9 +133,9 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountUsername(int id, string username)
         {
-            var query = "update [UserAccount] set Username = @Username where Id = @Id;";
+            var storedProcedure = "dbo.UserAccount_Update_Username";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -157,9 +146,9 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountEmail(int id, string email)
         {
-            var query = "update [UserAccount] set EmailAddress = @EmailAddress where Id = @Id;";
+            var storedProcedure = "dbo.UserAccount_Update_Email";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -170,9 +159,9 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountPassword(int id, string password)
         {
-            var query = "update [UserAccount] set Password = @Password where Id = @Id;";
+            var storedProcedure = "dbo.UserAccount_Update_Password";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -183,9 +172,9 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountSalt(int id, string salt)
         {
-            var query = "update [UserAccount] set Salt = @Salt where Id = @Id;";
+            var storedProcedure = "dbo.UserAccount_Update_Salt";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -197,22 +186,22 @@ namespace DataAccess.Repositories
 
         public async Task<int> UpdateAccountStatus(int id, string accountStatus)
         {
-            var query = "update [UserAccount] set AccountStatus = @AccountStatus where Id = @UserAccountId;";
+            var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              AccountStatus = accountStatus,
-                                             UserAccountId = id
+                                             Id = id
                                          },
                                          _connectionString.SqlConnectionString);
         }
 
         public async Task<int> UpdateAccountType(int id, string accountType)
         {
-            var query = "update [UserAccount] set AccountType = @AccountType where Id = @Id;";
+            var storedProcedure = "dbo.UserAccount_Update_AccountType";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              AccountType = accountType,
