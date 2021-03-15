@@ -276,7 +276,7 @@ namespace BusinessLayerUnitTests.Registration
 
         #region Functional Tests
         [DataTestMethod]
-        [DataRow(11, "TestUser1", "TestPassword11", "TestEmailAddress11", "TestAccountType11",
+        [DataRow(11, "TestUser1", "TestPassword11", "matt@infinimuse.com", "TestAccountType11",
             "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
             "TestSurname11", "127.0.0.1", ErrorMessage.UsernameExists)]
         public async Task RegisterUser_UserNameExists(int expectedId, string username, string password,
@@ -373,8 +373,8 @@ namespace BusinessLayerUnitTests.Registration
                 (actualResult.Item2.ErrorMessage == expectedResult.Item2.ErrorMessage));
         }
 
-        [DataTestMethod]
-        [DataRow(11, "TestUser11", "TestPassword11", "TestEmailAddress11", "TestAccountType11",
+       [DataTestMethod]
+        [DataRow(11, "TestUser11", "TestPassword11", "TestEmailAddress100", "TestAccountType11",
             "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
             "TestSurname11", "127.0.0.1", ErrorMessage.EmailNotSent)]
         public async Task RegisterUser_EmailNotSent(int expectedId, string username, string password,
@@ -425,7 +425,7 @@ namespace BusinessLayerUnitTests.Registration
         }
 
         [DataTestMethod]
-        [DataRow(11, "TestUser11", "TestPassword11", "shariffshaan@gmail.com", "TestAccountType11",
+        [DataRow(11, "TestUser11", "TestPassword11", "matt@infinimuse.com", "TestAccountType11",
             "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
             "TestSurname11", "127.0.0.1")]
         public async Task RegisterUser_Success(int expectedId, string username, string password,
