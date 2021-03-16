@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UserManagement;
 using UserManagement.Models;
 using static Models.UserProfileModel;
-
+/*
 namespace WebUI.Models
 {
     public class UserHomeModel
@@ -19,4 +19,4 @@ namespace WebUI.Models
 
         public string Popcorn { get; set; }
     }
-}
+}*/

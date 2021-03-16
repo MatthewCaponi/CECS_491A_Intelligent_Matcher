@@ -11,6 +11,8 @@ namespace Security
 {
     public class CryptographyService : ICryptographyService
     {
+        private const int SALT_LENGTH = 10;
+
         private readonly IUserAccountRepository _userAccountRepository;
 
         public CryptographyService(IUserAccountRepository userAccountRepository)
@@ -20,7 +22,6 @@ namespace Security
         private async Task<bool> CreateSalt(int UserID)
         {
 
-            int length = 10;
 
             // creating a StringBuilder object()
             StringBuilder str_build = new StringBuilder();
@@ -28,7 +29,7 @@ namespace Security
 
             char letter;
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < SALT_LENGTH; i++)
             {
                 double flt = random.NextDouble();
                 int shift = Convert.ToInt32(Math.Floor(25 * flt));
