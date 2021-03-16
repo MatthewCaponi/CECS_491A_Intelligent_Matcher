@@ -9,7 +9,7 @@ namespace Registration
 {
     public interface IRegistrationManager
     {
-        Task<Tuple<bool, ResultModel<int>>> RegisterNewAccount(WebUserAccountModel accountModel,
-            WebUserProfileModel usermodel, bool emailIsActive, string password, string ipAddress);
+        Task<Tuple<bool, ResultModel<int>>> RegisterAccount(WebUserAccountModel accountModel,
+            WebUserProfileModel usermodel, string password, string ipAddress);
     }
 }

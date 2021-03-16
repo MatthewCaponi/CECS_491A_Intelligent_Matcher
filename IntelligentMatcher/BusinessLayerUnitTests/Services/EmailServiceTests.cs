@@ -14,13 +14,23 @@ namespace BusinessLayerUnitTests.Services
     {
         #region Functional Tests
         [DataTestMethod]
-        [DataRow("shariffshaan@gmail.com", "support@infinimuse.com", true, "Test", "This is a test.",
+        [DataRow("matt@infinimuse.com", "support@infinimuse.com", true, "Test", "This is a test.",
             "This is a test!", "outbound", "Test Email", true)]
         public async Task SendEmail_EmailSent_Success(string recipient, string sender, bool trackOpens,
             string subject, string textBody, string htmlBody, string messageStream, string tag, bool expectedResult)
         {
             //Arrange
-            EmailModel emailModel = new EmailModel(recipient, sender, trackOpens, subject, textBody, htmlBody, messageStream, tag);
+            EmailModel emailModel = new EmailModel();
+
+            emailModel.Recipient = recipient;
+            emailModel.Sender = sender;
+            emailModel.TrackOpens = trackOpens;
+            emailModel.Subject = subject;
+            emailModel.TextBody = textBody;
+            emailModel.HtmlBody = htmlBody;
+            emailModel.MessageStream = messageStream;
+            emailModel.Tag = tag;
+
             EmailService emailService = new EmailService();
             //Act
             var actualResult = await emailService.SendEmail(emailModel);
@@ -28,14 +38,24 @@ namespace BusinessLayerUnitTests.Services
             Assert.IsTrue(actualResult == expectedResult);
         }
 
-        [DataTestMethod]
+        //[DataTestMethod]
         [DataRow("BadEmail", "support@infinimuse.com", true, "Test", "This is a test.",
             "This is a test!", "outbound", "Test Email", false)]
         public async Task SendEmail_EmailSent_EmailNotSent(string recipient, string sender, bool trackOpens,
             string subject, string textBody, string htmlBody, string messageStream, string tag, bool expectedResult)
         {
             //Arrange
-            EmailModel emailModel = new EmailModel(recipient, sender, trackOpens, subject, textBody, htmlBody, messageStream, tag);
+            EmailModel emailModel = new EmailModel();
+
+            emailModel.Recipient = recipient;
+            emailModel.Sender = sender;
+            emailModel.TrackOpens = trackOpens;
+            emailModel.Subject = subject;
+            emailModel.TextBody = textBody;
+            emailModel.HtmlBody = htmlBody;
+            emailModel.MessageStream = messageStream;
+            emailModel.Tag = tag;
+
             EmailService emailService = new EmailService();
             //Act
             var actualResult = await emailService.SendEmail(emailModel);
@@ -46,18 +66,28 @@ namespace BusinessLayerUnitTests.Services
 
         #region Non-Functional Tests
         [DataTestMethod]
-        [DataRow("BadEmail", "support@infinimuse.com", true, "Test", "This is a test.",
-            "This is a test!", "outbound", "Test Email", false, 5000)]
+        [DataRow("shariffshaan@gmail.com", "support@infinimuse.com", true, "Test", "This is a test.",
+            "This is a test!", "outbound", "Test Email", 5000)]
         public async Task SendEmail_EmailSent_LessThan5Seconds(string recipient, string sender, bool trackOpens,
-            string subject, string textBody, string htmlBody, string messageStream, string tag, bool expectedResult,
+            string subject, string textBody, string htmlBody, string messageStream, string tag,
             int expectedTime)
         {
             //Arrange
-            EmailModel emailModel = new EmailModel(recipient, sender, trackOpens, subject, textBody, htmlBody, messageStream, tag);
+            EmailModel emailModel = new EmailModel();
+
+            emailModel.Recipient = recipient;
+            emailModel.Sender = sender;
+            emailModel.TrackOpens = trackOpens;
+            emailModel.Subject = subject;
+            emailModel.TextBody = textBody;
+            emailModel.HtmlBody = htmlBody;
+            emailModel.MessageStream = messageStream;
+            emailModel.Tag = tag;
+
             EmailService emailService = new EmailService();
             //Act
             var timer = Stopwatch.StartNew();
-            var actualResult = await emailService.SendEmail(emailModel);
+            await emailService.SendEmail(emailModel);
             var actualTime = timer.ElapsedMilliseconds;
             Debug.WriteLine("Actual Execution Time: " + actualTime);
             //Assert

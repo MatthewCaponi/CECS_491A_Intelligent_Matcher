@@ -23,7 +23,7 @@ namespace BusinessLayerUnitTests.Security
         [TestInitialize()]
         public async Task Init()
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -70,7 +70,7 @@ namespace BusinessLayerUnitTests.Security
         public async Task CleanUp()
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
@@ -102,7 +102,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
 
             // Act
@@ -139,7 +139,7 @@ namespace BusinessLayerUnitTests.Security
         {
 
 
-            UserAccountRepository userAccountRepo = new UserAccountRepository(new DataGateway(), new ConnectionStringData());
+            UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
 
             // Act

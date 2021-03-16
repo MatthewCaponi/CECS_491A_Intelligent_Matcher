@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAccountSettingsUI", "Us
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging", "Messaging\Messaging.csproj", "{D37DE636-C4F1-4CD3-AA82-F5C5B9961031}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentMatcherUI", "IntelligentMatcherUI\IntelligentMatcherUI.csproj", "{7B17477D-B1F6-4C3D-A522-A201040C50EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{D37DE636-C4F1-4CD3-AA82-F5C5B9961031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D37DE636-C4F1-4CD3-AA82-F5C5B9961031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D37DE636-C4F1-4CD3-AA82-F5C5B9961031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B17477D-B1F6-4C3D-A522-A201040C50EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B17477D-B1F6-4C3D-A522-A201040C50EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B17477D-B1F6-4C3D-A522-A201040C50EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B17477D-B1F6-4C3D-A522-A201040C50EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +152,7 @@ Global
 		{8E6B46A7-E35A-49D3-A698-452B1B2CF2AF} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 		{C0D76BCD-FD02-49AC-BB0C-C69BB7A0027F} = {938CCB21-ABFE-4F2D-9FE1-4024A3E7F237}
 		{D37DE636-C4F1-4CD3-AA82-F5C5B9961031} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
+		{7B17477D-B1F6-4C3D-A522-A201040C50EA} = {938CCB21-ABFE-4F2D-9FE1-4024A3E7F237}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF33D655-7913-49CE-90DE-24BB5A7DA8E0}

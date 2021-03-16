@@ -11,9 +11,9 @@ namespace DataAccessUnitTestes
         public static async Task ReseedAsync(string tableName, int NEWSEEDNUMBER, IConnectionStringData connectionString, 
             IDataGateway dataGateway)
         {
-            var query = "DBCC CHECKIDENT (@tableName, RESEED, @NEWSEEDNUMBER)";
+            var storedProcedure = "dbo.Testing_Reseed";
 
-            await dataGateway.SaveData(query, new
+            await dataGateway.SaveData(storedProcedure, new
                                                  {
                                                     @tableName = tableName,
                                                     @NEWSEEDNUMBER = NEWSEEDNUMBER

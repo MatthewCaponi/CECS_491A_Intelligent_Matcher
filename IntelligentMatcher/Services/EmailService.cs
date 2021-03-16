@@ -11,7 +11,7 @@ namespace Registration.Services
 {
     public class EmailService : IEmailService
     {
-		private const string API_KEY = "7e3947d6-ad88-41aa-91ae-8166ae128b21";
+		private const string API_KEY = "POSTMARK_API_TEST";
         public async Task<bool> SendEmail(EmailModel emailModel)
         {
 			var message = new PostmarkMessage()
@@ -32,7 +32,15 @@ namespace Registration.Services
             try
             {
 				var sendResult = await client.SendMessageAsync(message);
-				return true;
+				System.Threading.Thread.Sleep(500);
+				if(sendResult.Status == PostmarkStatus.Success)
+                {
+					return true;
+				}
+                else
+                {
+					return false;
+				}
 			} 
 			catch
             {
