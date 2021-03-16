@@ -84,7 +84,7 @@ namespace UserAccountSettingsUI.Controllers
         [HttpPost("delete")]
         public async Task<bool> DeleteAccountAsync([FromBody] DeleteModel deleteModel)
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -101,7 +101,7 @@ namespace UserAccountSettingsUI.Controllers
         public async Task<bool> PasswordChangeAsync([FromBody] PasswordModel passwordModel)
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -118,7 +118,7 @@ namespace UserAccountSettingsUI.Controllers
         public async Task<bool> ChangeFontSizeAsync([FromBody] FontSizeModel fontSize)
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -136,7 +136,7 @@ namespace UserAccountSettingsUI.Controllers
         public async Task<bool> ChangeEmailAsync([FromBody] EmailModel email)
         {
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -153,7 +153,7 @@ namespace UserAccountSettingsUI.Controllers
         public async Task<string> GetFontSizeAsync([FromBody] string id)
         {
             Console.WriteLine("Fethcing Font Size" + id);
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
@@ -165,7 +165,7 @@ namespace UserAccountSettingsUI.Controllers
         {
             Console.WriteLine("Font Style Changed");
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -180,7 +180,7 @@ namespace UserAccountSettingsUI.Controllers
         public async Task<FontStyleModel> GetFontStyleAsync([FromBody] string id)
         {
             Console.WriteLine("Fethcing Font Style" + id);
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             FontStyleModel fontStyle = new FontStyleModel();
@@ -194,7 +194,7 @@ namespace UserAccountSettingsUI.Controllers
         {
             Console.WriteLine("Font Style Changed");
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -209,7 +209,7 @@ namespace UserAccountSettingsUI.Controllers
         public async Task<ThemeModel> GetThemeAsync([FromBody] string id)
         {
             Console.WriteLine("Fethcing Font Style" + id);
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ThemeModel themeModel = new ThemeModel();
