@@ -34,7 +34,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.FontSize = FontSize;
             userAccountSettingsModel.FontStyle = FontStyle;
             userAccountSettingsModel.ThemeColor = ThemeColor;
-            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettings(userAccountSettingsModel);
+            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettingsAsync(userAccountSettingsModel);
 
             if (result == true)
             {
@@ -61,7 +61,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
-            bool result = await userAccountSettingsManager.ChangeFontSize(userId, FontSize);
+            bool result = await userAccountSettingsManager.ChangeFontSizeAsync(userId, FontSize);
 
             if (result == true)
             {
@@ -88,7 +88,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
-            bool result = await userAccountSettingsManager.ChangeThemeColor(userId, ThemeColor);
+            bool result = await userAccountSettingsManager.ChangeThemeColorAsync(userId, ThemeColor);
 
 
             if (result == true)
@@ -164,7 +164,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUserId(password, userId)).Returns(Task.FromResult(true));
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
-            bool result = await userAccountSettingsManager.ChangeEmail(password, email, userId);
+            bool result = await userAccountSettingsManager.ChangeEmailAsync(password, email, userId);
 
 
             if (result == true)
@@ -193,7 +193,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
-            bool result = await userAccountSettingsManager.ChangePassword(password, newPassword, userId);
+            bool result = await userAccountSettingsManager.ChangePasswordAsync(password, newPassword, userId);
 
 
             if (result == true)
