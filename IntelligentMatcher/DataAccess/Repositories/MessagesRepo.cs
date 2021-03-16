@@ -13,7 +13,7 @@ namespace DataAccess.Repositories
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
-
+        
         public async Task<List<MessageModel>> GetAllMessagesByChannelId(int id)
         {
             var query = "select [Id], [ChannelId], [ChannelMessageId], [UserId], [Message], " +
@@ -27,7 +27,7 @@ namespace DataAccess.Repositories
                 },
                 _connectionString.SqlConnectionString);
 
-            return row.ToList();
+            return row.AsList();
         }
     }
 }

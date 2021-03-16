@@ -6,8 +6,8 @@ import { ChangeFontStyle } from './ChangeFontStyle';
 import { ChangeTheme } from './ChangeTheme';
 import { ChangeEmail } from './ChangeEmail';
 
-export class Home extends Component {
-  static displayName = Home.name;
+export class UserAccountSettings extends Component {
+  static displayName = UserAccountSettings.name;
 
   render () {
     return (

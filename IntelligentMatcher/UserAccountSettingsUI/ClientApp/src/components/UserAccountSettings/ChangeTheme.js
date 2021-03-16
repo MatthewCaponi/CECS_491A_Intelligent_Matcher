@@ -12,7 +12,7 @@
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
-          body: JSON.stringify("2")
+          body: JSON.stringify("1")
       }).
       then(r => r.json())
       .then(res=>{
@@ -31,7 +31,7 @@
 
   
     changeTheme() {
-      var ChangeThemeModel = {id: 2, theme: this.theme.value};
+      var ChangeThemeModel = {id: 1, theme: this.theme.value};
   
       fetch('useraccountsettings/changetheme',
       {

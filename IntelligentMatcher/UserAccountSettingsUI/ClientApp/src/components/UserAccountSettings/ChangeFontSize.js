@@ -11,7 +11,7 @@ export class ChangeFontSize extends Component {
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
-        body: JSON.stringify("2")
+        body: JSON.stringify("1")
     }).
     then(r => r.json())
     .then(res=>{
@@ -26,7 +26,7 @@ export class ChangeFontSize extends Component {
 
 
   changeFontSize() {
-    var ChangeFontSizeModel = {id: 2, fontSize: this.fontSize.value};
+    var ChangeFontSizeModel = {id: 1, fontSize: this.fontSize.value};
 
     fetch('useraccountsettings/changefontsize',
     {

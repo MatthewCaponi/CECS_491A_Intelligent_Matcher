@@ -12,7 +12,7 @@
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
-          body: JSON.stringify("2")
+          body: JSON.stringify("1")
       }).
       then(r => r.json())
       .then(res=>{
@@ -31,7 +31,7 @@
 
   
     changeFontStyle() {
-      var ChangeFontStyleModel = {id: 2, fontStyle: this.fontStyle.value};
+      var ChangeFontStyleModel = {id: 1, fontStyle: this.fontStyle.value};
   
       fetch('useraccountsettings/changefontstyle',
       {
