@@ -10,7 +10,7 @@ using UserManagement.Models;
 
 namespace IntelligentMatcherUI.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class UserManagementController : ControllerBase
     {
@@ -21,11 +21,22 @@ namespace IntelligentMatcherUI.Controllers
             _userManager = userManager;
         }
 
-
         [HttpGet]
         public ActionResult<List<WebUserAccountModel>> GetAllUserAccounts()
         {
             return  _userManager.GetAllUserAccounts().Result.SuccessValue;
+        }
+   
+        [HttpGet]
+        public ActionResult<List<WebUserProfileModel>> GetAllUserProfiles()
+        {
+            return _userManager.GetAllUserProfiles().Result.SuccessValue;
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<WebUserProfileModel> GetUserProfile(int id)
+        {
+            return _userManager.GetUserProfile(id).Result.SuccessValue;
         }
     }
 }
