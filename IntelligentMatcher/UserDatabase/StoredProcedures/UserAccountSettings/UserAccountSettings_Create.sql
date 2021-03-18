@@ -8,7 +8,7 @@ AS
 begin
 	set nocount on;
 
-	insert into dbo.[UserAccountSettings]([FontSize], [FontStyle], [ThemeColor], [UserId])
+	insert into dbo.[UserAccountSettings]([FontSize], [FontStyle], [ThemeColor], [UserId] )
                         values (@FontSize, @FontStyle, @ThemeColor, @UserId); 
 
 	set @Id = SCOPE_IDENTITY();

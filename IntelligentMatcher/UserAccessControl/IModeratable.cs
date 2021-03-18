@@ -5,6 +5,7 @@ using UserManagement.Models;
 
 namespace UserAccessControl
 {
+    
     interface IModeratable
     {
         bool CheckUserPermissions(UserInfoModel model);

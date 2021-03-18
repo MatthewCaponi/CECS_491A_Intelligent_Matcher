@@ -7,7 +7,7 @@ using DataAccess.Repositories;
 
 using UserAccountSettings;
 
-namespace UserAccountSettingsUI.Controllers
+namespace IntelligentMatcherUI.Controllers
 {
     public class DeleteModel
     {

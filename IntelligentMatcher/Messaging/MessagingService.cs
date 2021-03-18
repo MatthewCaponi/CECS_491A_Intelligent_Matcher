@@ -5,26 +5,131 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using Dapper;
-namespace DataAccess.Repositories
+using DataAccess.Repositories;
+using Models;
+
+namespace Messaging
 {
+
+
     public class MessagingService : IMessagingService
     {
+        private readonly IMessagesRepo _messagesRepo;
+        private readonly IChannelsRepo _channelsRepo;
+        private readonly IUserChannelsRepo _userChannelsRepo;
+        private readonly IUserAccountRepository _userAccountRepository;
 
-        public async Task<MessageModel> GetMessagesByGroupId(int id)
+
+        public MessagingService(IMessagesRepo messagesRepo, IChannelsRepo channelsRepo, IUserChannelsRepo userChannelsRepo, IUserAccountRepository userAccountRepository)
         {
-            var query = "select [Id], [Username], [Password], [Salt], [EmailAddress], " +
-                        "[AccountType], [AccountStatus], [CreationDate], [UpdationDate]" +
-                        "from [UserAccount] where Id = @Id";
+            _messagesRepo = messagesRepo;
+            _channelsRepo = channelsRepo;
+            _userChannelsRepo = userChannelsRepo;
+            _userAccountRepository = userAccountRepository;
+        }
+        public async Task<bool> sendMessageAsync(MessageModel model)
+        {
 
-            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
-                new
-                {
-                    Id = id
-                },
-                _connectionString.SqlConnectionString);
+            try
+            {
+                IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelId(model.ChannelId);
 
-            return row.FirstOrDefault();
+                model.ChannelMessageId = models.Count();
+                model.Date = DateTime.Now;
+                model.Time = DateTime.Now.ToString().Split(' ')[1];
+                await _messagesRepo.CreateAccount(model);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+
         }
 
+        public async Task<IEnumerable<MessageModel>> GetAllChannelMessages(int ChannelId)
+        {
+            IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelId(ChannelId);
+
+            return models;
+
+        }
+
+        public async Task<bool> CreateChannel(ChannelModel model)
+        {
+
+            await _userChannelsRepo.AddUserChannel(model.OwnerId, await _channelsRepo.CreateChannel(model));
+
+            return true;
+        }
+
+        public async Task<bool> DeleteChannel(int id)
+        {
+
+            await _channelsRepo.DeleteChannelbyId(id);
+            await _userChannelsRepo.RemoveChannelUsingChannelId(id);
+            return true;
+        }
+
+        public async Task<bool> RemoveUserFromChannel(int channelId, int userId)
+        {
+
+            await _userChannelsRepo.RemoveUserIdChannelId(userId, channelId);
+            return true;
+        }
+
+        public async Task<bool> AddUserToChannel(int UserId, int ChannelId)
+        {
+
+            await _userChannelsRepo.AddUserChannel(UserId, ChannelId);
+            return true;
+        }
+
+        public async Task<IEnumerable<UserIdModel>> GetAllUsersInChannel(int channelId)
+        {
+            IEnumerable<int> userIds = await _userChannelsRepo.GetAllUsersByChannelId(channelId);
+            List<UserIdModel> userIdModels = new List<UserIdModel>();
+            foreach(int userId in userIds)
+            {
+                UserIdModel model = new UserIdModel();
+                model.UserId = userId;
+                UserAccountModel userAcountModel = await _userAccountRepository.GetAccountById(userId);
+                model.Username = userAcountModel.Username;
+                userIdModels.Add(model);
+            }
+
+            IEnumerable<UserIdModel> userIdModelI = userIdModels;
+
+            return userIdModelI;
+
+
+        }
+
+        public async Task<IEnumerable<ChannelModel>> GetAllUserChannels(int UserId)
+        {
+            IEnumerable<int> channelIds = await _userChannelsRepo.GetAllChannelsByUserId(UserId);
+            List<ChannelModel> channelModelsList = new List<ChannelModel>();
+            foreach (int channelId in channelIds)
+            {
+                ChannelModel newModel = await _channelsRepo.GetChannelbyId(channelId);
+                if(newModel != null)
+                {
+                    channelModelsList.Add(newModel);
+
+                }
+            }
+
+            IEnumerable<ChannelModel> channelModels = channelModelsList;
+
+            return channelModels;
+
+
+        }
+
+        public async Task<string> GetChannelOwner(int id)
+        {
+            return await _channelsRepo.GetChannelOwnerbyId(id);
+        }
     }
 }

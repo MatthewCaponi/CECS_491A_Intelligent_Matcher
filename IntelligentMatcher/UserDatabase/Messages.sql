@@ -4,7 +4,7 @@
 	[ChannelId] INT NOT NULL, 
 	[ChannelMessageId] INT NOT NULL, 
 	[UserId] INT NOT NULL,	
-	[Message] nvarchar(1000) NOT NULL, 
-    [Time] DATE NOT NULL
-
+	[Message] nvarchar(1000) NOT NULL,
+	[Time] NVARCHAR(100) NOT NULL,
+	[Date] date NOT NULL
 )

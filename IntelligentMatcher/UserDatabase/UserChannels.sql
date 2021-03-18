@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[UserChannels]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[UserId] INT NOT NULL,
+	[ChannelId] INT NOT NULL
+)

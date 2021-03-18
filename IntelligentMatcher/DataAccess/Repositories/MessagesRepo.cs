@@ -13,21 +13,41 @@ namespace DataAccess.Repositories
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
-        
-        public async Task<List<MessageModel>> GetAllMessagesByChannelId(int id)
+        public MessagesRepo(IDataGateway dataGateway, IConnectionStringData connectionString)
         {
-            var query = "select [Id], [ChannelId], [ChannelMessageId], [UserId], [Message], " +
-                        "[Time]" +
-                        "from [Messages] where ChannelId = @Id";
+            _dataGateway = dataGateway;
+            _connectionString = connectionString;
+        }
 
-            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(query,
-                new
-                {
-                    Id = id
-                },
-                _connectionString.SqlConnectionString);
+        public async Task<IEnumerable<MessageModel>> GetAllMessagesByChannelId(int channelId)
+        {
+            string storedProcedure = "dbo.Messages_Get_All_By_ChannelId";
 
-            return row.AsList();
+            return await _dataGateway.LoadData<MessageModel, dynamic>(storedProcedure,
+                                                                          new {
+                                                                              ChannelId = channelId
+                                                                          },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
+        public async Task<int> CreateAccount(MessageModel model)
+        {
+            var storedProcedure = "dbo.Messages_Create";
+
+            DynamicParameters p = new DynamicParameters();
+
+            p.Add("ChannelId", model.ChannelId);
+            p.Add("ChannelMessageId", model.ChannelMessageId);
+            p.Add("UserId", model.UserId);
+            p.Add("Message", model.Message);
+            p.Add("Time", model.Time);
+            p.Add("Date", model.Date);
+
+            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+
+            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+
+            return p.Get<int>("Id");
         }
     }
 }

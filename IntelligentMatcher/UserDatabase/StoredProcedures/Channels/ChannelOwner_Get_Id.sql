@@ -1,11 +1,11 @@
-﻿CREATE PROCEDURE [dbo].[Channel_Get_Id.]
+﻿CREATE PROCEDURE [dbo].[ChannelOwner_Get_Id]
 	@Id int
 AS
 begin
 
 	set nocount on
 
-	select [Id], [OwnerId], [Name]
+	select [OwnerId]
 	from dbo.[Channels]
 	where Id = @Id;
 end
