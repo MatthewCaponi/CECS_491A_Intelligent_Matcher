@@ -22,7 +22,7 @@ namespace DataAccess.Repositories
 
 
 
-        public async Task<IEnumerable<UserChannelModel>> GetAllUserChannels ()
+        public async Task<IEnumerable<UserChannelModel>> GetAllUserChannelsAsync ()
         {
             string storedProcedure = "dbo.UserChannels_Get_All";
 
@@ -31,7 +31,7 @@ namespace DataAccess.Repositories
                                                                           _connectionString.SqlConnectionString);
         }
 
-        public async Task<int> DeleteUserChannelsById(int id)
+        public async Task<int> DeleteUserChannelsByIdAsync(int id)
         {
             var storedProcedure = "dbo.UserChannels_Delete_ById";
 
@@ -46,7 +46,7 @@ namespace DataAccess.Repositories
 
 
 
-        public async Task<int> AddUserChannel(int UserId, int ChannelId)
+        public async Task<int> AddUserChannelAsync(int UserId, int ChannelId)
         {
             var storedProcedure = "dbo.UserChannel_Add";
 
@@ -63,7 +63,7 @@ namespace DataAccess.Repositories
             return p.Get<int>("Id");
         }
 
-        public async Task<int> RemoveUserIdChannelId(int userId, int channelId)
+        public async Task<int> RemoveUserIdChannelIdAsync(int userId, int channelId)
         {
             var storedProcedure = "dbo.UserChannel_RemoveUser";
 
@@ -75,7 +75,7 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
-        public async Task<int> RemoveChannelUsingChannelId( int channelId)
+        public async Task<int> RemoveChannelUsingChannelIdAsync( int channelId)
         {
             var storedProcedure = "dbo.UserChannel_RemoveChannel";
 
@@ -87,7 +87,7 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public async Task<IEnumerable<int>> GetAllChannelsByUserId(int userId)
+        public async Task<IEnumerable<int>> GetAllChannelsByUserIdAsync(int userId)
         {
             string storedProcedure = "dbo.Channels_Get_UserId";
 
@@ -99,7 +99,7 @@ namespace DataAccess.Repositories
                                                                           _connectionString.SqlConnectionString);
         }
 
-        public async Task<IEnumerable<int>> GetAllUsersByChannelId(int channelId)
+        public async Task<IEnumerable<int>> GetAllUsersByChannelIdAsync(int channelId)
         {
             string storedProcedure = "dbo.Users_Get_ChannelId";
 

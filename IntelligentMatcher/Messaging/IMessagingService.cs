@@ -27,6 +27,6 @@ namespace Messaging
 
          Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int UserId);
 
-         Task<string> GetChannelOwnerAsync(int id);
+         Task<int> GetChannelOwnerAsync(int id);
     }
 }

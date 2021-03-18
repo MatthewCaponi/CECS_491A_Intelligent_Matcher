@@ -45,33 +45,33 @@ namespace BusinessLayerUnitTests.Messaging
 
 
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            var messages = await messagesRepo.GetAllMessages();
+            var messages = await messagesRepo.GetAllMessagesAsync();
 
             foreach (var message in messages)
             {
-                await messagesRepo.DeleteMessageById(message.Id);
+                await messagesRepo.DeleteMessageByIdAsync(message.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Messages", 0, connectionString, dataGateway);
 
 
             IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            var channels = await channelsRepo.GetAllChannels();
+            var channels = await channelsRepo.GetAllChannelsAsync();
 
             foreach (var channel in channels)
             {
-                await channelsRepo.DeleteChannelbyId(channel.Id);
+                await channelsRepo.DeleteChannelbyIdAsync(channel.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            var userChannels = await userChannelsRepo.GetAllUserChannels();
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
             foreach (var userChannel in userChannels)
             {
-                await userChannelsRepo.DeleteUserChannelsById(userChannel.Id);
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);

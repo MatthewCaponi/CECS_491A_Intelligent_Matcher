@@ -60,7 +60,6 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost("sendmessage")]
         public async Task<bool> SendMessageAsync([FromBody] SendMessageModel messageModel)
         {
-            Console.WriteLine("Got it");
 
             MessageModel model = new MessageModel();
             model.ChannelId = messageModel.ChannelId;
@@ -78,14 +77,12 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
             await messagingService.sendMessageAsync(model);
-            Console.WriteLine("Message Sent");
             return true;
         }
 
         [HttpPost("getmessages")]
         public async Task<IEnumerable<MessageModel>> GetChannelMessagesAsync([FromBody] int channelId)
         {
-            Console.WriteLine("Fethcing group data" + channelId);
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -97,14 +94,12 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository); 
             IEnumerable<MessageModel>  models = await messagingService.GetAllChannelMessagesAsync(channelId);
 
-            Console.WriteLine(models);
             return models;
         }
 
         [HttpPost("getchannelusers")]
         public async Task<IEnumerable<UserIdModel>> GetAllUsersInGroup([FromBody] int channelId)
         {
-            Console.WriteLine("Fethcing Users In the Channel" + channelId);
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -114,7 +109,6 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
             IEnumerable<UserIdModel> models = await messagingService.GetAllUsersInChannelAsync(channelId);
 
-            Console.WriteLine(models);
             return models;
         }
 
@@ -122,7 +116,6 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost("addusertogroup")]
         public async Task<bool> AddUserChannel([FromBody] UsernameChannelAdd model)
         {
-            Console.WriteLine("Adding User To Group");
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -141,7 +134,6 @@ namespace IntelligentMatcherUI.Controllers
 
         public async Task<bool> RemoveUserChannel([FromBody] UserChannelModel model)
         {
-            Console.WriteLine("Removing user from channel");
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -160,7 +152,6 @@ namespace IntelligentMatcherUI.Controllers
 
         public async Task<IEnumerable<ChannelModel>> GetUserChannels([FromBody] int userId)
         {
-            Console.WriteLine("Removing user from channel");
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -177,7 +168,6 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost("createchannel")]
         public async Task<bool> CreateGroupAsync([FromBody] CreateChannelModel channelModel)
         {
-            Console.WriteLine("Creating Channel");
 
             ChannelModel channel = new ChannelModel();
             channel.Name = channelModel.Name;
@@ -193,16 +183,13 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
             await messagingService.CreateChannelAsync(channel);
-            Console.WriteLine("Channel Made");
             return true;
         }
 
 
         [HttpPost("getchannelowner")]
-        public async Task<string> CreateGroupAsync([FromBody] int channelid)
+        public async Task<int> GetChannelOwner([FromBody] int channelid)
         {
-            Console.WriteLine("GEtting Owner");
-
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -211,14 +198,26 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+
+
             Console.WriteLine(await messagingService.GetChannelOwnerAsync(channelid));
-            return await messagingService.GetChannelOwnerAsync(channelid);
+
+            int ownerId = await messagingService.GetChannelOwnerAsync(channelid);
+            if (ownerId == 0)
+            {
+
+                return -1;
+            }
+
+            return ownerId;
+
+
+
         }
 
         [HttpPost("deletechannel")]
         public async Task<bool> DeleteChannel([FromBody] int channelid)
         {
-            Console.WriteLine("GEtting Owner");
 
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();

@@ -21,7 +21,7 @@ namespace DataAccess.Repositories
 
 
 
-        public async Task<IEnumerable<ChannelModel>> GetAllChannels()
+        public async Task<IEnumerable<ChannelModel>> GetAllChannelsAsync()
         {
             string storedProcedure = "dbo.Channels_Get_All";
 
@@ -31,7 +31,7 @@ namespace DataAccess.Repositories
         }
 
 
-        public async Task<int> CreateChannel(ChannelModel model)
+        public async Task<int> CreateChannelAsync(ChannelModel model)
         {
             var storedProcedure = "dbo.Channels_Create";
 
@@ -48,7 +48,7 @@ namespace DataAccess.Repositories
             return p.Get<int>("Id");
         }
 
-        public async Task<ChannelModel> GetChannelbyId(int id)
+        public async Task<ChannelModel> GetChannelbyIdAsync(int id)
         {
             string storedProcedure = "dbo.Channel_Get_Id";
 
@@ -62,11 +62,11 @@ namespace DataAccess.Repositories
             return row.FirstOrDefault();
         }
 
-        public async Task<string> GetChannelOwnerbyId(int id)
+        public async Task<int> GetChannelOwnerbyIdAsync(int id)
         {
             string storedProcedure = "dbo.ChannelOwner_Get_Id";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
+            var row = await _dataGateway.LoadData<int, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
@@ -76,7 +76,7 @@ namespace DataAccess.Repositories
             return row.FirstOrDefault();
         }
 
-        public async Task<int> DeleteChannelbyId(int id)
+        public async Task<int> DeleteChannelbyIdAsync(int id)
         {
             var storedProcedure = "dbo.Channel_Delete";
 

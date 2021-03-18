@@ -9,12 +9,12 @@ namespace DataAccess.Repositories
     public interface IMessagesRepo
     {
 
-        Task<IEnumerable<MessageModel>> GetAllMessagesByChannelId(int id);
+        Task<IEnumerable<MessageModel>> GetAllMessagesByChannelIdAsync(int id);
 
-        Task<int> CreateMessage(MessageModel model);
+        Task<int> CreateMessageAsync(MessageModel model);
 
-        Task<IEnumerable<MessageModel>> GetAllMessages();
+        Task<IEnumerable<MessageModel>> GetAllMessagesAsync();
 
-        Task<int> DeleteMessageById(int id);
+        Task<int> DeleteMessageByIdAsync(int id);
     }
 }

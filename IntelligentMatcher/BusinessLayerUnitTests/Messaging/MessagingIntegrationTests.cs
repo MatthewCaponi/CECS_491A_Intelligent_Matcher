@@ -45,33 +45,33 @@ namespace BusinessLayerUnitTests.Messaging
 
 
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            var messages = await messagesRepo.GetAllMessages();
+            var messages = await messagesRepo.GetAllMessagesAsync();
 
             foreach (var message in messages)
             {
-                await messagesRepo.DeleteMessageById(message.Id);
+                await messagesRepo.DeleteMessageByIdAsync(message.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Messages", 0, connectionString, dataGateway);
 
 
             IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            var channels = await channelsRepo.GetAllChannels();
+            var channels = await channelsRepo.GetAllChannelsAsync();
 
             foreach (var channel in channels)
             {
-                await channelsRepo.DeleteChannelbyId(channel.Id);
+                await channelsRepo.DeleteChannelbyIdAsync(channel.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            var userChannels = await userChannelsRepo.GetAllUserChannels();
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
             foreach (var userChannel in userChannels)
             {
-                await userChannelsRepo.DeleteUserChannelsById(userChannel.Id);
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
@@ -170,33 +170,33 @@ namespace BusinessLayerUnitTests.Messaging
 
 
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            var messages = await messagesRepo.GetAllMessages();
+            var messages = await messagesRepo.GetAllMessagesAsync();
 
             foreach (var message in messages)
             {
-                await messagesRepo.DeleteMessageById(message.Id);
+                await messagesRepo.DeleteMessageByIdAsync(message.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Messages", 0, connectionString, dataGateway);
 
 
             IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            var channels = await channelsRepo.GetAllChannels();
+            var channels = await channelsRepo.GetAllChannelsAsync();
 
             foreach (var channel in channels)
             {
-                await channelsRepo.DeleteChannelbyId(channel.Id);
+                await channelsRepo.DeleteChannelbyIdAsync(channel.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            var userChannels = await userChannelsRepo.GetAllUserChannels();
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
             foreach (var userChannel in userChannels)
             {
-                await userChannelsRepo.DeleteUserChannelsById(userChannel.Id);
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
             }
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
@@ -230,7 +230,7 @@ namespace BusinessLayerUnitTests.Messaging
                 Assert.IsTrue(false);
             }
 
-            IEnumerable<MessageModel> models = await messagesRepo.GetAllMessagesByChannelId(channelId);
+            IEnumerable<MessageModel> models = await messagesRepo.GetAllMessagesByChannelIdAsync(channelId);
 
 
             foreach(MessageModel modelList in models)
@@ -291,10 +291,25 @@ namespace BusinessLayerUnitTests.Messaging
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            await messagingService.CreateChannelAsync(model);
-            await messagingService.DeleteChannelAsync(ChannelId);
+            try
+            {
+                await messagingService.CreateChannelAsync(model);
 
-            ChannelModel channelModel = await channelsRepo.GetChannelbyId(ChannelId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+            try
+            {
+                await messagingService.DeleteChannelAsync(ChannelId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+            ChannelModel channelModel = await channelsRepo.GetChannelbyIdAsync(ChannelId);
             if(channelModel != null)
             {
                 Assert.IsTrue(false);
@@ -324,21 +339,28 @@ namespace BusinessLayerUnitTests.Messaging
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
             await messagingService.CreateChannelAsync(model);
             await messagingService.AddUserToChannelAsync(NewUserId, ChannelId);
-
-            IEnumerable<UserIdModel> users = await messagingService.GetAllUsersInChannelAsync(ChannelId);
-            bool done = false;
-            foreach(UserIdModel user in users)
+            try
             {
-                if(user.UserId == NewUserId)
+                IEnumerable<UserIdModel> users = await messagingService.GetAllUsersInChannelAsync(ChannelId);
+                bool done = false;
+                foreach (UserIdModel user in users)
                 {
-                    Assert.IsTrue(true);
-                    done = true;
+                    if (user.UserId == NewUserId)
+                    {
+                        Assert.IsTrue(true);
+                        done = true;
+                    }
+                }
+                if (done == false)
+                {
+                    Assert.IsTrue(false);
                 }
             }
-            if (done == false)
+            catch
             {
                 Assert.IsTrue(false);
             }
+       
 
 
 
@@ -365,20 +387,29 @@ namespace BusinessLayerUnitTests.Messaging
             await messagingService.CreateChannelAsync(model);
             await messagingService.AddUserToChannelAsync(AddUser, ChannelId);
             await messagingService.RemoveUserFromChannelAsync(ChannelId, AddUser);
-            IEnumerable<UserIdModel> users = await messagingService.GetAllUsersInChannelAsync(ChannelId);
-            bool done = false;
-            foreach (UserIdModel user in users)
+
+            try
             {
-                if (user.UserId == AddUser)
+                IEnumerable<UserIdModel> users = await messagingService.GetAllUsersInChannelAsync(ChannelId);
+                bool done = false;
+                foreach (UserIdModel user in users)
                 {
-                    Assert.IsTrue(false);
-                    done = true;
+                    if (user.UserId == AddUser)
+                    {
+                        Assert.IsTrue(false);
+                        done = true;
+                    }
+                }
+                if (done == false)
+                {
+                    Assert.IsTrue(true);
                 }
             }
-            if (done == false)
+            catch
             {
-                Assert.IsTrue(true);
+                Assert.IsTrue(false);
             }
+   
         }
 
     }

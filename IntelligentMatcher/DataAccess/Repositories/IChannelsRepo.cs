@@ -12,11 +12,11 @@ namespace DataAccess.Repositories
     public interface IChannelsRepo
     {
 
-        Task<IEnumerable<ChannelModel>> GetAllChannels();
-        Task<int> CreateChannel(ChannelModel model);
-        Task<ChannelModel> GetChannelbyId(int id);
-        Task<int> DeleteChannelbyId(int id);
+        Task<IEnumerable<ChannelModel>> GetAllChannelsAsync();
+        Task<int> CreateChannelAsync(ChannelModel model);
+        Task<ChannelModel> GetChannelbyIdAsync(int id);
+        Task<int> DeleteChannelbyIdAsync(int id);
 
-        Task<string> GetChannelOwnerbyId(int id);
+        Task<int> GetChannelOwnerbyIdAsync(int id);
     }
 }

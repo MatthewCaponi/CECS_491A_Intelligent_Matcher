@@ -7,16 +7,16 @@ namespace DataAccess.Repositories
 {
     public interface IUserChannelsRepo
     {
-        Task<int> AddUserChannel(int UserId, int ChannelId);
-        Task<IEnumerable<int>> GetAllChannelsByUserId(int UserId);                               
-       Task<IEnumerable<int>> GetAllUsersByChannelId(int channelId);
+        Task<int> AddUserChannelAsync(int UserId, int ChannelId);
+        Task<IEnumerable<int>> GetAllChannelsByUserIdAsync(int UserId);                               
+       Task<IEnumerable<int>> GetAllUsersByChannelIdAsync(int channelId);
 
-        Task<int> RemoveUserIdChannelId(int userId, int channelId);
+        Task<int> RemoveUserIdChannelIdAsync(int userId, int channelId);
 
-        Task<int> RemoveChannelUsingChannelId(int channelId);
+        Task<int> RemoveChannelUsingChannelIdAsync(int channelId);
 
-        Task<int> DeleteUserChannelsById(int id);
+        Task<int> DeleteUserChannelsByIdAsync(int id);
 
-        Task<IEnumerable<UserChannelModel>> GetAllUserChannels();
+        Task<IEnumerable<UserChannelModel>> GetAllUserChannelsAsync();
     }
 }

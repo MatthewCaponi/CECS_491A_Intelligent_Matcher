@@ -1,19 +1,18 @@
-import { Alert } from 'bootstrap';
 import React, { Component } from 'react';
 
 
-export class MessageBox extends Component {
-  static displayName = MessageBox.name;
+export class MessageBox2 extends Component {
+  static displayName = MessageBox2.name;
 
   constructor(props) {
     super(props);
-    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 1, userRemoveSelect: 0, currentGroupOwner: 0};
+    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 2, userRemoveSelect: 0, currentGroupOwner: 0};
+
 
     this.addUser = this.addUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
     this.createChannel = this.createChannel.bind(this);
     this.deletChannel = this.deletChannel.bind(this);
-    this.changeUser = this.changeUser.bind(this);
 
     this.sendMessage = this.sendMessage.bind(this);
     this.changeChannel = this.changeChannel.bind(this);
@@ -26,12 +25,6 @@ export class MessageBox extends Component {
     this.getGroupData();
 
     
-  }
-
-  changeUser(){
-    this.setState({userId: Number(this.userselect.value)});
-    this.getGroupData();
-
   }
 
    async changeChannel(){
@@ -66,7 +59,6 @@ export class MessageBox extends Component {
 
 
 async deletChannel(){
-
     await fetch('messaging/deletechannel',
     {
         method: "POST",
@@ -82,8 +74,8 @@ async deletChannel(){
 
     this.currentchannelselect.value = "0";
     this.state.currentGroupOwner = 0;
-  
-    window.location.reload();
+    this.getGroupData();
+    this.render();     
 
 }
 
@@ -130,16 +122,8 @@ async removeUser(id){
         
             );
         }
-        if(this.state.currentGroupOwner == -1){
-          this.setState({channelId: 0});
 
-          this.currentchannelselect.value = "0";
-          this.state.currentGroupOwner = 0;
-          window.location.reload();
-    
-        }
 
-        
 
         await fetch('messaging/getuserchannels',
         {
@@ -184,24 +168,6 @@ async removeUser(id){
         }
     
         ); 
-        if(this.state.channelId != 0){
-          var isRemoved = false;
-          this.state.channelUsers.map((channelUsers) =>{  
-              if(channelUsers.userId == this.state.userId){
-                isRemoved = true;
-              }
-          });
-  
-          if(isRemoved == false){
-            this.setState({channelId: 0});
-
-            this.currentchannelselect.value = "0";
-            this.state.currentGroupOwner = 0;
-      
-  
-          }
-        }
-   
     }
 
     async addUser() {
@@ -301,10 +267,6 @@ if(this.state.channelId == 0){
 
     return(<div>
       
-      <input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
-
-
-        <br />
                   <select ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
         
                   <option value="none" selected disabled hidden> 
@@ -354,14 +316,6 @@ if(this.state.userId == this.state.currentGroupOwner){
 
 
     return(<div>
-
-
-<input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
-        
-
-        <br />
-
-
         <table>
         
         
@@ -435,16 +389,7 @@ if(this.state.userId == this.state.currentGroupOwner){
               </div>);
 }else{
 
-    return(
-    
-    
-    <div>
-
-      
-<input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
-    
-          <br />
-
+    return(<div>
         <table>
         
         
