@@ -11,6 +11,10 @@ namespace DataAccess.Repositories
 
         Task<IEnumerable<MessageModel>> GetAllMessagesByChannelId(int id);
 
-        Task<int> CreateAccount(MessageModel model);
+        Task<int> CreateMessage(MessageModel model);
+
+        Task<IEnumerable<MessageModel>> GetAllMessages();
+
+        Task<int> DeleteMessageById(int id);
     }
 }

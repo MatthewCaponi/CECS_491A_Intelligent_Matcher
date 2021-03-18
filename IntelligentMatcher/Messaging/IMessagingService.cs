@@ -9,21 +9,24 @@ namespace Messaging
     public interface IMessagingService
     {
 
-        Task<bool> RemoveUserFromChannel(int channelId, int userId);
-        Task<bool> sendMessageAsync(MessageModel model);
 
-        Task<IEnumerable<MessageModel>> GetAllChannelMessages(int ChannelId);
+         Task<bool> sendMessageAsync(MessageModel model);
+        
 
-        Task<bool> CreateChannel(ChannelModel model);
+         Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int ChannelId);
+        
 
-        Task<bool> DeleteChannel(int id);
+         Task<bool> CreateChannelAsync(ChannelModel model);
 
-        Task<bool> AddUserToChannel(int UserId, int ChannelId);
+         Task<bool> DeleteChannelAsync(int id);
 
-        Task<IEnumerable<UserIdModel>> GetAllUsersInChannel(int channelId);
+         Task<bool> RemoveUserFromChannelAsync(int channelId, int userId);
 
-        Task<IEnumerable<ChannelModel>> GetAllUserChannels(int UserId);
+         Task<bool> AddUserToChannelAsync(int UserId, int ChannelId);
+         Task<IEnumerable<UserIdModel>> GetAllUsersInChannelAsync(int channelId);
 
-        Task<string> GetChannelOwner(int id);
+         Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int UserId);
+
+         Task<string> GetChannelOwnerAsync(int id);
     }
 }

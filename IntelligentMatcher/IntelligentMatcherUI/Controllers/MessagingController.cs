@@ -95,7 +95,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository); 
-            IEnumerable<MessageModel>  models = await messagingService.GetAllChannelMessages(channelId);
+            IEnumerable<MessageModel>  models = await messagingService.GetAllChannelMessagesAsync(channelId);
 
             Console.WriteLine(models);
             return models;
@@ -112,7 +112,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            IEnumerable<UserIdModel> models = await messagingService.GetAllUsersInChannel(channelId);
+            IEnumerable<UserIdModel> models = await messagingService.GetAllUsersInChannelAsync(channelId);
 
             Console.WriteLine(models);
             return models;
@@ -133,7 +133,7 @@ namespace IntelligentMatcherUI.Controllers
 
             UserAccountModel userAccountModel = await userAccountRepository.GetAccountByUsername(model.Username);
 
-            await messagingService.AddUserToChannel(userAccountModel.Id, model.ChannelId);
+            await messagingService.AddUserToChannelAsync(userAccountModel.Id, model.ChannelId);
 
             return true;
         }
@@ -151,7 +151,7 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
 
-            await messagingService.RemoveUserFromChannel(model.ChannelId, model.UserId);
+            await messagingService.RemoveUserFromChannelAsync(model.ChannelId, model.UserId);
 
             return true;
         }
@@ -170,7 +170,7 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
 
-            return await messagingService.GetAllUserChannels(userId);
+            return await messagingService.GetAllUserChannelsAsync(userId);
 
         }
 
@@ -192,7 +192,7 @@ namespace IntelligentMatcherUI.Controllers
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
-            await messagingService.CreateChannel(channel);
+            await messagingService.CreateChannelAsync(channel);
             Console.WriteLine("Channel Made");
             return true;
         }
@@ -211,8 +211,8 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            Console.WriteLine(await messagingService.GetChannelOwner(channelid));
-            return await messagingService.GetChannelOwner(channelid);
+            Console.WriteLine(await messagingService.GetChannelOwnerAsync(channelid));
+            return await messagingService.GetChannelOwnerAsync(channelid);
         }
 
         [HttpPost("deletechannel")]
@@ -228,7 +228,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            await messagingService.DeleteChannel(channelid);
+            await messagingService.DeleteChannelAsync(channelid);
 
             return true;
         }

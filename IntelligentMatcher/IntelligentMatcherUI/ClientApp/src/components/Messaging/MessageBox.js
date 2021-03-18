@@ -6,7 +6,7 @@ export class MessageBox extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 3, userId: 3, userRemoveSelect: 0, currentGroupOwner: 0};
+    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 1, userRemoveSelect: 0, currentGroupOwner: 0};
 
 
     this.addUser = this.addUser.bind(this);
@@ -16,6 +16,11 @@ export class MessageBox extends Component {
 
     this.sendMessage = this.sendMessage.bind(this);
     this.changeChannel = this.changeChannel.bind(this);
+
+
+    setInterval(async () => {  this.getGroupData()  }, 100);
+
+        
 
     this.getGroupData();
 
@@ -28,7 +33,7 @@ export class MessageBox extends Component {
     this.setState({channelId: Number(this.currentchannelselect.value)});
 
 
-    fetch('messaging/getchannelowner',
+    await fetch('messaging/getchannelowner',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -43,16 +48,18 @@ export class MessageBox extends Component {
 
 
 
-
     await this.getGroupData();
     this.render();
+
+    this.currentchannelselect.value = String(this.state.channelId);
+
 
 }
 
 
 
 async deletChannel(){
-    fetch('messaging/deletechannel',
+    await fetch('messaging/deletechannel',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -63,13 +70,13 @@ async deletChannel(){
     }
 
     );
+    this.setState({channelId: 0});
+
+    this.currentchannelselect.value = "0";
+    this.state.currentGroupOwner = 0;
     this.getGroupData();
     this.render();     
-    this.render();      
 
-    this.getGroupData();
-    this.render();   
-    this.render();   
 }
 
 
@@ -79,7 +86,7 @@ async removeUser(id){
     var removeUserModel = {ChannelId: this.state.channelId,  UserId: id};
 
 
-    fetch('messaging/removeuserchannel',
+    await fetch('messaging/removeuserchannel',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -93,16 +100,30 @@ async removeUser(id){
     );
     this.getGroupData();
     this.render();     
-    this.render();      
 
-    this.getGroupData();
-    this.render();   
-    this.render();      
 
 }
 
 
     async getGroupData(){
+
+
+        if(this.state.channelId != 0){
+            await fetch('messaging/getchannelowner',
+            {
+                method: "POST",
+                headers: {'Content-type':'application/json'},
+                body: JSON.stringify(this.state.channelId)
+            }).
+            then(r => r.json())
+            .then(res=>{
+                this.setState({currentGroupOwner: res});
+            }
+        
+            );
+        }
+
+
 
         await fetch('messaging/getuserchannels',
         {
@@ -172,18 +193,7 @@ async removeUser(id){
     
             this.getGroupData();
             this.render();     
-            this.render();      
-     
-            this.getGroupData();
-            this.render();   
-            this.render();    
-            this.getGroupData();
-            this.render();     
-            this.render();      
-     
-            this.getGroupData();
-            this.render();   
-            this.render();        
+  
       
           }
       }
@@ -196,7 +206,7 @@ async removeUser(id){
         
         var ChannelModel = {OwnerId: this.state.userId, Name: this.channelname.value};
     
-        fetch('messaging/createchannel',
+        await fetch('messaging/createchannel',
         {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -211,11 +221,7 @@ async removeUser(id){
     
             this.getGroupData();
             this.render();     
-            this.render();      
-     
-            this.getGroupData();
-            this.render();   
-            this.render();      
+
       
           }
       }
@@ -229,9 +235,9 @@ async removeUser(id){
       if(this.message.value != ""){
 
     
-    var MessageModel = {ChannelId: this.state.channelId, UserId: 1, Message: this.message.value};
+    var MessageModel = {ChannelId: this.state.channelId, UserId: this.state.userId, Message: this.message.value};
 
-    fetch('messaging/sendmessage',
+    await fetch('messaging/sendmessage',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -246,17 +252,61 @@ async removeUser(id){
 
         this.getGroupData();
         this.render();     
-        this.render();      
  
-        this.getGroupData();
-        this.render();   
-        this.render();      
   
       }
   }
 
   render() {
     //setInterval(this.render, 500);
+
+
+
+if(this.state.channelId == 0){
+    
+
+    return(<div>
+      
+                  <select ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
+        
+                  <option value="none" selected disabled hidden> 
+                  Select Channel
+                        </option> 
+                        <button className="btn btn-primary" onClick={this.sendMessage}>Delete Channel</button>
+
+                        {this.state.usersgroups.map(usersgroups =>
+                    <option value={usersgroups.id}>{usersgroups.name}</option>
+        
+          )}
+        
+        
+        
+                </select>
+                <button className="btn btn-primary" onClick={this.deletChannel}>Delete Channel</button>
+
+                <input type="text" name="channelname" placeholder="Channel Name"  ref={(input) => this.channelname = input}/>
+        
+        <button className="btn btn-primary" onClick={this.createChannel}>Create Channel</button>
+        
+        
+        <p>Please Select a Channel</p>
+
+
+              </div>);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if(this.state.userId == this.state.currentGroupOwner){
@@ -300,8 +350,8 @@ if(this.state.userId == this.state.currentGroupOwner){
           {this.state.channel.map(channel =>
             <tr key={channel.id}>
               <td>{channel.message}</td>
-              <td>{channel.time}</td>
-              <td>{channel.userId}</td>
+              <td>{channel.username}({channel.time})</td>
+
             </tr>
           )}
         </tbody>
@@ -372,8 +422,7 @@ if(this.state.userId == this.state.currentGroupOwner){
           {this.state.channel.map(channel =>
             <tr key={channel.id}>
               <td>{channel.message}</td>
-              <td>{channel.time}</td>
-              <td>{channel.userId}</td>
+              <td>{channel.username}({channel.time})</td>
             </tr>
           )}
         </tbody>

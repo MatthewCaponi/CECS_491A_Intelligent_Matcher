@@ -18,6 +18,34 @@ namespace DataAccess.Repositories
             _dataGateway = dataGateway;
             _connectionString = connectionString;
         }
+
+
+
+
+        public async Task<IEnumerable<UserChannelModel>> GetAllUserChannels ()
+        {
+            string storedProcedure = "dbo.UserChannels_Get_All";
+
+            return await _dataGateway.LoadData<UserChannelModel, dynamic>(storedProcedure,
+                                                                          new { },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
+        public async Task<int> DeleteUserChannelsById(int id)
+        {
+            var storedProcedure = "dbo.UserChannels_Delete_ById";
+
+            return await _dataGateway.SaveData(storedProcedure,
+                                         new
+                                         {
+                                             Id = id
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
+
+
+
+
         public async Task<int> AddUserChannel(int UserId, int ChannelId)
         {
             var storedProcedure = "dbo.UserChannel_Add";

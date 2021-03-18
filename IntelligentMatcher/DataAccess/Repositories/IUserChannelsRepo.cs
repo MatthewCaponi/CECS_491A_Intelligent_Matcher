@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-
+using Models;
 namespace DataAccess.Repositories
 {
     public interface IUserChannelsRepo
@@ -14,5 +14,9 @@ namespace DataAccess.Repositories
         Task<int> RemoveUserIdChannelId(int userId, int channelId);
 
         Task<int> RemoveChannelUsingChannelId(int channelId);
+
+        Task<int> DeleteUserChannelsById(int id);
+
+        Task<IEnumerable<UserChannelModel>> GetAllUserChannels();
     }
 }

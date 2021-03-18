@@ -19,6 +19,28 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
+
+        public async Task<IEnumerable<MessageModel>> GetAllMessages()
+        {
+            string storedProcedure = "dbo.Messages_Get_All";
+
+            return await _dataGateway.LoadData<MessageModel, dynamic>(storedProcedure,
+                                                                          new { },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
+        public async Task<int> DeleteMessageById(int id)
+        {
+            var storedProcedure = "dbo.Messages_Delete_ById";
+
+            return await _dataGateway.SaveData(storedProcedure,
+                                         new
+                                         {
+                                             Id = id
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
+
         public async Task<IEnumerable<MessageModel>> GetAllMessagesByChannelId(int channelId)
         {
             string storedProcedure = "dbo.Messages_Get_All_By_ChannelId";
@@ -30,7 +52,7 @@ namespace DataAccess.Repositories
                                                                           _connectionString.SqlConnectionString);
         }
 
-        public async Task<int> CreateAccount(MessageModel model)
+        public async Task<int> CreateMessage(MessageModel model)
         {
             var storedProcedure = "dbo.Messages_Create";
 
@@ -42,6 +64,7 @@ namespace DataAccess.Repositories
             p.Add("Message", model.Message);
             p.Add("Time", model.Time);
             p.Add("Date", model.Date);
+            p.Add("Username", model.Username);
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 

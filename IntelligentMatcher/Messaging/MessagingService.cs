@@ -37,7 +37,10 @@ namespace Messaging
                 model.ChannelMessageId = models.Count();
                 model.Date = DateTime.Now;
                 model.Time = DateTime.Now.ToString().Split(' ')[1];
-                await _messagesRepo.CreateAccount(model);
+
+                UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(model.UserId);
+                model.Username = userAccountModel.Username;
+                await _messagesRepo.CreateMessage(model);
                 return true;
             }
             catch
@@ -48,7 +51,7 @@ namespace Messaging
 
         }
 
-        public async Task<IEnumerable<MessageModel>> GetAllChannelMessages(int ChannelId)
+        public async Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int ChannelId)
         {
             IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelId(ChannelId);
 
@@ -56,7 +59,7 @@ namespace Messaging
 
         }
 
-        public async Task<bool> CreateChannel(ChannelModel model)
+        public async Task<bool> CreateChannelAsync(ChannelModel model)
         {
 
             await _userChannelsRepo.AddUserChannel(model.OwnerId, await _channelsRepo.CreateChannel(model));
@@ -64,7 +67,7 @@ namespace Messaging
             return true;
         }
 
-        public async Task<bool> DeleteChannel(int id)
+        public async Task<bool> DeleteChannelAsync(int id)
         {
 
             await _channelsRepo.DeleteChannelbyId(id);
@@ -72,21 +75,21 @@ namespace Messaging
             return true;
         }
 
-        public async Task<bool> RemoveUserFromChannel(int channelId, int userId)
+        public async Task<bool> RemoveUserFromChannelAsync(int channelId, int userId)
         {
 
             await _userChannelsRepo.RemoveUserIdChannelId(userId, channelId);
             return true;
         }
 
-        public async Task<bool> AddUserToChannel(int UserId, int ChannelId)
+        public async Task<bool> AddUserToChannelAsync(int UserId, int ChannelId)
         {
 
             await _userChannelsRepo.AddUserChannel(UserId, ChannelId);
             return true;
         }
 
-        public async Task<IEnumerable<UserIdModel>> GetAllUsersInChannel(int channelId)
+        public async Task<IEnumerable<UserIdModel>> GetAllUsersInChannelAsync(int channelId)
         {
             IEnumerable<int> userIds = await _userChannelsRepo.GetAllUsersByChannelId(channelId);
             List<UserIdModel> userIdModels = new List<UserIdModel>();
@@ -106,7 +109,7 @@ namespace Messaging
 
         }
 
-        public async Task<IEnumerable<ChannelModel>> GetAllUserChannels(int UserId)
+        public async Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int UserId)
         {
             IEnumerable<int> channelIds = await _userChannelsRepo.GetAllChannelsByUserId(UserId);
             List<ChannelModel> channelModelsList = new List<ChannelModel>();
@@ -127,7 +130,7 @@ namespace Messaging
 
         }
 
-        public async Task<string> GetChannelOwner(int id)
+        public async Task<string> GetChannelOwnerAsync(int id)
         {
             return await _channelsRepo.GetChannelOwnerbyId(id);
         }

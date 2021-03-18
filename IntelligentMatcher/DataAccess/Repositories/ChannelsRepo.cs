@@ -19,6 +19,18 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
+
+
+        public async Task<IEnumerable<ChannelModel>> GetAllChannels()
+        {
+            string storedProcedure = "dbo.Channels_Get_All";
+
+            return await _dataGateway.LoadData<ChannelModel, dynamic>(storedProcedure,
+                                                                          new { },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
+
         public async Task<int> CreateChannel(ChannelModel model)
         {
             var storedProcedure = "dbo.Channels_Create";
