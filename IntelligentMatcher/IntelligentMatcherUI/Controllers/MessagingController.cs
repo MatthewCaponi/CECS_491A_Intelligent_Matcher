@@ -200,7 +200,6 @@ namespace IntelligentMatcherUI.Controllers
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
 
-            Console.WriteLine(await messagingService.GetChannelOwnerAsync(channelid));
 
             int ownerId = await messagingService.GetChannelOwnerAsync(channelid);
             if (ownerId == 0)

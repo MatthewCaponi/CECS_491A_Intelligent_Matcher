@@ -27,7 +27,7 @@ export class MessageBox extends Component {
 
     
   }
-
+  
   changeUser(){
     this.setState({userId: Number(this.userselect.value)});
     this.getGroupData();
@@ -293,235 +293,141 @@ async removeUser(id){
 
   render() {
     //setInterval(this.render, 500);
+    const container = {
+      backgroundColor: '#202225'
+
+    };
+    const chatchild = {
+      backgroundColor: '#202225',
+
+      width: '70%',
+      float: 'left',
+  };
+  const sidebarcild = {
+    float: 'left',
+  };
+  const channelsettings = {
+    backgroundColor: '#18191C',
+
+    width: '100%',
+    height: '5vh'
+  };
+  const messages = {
+    backgroundColor: '#36393F',
+
+    width: '100%',
+    height: '75vh'
+  };
+  const messageinput = {
+    backgroundColor: '#202225',
+
+    width: '100%',
+    height: '5vh'
+  };
+  const users = {
+    backgroundColor: '#2F3136',
+
+    width: '100%',
+    height: '75vh'
+  };
+  const adduser = {
+    backgroundColor: '#2F3136',
+
+    width: '100%',
+    height: '10vh'
+  };
+
+  const messagetablestyle = {
+    color: "white",
+    display: 'block',
+    height: '75vh',
+    overflowY: "auto"
 
 
-
-if(this.state.channelId == 0){
-    
-
-    return(<div>
-      
-      <input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
-
-
-        <br />
-                  <select ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
-        
-                  <option value="none" selected disabled hidden> 
-                  Select Channel
-                        </option> 
-                        <button className="btn btn-primary" onClick={this.sendMessage}>Delete Channel</button>
-
-                        {this.state.usersgroups.map(usersgroups =>
-                    <option value={usersgroups.id}>{usersgroups.name}</option>
-        
-          )}
-        
-        
-        
-                </select>
-                <button className="btn btn-primary" onClick={this.deletChannel}>Delete Channel</button>
-
-                <input type="text" name="channelname" placeholder="Channel Name"  ref={(input) => this.channelname = input}/>
-        
-        <button className="btn btn-primary" onClick={this.createChannel}>Create Channel</button>
-        
-        
-        <p>Please Select a Channel</p>
+  };
+  const usertablestyle = {
+    color: "white",
+    display: 'block',
+    height: '75vh',
+    overflowY: "auto"
 
 
-              </div>);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if(this.state.userId == this.state.currentGroupOwner){
-
-
-
-
-
-    return(<div>
-
-
-<input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
-        
-
-        <br />
-
-
-        <table>
-        
-        
-        <td>
-                  <select ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
-        
-                  <option value="none" selected disabled hidden> 
-                  Select Channel
-                        </option> 
-                        <button className="btn btn-primary" onClick={this.sendMessage}>Delete Channel</button>
-
-                        {this.state.usersgroups.map(usersgroups =>
-                    <option value={usersgroups.id}>{usersgroups.name}</option>
-        
-          )}
-        
-        
-        
-                </select>
-                <button className="btn btn-primary" onClick={this.deletChannel}>Delete Channel</button>
-
-                <input type="text" name="channelname" placeholder="Channel Name"  ref={(input) => this.channelname = input}/>
-        
-        <button className="btn btn-primary" onClick={this.createChannel}>Create Channel</button>
-        
-        
-        
-        
-        <table className='table table-striped' aria-labelledby="tabelLabel">
-        
-        <tbody>
-          {this.state.channel.map(channel =>
-            <tr key={channel.id}>
-              <td>{channel.message}</td>
-              <td>{channel.username}({channel.time})</td>
-
-            </tr>
-          )}
-        </tbody>
-        </table>
-        <input type="text" name="message"  ref={(input) => this.message = input}/>
-        
-        <button className="btn btn-primary" onClick={this.sendMessage}>Send Message</button>
-        
-        </td>
-        <td>
-        
-        
-        
-        
-                <table className='table table-striped' aria-labelledby="tabelLabel">
-        <tbody>
-          {this.state.channelUsers.map(channelUsers =>
-            <tr>     
-            
-             <td>{channelUsers.username}</td>
-        <td> <a           onClick={() => {
-        this.removeUser(channelUsers.userId);
-                }}  style={{cursor: 'pointer'}}>Remove</a>
-        </td>
-            </tr>
-          )}
-        </tbody>
-        </table>
-        
-        <input type="text" name="username"  ref={(input) => this.username = input}/>
-        
-        <button className="btn btn-primary" onClick={this.addUser}>Add User</button>
-        </td>
-        </table>
-              </div>);
-}else{
-
+  };
     return(
-    
-    
-    <div>
 
-      
-<input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
-    
-          <br />
+  <div>
+    <input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
+  <div style={container}>
 
-        <table>
-        
-        
-        <td>
-                  <select ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
-        
-                  <option value="none" selected disabled hidden> 
-                  Select Channel
-                        </option> 
-        
-                        {this.state.usersgroups.map(usersgroups =>
-                    <option value={usersgroups.id}>{usersgroups.name}</option>
-        
-          )}
-        
-        
-        
-                </select>
-        
-                <input type="text" name="channelname" placeholder="Channel Name"  ref={(input) => this.channelname = input}/>
-        
-        <button className="btn btn-primary" onClick={this.createChannel}>Create Channel</button>
-        
-        
-        
-        
-        <table className='table table-striped' aria-labelledby="tabelLabel">
-        
-        <tbody>
-          {this.state.channel.map(channel =>
-            <tr key={channel.id}>
-              <td>{channel.message}</td>
-              <td>{channel.username}({channel.time})</td>
+    <div style={chatchild}>
+      <div style={channelsettings}>
+      <form class="form-inline justify-content-center">
+
+        <select className=" w-25" ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
+          <option value="none" selected disabled hidden> 
+            Select Channel
+          </option> 
+          <button className=" btn btn-dark  w-25" onClick={this.sendMessage}>Delete Channel</button>
+            {this.state.usersgroups.map(usersgroups =>
+              <option value={usersgroups.id}>{usersgroups.name}</option>
+            )}
+          </select>
+          <button className=" btn btn-dark w-25" onClick={this.deletChannel}>Delete Channel</button>
+          <input type="text" name="channelname" className=" w-25" placeholder="Channel Name"  ref={(input) => this.channelname = input}/>
+          <button className=" btn btn-dark  w-25" onClick={this.createChannel}>Create Channel</button>
+          </form>
+
+        </div>
+      <div style={messages}>
+        <table className="messages" style={messagetablestyle}  > 
+          <tbody>
+            {this.state.channel.map(messageData =>
+            <tr>
+              <tr>
+                <td>{messageData.username}({messageData.time}):</td>
+              </tr>
+              <tr>
+                <td>{messageData.message}</td>
+              </tr>
             </tr>
-          )}
-        </tbody>
+            )}
+          </tbody>
         </table>
-        <input type="text" name="message"  ref={(input) => this.message = input}/>
-        
-        <button className="btn btn-primary" onClick={this.sendMessage}>Send Message</button>
-        
-        </td>
-        <td>
-        
-        
-        
-        
-                <table className='table table-striped' aria-labelledby="tabelLabel">
+      </div>
+      <div style={messageinput}>
+        <input type="text" name="message" className="input-dark w-75 h-100" ref={(input) => this.message = input}/>      
+        <button className="btn btn-dark w-25 h-100"  onClick={this.sendMessage}>Send Message</button>
+      </div>
+
+    </div>
+    <div style={sidebarcild}>
+    <div style={users}>
+      <table className='table table-striped' aria-labelledby="tabelLabel" style={usertablestyle}>
         <tbody>
           {this.state.channelUsers.map(channelUsers =>
-            <tr>     
-            
-             <td>{channelUsers.username}</td>
-  
+            <tr>        
+              <td>{channelUsers.username}</td>
+              <td> <a           onClick={() => {
+                this.removeUser(channelUsers.userId);
+                  }}  style={{cursor: 'pointer'}}>Remove</a>
+              </td>
             </tr>
-          )}
+            )}
         </tbody>
-        </table>
-        
-        
-        </td>
-        </table>
-              </div>);
-    
-}
+      </table>
+    </div>
+    <div style={adduser}>        
+      <input type="text" className="w-100 h-50" name="username"  ref={(input) => this.username = input}/>
+      <br />      
+      <button className="btn btn-dark w-100 h-50" onClick={this.addUser}>Add User</button>
+    </div>
 
+    </div>
 
+  </div>
 
+</div>
 
-
-
-
-
-
-
-
-
-
+    );
   }
 }
