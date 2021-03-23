@@ -406,10 +406,10 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            Result<int> registry = new Result<int>();
+            ResultModel<int> registry = new ResultModel<int>();
             registry.Result = expectedId;
             registry.ErrorMessage = error;
-            var expectedResult = new Tuple<bool, Result<int>>(true, registry);
+            var expectedResult = new Tuple<bool, ResultModel<int>>(true, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService);
@@ -457,9 +457,9 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            Result<int> registry = new Result<int>();
+            ResultModel<int> registry = new ResultModel<int>();
             registry.Result = expectedId;
-            var expectedResult = new Tuple<bool, Result<int>>(true, registry);
+            var expectedResult = new Tuple<bool, ResultModel<int>>(true, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService);

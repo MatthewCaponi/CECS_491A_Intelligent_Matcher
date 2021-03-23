@@ -22,21 +22,21 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<WebUserAccountModel>> GetAllUserAccounts()
+        public async Task<ActionResult<List<WebUserAccountModel>>> GetAllUserAccounts()
         {
-            return  _userManager.GetAllUserAccounts().Result.SuccessValue;
+            return (await _userManager.GetAllUserAccounts()).SuccessValue;
         }
    
         [HttpGet]
-        public ActionResult<List<WebUserProfileModel>> GetAllUserProfiles()
+        public async Task<ActionResult<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
-            return _userManager.GetAllUserProfiles().Result.SuccessValue;
+            return (await _userManager.GetAllUserProfiles()).SuccessValue;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<WebUserProfileModel> GetUserProfile(int id)
+        public async Task<ActionResult<WebUserProfileModel>> GetUserProfile(int id)
         {
-            return _userManager.GetUserProfile(id).Result.SuccessValue;
+            return (await _userManager.GetUserProfile(id)).SuccessValue;
         }
     }
 }
