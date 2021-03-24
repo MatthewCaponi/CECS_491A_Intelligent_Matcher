@@ -15,7 +15,7 @@ namespace WebApi
         {
                      
             Seed seed = new Seed();
-            await seed.SeedUsers(20);
+            await seed.SeedUsers(100);
             CreateHostBuilder(args).Build().Run();
 
         }

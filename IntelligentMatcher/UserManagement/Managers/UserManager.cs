@@ -43,7 +43,6 @@ namespace IntelligentMatcher.UserManagement
         public async Task<Result<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
             var result = new Result<List<WebUserProfileModel>>();
-
             result.Success = true;
             result.SuccessValue = await _userProfileService.GetAllUsers();
             return result;
