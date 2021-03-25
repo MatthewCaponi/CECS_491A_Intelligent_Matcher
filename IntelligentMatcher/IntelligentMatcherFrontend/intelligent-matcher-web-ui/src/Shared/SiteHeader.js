@@ -13,7 +13,6 @@ const useStyles = makeStyles(() => ({
         marginLeft: 5,
         marginRight: 5,
         size: 200
-
     }
   }));
 
@@ -23,15 +22,11 @@ function SiteHeader() {
         <AppBar position="static">
             <Toolbar>
                 <FontAwesomeIcon icon={faMoon} className={classes.spacingStyles}/>
-                <Typography className={classes.typographyStyles}>
+                <Typography className={classes.typographyStyles} style={{fontSize: 18}}>
                     InfiniMuse
                 </Typography>        
             </Toolbar>
         </AppBar>
-        
-        
-
-  
     )
 }
 export default SiteHeader;

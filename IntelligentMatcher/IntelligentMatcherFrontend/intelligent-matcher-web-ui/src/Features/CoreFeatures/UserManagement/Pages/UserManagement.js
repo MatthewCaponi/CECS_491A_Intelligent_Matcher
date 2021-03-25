@@ -22,13 +22,8 @@ function UserManagement () {
                     </Grid>
                     <Grid item sm={2}/>       
             </Grid>
-            
-        </div>
-
-        
+        </div>   
     )
-
-
 }
 
 export default UserManagement;

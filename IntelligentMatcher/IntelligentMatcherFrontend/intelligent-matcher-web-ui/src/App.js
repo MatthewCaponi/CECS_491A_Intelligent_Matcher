@@ -39,7 +39,6 @@ function App() {
             <SiteFooter/>
           </Grid>
     </ThemeProvider>
-      
     </div>
   );
 }

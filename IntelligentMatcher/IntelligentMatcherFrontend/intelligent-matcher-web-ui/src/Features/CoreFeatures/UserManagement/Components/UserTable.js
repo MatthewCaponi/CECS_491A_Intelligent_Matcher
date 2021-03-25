@@ -12,7 +12,7 @@ import theme from '../../../../Shared/Theme';
 
 const useStyles = makeStyles({
     container: {
-      maxHeight: 440
+      maxHeight: 600
     }
   });
 
@@ -27,7 +27,6 @@ const useStyles = makeStyles({
 }))(TableCell);
   
 function UserTable(props) {
-
     const classes = useStyles();
 
     if (props.rows.length === 0) {
@@ -39,9 +38,9 @@ function UserTable(props) {
     return (
         <Box boxShadow={4}>
             <TableContainer component={Paper} className={classes.container}>
-                    <Table  stickyHeader aria-label="simple table">
+                    <Table stickyHeader aria-label="simple table">
                         <TableHead>
-                            <TableRow className={classes.head}>
+                            <TableRow>
                                 <StyledTableCell>Id</StyledTableCell>
                                 <StyledTableCell align="center">Username</StyledTableCell>
                                 <StyledTableCell align="center">Email</StyledTableCell>
@@ -53,7 +52,7 @@ function UserTable(props) {
                         </TableHead>
                         <TableBody>
                             {(props.rows.map(user => (
-                                <TableRow key={user.id}>
+                                <TableRow hover key={user.id}>
                                     <TableCell>{user.id}</TableCell>
                                     <TableCell align="center">{user.username}</TableCell>
                                     <TableCell align="center">{user.emailAddress}</TableCell>
@@ -66,8 +65,7 @@ function UserTable(props) {
                         </TableBody>
                     </Table>
             </TableContainer>
-        </Box>
-        
+        </Box>     
     )
 }
 
