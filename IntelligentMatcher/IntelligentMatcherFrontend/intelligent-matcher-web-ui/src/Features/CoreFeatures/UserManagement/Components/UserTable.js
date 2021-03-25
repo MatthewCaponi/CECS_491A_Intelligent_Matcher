@@ -10,10 +10,9 @@ function UserTable(props) {
         )
     }
 
-
     return (
-        <div className="userTable">
-            <Table className="userTable" inverted selectable size="small">
+        <div className=".container__table">
+            <Table inverted selectable size="small">
                 <Table.Header className="userHeader">
                     <Table.Row>
                         <Table.HeaderCell>Id</Table.HeaderCell>
@@ -39,9 +38,7 @@ function UserTable(props) {
                     )))}
                 </Table.Body>
             </Table>
-        </div>
-        
-        
+        </div>  
     )
 
 }

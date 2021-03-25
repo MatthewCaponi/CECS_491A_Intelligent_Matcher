@@ -7,13 +7,10 @@ import SiteHeader from './Shared/SiteHeader';
 function App() {
   return (
     <div className="App">
-    
       <SiteHeader />
       <Container >
         <UserManagement />
       </Container>
-      
-
     </div>
   );
 }
