@@ -1,6 +1,6 @@
 import { Tab } from 'material-ui'
 import React, {createRef} from 'react'
-import { Table, Sticky } from 'semantic-ui-react'
+import Table from 'react-bootstrap/Table';
 import './UserTable.css'
 
 function UserTable(props) {
@@ -10,38 +10,35 @@ function UserTable(props) {
         )
     }
 
-
     return (
-        <div className="userTable">
-            <Table className="userTable" inverted selectable size="small">
-                <Table.Header className="userHeader">
-                    <Table.Row>
-                        <Table.HeaderCell>Id</Table.HeaderCell>
-                        <Table.HeaderCell>Username</Table.HeaderCell>
-                        <Table.HeaderCell>Email</Table.HeaderCell>
-                        <Table.HeaderCell>Role</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                        <Table.HeaderCell>Creation Date</Table.HeaderCell>
-                        <Table.HeaderCell>Last Updated</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
+        <div >
+            <Table bordered hover className="container__table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Creation Date</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {(props.rows.map(user => (
-                        <Table.Row className="userRow" key={user.id}>
-                            <Table.Cell>{user.id}</Table.Cell>
-                            <Table.Cell>{user.username}</Table.Cell>
-                            <Table.Cell>{user.emailAddress}</Table.Cell>
-                            <Table.Cell>{user.accountType}</Table.Cell>
-                            <Table.Cell>{user.accountStatus}</Table.Cell>
-                            <Table.Cell>{user.creationDate}</Table.Cell>
-                            <Table.Cell>{user.updationDate}</Table.Cell>
-                        </Table.Row>
+                        <tr className="userRow" key={user.id}>
+                            <td>{user.id}</td>
+                            <td>{user.username}</td>
+                            <td>{user.emailAddress}</td>
+                            <td>{user.accountType}</td>
+                            <td>{user.accountStatus}</td>
+                            <td>{user.creationDate}</td>
+                            <td>{user.updationDate}</td>
+                        </tr>
                     )))}
-                </Table.Body>
+                </tbody>
             </Table>
         </div>
-        
-        
     )
 
 }

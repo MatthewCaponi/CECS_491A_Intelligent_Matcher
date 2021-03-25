@@ -1,19 +1,17 @@
 import React from 'react';
-import { Header, Segment, Icon } from 'semantic-ui-react'
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMoon } from '@fortawesome/free-solid-svg-icons';
+import './SiteHeader.css'
 
 
 function SiteHeader() {
     return (
-        <Segment inverted>
-            <Header as='header' inverted color='grey'>
-                <Icon name='moon' />
-                InfiniMuse
-            </Header>
-        </Segment>
-        
-        
-
-  
+        <Navbar bg="dark" variant="dark" fixed="top" expand="lg">
+            <FontAwesomeIcon icon={faMoon} className="component-moon" />
+            <Navbar.Brand>InfiniMuse</Navbar.Brand>
+        </Navbar>
     )
 }
 export default SiteHeader;

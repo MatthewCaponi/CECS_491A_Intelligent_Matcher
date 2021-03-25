@@ -1,6 +1,4 @@
-import { activeGridFilterItemsSelector } from '@material-ui/data-grid';
 import React, {useState, useEffect} from 'react';
-import UserList from "../Components/UserList";
 import UserTable from '../Components/UserTable'
 
 function UserManagement () {
@@ -17,12 +15,8 @@ function UserManagement () {
     return (
         <div>
             <UserTable rows={users}/>
-        </div>
-
-        
+        </div>     
     )
-
-
 }
 
 export default UserManagement;
