@@ -10,9 +10,15 @@ function UserTable(props) {
         )
     }
 
+    const userstyle = {
+        display: 'block',
+        height: '75vh',
+        overflowY: "auto"
+      };
+
     return (
         <div >
-            <Table bordered hover className="container__table">
+            <Table bordered hover style={userstyle}>
                 <thead>
                     <tr>
                         <th>Id</th>
