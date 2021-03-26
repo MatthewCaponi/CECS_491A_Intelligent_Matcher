@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Security\Security.csproj" />
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
+    <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
