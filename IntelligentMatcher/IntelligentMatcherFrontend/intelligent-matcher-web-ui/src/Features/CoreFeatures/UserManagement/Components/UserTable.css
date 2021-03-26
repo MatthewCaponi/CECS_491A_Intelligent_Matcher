@@ -4,7 +4,6 @@
 }
 
 .userRow {
-    background-color: lightgray;
     border-width: 10px;
     border-style: solid;
 
@@ -12,6 +11,6 @@
 }
 
 .container__table {
-    height: 500px;
+    height: 100px;
     overflow-y: scroll;
 }

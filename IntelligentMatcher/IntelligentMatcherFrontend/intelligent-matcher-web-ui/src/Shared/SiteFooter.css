@@ -1,0 +1,11 @@
+.footerContainer {
+    background-color: #161616;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-radius: 100px;
+}
+
+.headerContent {
+    font-size: 13px !important;
+}

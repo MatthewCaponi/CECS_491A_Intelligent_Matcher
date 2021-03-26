@@ -5,6 +5,7 @@ body {
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100vh;
   }
   
   code {
@@ -12,3 +13,8 @@ body {
       monospace;
   }
   
+ #root {
+  height: 100%;
+  padding-bottom:60px;
+
+}
