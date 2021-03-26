@@ -27,7 +27,7 @@ namespace Messaging
             _userChannelsRepo = userChannelsRepo;
             _userAccountRepository = userAccountRepository;
         }
-        public async Task<bool> sendMessageAsync(MessageModel model)
+        public async Task<bool> SendMessageAsync(MessageModel model)
         {
 
             try
@@ -51,11 +51,13 @@ namespace Messaging
 
         }
 
-        public async Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int ChannelId)
+        public async Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int channelId)
         {
-            IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelIdAsync(ChannelId);
 
-            return models;
+                IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelIdAsync(channelId);
+
+                return models;
+
 
         }
 
@@ -95,11 +97,11 @@ namespace Messaging
 
         }
 
-        public async Task<bool> AddUserToChannelAsync(int UserId, int ChannelId)
+        public async Task<bool> AddUserToChannelAsync(int userId, int channelId)
         {
             try
             {
-                await _userChannelsRepo.AddUserChannelAsync(UserId, ChannelId);
+                await _userChannelsRepo.AddUserChannelAsync(userId, channelId);
                 return true;
             }
             catch
@@ -129,9 +131,9 @@ namespace Messaging
 
         }
 
-        public async Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int UserId)
+        public async Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int userId)
         {
-            IEnumerable<int> channelIds = await _userChannelsRepo.GetAllChannelsByUserIdAsync(UserId);
+            IEnumerable<int> channelIds = await _userChannelsRepo.GetAllChannelsByUserIdAsync(userId);
             List<ChannelModel> channelModelsList = new List<ChannelModel>();
             foreach (int channelId in channelIds)
             {

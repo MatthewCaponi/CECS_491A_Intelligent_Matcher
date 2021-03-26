@@ -76,7 +76,7 @@ namespace IntelligentMatcherUI.Controllers
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
-            await messagingService.sendMessageAsync(model);
+            await messagingService.SendMessageAsync(model);
             return true;
         }
 

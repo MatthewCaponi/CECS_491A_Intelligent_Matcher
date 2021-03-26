@@ -10,10 +10,10 @@ namespace Messaging
     {
 
 
-         Task<bool> sendMessageAsync(MessageModel model);
+         Task<bool> SendMessageAsync(MessageModel model);
         
 
-         Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int ChannelId);
+         Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int channelId);
         
 
          Task<bool> CreateChannelAsync(ChannelModel model);
@@ -22,10 +22,10 @@ namespace Messaging
 
          Task<bool> RemoveUserFromChannelAsync(int channelId, int userId);
 
-         Task<bool> AddUserToChannelAsync(int UserId, int ChannelId);
+         Task<bool> AddUserToChannelAsync(int userId, int channelId);
          Task<IEnumerable<UserIdModel>> GetAllUsersInChannelAsync(int channelId);
 
-         Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int UserId);
+         Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int userId);
 
          Task<int> GetChannelOwnerAsync(int id);
     }
