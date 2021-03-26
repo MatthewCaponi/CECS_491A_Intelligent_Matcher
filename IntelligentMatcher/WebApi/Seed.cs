@@ -22,7 +22,6 @@ namespace WebApi
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
-
             var accounts = await userAccountRepository.GetAllAccounts();            
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();

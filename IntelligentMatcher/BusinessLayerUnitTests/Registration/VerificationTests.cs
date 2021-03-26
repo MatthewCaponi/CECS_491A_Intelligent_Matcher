@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using TestHelper;
 using UserManagement.Services;
 
 namespace BusinessLayerUnitTests.Registration
@@ -21,6 +22,7 @@ namespace BusinessLayerUnitTests.Registration
         [TestInitialize]
         public async Task Init()
         {
+            await TestCleaner.CleanDatabase();
             var numTestRows = 10;
 
             IDataGateway dataGateway = new SQLServerGateway();

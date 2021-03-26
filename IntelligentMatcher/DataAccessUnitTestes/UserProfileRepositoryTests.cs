@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TestHelper;
 
 namespace DataAccessUnitTestes
 {
@@ -17,6 +18,7 @@ namespace DataAccessUnitTestes
         [TestInitialize()]
         public async Task Init()
         {
+            await TestCleaner.CleanDatabase();
             var numTestRows = 20;
 
             IDataGateway dataGateway = new SQLServerGateway();

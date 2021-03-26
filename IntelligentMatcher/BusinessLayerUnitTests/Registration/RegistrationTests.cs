@@ -17,6 +17,7 @@ using Registration.Services;
 using BusinessModels;
 using Security;
 using System.Diagnostics;
+using TestHelper;
 
 namespace BusinessLayerUnitTests.Registration
 {
@@ -28,6 +29,7 @@ namespace BusinessLayerUnitTests.Registration
         [TestInitialize]
         public async Task Init()
         {
+            await TestCleaner.CleanDatabase();
             var numTestRows = 10;
 
             IDataGateway dataGateway = new SQLServerGateway();

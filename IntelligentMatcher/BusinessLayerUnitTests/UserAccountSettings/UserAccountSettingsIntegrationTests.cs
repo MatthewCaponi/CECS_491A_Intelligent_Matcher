@@ -16,6 +16,8 @@ using UserManagement.Services;
 using Services;
 using UserAccountSettings;
 using Moq;
+using TestHelper;
+
 namespace BusinessLayerUnitTests.UserAccountSettings
 {
     [TestClass]
@@ -24,7 +26,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         [TestInitialize()]
         public async Task Init()
         {
-
+            await TestCleaner.CleanDatabase();
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
