@@ -1,32 +1,16 @@
+  
 import React from 'react';
-import { AppBar, Icon, Toolbar, Typography, Grid } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMoon } from '@fortawesome/free-solid-svg-icons';
+import { Header, Segment, Icon } from 'semantic-ui-react'
 
-const useStyles = makeStyles(() => ({
-    typographyStyles: {
-      flex: 0,
-      fontSize: 20
-    },
-    spacingStyles: {
-        marginLeft: 5,
-        marginRight: 5,
-        size: 200
-    }
-  }));
 
 function SiteHeader() {
-    const classes = useStyles();
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <FontAwesomeIcon icon={faMoon} className={classes.spacingStyles}/>
-                <Typography className={classes.typographyStyles} style={{fontSize: 18}}>
-                    InfiniMuse
-                </Typography>        
-            </Toolbar>
-        </AppBar>
+        <Segment inverted>
+            <Header as='header' inverted color='grey'>
+                <Icon name='moon' />
+                InfiniMuse
+            </Header>
+        </Segment>
     )
 }
 export default SiteHeader;
