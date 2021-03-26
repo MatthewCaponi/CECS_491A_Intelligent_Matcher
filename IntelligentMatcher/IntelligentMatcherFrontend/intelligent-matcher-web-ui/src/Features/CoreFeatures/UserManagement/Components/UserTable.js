@@ -3,6 +3,7 @@ import React, {createRef} from 'react'
 import { Table, Sticky } from 'semantic-ui-react'
 import './UserTable.css'
 
+
 function UserTable(props) {
     if (props.rows.length === 0) {
         return (
@@ -10,9 +11,16 @@ function UserTable(props) {
         )
     }
 
+    const userstyle = {
+        display: 'block',
+    height: '75vh',
+    overflowY: "auto"
+
+      };
+
     return (
-        <div className=".container__table">
-            <Table inverted selectable size="small">
+        <div>
+            <Table inverted selectable size="small" style={userstyle}>
                 <Table.Header className="userHeader">
                     <Table.Row>
                         <Table.HeaderCell>Id</Table.HeaderCell>

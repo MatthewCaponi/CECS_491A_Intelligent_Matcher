@@ -10,10 +10,6 @@ function SiteHeader() {
                 InfiniMuse
             </Header>
         </Segment>
-        
-        
-
-  
     )
 }
 export default SiteHeader;
