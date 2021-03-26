@@ -1,13 +1,22 @@
 import { Tab } from 'material-ui'
-import React, {createRef} from 'react'
-import { Table, Grid } from 'semantic-ui-react'
+import React, {createRef, useState} from 'react'
+import { Table, Grid, Dimmer, Loader, Segment, Container } from 'semantic-ui-react'
 import './UserTable.css'
 
 
 function UserTable(props) {
+    const [timedOut, setTimedOut] = useState('False');
     if (props.rows.length === 0) {
         return (
-            <h1>No users found</h1>
+            <Grid container centered>
+                <Grid.Row />
+                <Grid.Row />
+                <Grid.Row>
+                    <Dimmer inverted active>
+                        <Loader size="massive"/>
+                    </Dimmer>
+                </Grid.Row>          
+            </Grid>    
         )
     }
 

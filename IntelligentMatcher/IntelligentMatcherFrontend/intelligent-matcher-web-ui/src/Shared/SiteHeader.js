@@ -21,16 +21,16 @@ function SiteHeader() {
         <Segment inverted>
             <Grid columns={12}>
                 <Grid.Column mobile={2} tablet={2} container textAlign="left" verticalAlign="center" width={1}>
-                    <Header inverted color="grey">                      
+                    <Header href="http://localhost:3000" inverted color="grey">                      
                         <Icon name='moon' />
                         InfiniMuse
                     </Header>  
                 </Grid.Column>
                 <Grid.Column container>
                 <Menu inverted pointing secondary>
-                    <Menu.Item name='home' />
-                    <Menu.Item name='profile' />
-                    <Menu.Item name='Listings' />
+                    <Menu.Item href="http://localhost:3000" name='home' />
+                    <Menu.Item link name='profile' />
+                    <Menu.Item link name='Listings' />
                     </Menu>
                 </Grid.Column>
                 <Grid.Column container>
@@ -42,7 +42,7 @@ function SiteHeader() {
                 <Grid.Column container only="computer" />
                 <Grid.Column container only="computer" only="tablet"/>
                 <Grid.Column container floated="right" verticalAlign="center" width={2}>           
-                    <Button className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
+                    <Button href="http://localhost:3000/UserManagement" className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
                         Admin
                     </Button>
                 </Grid.Column>
@@ -55,20 +55,18 @@ function SiteHeader() {
                             <Button icon='bell' className="message"/>
                         </Grid.Column>
                         <Grid.Column >
-
-
-                        <Dropdown
-                                trigger={trigger}
-                                direction="left"
-                                content = "none"
-                            >
-                                <Dropdown.Menu>
-                                <Dropdown.Item icon='user' content='Account' />
-                                <Dropdown.Item icon='privacy' text='Privacy' />
-                                <Dropdown.Item icon='help' text='Help' />
-                                <Dropdown.Item icon='logout' text='Logout' />
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            <Dropdown
+                                    trigger={trigger}
+                                    direction="left"
+                                    content = "none"
+                                >
+                                    <Dropdown.Menu>
+                                    <Dropdown.Item icon='user' content='Account' />
+                                    <Dropdown.Item icon='privacy' text='Privacy' />
+                                    <Dropdown.Item icon='help' text='Help' />
+                                    <Dropdown.Item icon='logout' text='Logout' />
+                                    </Dropdown.Menu>
+                                </Dropdown>
                         </Grid.Column>
                     </Grid>
                 </Grid.Column>
