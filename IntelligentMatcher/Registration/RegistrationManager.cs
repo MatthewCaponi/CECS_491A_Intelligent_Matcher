@@ -42,7 +42,7 @@ namespace Registration
             WebUserProfileModel userModel, string password, string ipAddress)
         {
             // Create Tuple to determine the result and message the UI will present
-            Tuple<bool,ResultModel<int>> resultModel = new Tuple<bool, ResultModel<int>>(false, new ResultModel<int>());
+            Tuple<bool, ResultModel<int>> resultModel = new Tuple<bool, ResultModel<int>>(false, new ResultModel<int>());
             // Clarify the logging event
             ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountModel.Id, AccountType.User.ToString());
@@ -101,9 +101,9 @@ namespace Registration
             emailModel.Tag = "Welcome";
 
             //Send Verification Email
-            if(!await _emailService.SendEmail(emailModel))
+            if (!await _emailService.SendEmail(emailModel))
             {
-                if(!await _emailService.SendEmail(emailModel))
+                if (!await _emailService.SendEmail(emailModel))
                 {
                     //Log Email Result
                     _logger.LogInfo(_loggingEvent, ErrorMessage.EmailNotSent.ToString());
@@ -119,7 +119,7 @@ namespace Registration
 
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
-            return new Tuple<bool, ResultModel<int>>(true,resultModel.Item2);
+            return new Tuple<bool, ResultModel<int>>(true, resultModel.Item2);
         }
     }
 }

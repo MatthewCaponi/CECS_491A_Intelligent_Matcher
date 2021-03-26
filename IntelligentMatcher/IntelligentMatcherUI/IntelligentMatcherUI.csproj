@@ -21,10 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Messaging\Messaging.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+=======
+>>>>>>> main
     <ProjectReference Include="..\Security\Security.csproj" />
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
     <ProjectReference Include="..\UserManagement\UserManagement.csproj" />

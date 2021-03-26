@@ -8,8 +8,7 @@ namespace UserAccessControl
     
     interface IModeratable
     {
-        bool CheckUserPermissions(UserInfoModel model);
-        bool SetComponentsAccess(UserInfoModel model);
+
     }
 }
 

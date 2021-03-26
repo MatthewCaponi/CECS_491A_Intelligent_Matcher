@@ -16,6 +16,8 @@ using UserManagement.Services;
 using Services;
 
 using Moq;
+using TestHelper;
+
 namespace BusinessLayerUnitTests.Security
 {
     [TestClass]
@@ -25,6 +27,7 @@ namespace BusinessLayerUnitTests.Security
         [TestInitialize()]
         public async Task Init()
         {
+            await TestCleaner.CleanDatabase();
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
 

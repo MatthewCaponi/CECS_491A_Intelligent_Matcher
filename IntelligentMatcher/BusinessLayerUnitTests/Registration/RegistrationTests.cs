@@ -17,7 +17,12 @@ using Registration.Services;
 using BusinessModels;
 using Security;
 using System.Diagnostics;
+<<<<<<< HEAD
 /*
+=======
+using TestHelper;
+
+>>>>>>> main
 namespace BusinessLayerUnitTests.Registration
 {
     [TestClass]
@@ -28,6 +33,7 @@ namespace BusinessLayerUnitTests.Registration
         [TestInitialize]
         public async Task Init()
         {
+            await TestCleaner.CleanDatabase();
             var numTestRows = 10;
 
             IDataGateway dataGateway = new SQLServerGateway();
@@ -111,9 +117,9 @@ namespace BusinessLayerUnitTests.Registration
             mockValidationService.Setup(x => x.UsernameExists(username)).Returns(Task.FromResult(true));
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
 
-            ResultModel<int> registry = new ResultModel<int>();
+            Result<int> registry = new Result<int>();
             registry.ErrorMessage = error;
-            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+            var expectedResult = new Tuple<bool, Result<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
@@ -160,9 +166,9 @@ namespace BusinessLayerUnitTests.Registration
             mockValidationService.Setup(x => x.EmailExists(emailAddress)).Returns(Task.FromResult(true));
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
 
-            ResultModel<int> registry = new ResultModel<int>();
+            Result<int> registry = new Result<int>();
             registry.ErrorMessage = error;
-            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+            var expectedResult = new Tuple<bool, Result<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
@@ -209,9 +215,9 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
 
-            ResultModel<int> registry = new ResultModel<int>();
+            Result<int> registry = new Result<int>();
             registry.ErrorMessage = error;
-            var expectedResult = new Tuple<bool, ResultModel<int>>(true, registry);
+            var expectedResult = new Tuple<bool, Result<int>>(true, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
@@ -258,8 +264,8 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
 
-            ResultModel<int> registry = new ResultModel<int>();
-            var expectedResult = new Tuple<bool, ResultModel<int>>(true, registry);
+            Result<int> registry = new Result<int>();
+            var expectedResult = new Tuple<bool, Result<int>>(true, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
@@ -308,9 +314,9 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            ResultModel<int> registry = new ResultModel<int>();
+            Result<int> registry = new Result<int>();
             registry.ErrorMessage = error;
-            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+            var expectedResult = new Tuple<bool, Result<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService);
@@ -357,9 +363,9 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            ResultModel<int> registry = new ResultModel<int>();
+            Result<int> registry = new Result<int>();
             registry.ErrorMessage = error;
-            var expectedResult = new Tuple<bool, ResultModel<int>>(false, registry);
+            var expectedResult = new Tuple<bool, Result<int>>(false, registry);
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService);

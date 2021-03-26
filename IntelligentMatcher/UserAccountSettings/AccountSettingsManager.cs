@@ -54,7 +54,7 @@ namespace UserAccountSettings
             bool AuthenticationToken = await _authenticationService.AuthenticatePasswordWithUserId(oldPassword, UserID);
             if (AuthenticationToken == true)
             {
-                await _cryptographyService.NewPasswordEncryptAsync(newPassword, UserID);
+                await _cryptographyService.newPasswordEncryptAsync(newPassword, UserID);
                 return true;
             }
             else

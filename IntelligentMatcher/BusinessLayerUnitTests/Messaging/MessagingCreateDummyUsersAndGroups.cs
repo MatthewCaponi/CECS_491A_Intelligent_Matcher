@@ -173,13 +173,13 @@ namespace BusinessLayerUnitTests.Messaging
             messageModel.ChannelId = 1;
             messageModel.UserId = 1;
             messageModel.Message = "Hi Tim";
-            await messagingService.sendMessageAsync(messageModel);
+            await messagingService.SendMessageAsync(messageModel);
 
             messageModel = new MessageModel();
             messageModel.ChannelId = 1;
             messageModel.UserId = 2;
             messageModel.Message = "Whats up Jake";
-            await messagingService.sendMessageAsync(messageModel);
+            await messagingService.SendMessageAsync(messageModel);
 
             model = new ChannelModel();
             model.OwnerId = 3;
@@ -193,7 +193,7 @@ namespace BusinessLayerUnitTests.Messaging
             messageModel.ChannelId = 2;
             messageModel.UserId = 3;
             messageModel.Message = "Hi Jake and Tim";
-            await messagingService.sendMessageAsync(messageModel);
+            await messagingService.SendMessageAsync(messageModel);
         }
 
         [DataTestMethod]

@@ -36,7 +36,7 @@ namespace IntelligentMatcherUI.Controllers
     }
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class MessagingController : ControllerBase
     {
 

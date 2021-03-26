@@ -1,3 +1,7 @@
+using DataAccess;
+using DataAccess.Repositories;
+using IntelligentMatcher.Services;
+using IntelligentMatcher.UserManagement;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +9,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Services;
+using UserManagement.Services;
 
 namespace IntelligentMatcherUI
 {
@@ -28,6 +34,17 @@ namespace IntelligentMatcherUI
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<IDataGateway, SQLServerGateway>();
+            services.AddSingleton<IConnectionStringData, ConnectionStringData>();
+            services.AddTransient<IUserProfileRepository, UserProfileRepository>();
+            services.AddTransient<IUserAccountRepository, UserAccountRepository>();    
+            services.AddTransient<IUserProfileService, UserProfileService>();
+            services.AddTransient<IUserAccountService, UserAccountService>();
+            services.AddTransient<IValidationService, ValidationService>();
+            services.AddTransient<IUserAccessService, UserAccessService>();
+            services.AddScoped<IUserManager, UserManager>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
