@@ -10,23 +10,14 @@ function App() {
   return (
     <div className="box">
       <SiteHeader />
-        <Grid container className="content">
-        <Grid.Row />
-        <Grid.Column width={2}/>
-        <Grid.Column width={12}>
-        <Router>
-            <Switch>
-                  <Route path="/UserManagement">
-                    <UserManagement />
-                  </Route>
-            </Switch>
+      <Router>
+        <Switch>
+          <Route path="/UserManagement">
+                <UserManagement />
+          </Route>
+        </Switch>
           </Router>
-        </Grid.Column>
-        <Grid.Column width={2}/>
-       
-          <Grid.Row />
-        </Grid>
-        <SiteFooter />
+      <SiteFooter />
     </div>
       
   );

@@ -12,7 +12,6 @@ function UserTable(props) {
     }
 
     const userstyle = {
-        maxWidth: 1800,
         display: 'block',
         height: '40vh',
         overflowY: "auto",
@@ -21,7 +20,7 @@ function UserTable(props) {
 
     return (
         <Grid container centered>
-            <Table stackable striped selectable size="small" style={userstyle} color="black">
+            <Table stackable striped selectable size="large" style={userstyle} color="black" >
                 <Table.Header className="userHeader">
                     <Table.Row>
                         <Table.HeaderCell>Id</Table.HeaderCell>

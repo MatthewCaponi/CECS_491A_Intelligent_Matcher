@@ -20,41 +20,42 @@ function SiteHeader() {
     return (
         <Segment inverted>
             <Grid columns={12}>
-                <Grid.Column stackable textAlign="left" verticalAlign="center" width={1}>
+                <Grid.Column mobile={2} tablet={2} container textAlign="left" verticalAlign="center" width={1}>
                     <Header inverted color="grey">                      
                         <Icon name='moon' />
                         InfiniMuse
                     </Header>  
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column container>
                 <Menu inverted pointing secondary>
                     <Menu.Item name='home' />
                     <Menu.Item name='profile' />
                     <Menu.Item name='Listings' />
                     </Menu>
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column container>
                
                 </Grid.Column>
-                <Grid.Column />
-                <Grid.Column />
-                <Grid.Column />
-                <Grid.Column />
-                <Grid.Column />
-                <Grid.Column floated="right" verticalAlign="center">           
+                <Grid.Column container />
+                <Grid.Column container/>
+                <Grid.Column container only="computer"/>
+                <Grid.Column container only="computer" />
+                <Grid.Column container only="computer" only="tablet"/>
+                <Grid.Column container floated="right" verticalAlign="center" width={2}>           
                     <Button className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
                         Admin
                     </Button>
                 </Grid.Column>
-                <Grid.Column floated="right">
-                    <Grid columns={3} pad>
-                        <Grid.Column>
+                <Grid.Column container floated="right" width={2} widescreen={1} computer={2} tablet={2}>
+                    <Grid columns={3}>
+                        <Grid.Column >
                             <Button icon='conversation' className="message" />
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column >
                             <Button icon='bell' className="message"/>
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column >
+
 
                         <Dropdown
                                 trigger={trigger}
@@ -68,7 +69,6 @@ function SiteHeader() {
                                 <Dropdown.Item icon='logout' text='Logout' />
                                 </Dropdown.Menu>
                             </Dropdown>
-                            
                         </Grid.Column>
                     </Grid>
                 </Grid.Column>
