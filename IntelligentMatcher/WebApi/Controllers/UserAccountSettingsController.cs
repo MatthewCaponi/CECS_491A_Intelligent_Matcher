@@ -60,7 +60,7 @@ namespace IntelligentMatcherUI.Controllers
 
     }
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class UserAccountSettingsController : ControllerBase
     {
 

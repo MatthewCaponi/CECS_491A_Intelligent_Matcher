@@ -34,9 +34,8 @@ namespace IntelligentMatcherUI.Controllers
         public int ChannelId { get; set; }
 
     }
-
-    [ApiController]
     [Route("[controller]/[action]")]
+    [ApiController]
     public class MessagingController : ControllerBase
     {
 
@@ -55,10 +54,18 @@ namespace IntelligentMatcherUI.Controllers
             })
             .ToArray();
         }*/
+        private readonly IMessagingService _messagingService;
+        private readonly IUserAccountRepository _userAccountRepository;
+
+        public MessagingController(IMessagingService messagingService, IUserAccountRepository userAccountRepository)
+        {
+            _messagingService = messagingService;
+            _userAccountRepository = userAccountRepository;
+        }
 
 
-        [HttpPost("sendmessage")]
-        public async Task<bool> SendMessageAsync([FromBody] SendMessageModel messageModel)
+        [HttpPost]
+        public async Task<bool> SendMessage([FromBody] SendMessageModel messageModel)
         {
 
             MessageModel model = new MessageModel();
@@ -66,142 +73,77 @@ namespace IntelligentMatcherUI.Controllers
             model.UserId = messageModel.UserId;
             model.Message = messageModel.Message;
 
-
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-
-            await messagingService.SendMessageAsync(model);
+            await _messagingService.SendMessageAsync(model);
             return true;
         }
 
-        [HttpPost("getmessages")]
-        public async Task<IEnumerable<MessageModel>> GetChannelMessagesAsync([FromBody] int channelId)
+        [HttpPost]
+        public async Task<IEnumerable<MessageModel>> GetChannelMessages([FromBody] int channelId)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository); 
-            IEnumerable<MessageModel>  models = await messagingService.GetAllChannelMessagesAsync(channelId);
+            IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(channelId);
 
             return models;
         }
 
-        [HttpPost("getchannelusers")]
+        [HttpPost]
         public async Task<IEnumerable<UserIdModel>> GetAllUsersInGroup([FromBody] int channelId)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            IEnumerable<UserIdModel> models = await messagingService.GetAllUsersInChannelAsync(channelId);
+
+            IEnumerable<UserIdModel> models = await _messagingService.GetAllUsersInChannelAsync(channelId);
 
             return models;
         }
 
 
-        [HttpPost("addusertogroup")]
+        [HttpPost]
         public async Task<bool> AddUserChannel([FromBody] UsernameChannelAdd model)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
-            UserAccountModel userAccountModel = await userAccountRepository.GetAccountByUsername(model.Username);
+            UserAccountModel userAccountModel = await _userAccountRepository.GetAccountByUsername(model.Username);
 
-            await messagingService.AddUserToChannelAsync(userAccountModel.Id, model.ChannelId);
+            await _messagingService.AddUserToChannelAsync(userAccountModel.Id, model.ChannelId);
 
             return true;
         }
-        [HttpPost("removeuserchannel")]
+        [HttpPost]
 
         public async Task<bool> RemoveUserChannel([FromBody] UserChannelModel model)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
-
-            await messagingService.RemoveUserFromChannelAsync(model.ChannelId, model.UserId);
+            await _messagingService.RemoveUserFromChannelAsync(model.ChannelId, model.UserId);
 
             return true;
         }
 
-        [HttpPost("getuserchannels")]
+        [HttpPost]
 
         public async Task<IEnumerable<ChannelModel>> GetUserChannels([FromBody] int userId)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
-
-            return await messagingService.GetAllUserChannelsAsync(userId);
+            return await _messagingService.GetAllUserChannelsAsync(userId);
 
         }
 
-        [HttpPost("createchannel")]
-        public async Task<bool> CreateGroupAsync([FromBody] CreateChannelModel channelModel)
+        [HttpPost]
+        public async Task<bool> CreateChannel([FromBody] CreateChannelModel channelModel)
         {
 
             ChannelModel channel = new ChannelModel();
             channel.Name = channelModel.Name;
             channel.OwnerId = channelModel.OwnerId;
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-
-            await messagingService.CreateChannelAsync(channel);
+            await _messagingService.CreateChannelAsync(channel);
             return true;
         }
 
 
-        [HttpPost("getchannelowner")]
+        [HttpPost]
         public async Task<int> GetChannelOwner([FromBody] int channelid)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
 
-
-            int ownerId = await messagingService.GetChannelOwnerAsync(channelid);
+            int ownerId = await _messagingService.GetChannelOwnerAsync(channelid);
             if (ownerId == 0)
             {
 
@@ -214,19 +156,11 @@ namespace IntelligentMatcherUI.Controllers
 
         }
 
-        [HttpPost("deletechannel")]
+        [HttpPost]
         public async Task<bool> DeleteChannel([FromBody] int channelid)
         {
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
-            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-
-            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            await messagingService.DeleteChannelAsync(channelid);
+            await _messagingService.DeleteChannelAsync(channelid);
 
             return true;
         }
