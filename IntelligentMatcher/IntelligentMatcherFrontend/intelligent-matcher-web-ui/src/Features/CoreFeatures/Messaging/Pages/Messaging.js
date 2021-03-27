@@ -238,7 +238,7 @@ async createChannel() {
 
   const messagetablestyle = {
     display: 'block',
-    height: '75vh',
+    height: '60vh',
     overflowY: "auto"
   };
   const usertablestyle = {
