@@ -1,0 +1,18 @@
+.message.ui.icon.button {
+    background-color: transparent;
+    color: white;
+    font-size: .5em;
+}
+
+.settings.ui.button.floating.dropdown {
+    background-color: transparent;
+
+}
+
+.adminVisible.ui.circular.inverted.button {
+    visibility: visible;
+}
+
+.adminHidden.ui.circular.inverted.button {
+    visibility: hidden;
+}

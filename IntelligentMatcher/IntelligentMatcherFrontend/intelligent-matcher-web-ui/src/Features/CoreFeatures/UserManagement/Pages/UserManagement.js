@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import UserTable from '../Components/UserTable';
-import { Grid } from "@material-ui/core";
+import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
 
 function UserManagement () {
     const [users, setUsers] = useState([]);
@@ -14,15 +14,26 @@ function UserManagement () {
     }, [])
 
     return (
-        <div>
-            <Grid item container>
-                <Grid item sm={2}/>
-                    <Grid item container sm={8}> 
-                        <UserTable rows={users}/>
-                    </Grid>
-                    <Grid item sm={2}/>       
-            </Grid>
-        </div>   
+        <Grid container centered>
+            <Grid.Row>
+                <Divider horizontal centered>User Management</Divider>
+            </Grid.Row>
+            <Grid.Row>
+                <Search placeholder="Search User"></Search>
+            </Grid.Row>
+            <Grid.Row>
+                <Grid.Column>
+                    <UserTable rows={users}/>
+                </Grid.Column>
+                
+            </Grid.Row>
+            <Grid.Row />    
+        </Grid>
+            
+
+            
+ 
+
     )
 }
 
