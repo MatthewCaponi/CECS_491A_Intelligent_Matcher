@@ -148,15 +148,15 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.FontSize = FontSize;
             userAccountSettingsModel.FontStyle = FontStyle;
             userAccountSettingsModel.ThemeColor = ThemeColor;
-<<<<<<< HEAD
+
             bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettingsAsync(userAccountSettingsModel);
             if (!result)
             {
                 Assert.IsTrue(false);
             }
-=======
+
             await userAccountSettingsManager.CreateDefaultUserAccountSettingsAsync(userAccountSettingsModel);
->>>>>>> main
+            
             model = await userAccountSettingsRepository.GetUserAccountSettingsByUserId(UserId);         
             if(model.UserId == UserId && model.FontSize == 12 && model.FontStyle == "Defualt Font Style" && model.ThemeColor == "Default Theme Color")
             {
@@ -181,16 +181,13 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-<<<<<<< HEAD
             bool result = await userAccountSettingsManager.ChangeFontSizeAsync(userId, FontSize);
             if (!result)
             {
                 Assert.IsTrue(false);
             }
-=======
             await userAccountSettingsManager.ChangeFontSizeAsync(userId, FontSize);
 
->>>>>>> main
             string newFontSize = await userAccountSettingsRepository.GetFontSizeByID(userId);
             if (FontSize.ToString() == newFontSize)
             {
@@ -217,16 +214,13 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
-<<<<<<< HEAD
             bool result = await userAccountSettingsManager.ChangeThemeColorAsync(userId, ThemeColor);
             if (!result)
             {
                 Assert.IsTrue(false);
             }
-=======
             await userAccountSettingsManager.ChangeThemeColorAsync(userId, ThemeColor);
 
->>>>>>> main
             string newThemeColor = await userAccountSettingsRepository.GetThemeColorByID(userId);
 
             if (ThemeColor == newThemeColor)
@@ -313,14 +307,11 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeEmailAsync(password, email, userId);
-<<<<<<< HEAD
             if (!result)
             {
                 Assert.IsTrue(false);
             }
-=======
 
->>>>>>> main
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
 
             if (model.EmailAddress == email)
@@ -349,14 +340,11 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangePasswordAsync(password, newPassword, userId);
-<<<<<<< HEAD
             if (!result)
             {
                 Assert.IsTrue(false);
             }
-=======
 
->>>>>>> main
             UserAccountModel model = await userAccountRepository.GetAccountById(userId);
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
                        

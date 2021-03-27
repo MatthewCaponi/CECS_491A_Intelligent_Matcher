@@ -223,7 +223,7 @@ namespace BusinessLayerUnitTests.Messaging
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
             try{
-                await messagingService.sendMessageAsync(model);
+                await messagingService.SendMessageAsync(model);
             }
             catch
             {

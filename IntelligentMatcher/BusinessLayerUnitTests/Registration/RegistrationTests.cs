@@ -17,7 +17,6 @@ using Registration.Services;
 using BusinessModels;
 using Security;
 using System.Diagnostics;
-<<<<<<< HEAD
 /*
 =======
 using TestHelper;
