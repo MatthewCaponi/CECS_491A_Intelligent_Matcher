@@ -74,7 +74,7 @@ namespace BusinessLayerUnitTests.Messaging
                 await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserChannelsRepo", 0, connectionString, dataGateway);
 
 
         }

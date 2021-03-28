@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Grid, Dimmer, Loader, Segment, Container } from 'semantic-ui-react'
+import { Table, Grid } from 'semantic-ui-react'
 import { animateScroll } from "react-scroll";
 
 
@@ -8,7 +8,7 @@ export class Messaging extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 1, userRemoveSelect: 0, currentGroupOwner: 0, };
+    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 1, userRemoveSelect: 0, currentGroupOwner: 0, currentmessagecount: 0};
     this.addUser = this.addUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
     this.createChannel = this.createChannel.bind(this);
@@ -72,7 +72,20 @@ async deletChannel(){
 }
 
 
-
+async removeMessage(id){
+  
+    await fetch('http://localhost:5000/Messaging/DeleteMessage',
+      {
+          method: "POST",
+          headers: {'Content-type':'application/json'},
+          body: JSON.stringify(Number(id))
+        }).then(r => r.json()).then(res=>{
+          this.username.value = ""
+      }
+    );
+    await this.getGroupData();
+    await this.render();     
+  }
 
 async removeUser(id){
   var removeUserModel = {ChannelId: this.state.channelId,  UserId: id};
@@ -140,8 +153,13 @@ async removeUser(id){
         ); 
 
 
+            if(this.state.currentmessagecount != this.state.channel.length){
+                await this.scrollToBottom();
 
-  
+            }
+          this.state.currentmessagecount = this.state.channel.length;
+
+
         
         if(this.state.channelId != 0){
           var isRemoved = false;
@@ -262,7 +280,14 @@ async createChannel() {
     fontWeight: '500',
     color: '#DCCDC4'
   };
+  const deletestyle = {
+    color: 'grey',
+    fontSize: '10px',
+    fontWeight: '500',
+    color: '#DCCDC4',
+    cursor: 'pointer'
 
+  };
   const renderUserTable = () => {
 
 
@@ -276,7 +301,8 @@ async createChannel() {
                 </Table.Row>
                   {this.state.channelUsers.map(channelUsers =>
                 <Table.Row>        
-                  <Table.Cell>{channelUsers.username}</Table.Cell>
+                  <Table.Cell>{                     (channelUsers.userId == this.state.currentGroupOwner) ?(
+                                channelUsers.username + " (Owner)"  ) : (channelUsers.username)}</Table.Cell>
                   <Table.Cell> <a           onClick={() => {
                       this.removeUser(channelUsers.userId);
                       }}  style={{cursor: 'pointer'}}>Remove</a>
@@ -295,7 +321,12 @@ async createChannel() {
                     </Table.Row>
                   {this.state.channelUsers.map(channelUsers =>
                     <Table.Row>        
-                      <Table.Cell>{channelUsers.username}</Table.Cell>
+                      <Table.Cell>{
+
+                            (channelUsers.userId == this.state.currentGroupOwner) ?(
+                                channelUsers.username + " (Owner)"  ) : (channelUsers.username)
+                            
+                      }</Table.Cell>
                     </Table.Row>
                     )}
                 </Table.Body>
@@ -429,11 +460,30 @@ async createChannel() {
                             <Table.Row>
                             <Table.Row>
 
-                                <Table.Cell><span style={userstyle}>{messageData.username}</span> <span style={datestyle}> {messageData.time} </span></Table.Cell>
+                                <Table.Cell><a href={"profile?id="+ messageData.userId}><span style={userstyle}>{messageData.username}</span></a> <span style={datestyle}> {messageData.time}   </span>
+                                
+                                
+                                
+                                </Table.Cell>
+
+
+ 
                             </Table.Row>
                             <Table.Row>
-                                <Table.Cell><span style={messagestyle}>{messageData.message}</span></Table.Cell>
+
+                                <Table.Cell>
+                                <span style={messagestyle}>{messageData.message}</span> 
+                                <br /> 
+                                <a onClick={() => {
+                                this.removeMessage(messageData.id);
+                                }}  style={{cursor: 'pointer'}}>
+                                <span style={deletestyle}>{ (messageData.userId == this.state.userId) ?("Delete" ) : ("")}
+                                </span>
+                                </a>
+                                </Table.Cell>
                             </Table.Row>
+
+                            
                             </Table.Row>
                         )}
                 </Table.Body>

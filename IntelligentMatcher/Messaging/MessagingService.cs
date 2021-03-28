@@ -96,7 +96,19 @@ namespace Messaging
             }
 
         }
+        public async Task<bool> DeleteMessageAsync(int messageId)
+        {
+            try
+            {
+                await _messagesRepo.DeleteMessageByIdAsync(messageId);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
+        }
         public async Task<bool> AddUserToChannelAsync(int userId, int channelId)
         {
             try

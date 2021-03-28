@@ -165,5 +165,14 @@ namespace IntelligentMatcherUI.Controllers
             return true;
         }
 
+        [HttpPost]
+        public async Task<bool> DeleteMessage([FromBody] int messageId)
+        {
+
+            await _messagingService.DeleteMessageAsync(messageId);
+
+            return true;
+        }
+
     }
 }

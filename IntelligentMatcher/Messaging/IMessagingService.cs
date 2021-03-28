@@ -28,5 +28,8 @@ namespace Messaging
          Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int userId);
 
          Task<int> GetChannelOwnerAsync(int id);
+
+        Task<bool> DeleteMessageAsync(int messageId);
+
     }
 }

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserAccountSettings;
-
+using Messaging;
 namespace WebApi
 {
     public class Seed
@@ -41,7 +41,37 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+            var messages = await messagesRepo.GetAllMessagesAsync();
 
+            foreach (var message in messages)
+            {
+                await messagesRepo.DeleteMessageByIdAsync(message.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("Messages", 0, connectionString, dataGateway);
+
+
+            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
+            var channels = await channelsRepo.GetAllChannelsAsync();
+
+            foreach (var channel in channels)
+            {
+                await channelsRepo.DeleteChannelbyIdAsync(channel.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
+
+
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
+
+            foreach (var userChannel in userChannels)
+            {
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserChannels", 0, connectionString, dataGateway);
 
             for (int i = 1; i < seedAmount; ++i)
             {
@@ -74,7 +104,126 @@ namespace WebApi
                 await userAccountRepository.CreateAccount(userAccountModel);        
                 await userProfileRepository.CreateUserProfile(userProfileModel);
                 await userAccountSettingsRepository.CreateUserAccountSettings(userAccountSettingsModel);
+
+
+
+
             }
+
+
+            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+
+            ChannelModel model = new ChannelModel();
+            model.OwnerId = 1;
+            model.Name = "Jakes Group";
+            await messagingService.CreateChannelAsync(model);
+
+            await messagingService.AddUserToChannelAsync(2, 1);
+            await messagingService.AddUserToChannelAsync(3, 1);
+
+            await messagingService.AddUserToChannelAsync(4, 1);
+            await messagingService.AddUserToChannelAsync(5, 1);
+            await messagingService.AddUserToChannelAsync(6, 1);
+            await messagingService.AddUserToChannelAsync(7, 1);
+            await messagingService.AddUserToChannelAsync(8, 1);
+            await messagingService.AddUserToChannelAsync(9, 1);
+            await messagingService.AddUserToChannelAsync(10, 1);
+            await messagingService.AddUserToChannelAsync(11, 1);
+            await messagingService.AddUserToChannelAsync(12, 1); 
+            await messagingService.AddUserToChannelAsync(13, 1);
+            await messagingService.AddUserToChannelAsync(14, 1);
+            await messagingService.AddUserToChannelAsync(15, 1);
+            await messagingService.AddUserToChannelAsync(16, 1);
+            await messagingService.AddUserToChannelAsync(17, 1);
+            await messagingService.AddUserToChannelAsync(18, 1);
+
+
+            MessageModel messageModel = new MessageModel();
+            messageModel.ChannelId = 1;
+            messageModel.UserId = 1;
+            messageModel.Message = "Hi Tim";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 1;
+            messageModel.UserId = 2;
+            messageModel.Message = "Whats up Jake";
+            await messagingService.SendMessageAsync(messageModel);
+
+            model = new ChannelModel();
+            model.OwnerId = 3;
+            model.Name = "Richards Group";
+            await messagingService.CreateChannelAsync(model);
+
+            await messagingService.AddUserToChannelAsync(1, 2);
+            await messagingService.AddUserToChannelAsync(2, 2);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 3;
+            messageModel.Message = "Hi Jake and Tim";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 1;
+            messageModel.Message = "Whats up Richard how are you doing";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 3;
+            messageModel.Message = "Im Chilling";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 3;
+            messageModel.Message = "Just doing some homework";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 1;
+            messageModel.Message = "Oh nice, I started spring break this week and I finished all of my homework a few days ago so im just relaxing playing some warzone";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 3;
+            messageModel.Message = "Oh sweet";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 2;
+            messageModel.Message = "Whats up guys its me Tim";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 3;
+            messageModel.Message = "Hey Tim";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 1;
+            messageModel.Message = "Whats up tim";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 2;
+            messageModel.Message = "Nothing much guys";
+            await messagingService.SendMessageAsync(messageModel);
+
+            messageModel = new MessageModel();
+            messageModel.ChannelId = 2;
+            messageModel.UserId = 1;
+            messageModel.Message = "You guys wanna hop on warzone with me";
+            await messagingService.SendMessageAsync(messageModel);
+
         }
     }
 }
