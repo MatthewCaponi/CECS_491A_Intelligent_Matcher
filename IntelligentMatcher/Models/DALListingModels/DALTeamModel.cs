@@ -10,5 +10,6 @@ namespace Models.DALListingModels
         public String GameType { get; set; }
         public String Platform { get; set; }
         public String Experience { get; set; }
+        public int ListingId { get; set; }
     }
 }

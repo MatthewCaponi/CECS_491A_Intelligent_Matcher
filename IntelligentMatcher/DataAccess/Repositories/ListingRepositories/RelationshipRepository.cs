@@ -26,10 +26,10 @@ namespace DataAccess.Repositories.ListingRepositories
                 "values (@RelationshipType,@Age, @Interests,@GenderPreference,@ListingId); set @Id = SCOPE_IDENTITY();";
 
             DynamicParameters p = new DynamicParameters();
-            p.Add("RelationshipType", dalRelationshipModel.Title);
+            p.Add("RelationshipType", dalRelationshipModel.RelationshipType);
             p.Add("Age", dalRelationshipModel.Age);
-            p.Add("Interests", dalRelationshipModel.City);
-            p.Add("GenderPreference", dalRelationshipModel.State);
+            p.Add("Interests", dalRelationshipModel.Interests);
+            p.Add("GenderPreference", dalRelationshipModel.GenderPreference);
             p.Add("ListingId", dalRelationshipModel.ListingId);
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);

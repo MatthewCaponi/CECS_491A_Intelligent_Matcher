@@ -100,11 +100,45 @@ namespace TraditionalListings.Services
             {
                 // Create ListingModel, RelationshipModel, DatingModel 
                 // Same steps but instead of 2 models to be created, i need to create 3 
+                BusinessRelationshipModel newBusinessRelationshipModel = (BusinessRelationshipModel)businessListingmodel;
+                BusinessListingModel newBusinessListingModel = new BusinessListingModel();
+                BusinessDatingModel newBusinessDatingModel = (BusinessDatingModel)businessListingmodel;
+
+                newBusinessListingModel.Title = newBusinessRelationshipModel.Title;
+                newBusinessListingModel.Details = newBusinessRelationshipModel.Details;
+                newBusinessListingModel.City = newBusinessRelationshipModel.City;
+                newBusinessListingModel.State = newBusinessRelationshipModel.State;
+                newBusinessListingModel.NumberOfParticipants = newBusinessRelationshipModel.NumberOfParticipants;
+                newBusinessListingModel.InPersonOrRemote = newBusinessRelationshipModel.InPersonOrRemote;
+                newBusinessListingModel.UserAccountId = newBusinessRelationshipModel.UserAccountId;
                 
+
+                DALListingModel dALListingModel = new DALListingModel();
+                DALRelationshipModel dALRelationshipModel = new DALRelationshipModel();
+
+
+
+
             }
             else if(businessListingmodel is BusinessTeamModel)
             {
-                // Same steps as is BusinessCollaborationModel
+                
+                BusinessTeamModel newBusinessTeamModel = (BusinessTeamModel)businessListingmodel;
+                BusinessListingModel newBusinessListingModel = new BusinessListingModel();
+                DALListingModel dALListingModel = new DALListingModel();
+                DALTeamModel dALTeamModel = new DALTeamModel();
+
+                var dalListingModel = ModelConverterService.ConvertTo(newBusinessListingModel, dALListingModel);
+                var dalTeamModel = ModelConverterService.ConvertTo(newBusinessTeamModel, dALTeamModel);
+
+                var result = await _listingRepository.CreateListing(dalListingModel);
+                dalTeamModel.ListingId = result;
+
+                await _teamModelRepository.CreateListing(dalTeamModel); //collaboration repo instead of listing repo 
+
+                return result;
+
+
             }
 
             return 0;

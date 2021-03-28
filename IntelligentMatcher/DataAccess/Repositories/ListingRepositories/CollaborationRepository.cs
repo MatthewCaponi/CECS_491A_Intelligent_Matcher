@@ -29,9 +29,9 @@ namespace DataAccess.Repositories.ListingRepositories
                 "values (@CollaborationType,@InvolvementType, @Experience,@ListingId); set @Id = SCOPE_IDENTITY();";
 
             DynamicParameters p = new DynamicParameters();
-            p.Add("CollaborationType", dalCollaborationModel.Title);
-            p.Add("InvolvementType", dalCollaborationModel.Details);
-            p.Add("Experience", dalCollaborationModel.City);
+            p.Add("CollaborationType", dalCollaborationModel.CollaborationType);
+            p.Add("InvolvementType", dalCollaborationModel.InvolvementType);
+            p.Add("Experience", dalCollaborationModel.Experience);
             p.Add("ListingId", dalCollaborationModel.ListingId);
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);

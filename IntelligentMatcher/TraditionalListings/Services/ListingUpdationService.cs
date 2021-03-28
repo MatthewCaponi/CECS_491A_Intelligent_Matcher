@@ -2,6 +2,7 @@
 using BusinessModels.ListingModels;
 using DataAccess;
 using DataAccess.Repositories;
+using Models.DALListingModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,14 +19,15 @@ namespace TraditionalListings.Services
             _listingRepository = listingRepository;
         }
 
-        public Task<bool> UpdateListing(BusinessListingModel businessListingModel)
+        public async Task<int> UpdateListing(DALListingModel dalListingModel)
         {
+            int returnValue = await _listingRepository.UpdateListing(dalListingModel);
+           
+            return returnValue;
 
-
-            return Task.FromResult(true);
         }
 
-        
+
     }
 }
 

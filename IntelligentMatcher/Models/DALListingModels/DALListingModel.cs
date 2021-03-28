@@ -15,6 +15,9 @@ namespace Models.DALListingModels
         public string InPersonOrRemote { get; set; }
         public int UserAccountId { get; set; }
 
-
+        public static implicit operator int(DALListingModel v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

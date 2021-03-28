@@ -92,20 +92,21 @@ namespace DataAccess.Repositories
         }
 
 
-        public async Task<List<DALListingModel>> GetAllListing() //change to DALListingModel dalListingModel 
+       
+
+        public async Task<List<DALListingModel>> GetAllListing(int id)
         {
             var query = "Select * from Listing ";
 
             var row = await _dataGateway.LoadData<DALListingModel, dynamic>(query,
                 new
                 {
-                   
+
                 },
                 _connectionString.SqlConnectionString);
 
             return row;
         }
-
     }
         
 }
