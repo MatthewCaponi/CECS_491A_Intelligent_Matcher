@@ -2,18 +2,24 @@ using DataAccess;
 using DataAccess.Repositories;
 using IntelligentMatcher.Services;
 using IntelligentMatcher.UserManagement;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Security;
 using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Services;
 
@@ -34,8 +40,25 @@ namespace WebApi
 
             services.AddCors();
 
-            services.AddControllers();
-            
+            services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            });
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
+            services.AddScoped<ITokenService, TokenService>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
@@ -62,7 +85,10 @@ namespace WebApi
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //app.UseCors(x => x.WithOrigin("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+           
 
             app.UseEndpoints(endpoints =>
             {
