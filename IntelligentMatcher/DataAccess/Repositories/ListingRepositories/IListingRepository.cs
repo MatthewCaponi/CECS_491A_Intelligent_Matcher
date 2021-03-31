@@ -13,7 +13,8 @@ namespace DataAccess.Repositories
        Task<int> DeleteListing(int id);
        Task<int> UpdateListing(DALListingModel dalListingModel);
        Task<DALListingModel> GetListing(int id);
-       Task<List<DALListingModel>> GetAllListing(int id);
-
+       Task<IEnumerable<DALListingModel>> GetAllListings();
+        
+           
     }
 }

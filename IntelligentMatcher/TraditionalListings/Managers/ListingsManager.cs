@@ -35,19 +35,30 @@ namespace TraditionalListings.Managers
             throw new NotImplementedException();
         }
 
-        public Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id)
+        public async Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id)
         {
-            throw new NotImplementedException();
+            ResultModel<int> resultModel = new ResultModel<int>();
+            await _listingDeletionService.DeleteListing(Id);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
+        public async Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
         {
-            throw new NotImplementedException();
+            ResultModel<int> resultModel = new ResultModel<int>();
+             
+            await _listUpdationService.UpdateListing(businessListingModel);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public Task<bool> GetListing(int Id)
+        public async Task<bool> GetListing(int Id)
         {
-            throw new NotImplementedException();
+            ResultModel<int> resultModel = new ResultModel<int>();
+
+            resultModel.Result=await _listingGetterService.GetListing(Id);
+
+            return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
         public Task<bool> UpdateListing(BusinessListingModel businessListingModel)
