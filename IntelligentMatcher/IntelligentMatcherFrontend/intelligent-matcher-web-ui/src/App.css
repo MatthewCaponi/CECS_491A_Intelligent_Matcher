@@ -1,0 +1,14 @@
+.siteHeader {
+    margin-top: 10px;
+}
+
+.box {
+  height: 100%;
+}
+
+.content.ui.container.grid {
+    height: 100%;
+    max-width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+}
