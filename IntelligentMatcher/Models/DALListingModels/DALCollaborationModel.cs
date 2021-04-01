@@ -10,5 +10,6 @@ namespace Models.DALListingModels
         public string InvolvementType { get; set; }
         public string Experience { get; set; }
         public int ListingId { get; set; }
+        
     }
 }

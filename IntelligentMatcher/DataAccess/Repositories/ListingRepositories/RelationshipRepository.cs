@@ -22,19 +22,19 @@ namespace DataAccess.Repositories.ListingRepositories
         public async Task<int> CreateListing(DALRelationshipModel dalRelationshipModel)
         {
 
-            var query = "insert into [Relationship]([RelationshipType],[Age],[Interests],[GenderPreference],[ListingId])" +
-                "values (@RelationshipType,@Age, @Interests,@GenderPreference,@ListingId); set @Id = SCOPE_IDENTITY();";
+            string storedProcedure = "dbo.TraditionalListing_CreateRelationshipListing";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("RelationshipType", dalRelationshipModel.RelationshipType);
             p.Add("Age", dalRelationshipModel.Age);
             p.Add("Interests", dalRelationshipModel.Interests);
             p.Add("GenderPreference", dalRelationshipModel.GenderPreference);
+            p.Add("CreationDate", dalRelationshipModel.CreationDate);
             p.Add("ListingId", dalRelationshipModel.ListingId);
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
+            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
 

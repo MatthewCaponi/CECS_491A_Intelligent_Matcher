@@ -14,6 +14,7 @@ namespace BusinessModels.ListingModels
         public string State { get; set; }
         public int NumberOfParticipants { get; set; }
         public string InPersonOrRemote { get; set; }
+        public DateTime CreationDate { get; set; }
         public int UserAccountId { get; set; }
         
 

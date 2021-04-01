@@ -18,17 +18,23 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
+
+        // doesnt like the star change it. 
         public async Task<IEnumerable<DALListingModel>> GetAllListings()
         {
-            var query = "Select * from Listing";
-            return await _dataGateway.LoadData<DALListingModel, dynamic>(query,
+            string storedProcedure = "dbo.ListingSearch_GetAllListing";
+            return await _dataGateway.LoadData<DALListingModel, dynamic>(storedProcedure,
                                                                          new { },
                                                                          _connectionString.SqlConnectionString);
         }
 
 
 
-        // Gold plating... sorting thats not in the brd 
+        
+        
+        
+        
+        // Gold plating... sorting thats not in the brd....... //Comment out or delete if you run out of time.
         public async Task<IEnumerable<DALListingModel>> SortListingbyCity()
         {
             var query = "Select * from Listing ORDER BY [City] ASC";

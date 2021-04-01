@@ -23,9 +23,7 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateListing(DALListingModel dalListingModel)
         {
-            var query = "insert into [Listing]([Title],[Details],[City],[State],[NumberOfParticipants], " +
-                       "[InPersonOrRemote] , [UserAccountID]) values (@Title , @Details, @City, @State, " +
-                       "@NumberOfParticipants, @InPersonOrRemote, @UserAccountID); " + "set @Id= SCOPE_IDENTITY();";
+            string storedProcedure = "dbo.TraditionalListing_CreateParentListing";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("Title", dalListingModel.Title);
@@ -35,9 +33,10 @@ namespace DataAccess.Repositories
             p.Add("NumberOfParticipants", dalListingModel.NumberOfParticipants);
             p.Add("InPersonOrRemote", dalListingModel.InPersonOrRemote);
             p.Add("UserAccountId", dalListingModel.UserAccountId);
+            p.Add("CreationDate", dalListingModel.CreationDate);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
+            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
 

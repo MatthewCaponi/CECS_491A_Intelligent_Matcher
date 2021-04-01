@@ -25,18 +25,18 @@ namespace DataAccess.Repositories.ListingRepositories
         public async Task<int> CreateListing(DALCollaborationModel dalCollaborationModel)
         {
 
-            var query = "insert into [Collaboration]([CollaborationType],[InvolvementType],[Experience],[ListingId])" +
-                "values (@CollaborationType,@InvolvementType, @Experience,@ListingId); set @Id = SCOPE_IDENTITY();";
+            string storedProcedure = "dbo.TraditionalListing_CreateCollaboration";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("CollaborationType", dalCollaborationModel.CollaborationType);
             p.Add("InvolvementType", dalCollaborationModel.InvolvementType);
             p.Add("Experience", dalCollaborationModel.Experience);
             p.Add("ListingId", dalCollaborationModel.ListingId);
+            p.Add("CreationDate", dalCollaborationModel.CreationDate);
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(query, p, _connectionString.SqlConnectionString);
+            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
 

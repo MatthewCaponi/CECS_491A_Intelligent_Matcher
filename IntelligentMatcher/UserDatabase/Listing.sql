@@ -7,7 +7,8 @@
     [State] NVARCHAR(50) NULL, 
     [NumberOfParticipants] INT NOT NULL, 
     [InPersonOrRemote] NVARCHAR(50) NOT NULL, 
-    [UserAccountID] INT NOT NULL
+    [UserAccountID] INT NOT NULL,
+    [CreationDate] DATETIME NOT NULL,
     
     
 )
