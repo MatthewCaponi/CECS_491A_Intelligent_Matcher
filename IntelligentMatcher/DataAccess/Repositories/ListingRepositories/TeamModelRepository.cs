@@ -54,5 +54,5 @@ namespace DataAccess.Repositories.ListingRepositories
     }
 
        
-    }
 }
+

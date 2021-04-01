@@ -1,6 +1,5 @@
 ﻿
-using DataAccessLayer;
-using DataAccessLayer.Repositories;
+using DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;

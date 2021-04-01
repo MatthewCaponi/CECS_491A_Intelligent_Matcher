@@ -56,7 +56,6 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="TraditionalListing" />
     <Folder Include="StoredProcedures" />
     <Folder Include="StoredProcedures\UserAccount" />
     <Folder Include="StoredProcedures\UserProfile" />
@@ -65,10 +64,6 @@
   <ItemGroup>
     <Build Include="UserAccount.sql" />
     <Build Include="UserProfile.sql" />
-    <Build Include="TraditionalListing\Listing.sql" />
-    <Build Include="TraditionalListing\Collaboration.sql" />
-    <Build Include="TraditionalListing\TeamModel.sql" />
-    <Build Include="TraditionalListing\Relationship.sql" />
     <Build Include="UserAccountSettings.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_Create.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_Delete_ById.sql" />
@@ -100,6 +95,10 @@
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
+    <Build Include="Collaboration.sql" />
+    <Build Include="Relationship.sql" />
+    <Build Include="TeamModel.sql" />
+    <Build Include="Listing.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

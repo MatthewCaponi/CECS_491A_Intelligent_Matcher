@@ -22,7 +22,7 @@ namespace BusinessLayerUnitTests.TraditionalListing
         {
             var numTestRows = 20;
 
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
@@ -47,12 +47,12 @@ namespace BusinessLayerUnitTests.TraditionalListing
         [TestCleanup()]
         public async Task CleanUp()
         {
-            IDataGateway dataGateway = new DataGateway();
+            IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
             var accounts = await userAccountRepository.GetAllAccounts();
-            var listings = await listingRepository.GetAllListing();
+           // var listings = await listingRepository.GetAllListing();
 
             foreach (var account in accounts)
             {
@@ -81,8 +81,8 @@ namespace BusinessLayerUnitTests.TraditionalListing
             //arrange- setup variables 
             BusinessCollaborationModel newBusinessCollaborationModel = new BusinessCollaborationModel();
             BusinessListingModel newBusinessListingModel = new BusinessListingModel();
-            ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new DataGateway(), new ConnectionStringData()),
-                new CollaborationRepository(new DataGateway(), new ConnectionStringData()), null, null, null);
+            ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new SQLServerGateway(), new ConnectionStringData()),
+                new CollaborationRepository(new SQLServerGateway(), new ConnectionStringData()), null, null, null);
             newBusinessCollaborationModel.Id = expectedID;
             newBusinessCollaborationModel.Title = title;
             newBusinessCollaborationModel.Details = detail;
@@ -112,8 +112,8 @@ namespace BusinessLayerUnitTests.TraditionalListing
             //arrange- setup variables 
             BusinessRelationshipModel newBusinessRelationshipModel = new BusinessRelationshipModel();
             BusinessListingModel newBusinessListingModel = new BusinessListingModel();
-            ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new DataGateway(), new ConnectionStringData()),
-                null, new RelationshipRepository(new DataGateway(), new ConnectionStringData()), null, null);
+            ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new SQLServerGateway(), new ConnectionStringData()),
+                null, new RelationshipRepository(new SQLServerGateway(), new ConnectionStringData()), null, null);
             newBusinessRelationshipModel.Id = expectedID;
             newBusinessRelationshipModel.Title = title;
             newBusinessRelationshipModel.Details = detail;

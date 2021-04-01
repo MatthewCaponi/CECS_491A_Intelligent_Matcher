@@ -7,9 +7,7 @@
     [State] NVARCHAR(50) NULL, 
     [NumberOfParticipants] INT NOT NULL, 
     [InPersonOrRemote] NVARCHAR(50) NOT NULL, 
-    [UserAccountID] INT NOT NULL, 
-    CONSTRAINT [Listing_UserAccount_FK] FOREIGN KEY ([Id]) REFERENCES [UserAccount]([Id]) 
-    ON DELETE CASCADE
+    [UserAccountID] INT NOT NULL
     
     
 )

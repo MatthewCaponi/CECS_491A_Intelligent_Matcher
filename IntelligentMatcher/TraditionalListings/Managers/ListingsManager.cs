@@ -43,16 +43,27 @@ namespace TraditionalListings.Managers
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public async Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
+        public Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
         {
-            ResultModel<int> resultModel = new ResultModel<int>();
-             
-            await _listUpdationService.UpdateListing(businessListingModel);
-
-            return new Tuple<bool, ResultModel<int>>(true, resultModel);
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> GetListing(int Id)
+        public Task<bool> GetListing(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        //public async Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
+        //{
+        //    ResultModel<int> resultModel = new ResultModel<int>();
+
+        //    await _listUpdationService.UpdateListing(businessListingModel);
+
+        //    return new Tuple<bool, ResultModel<int>>(true, resultModel);
+        //}
+
+        /*public async Task<bool> GetListing(int Id)
         {
             ResultModel<int> resultModel = new ResultModel<int>();
 
@@ -60,6 +71,7 @@ namespace TraditionalListings.Managers
 
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
+        */
 
         public Task<bool> UpdateListing(BusinessListingModel businessListingModel)
         {
