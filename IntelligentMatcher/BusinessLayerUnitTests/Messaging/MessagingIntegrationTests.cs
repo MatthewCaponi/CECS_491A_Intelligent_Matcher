@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using DataAccessUnitTestes;
 using Security;
 using UserAccountSettings;
+using System.Linq;
+
 namespace BusinessLayerUnitTests.Messaging
 {
     [TestClass]
@@ -248,7 +250,50 @@ namespace BusinessLayerUnitTests.Messaging
 
         }
 
+        [DataTestMethod]
+        [DataRow(1, 1, "Sending Test Message")]
+        public async Task deleteMessage_MessageSentThenDeleted_MessageDeleted(int channelId, int userId, string message)
+        {
 
+            MessageModel model = new MessageModel();
+            model.ChannelId = channelId;
+            model.UserId = userId;
+            model.Message = message;
+
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+            try
+            {
+                await messagingService.SendMessageAsync(model);
+                await messagingService.DeleteMessageAsync(0);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+            IEnumerable<MessageModel> models = await messagesRepo.GetAllMessagesByChannelIdAsync(channelId);
+
+            if (models.Count() == 1)
+            {
+                Assert.IsTrue(true);
+
+            }
+            else
+            {
+                Assert.IsTrue(false);
+
+            }
+
+
+
+        }
         [DataTestMethod]
         [DataRow(1, "My Group")]
         public async Task CreateChannel_ChannelCreatation_ChannelCreated(int OwnerId, string name)
@@ -366,6 +411,48 @@ namespace BusinessLayerUnitTests.Messaging
 
         }
 
+
+        [DataTestMethod]
+        [DataRow(1, 1, 1, "My Channel", 2)]
+        public async Task GetChannelOwner_ChannelOwner_RetrievedChannelOwner(int ChannelId, int UserId, int OwnerId, string ChannelName, int NewUserId)
+        {
+
+
+
+            ChannelModel model = new ChannelModel();
+            model.OwnerId = OwnerId;
+            model.Name = ChannelName;
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+            await messagingService.CreateChannelAsync(model);
+            try
+            {
+                int ownerId = await messagingService.GetChannelOwnerAsync(ChannelId);
+                if (ownerId == 1)
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+
+                }
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+
+
+
+        }
         [DataTestMethod]
         [DataRow(1, 1, 1, "My Channel", 2)]
         public async Task RemoveUserFromChannel_RemoveUser_UserRemoved(int ChannelId, int UserId, int OwnerId, string ChannelName, int AddUser)

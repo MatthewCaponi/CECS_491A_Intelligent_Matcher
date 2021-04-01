@@ -37,9 +37,16 @@ namespace Messaging
                 model.ChannelMessageId = models.Count();
                 model.Date = DateTime.Now;
                 model.Time = DateTime.Now.ToString().Split(' ')[1];
+                if(model.UserId != 0)
+                {
+                    UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(model.UserId);
+                    model.Username = userAccountModel.Username;
+                }
+                else
+                {
+                    model.Username = "SystemNotification";
+                }
 
-                UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(model.UserId);
-                model.Username = userAccountModel.Username;
                 await _messagesRepo.CreateMessageAsync(model);
                 return true;
             }

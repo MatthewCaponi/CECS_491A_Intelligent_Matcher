@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import { animateScroll } from "react-scroll";
-
+import Picker from 'emoji-picker-react';
 
 export class Messaging extends Component {
   static displayName = Messaging.name;
 
   constructor(props) {
     super(props);
-    this.state = { channel: [], channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 1, userRemoveSelect: 0, currentGroupOwner: 0, currentmessagecount: 0};
+    this.state = { channel: [], currentUsername: "", channelUsers: [], usersgroups: [], channelId: 0, selectedUser: 0, userId: 1, userRemoveSelect: 0, currentGroupOwner: 0, currentmessagecount: 0, currentEmoji: null};
     this.addUser = this.addUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
     this.createChannel = this.createChannel.bind(this);
@@ -17,7 +17,9 @@ export class Messaging extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.changeChannel = this.changeChannel.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.leaveChannel = this.leaveChannel.bind(this);
 
+    this.addEmoji = this.addEmoji.bind(this);
     setInterval(async () => {  this.getGroupData()  }, 100);
     this.scrollToBottom();
     this.getGroupData();   
@@ -87,7 +89,14 @@ async removeMessage(id){
     await this.render();     
   }
 
-async removeUser(id){
+async removeUser(id, username){
+
+
+  
+
+
+
+
   var removeUserModel = {ChannelId: this.state.channelId,  UserId: id};
 
 
@@ -97,6 +106,17 @@ async removeUser(id){
         headers: {'Content-type':'application/json'},
         body: JSON.stringify(removeUserModel)
     }).then(r => r.json()).then(res=>{
+        var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: username + " was removed from the channel by " + this.state.currentUsername};
+
+        fetch('http://localhost:5000/Messaging/SendMessage',
+        {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(MessageModel)
+        }).
+        then(r => r.json()).then(res=>{
+        }
+        );
         this.username.value = ""
     }
   );
@@ -104,6 +124,37 @@ async removeUser(id){
   await this.render();     
 }
 
+async leaveChannel(){
+
+    var removeUserModel = {ChannelId: this.state.channelId,  UserId: this.state.userId};
+
+    await fetch('http://localhost:5000/Messaging/RemoveUserChannel',
+      {
+          method: "POST",
+          headers: {'Content-type':'application/json'},
+          body: JSON.stringify(removeUserModel)
+      }).then(r => r.json()).then(res=>{
+        var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: this.state.currentUsername + " left the channel"};
+
+        fetch('http://localhost:5000/Messaging/SendMessage',
+        {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(MessageModel)
+        }).
+        then(r => r.json()).then(res=>{
+        }
+        );
+      }
+    );
+
+
+
+
+
+    await this.getGroupData();
+    await this.render();     
+  }
 
     async getGroupData(){
       if(this.state.channelId != 0){
@@ -177,6 +228,9 @@ async removeUser(id){
         }
 
     }
+    addEmoji(){
+        this.message.value = this.message.value + this.state.currentEmoji;
+    }
 
 async addUser() {
   await this.getGroupData();
@@ -190,7 +244,22 @@ async addUser() {
         headers: {'Content-type':'application/json'},
         body: JSON.stringify(AddUserModel)
     }).then(r => r.json()).then(res=>{
+
+        var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: this.username.value +  " was added by " + this.state.currentUsername};
+
+        fetch('http://localhost:5000/Messaging/SendMessage',
+        {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(MessageModel)
+        }).
+        then(r => r.json()).then(res=>{
+        }
+        );
+
         this.username.value = ""
+
+
     }
     );
 
@@ -226,7 +295,7 @@ async createChannel() {
 
   async sendMessage() {
     await this.getGroupData();
-    this.render();
+    await this.render();
       if(this.message.value != ""){
         var MessageModel = {ChannelId: this.state.channelId, UserId: this.state.userId, Message: this.message.value};
 
@@ -290,6 +359,14 @@ async createChannel() {
   };
   const renderUserTable = () => {
 
+    this.state.channelUsers.map(channelUsers =>{
+        if(channelUsers.userId == this.state.userId){
+            this.state.currentUsername = channelUsers.username;
+        }
+
+    }
+    )
+
 
 
 
@@ -304,7 +381,7 @@ async createChannel() {
                   <Table.Cell>{                     (channelUsers.userId == this.state.currentGroupOwner) ?(
                                 channelUsers.username + " (Owner)"  ) : (channelUsers.username)}</Table.Cell>
                   <Table.Cell> <a           onClick={() => {
-                      this.removeUser(channelUsers.userId);
+                      this.removeUser(channelUsers.userId, channelUsers.username);
                       }}  style={{cursor: 'pointer'}}>Remove</a>
                     </Table.Cell>
                 </Table.Row>
@@ -344,14 +421,40 @@ async createChannel() {
               }
             }
 
+
             const renderSendMessage = () => {
 
+                const onEmojiClick = (event, emojiObject) => {
+                    this.state.currentEmoji = emojiObject.emoji;
+                    this.addEmoji();
+
+                  };
+                
               if(this.state.channelId != 0){
                   return (  
+                      <div>
                   <div class="ui fluid action input">
                         <input type="text" name="message" placeholder="Message" placeholder="Message..."  ref={(input) => this.message = input}></input>
                         <button class="ui button" onClick={this.sendMessage}>Send Message</button>
+                        <span>
+                 </span>
+
                     </div>
+                      <Picker onEmojiClick={onEmojiClick}
+                        pickerStyle={{ width: '100%' }} 
+                        groupVisibility={{
+                            flags: false,
+                            smileys_people: false,
+                            animals_nature: false,
+                            food_drink: false,
+                            travel_places: false,
+                            symbols: false,
+                            flags: false,
+                            recently_used: false,
+                            activities: false,
+
+                          }}/>
+                      </div>
                     );
                                     
                   
@@ -360,8 +463,72 @@ async createChannel() {
           
             }
 
-            const renderChannelToggle = () => {
+            const printMessage = (messageData) => {
 
+                if(messageData.userId == 0){
+                    return              <div>  
+                <Table.Row>
+    
+                    <Table.Cell>
+                    <span style={datestyle}>{messageData.message}</span> 
+
+                    </Table.Cell>
+                </Table.Row></div>
+                }
+                
+                return              <div>  <Table.Row>
+
+                <Table.Cell>
+
+                <div><a href={"profile?id="+ messageData.userId}><span style={userstyle}>{messageData.username}</span>
+                            </a> <span style={datestyle}> {messageData.time}   </span></div>
+                
+                </Table.Cell>
+
+
+
+            </Table.Row>
+            <Table.Row>
+
+                <Table.Cell>
+                <span style={messagestyle}>{messageData.message}</span> 
+                <br /> 
+                <a onClick={() => {
+                this.removeMessage(messageData.id);
+                }}  style={{cursor: 'pointer'}}>
+                <span style={deletestyle}>{ (messageData.userId == this.state.userId) ?("Delete" ) : ("")}
+                </span>
+                </a>
+                </Table.Cell>
+            </Table.Row></div>
+
+            }
+
+            const renderChannelToggle = () => {
+                if(this.state.channelId == 0){
+          
+                    return        <div>
+
+                    <select class="ui search dropdown" ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
+                      <option value="none" selected disabled hidden> 
+                        Select Channel
+                      </option> 
+                        {this.state.usersgroups.map(usersgroups =>
+                          <option value={usersgroups.id}>{usersgroups.name}</option>
+                        )}
+                      </select>
+  
+                      <div class="ui action input">
+  
+                      <input type="text" name="channelname" placeholder="Message" placeholder="Channel Name..."  ref={(input) => this.channelname = input}></input>
+                      </div>
+  
+                      <button class="ui button" onClick={this.createChannel}>Create Channel</button>
+                      </div>
+            
+                    ;
+               
+                }
               if(this.state.userId != this.state.currentGroupOwner){
           
                   return        <div>
@@ -374,6 +541,8 @@ async createChannel() {
                         <option value={usersgroups.id}>{usersgroups.name}</option>
                       )}
                     </select>
+                    <button class="ui button" onClick={this.leaveChannel}>Leave Channel</button>
+
                     <div class="ui action input">
 
                     <input type="text" name="channelname" placeholder="Message" placeholder="Channel Name..."  ref={(input) => this.channelname = input}></input>
@@ -389,7 +558,7 @@ async createChannel() {
               
               if(this.state.userId == this.state.currentGroupOwner){
           
-                return        <div class="form-inline justify-content-center">
+                return        <div >
 
                 <select  class="ui  search dropdown" ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
                   <option value="none" selected disabled hidden> 
@@ -411,27 +580,7 @@ async createChannel() {
                 ;
            
             }
-              if(this.state.channelId == 0){
-          
-                return        <div class="form-inline justify-content-center">
 
-                <select class="ui  search dropdown" ref={(input) => this.currentchannelselect = input} onChange={this.changeChannel}>
-                  <option class="ui" value="none" selected disabled hidden> 
-                    Select Channel
-                  </option> 
-                  <button className=" btn btn-dark  w-25" onClick={this.sendMessage}>Delete Channel</button>
-                    {this.state.usersgroups.map(usersgroups =>
-                      <option class="ui" value={usersgroups.id}>{usersgroups.name}</option>
-                    )}
-                  </select>
-                  <button className=" btn btn-dark w-25" onClick={this.deletChannel}>Delete Channel</button>
-                  <input type="text" name="channelname" className=" w-25" placeholder="Channel Name"  ref={(input) => this.channelname = input}/>
-                  <button className=" btn btn-dark  w-25" onClick={this.createChannel}>Create Channel</button>
-                  </div>
-        
-                ;
-           
-            }
           
             }
 
@@ -457,34 +606,14 @@ async createChannel() {
             <Table stackable size="large" style={userstyle} color="black" style={messagetablestyle} id="message-table" >
                 <Table.Body>
                         {this.state.channel.map(messageData =>
+   
+                  
                             <Table.Row>
-                            <Table.Row>
+           
+                            {printMessage(messageData)}
 
-                                <Table.Cell><a href={"profile?id="+ messageData.userId}><span style={userstyle}>{messageData.username}</span></a> <span style={datestyle}> {messageData.time}   </span>
-                                
-                                
-                                
-                                </Table.Cell>
-
-
- 
-                            </Table.Row>
-                            <Table.Row>
-
-                                <Table.Cell>
-                                <span style={messagestyle}>{messageData.message}</span> 
-                                <br /> 
-                                <a onClick={() => {
-                                this.removeMessage(messageData.id);
-                                }}  style={{cursor: 'pointer'}}>
-                                <span style={deletestyle}>{ (messageData.userId == this.state.userId) ?("Delete" ) : ("")}
-                                </span>
-                                </a>
-                                </Table.Cell>
                             </Table.Row>
 
-                            
-                            </Table.Row>
                         )}
                 </Table.Body>
             </Table>
