@@ -66,7 +66,6 @@ namespace BusinessLayerUnitTests.Services
             IConnectionStringData connectionString = new ConnectionStringData();
             ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
 
-            var loginAttemptsModel = new LoginAttemptsModel();
             var expectedResult = true;
 
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(loginAttemptsRepository);

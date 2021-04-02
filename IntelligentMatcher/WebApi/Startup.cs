@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.Repositories;
 using IntelligentMatcher.Services;
 using IntelligentMatcher.UserManagement;
+using Login;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,13 +39,16 @@ namespace WebApi
             
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
+            services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+            services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IUserAccountService, UserAccountService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
-            services.AddScoped<IUserManager, UserManager>(); 
+            services.AddScoped<ILoginManager, LoginManager>();
+            services.AddScoped<IUserManager, UserManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

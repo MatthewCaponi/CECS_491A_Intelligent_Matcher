@@ -18,6 +18,214 @@ namespace BusinessLayerUnitTests.Login
     [TestClass]
     public class LoginTests
     {
+        #region Unit Tests Login
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 5, "3/28/2027 7:13:50 PM +00:00", ErrorMessage.TooManyAttempts)]
+        public async Task Login_TooManyAttemptsTaken_ReturnTooManyAttempts(string username, string password,
+            int loginAttemptsId, string ipAddress, int loginCounter, string suspensionEndTime, ErrorMessage error)
+        {
+            // Arrange
+            // Set mock objects for the dependencies LoginManager uses
+            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
+            Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
+            Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
+
+            var businessLoginAttemptsModel = new BusinessLoginAttemptsModel();
+
+            businessLoginAttemptsModel.Id = loginAttemptsId;
+            businessLoginAttemptsModel.IpAddress = ipAddress;
+            businessLoginAttemptsModel.LoginCounter = loginCounter;
+            businessLoginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse(suspensionEndTime);
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Set conditional for the used mock object
+            mockLoginAttemptsService.Setup(x => x.GetLoginAttemptsByIpAddress(ipAddress))
+                .Returns(Task.FromResult(businessLoginAttemptsModel));
+
+            // Initialize manager with the mock objects
+            ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
+                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserProfileService.Object);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 0, "3/28/2007 7:13:50 PM +00:00", ErrorMessage.UserDoesNotExist)]
+        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 5, "3/28/2007 7:13:50 PM +00:00", ErrorMessage.UserDoesNotExist)]
+        public async Task Login_UsernameDoesntExistWithLoginAttempts_ReturnUserDoesNotExist(string username, string password,
+            int loginAttemptsId, string ipAddress, int loginCounter, string suspensionEndTime, ErrorMessage error)
+        {
+            // Arrange
+            // Set mock objects for the dependencies LoginManager uses
+            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
+            Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
+            Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
+
+            var businessLoginAttemptsModel = new BusinessLoginAttemptsModel();
+
+            businessLoginAttemptsModel.Id = loginAttemptsId;
+            businessLoginAttemptsModel.IpAddress = ipAddress;
+            businessLoginAttemptsModel.LoginCounter = loginCounter;
+            businessLoginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse(suspensionEndTime);
+
+            WebUserAccountModel webUserAccountModel = null;
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Set conditional for the used mock object
+            mockLoginAttemptsService.Setup(x => x.GetLoginAttemptsByIpAddress(ipAddress))
+                .Returns(Task.FromResult(businessLoginAttemptsModel));
+            mockUserAccountService.Setup(x => x.GetUserAccountByUsername(username))
+                .Returns(Task.FromResult(webUserAccountModel));
+
+            // Initialize manager with the mock objects
+            ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
+                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserProfileService.Object);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "TestUser1", "TestPassword1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
+            "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", 1, "127.0.0.1", 0,
+            "3/28/2007 7:13:50 PM +00:00", ErrorMessage.NoMatch)]
+        [DataRow(1, "TestUser1", "TestPassword1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
+            "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", 1, "127.0.0.1", 5,
+            "3/28/2007 7:13:50 PM +00:00", ErrorMessage.NoMatch)]
+        public async Task Login_UsernameExistsButPasswordDoesntMatch_ReturnNoMatch(int accountId, string username, 
+            string password, string emailAddress, string accountType, string accountStatus, string creationDate,
+            string updationDate, int loginAttemptsId, string ipAddress, int loginCounter, string suspensionEndTime,
+            ErrorMessage error)
+        {
+            // Arrange
+            // Set mock objects for the dependencies LoginManager uses
+            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
+            Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
+            Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
+
+            var businessLoginAttemptsModel = new BusinessLoginAttemptsModel();
+
+            businessLoginAttemptsModel.Id = loginAttemptsId;
+            businessLoginAttemptsModel.IpAddress = ipAddress;
+            businessLoginAttemptsModel.LoginCounter = loginCounter;
+            businessLoginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse(suspensionEndTime);
+
+            var webUserAccountModel = new WebUserAccountModel();
+
+            webUserAccountModel.Id = accountId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Set conditional for the used mock object
+            mockLoginAttemptsService.Setup(x => x.GetLoginAttemptsByIpAddress(ipAddress))
+                .Returns(Task.FromResult(businessLoginAttemptsModel));
+            mockUserAccountService.Setup(x => x.GetUserAccountByUsername(username))
+                .Returns(Task.FromResult(webUserAccountModel));
+            mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUsename(password, username))
+                .Returns(Task.FromResult(false));
+
+            // Initialize manager with the mock objects
+            ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
+                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserProfileService.Object);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "TestUser1", "TestPassword1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
+            "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", 1, "127.0.0.1", 0,
+            "3/28/2007 7:13:50 PM +00:00")]
+        [DataRow(1, "TestUser1", "TestPassword1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
+            "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", 1, "127.0.0.1", 5,
+            "3/28/2007 7:13:50 PM +00:00")]
+        public async Task Login_LoginSuccess_ReturnWebUserAccountModel(int accountId, string username,
+            string password, string emailAddress, string accountType, string accountStatus, string creationDate,
+            string updationDate, int loginAttemptsId, string ipAddress, int loginCounter, string suspensionEndTime)
+        {
+            // Arrange
+            // Set mock objects for the dependencies LoginManager uses
+            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
+            Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
+            Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
+
+            var businessLoginAttemptsModel = new BusinessLoginAttemptsModel();
+
+            businessLoginAttemptsModel.Id = loginAttemptsId;
+            businessLoginAttemptsModel.IpAddress = ipAddress;
+            businessLoginAttemptsModel.LoginCounter = loginCounter;
+            businessLoginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse(suspensionEndTime);
+
+            var webUserAccountModel = new WebUserAccountModel();
+
+            webUserAccountModel.Id = accountId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = true;
+            expectedResult.SuccessValue = webUserAccountModel;
+
+            // Set conditional for the used mock object
+            mockLoginAttemptsService.Setup(x => x.GetLoginAttemptsByIpAddress(ipAddress))
+                .Returns(Task.FromResult(businessLoginAttemptsModel));
+            mockUserAccountService.Setup(x => x.GetUserAccountByUsername(username))
+                .Returns(Task.FromResult(webUserAccountModel));
+            mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUsename(password, username))
+                .Returns(Task.FromResult(true));
+
+            // Initialize manager with the mock objects
+            ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
+                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserProfileService.Object);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.SuccessValue == expectedResult.SuccessValue);
+        }
+        #endregion
+
         #region Unit Tests ForgotUsername
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress2", ErrorMessage.UserDoesNotExist)]

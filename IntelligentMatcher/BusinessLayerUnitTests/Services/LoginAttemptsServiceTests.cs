@@ -14,35 +14,6 @@ namespace BusinessLayerUnitTests.Services
     [TestClass]
     public class LoginAttemptsServiceTests
     {
-        #region Unit Tests AddIpAddress
-        [DataTestMethod]
-        [DataRow("127.0.0.12", 0)]
-        public async Task AddIpAddress_ReturnTrue(string ipAddress, int loginCounter)
-        {
-            // Arrange
-            // Setting up each dependency of LoginAttemptsService as a Mock
-            Mock<ILoginAttemptsRepository> mockLoginAttemptsRepository = new Mock<ILoginAttemptsRepository>();
-
-            var loginAttemptsModel = new LoginAttemptsModel();
-
-            loginAttemptsModel.IpAddress = ipAddress;
-            loginAttemptsModel.LoginCounter = loginCounter;
-            loginAttemptsModel.SuspensionEndTime = DateTimeOffset.UtcNow;
-
-            var expectedResult = true;
-
-            mockLoginAttemptsRepository.Setup(x => x.CreateLoginAttempts(loginAttemptsModel)).Returns(Task.FromResult(1));
-
-            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(mockLoginAttemptsRepository.Object);
-
-            // Act
-            var actualResult = await loginAttemptsService.AddIpAddress(ipAddress, loginCounter);
-
-            // Assert
-            Assert.IsTrue(actualResult == expectedResult);
-        }
-        #endregion
-
         #region Unit Tests GetLoginAttemptsByIpAddress
         [DataTestMethod]
         [DataRow(1, "127.0.0.1", 1, "3/28/2007 7:13:50 PM +00:00")]

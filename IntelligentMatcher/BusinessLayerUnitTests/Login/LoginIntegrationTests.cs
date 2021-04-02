@@ -33,20 +33,24 @@ namespace BusinessLayerUnitTests.Login
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
 
             for (int i = 1; i <= numTestRows; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();
                 userAccountModel.Id = i;
                 userAccountModel.Username = "TestUser" + i;
-                userAccountModel.Password = "TestPassword" + i;
-                userAccountModel.Salt = "TestSalt" + i;
+                userAccountModel.Password = "" + i;
+                userAccountModel.Salt = "" + i;
                 userAccountModel.EmailAddress = "TestEmailAddress" + i;
                 userAccountModel.AccountType = "TestAccountType" + i;
                 userAccountModel.AccountStatus = "TestAccountStatus" + i;
                 userAccountModel.CreationDate = DateTimeOffset.Parse("3/28/2007 7:13:50 PM +00:00");
                 userAccountModel.UpdationDate = DateTimeOffset.Parse("3/28/2007 7:13:50 PM +00:00");
+
                 await userAccountRepository.CreateAccount(userAccountModel);
+                await cryptographyService.newPasswordEncryptAsync("TestPassword" + i, i);
 
                 UserProfileModel userProfileModel = new UserProfileModel();
                 userProfileModel.Id = i;
@@ -54,8 +58,16 @@ namespace BusinessLayerUnitTests.Login
                 userProfileModel.Surname = "TestSurname" + i;
                 userProfileModel.DateOfBirth = DateTimeOffset.Parse("3/28/2007 7:13:50 PM +00:00");
                 userProfileModel.UserAccountId = userAccountModel.Id;
+
                 await userProfileRepository.CreateUserProfile(userProfileModel);
 
+                LoginAttemptsModel loginAttemptsModel = new LoginAttemptsModel();
+                loginAttemptsModel.Id = i;
+                loginAttemptsModel.IpAddress = "127.0.0." + i;
+                loginAttemptsModel.LoginCounter = i;
+                loginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse("3/28/2014 7:13:50 PM +00:00").AddYears(i);
+
+                await loginAttemptsRepository.CreateLoginAttempts(loginAttemptsModel);
             }
         }
 
@@ -66,14 +78,396 @@ namespace BusinessLayerUnitTests.Login
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
+
             var accounts = await userAccountRepository.GetAllAccounts();
 
             foreach (var account in accounts)
             {
                 await userAccountRepository.DeleteAccountById(account.Id);
             }
+
+            var loginAttempts = await loginAttemptsRepository.GetAllLoginAttempts();
+
+            foreach (var loginAttempt in loginAttempts)
+            {
+                await loginAttemptsRepository.DeleteLoginAttemptsById(loginAttempt.Id);
+            }
+
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("LoginAttempts", 0, connectionString, dataGateway);
+        }
+        #endregion
+
+        #region Integration Tests Login
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword1", "127.0.0.10", ErrorMessage.TooManyAttempts)]
+        public async Task Login_TooManyLoginAttemptsBeforeSuspensionEndTime_ReturnTooManyAttempts(string username,
+            string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.1", ErrorMessage.UserDoesNotExist)]
+        public async Task Login_IpAddressExistsButUsernameDoesntExist_ReturnUserDoesNotExist
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1));
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.4", ErrorMessage.UserDoesNotExist)]
+        public async Task Login_IpAddressExistsButUsernameDoesntExistAndLoginCounterIsFive_ReturnUserDoesNotExist
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1) &&
+                newBusinessLoginAttemptsModel.SuspensionEndTime != oldBusinessLoginAttemptsModel.SuspensionEndTime);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.5", ErrorMessage.UserDoesNotExist)]
+        public async Task Login_TooManyLoginAttemptsAfterSuspensionEndTimeButUsernameDoesntExist_ReturnUserDoesNotExist
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                businessLoginAttemptsModel.LoginCounter == 1);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.11", ErrorMessage.UserDoesNotExist)]
+        public async Task Login_IpAddressDoesntExistAndUsernameDoesntExist_ReturnUserDoesNotExist
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                businessLoginAttemptsModel.LoginCounter == 1);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword11", "127.0.0.1", ErrorMessage.NoMatch)]
+        public async Task Login_IpAddressAndUsernameExistsButPasswordDoesntMatch_ReturnNoMatch
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1));
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword11", "127.0.0.4", ErrorMessage.NoMatch)]
+        public async Task Login_IpAddressAndUsernameExistsButPasswordDoesntMatchAdnLoginCounterIsFive_ReturnNoMatch
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1) &&
+                newBusinessLoginAttemptsModel.SuspensionEndTime != oldBusinessLoginAttemptsModel.SuspensionEndTime);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword11", "127.0.0.5", ErrorMessage.NoMatch)]
+        public async Task Login_TooManyLoginAttemptsAfterSuspensionEndTimeButPasswordDoesntMatch_ReturnNoMatch
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                businessLoginAttemptsModel.LoginCounter == 1);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword11", "127.0.0.11", ErrorMessage.NoMatch)]
+        public async Task Login_IpAddressDoesntExistAndPasswordDoesntMatch_ReturnNoMatch
+            (string username, string password, string ipAddress, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.ErrorMessage == expectedResult.ErrorMessage &&
+                businessLoginAttemptsModel.LoginCounter == 1);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestUser1", "TestPassword1", "127.0.0.1")]
+        public async Task Login_LoginSuccess_ReturnWebUserAccountModel
+            (string username, string password, string ipAddress)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = true;
+            expectedResult.SuccessValue = await userAccountService.GetUserAccountByUsername(username);
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.Login(username, password, ipAddress);
+            var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+                actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id &&
+                actualResult.SuccessValue.Username == expectedResult.SuccessValue.Username &&
+                businessLoginAttemptsModel.LoginCounter == 0);
         }
         #endregion
 

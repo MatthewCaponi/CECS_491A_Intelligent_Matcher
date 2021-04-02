@@ -22,138 +22,215 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateLoginAttempts(LoginAttemptsModel model)
         {
-            var storedProcedure = "dbo.LoginAttempts_Create";
-            DynamicParameters p = new DynamicParameters();
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_Create";
+                DynamicParameters p = new DynamicParameters();
 
-            p.Add("IpAddress", model.IpAddress);
-            p.Add("LoginCounter", model.LoginCounter);
-            p.Add("SuspensionEndTime", model.SuspensionEndTime);
-            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("IpAddress", model.IpAddress);
+                p.Add("LoginCounter", model.LoginCounter);
+                p.Add("SuspensionEndTime", model.SuspensionEndTime);
+                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            return await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<int> DeleteLoginAttemptsById(int id)
         {
-            var storedProcedure = "dbo.LoginAttempts_Delete_ById";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_Delete_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             Id = id
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 Id = id
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<IEnumerable<LoginAttemptsModel>> GetAllLoginAttempts()
         {
-            string storedProcedure = "dbo.LoginAttempts_Get_All";
+            try
+            {
+                string storedProcedure = "dbo.LoginAttempts_Get_All";
 
-            return await _dataGateway.LoadData<LoginAttemptsModel, dynamic>(storedProcedure,
-                                                                          new { },
-                                                                          _connectionString.SqlConnectionString);
+                return await _dataGateway.LoadData<LoginAttemptsModel, dynamic>(storedProcedure,
+                                                                              new { },
+                                                                              _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<LoginAttemptsModel> GetLoginAttemptsById(int id)
         {
-            string storedProcedure = "dbo.LoginAttempts_Get_ById";
+            try
+            {
+                string storedProcedure = "dbo.LoginAttempts_Get_ById";
 
-            var row = await _dataGateway.LoadData<LoginAttemptsModel, dynamic>(storedProcedure,
-                new
-                {
-                    Id = id
-                },
-                _connectionString.SqlConnectionString);
+                var row = await _dataGateway.LoadData<LoginAttemptsModel, dynamic>(storedProcedure,
+                    new
+                    {
+                        Id = id
+                    },
+                    _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<LoginAttemptsModel> GetLoginAttemptsByIpAddress(string ipAddress)
         {
-            string storedProcedure = "dbo.LoginAttempts_Get_ByIpAddress";
+            try
+            {
+                string storedProcedure = "dbo.LoginAttempts_Get_ByIpAddress";
 
-            var row = await _dataGateway.LoadData<LoginAttemptsModel, dynamic>(storedProcedure,
-                new
-                {
-                    IpAddress = ipAddress
-                },
-                _connectionString.SqlConnectionString);
+                var row = await _dataGateway.LoadData<LoginAttemptsModel, dynamic>(storedProcedure,
+                    new
+                    {
+                        IpAddress = ipAddress
+                    },
+                    _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<int> IncrementLoginCounterById(int id)
         {
-            var storedProcedure = "dbo.LoginAttempts_IncrementLoginCounter_ById";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_IncrementLoginCounter_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             Id = id
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 Id = id
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<int> IncrementLoginCounterByIpAddress(string ipAddress)
         {
-            var storedProcedure = "dbo.LoginAttempts_IncrementLoginCounter_ByIpAddress";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_IncrementLoginCounter_ByIpAddress";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             IpAddress = ipAddress
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 IpAddress = ipAddress
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<int> ResetLoginCounterById(int id)
         {
-            var storedProcedure = "dbo.LoginAttempts_ResetLoginCounter_ById";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_ResetLoginCounter_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             Id = id
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 Id = id
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<int> ResetLoginCounterByIpAddress(string ipAddress)
         {
-            var storedProcedure = "dbo.LoginAttempts_ResetLoginCounter_ByIpAddress";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_ResetLoginCounter_ByIpAddress";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             IpAddress = ipAddress
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 IpAddress = ipAddress
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            { 
+                return default;
+            }
         }
 
         public async Task<int> UpdateSuspensionEndTimeById(int id, DateTimeOffset suspensionEndTime)
         {
-            var storedProcedure = "dbo.LoginAttempts_UpdateSuspensionEndTime_ById";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_UpdateSuspensionEndTime_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             Id = id,
-                                             SuspensionEndTime = suspensionEndTime
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 Id = id,
+                                                 SuspensionEndTime = suspensionEndTime
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task<int> UpdateSuspensionEndTimeByIpAddress(string ipAddress, DateTimeOffset suspensionEndTime)
         {
-            var storedProcedure = "dbo.LoginAttempts_UpdateSuspensionEndTime_ByIpAddress";
+            try
+            {
+                var storedProcedure = "dbo.LoginAttempts_UpdateSuspensionEndTime_ByIpAddress";
 
-            return await _dataGateway.SaveData(storedProcedure,
-                                         new
-                                         {
-                                             IpAddress = ipAddress,
-                                             SuspensionEndTime = suspensionEndTime
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.SaveData(storedProcedure,
+                                             new
+                                             {
+                                                 IpAddress = ipAddress,
+                                                 SuspensionEndTime = suspensionEndTime
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
         }
     }
 }

@@ -39,29 +39,43 @@ namespace IntelligentMatcher.Services
 
         public async Task<WebUserAccountModel> GetUserAccountByUsername(string username)
         {
-            var userAccountModel = await _userAccountRepository.GetAccountByUsername(username);
-            if (userAccountModel == null)
+            try
+            {
+                var userAccountModel = await _userAccountRepository.GetAccountByUsername(username);
+                if (userAccountModel == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                    return webUserAccountModel;
+                }
+            }
+            catch
             {
                 return null;
-            }
-            else
-            {
-                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
-                return webUserAccountModel;
             }
         }
 
         public async Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress)
         {
-            var userAccountModel = await _userAccountRepository.GetAccountByEmail(emailAddress);
-            if (userAccountModel == null)
+            try
+            {
+                var userAccountModel = await _userAccountRepository.GetAccountByEmail(emailAddress);
+                if (userAccountModel == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                    return webUserAccountModel;
+                }
+            }
+            catch
             {
                 return null;
-            }
-            else
-            {
-                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
-                return webUserAccountModel;
             }
         }
 
