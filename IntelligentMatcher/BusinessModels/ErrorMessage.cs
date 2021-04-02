@@ -16,6 +16,7 @@ namespace BusinessModels
         UserIsActive,
         NoUsersExist,
         EmailNotSent,
-        NoMatch
+        NoMatch,
+        TooManyAttempts
     }
 }

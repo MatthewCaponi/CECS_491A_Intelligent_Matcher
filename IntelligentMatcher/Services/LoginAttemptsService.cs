@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories;
+﻿using BusinessModels;
+using DataAccess.Repositories;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -16,55 +17,74 @@ namespace Services
             _loginAttemptsRepository = loginAttemptsRepository;
         }
 
-        public async Task<bool> AddIpAddress(string ipAddress)
+        public async Task<bool> AddIpAddress(string ipAddress, int loginCounter)
         {
             LoginAttemptsModel loginAttemptsModel = new LoginAttemptsModel();
 
             loginAttemptsModel.IpAddress = ipAddress;
-            loginAttemptsModel.LoginCounter = 0;
+            loginAttemptsModel.LoginCounter = loginCounter;
             loginAttemptsModel.SuspensionEndTime = DateTimeOffset.UtcNow;
 
-            await _loginAttemptsRepository.CreateLoginAttempts(loginAttemptsModel);
+            var changesMade = await _loginAttemptsRepository.CreateLoginAttempts(loginAttemptsModel);
+
+            if (changesMade == 0)
+            {
+                return false;
+            }
 
             return true;
         }
 
-        public async Task<bool> CheckLoginCounterByIpAddress(string ipAddress)
+        public async Task<BusinessLoginAttemptsModel> GetLoginAttemptsByIpAddress(string ipAddress)
         {
-            var loginAttemptModel = await _loginAttemptsRepository.GetLoginAttemptsByIpAddress(ipAddress);
+            var loginAttemptsModel = await _loginAttemptsRepository.GetLoginAttemptsByIpAddress(ipAddress);
 
-            if(loginAttemptModel == null)
+            if(loginAttemptsModel == null)
             {
-                await AddIpAddress(ipAddress);
+                return null;
             }
+            else
+            {
+                var businessLoginAttemptsModel = ModelConverterService.ConvertTo(loginAttemptsModel,
+                    new BusinessLoginAttemptsModel());
 
-            if(loginAttemptModel.LoginCounter >= 5)
-            {
-                if(DateTimeOffset.UtcNow < loginAttemptModel.SuspensionEndTime)
-                {
-                    return false;
-                }
+                return businessLoginAttemptsModel;
             }
-            return true;
         }
 
         public async Task<bool> IncrementLoginCounterByIpAddress(string ipAddress)
         {
-            await _loginAttemptsRepository.IncrementLoginCounterByIpAddress(ipAddress);
+            var changesMade = await _loginAttemptsRepository.IncrementLoginCounterByIpAddress(ipAddress);
+
+            if (changesMade == 0)
+            {
+                return false;
+            }
 
             return true;
         }
 
         public async Task<bool> ResetLoginCounterByIpAddress(string ipAddress)
         {
-            await _loginAttemptsRepository.ResetLoginCounterByIpAddress(ipAddress);
+            var changesMade = await _loginAttemptsRepository.ResetLoginCounterByIpAddress(ipAddress);
+
+            if (changesMade == 0)
+            {
+                return false;
+            }
 
             return true;
         }
 
-        public async Task<bool> SetSuspensionEndTimeByIpAddress(string ipAddress)
+        public async Task<bool> SetSuspensionEndTimeByIpAddress(string ipAddress, int suspensionHours)
         {
-            await _loginAttemptsRepository.UpdateSuspensionEndTimeByIpAddress(ipAddress, DateTimeOffset.UtcNow.AddHours(1));
+            var changesMade = await _loginAttemptsRepository.UpdateSuspensionEndTimeByIpAddress
+                (ipAddress, DateTimeOffset.UtcNow.AddHours(suspensionHours));
+
+            if (changesMade == 0)
+            {
+                return false;
+            }
 
             return true;
         }

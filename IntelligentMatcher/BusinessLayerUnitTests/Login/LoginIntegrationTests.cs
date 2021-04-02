@@ -77,10 +77,10 @@ namespace BusinessLayerUnitTests.Login
         }
         #endregion
 
-        #region Integration Tests ForgotUsernameValidation
+        #region Integration Tests ForgotUsername
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress11", ErrorMessage.UserDoesNotExist)]
-        public async Task ForgotUsernameValidation_WrongEmail_ReturnUserDoesNotExist(string dateOfBirth,
+        public async Task ForgotUsername_WrongEmail_ReturnUserDoesNotExist(string dateOfBirth,
             string emailAddress, ErrorMessage error)
         {
             // Arrange
@@ -89,21 +89,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), 
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<string>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
-            var actualResult = await loginManager.ForgotUsernameValidation(emailAddress, DateTimeOffset.Parse(dateOfBirth));
+            var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success &&
@@ -112,7 +114,7 @@ namespace BusinessLayerUnitTests.Login
 
         [DataTestMethod]
         [DataRow("3/28/2008 7:13:50 PM +00:00", "TestEmailAddress1", ErrorMessage.NoMatch)]
-        public async Task ForgotUsernameValidation_WrongDateOfBirth_ReturnUserNoMatch(string dateOfBirth,
+        public async Task ForgotUsername_WrongDateOfBirth_ReturnUserNoMatch(string dateOfBirth,
             string emailAddress, ErrorMessage error)
         {
             // Arrange
@@ -121,21 +123,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<string>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
-            var actualResult = await loginManager.ForgotUsernameValidation(emailAddress, DateTimeOffset.Parse(dateOfBirth));
+            var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success &&
@@ -145,7 +149,7 @@ namespace BusinessLayerUnitTests.Login
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
             "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 12:00:00 AM -07:00")]
-        public async Task ForgotUsernameValidation_InfoMatch_ReturnWebUserAccountModel(int accountId, string username,
+        public async Task ForgotUsername_InfoMatch_ReturnUsername(int accountId, string username,
             string emailAddress, string accountType, string accountStatus, string creationDate,
             string updationDate, string dateOfBirth)
         {
@@ -155,6 +159,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -170,21 +176,20 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<string>();
             expectedResult.Success = true;
-            expectedResult.SuccessValue = webUserAccountModel;
+            expectedResult.SuccessValue = username;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
-            var actualResult = await loginManager.ForgotUsernameValidation(emailAddress, DateTimeOffset.Parse(dateOfBirth));
+            var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success &&
-                actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id &&
-                actualResult.SuccessValue.EmailAddress == expectedResult.SuccessValue.EmailAddress);
+                actualResult.SuccessValue == expectedResult.SuccessValue);
         }
         #endregion
 
@@ -200,6 +205,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -210,7 +217,7 @@ namespace BusinessLayerUnitTests.Login
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
@@ -233,6 +240,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -243,7 +252,7 @@ namespace BusinessLayerUnitTests.Login
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
@@ -266,6 +275,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -276,7 +287,7 @@ namespace BusinessLayerUnitTests.Login
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
@@ -301,6 +312,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -321,7 +334,7 @@ namespace BusinessLayerUnitTests.Login
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act
@@ -350,6 +363,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -374,7 +389,7 @@ namespace BusinessLayerUnitTests.Login
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Initialize manager with the dependencies
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService,
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userProfileService);
 
             // Act

@@ -46,7 +46,8 @@ namespace IntelligentMatcher.Services
             }
             else
             {
-                return ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                return webUserAccountModel;
             }
         }
 
@@ -59,7 +60,8 @@ namespace IntelligentMatcher.Services
             }
             else
             {
-                return ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+                return webUserAccountModel;
             }
         }
 

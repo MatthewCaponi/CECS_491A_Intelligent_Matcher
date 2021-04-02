@@ -46,7 +46,8 @@ namespace UserManagement.Services
             }
             else
             {
-                return ModelConverterService.ConvertTo(userProfileModel, new WebUserProfileModel());
+                var webUserProfileModel =  ModelConverterService.ConvertTo(userProfileModel, new WebUserProfileModel());
+                return webUserProfileModel;
             }
         }
 

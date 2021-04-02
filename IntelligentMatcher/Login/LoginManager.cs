@@ -7,36 +7,69 @@ using Security;
 using IntelligentMatcher.Services;
 using UserManagement.Models;
 using UserManagement.Services;
+using Services;
 
 namespace Login
 {
     public class LoginManager : ILoginManager
     {
-
+        private const int loginCounter = 0;
+        private const int suspensionHours = 1;
         private readonly IAuthenticationService _authenticationService;
         private readonly ICryptographyService _cryptographyService;
+        private readonly ILoginAttemptsService _loginAttemptService;
         private readonly IUserAccountService _userAccountService;
         private readonly IUserProfileService _userProfileService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
-            IUserAccountService userAccountService, IUserProfileService userProfileService)
+            ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService, 
+            IUserProfileService userProfileService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
+            _loginAttemptService = loginAttemptsService;
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
         }
 
-        public async Task<Result<WebUserAccountModel>> Login(string username, string password, string IpAddress)
+        public async Task<Result<WebUserAccountModel>> Login(string username, string password, string ipAddress)
         {
             try
             {
                 var loginResult = new Result<WebUserAccountModel>();
+                var businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
+
+                if (businessLoginAttemptsModel == null)
+                {
+                    await _loginAttemptService.AddIpAddress(ipAddress, loginCounter);
+                    businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
+                }
+
+                if (businessLoginAttemptsModel.LoginCounter >= 5)
+                {
+                    if (DateTimeOffset.UtcNow < businessLoginAttemptsModel.SuspensionEndTime)
+                    {
+                        loginResult.Success = false;
+                        loginResult.ErrorMessage = ErrorMessage.TooManyAttempts;
+
+                        return loginResult;
+                    }
+                    await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
+                }
+
                 var account = await _userAccountService.GetUserAccountByUsername(username);
 
                 // Account will be null if an account with the given username can't be found
                 if (account == null)
                 {
+                    await _loginAttemptService.IncrementLoginCounterByIpAddress(ipAddress);
+                    businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
+
+                    if(businessLoginAttemptsModel.LoginCounter >= 5)
+                    {
+                        await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
+                    }
+
                     loginResult.Success = false;
                     loginResult.ErrorMessage = ErrorMessage.UserDoesNotExist;
 
@@ -47,11 +80,20 @@ namespace Login
 
                 if (authenticateUser == false)
                 {
+                    await _loginAttemptService.IncrementLoginCounterByIpAddress(ipAddress);
+                    businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
+
+                    if (businessLoginAttemptsModel.LoginCounter >= 5)
+                    {
+                        await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
+                    }
+
                     loginResult.Success = false;
                     loginResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return loginResult;
                 }
+                await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
 
                 loginResult.Success = true;
                 loginResult.SuccessValue = account;
@@ -68,11 +110,12 @@ namespace Login
             }
 
         }
-        public async Task<Result<WebUserAccountModel>> ForgotUsernameValidation(string emailAddress, DateTimeOffset dateOfBirth)
+
+        public async Task<Result<string>> ForgotUsername(string emailAddress, DateTimeOffset dateOfBirth)
         {
             try
             {
-                var forgotUsernameResult = new Result<WebUserAccountModel>();
+                var forgotUsernameResult = new Result<string>();
                 var account = await _userAccountService.GetUserAccountByEmail(emailAddress);
 
                 // Account will be null if an account with the given email address can't be found
@@ -96,19 +139,20 @@ namespace Login
                 }
 
                 forgotUsernameResult.Success = true;
-                forgotUsernameResult.SuccessValue = account;
+                forgotUsernameResult.SuccessValue = account.Username;
 
                 return forgotUsernameResult;
             }
             catch
             {
-                var forgotUsernameResult = new Result<WebUserAccountModel>();
+                var forgotUsernameResult = new Result<string>();
                 forgotUsernameResult.Success = false;
                 forgotUsernameResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return forgotUsernameResult;
             }
         }
+
         public async Task<Result<WebUserAccountModel>> ForgotPasswordValidation(string username, string emailAddress, 
             DateTimeOffset dateOfBirth)
         {
