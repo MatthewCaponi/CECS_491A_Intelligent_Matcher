@@ -37,6 +37,32 @@ namespace IntelligentMatcher.Services
             return webUserAccountModel;
         }
 
+        public async Task<WebUserAccountModel> GetUserAccountByUsername(string username)
+        {
+            var userAccountModel = await _userAccountRepository.GetAccountByUsername(username);
+            if (userAccountModel == null)
+            {
+                return null;
+            }
+            else
+            {
+                return ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+            }
+        }
+
+        public async Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress)
+        {
+            var userAccountModel = await _userAccountRepository.GetAccountByEmail(emailAddress);
+            if (userAccountModel == null)
+            {
+                return null;
+            }
+            else
+            {
+                return ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+            }
+        }
+
         public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
         {
             var userAccountModel = ModelConverterService.ConvertTo(webUserAccountModel, new UserAccountModel());

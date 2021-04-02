@@ -10,5 +10,6 @@ namespace UserManagement.Services
         Task<bool> DeleteProfile(int accountId);
         Task<List<WebUserProfileModel>> GetAllUsers();
         Task<WebUserProfileModel> GetUserProfile(int id);
+        Task<WebUserProfileModel> GetUserProfileByAccountId(int accountId);
     }
 }

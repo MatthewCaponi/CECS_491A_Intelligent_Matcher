@@ -60,6 +60,7 @@
     <Folder Include="StoredProcedures\UserAccount" />
     <Folder Include="StoredProcedures\UserProfile" />
     <Folder Include="StoredProcedures\UserAccountSettings" />
+    <Folder Include="StoredProcedures\LoginAttempts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -95,6 +96,18 @@
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
+    <Build Include="LoginAttempts.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Create.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_ResetLoginCounter_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_ResetLoginCounter_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_IncrementLoginCounter_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_IncrementLoginCounter_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_UpdateSuspensionEndTime_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_UpdateSuspensionEndTime_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_All.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Delete_ById.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

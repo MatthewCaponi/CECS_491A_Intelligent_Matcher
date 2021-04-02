@@ -117,7 +117,7 @@ namespace BusinessLayerUnitTests.Registration
             registry.ErrorMessage = error;
             var expectedResult = new Tuple<bool, Result<int>>(false, registry);
 
-            RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
+            IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object);
 
@@ -166,7 +166,7 @@ namespace BusinessLayerUnitTests.Registration
             registry.ErrorMessage = error;
             var expectedResult = new Tuple<bool, Result<int>>(false, registry);
 
-            RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
+            IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object);
 
@@ -215,7 +215,7 @@ namespace BusinessLayerUnitTests.Registration
             registry.ErrorMessage = error;
             var expectedResult = new Tuple<bool, Result<int>>(true, registry);
 
-            RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
+            IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object);
 
@@ -263,7 +263,7 @@ namespace BusinessLayerUnitTests.Registration
             Result<int> registry = new Result<int>();
             var expectedResult = new Tuple<bool, Result<int>>(true, registry);
 
-            RegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
+            IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object);
 
@@ -292,7 +292,8 @@ namespace BusinessLayerUnitTests.Registration
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
-            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), 
+                new ConnectionStringData()));
 
             WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
             webUserAccountModel.Id = expectedId;
