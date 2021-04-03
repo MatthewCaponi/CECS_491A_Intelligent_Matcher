@@ -19,16 +19,18 @@ namespace Login
         private readonly ICryptographyService _cryptographyService;
         private readonly ILoginAttemptsService _loginAttemptService;
         private readonly IUserAccountService _userAccountService;
+        private readonly IUserAccountCodeService _userAccountCodeService;
         private readonly IUserProfileService _userProfileService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
-            ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService, 
-            IUserProfileService userProfileService)
+            ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
+            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
             _loginAttemptService = loginAttemptsService;
             _userAccountService = userAccountService;
+            _userAccountCodeService = userAccountCodeService;
             _userProfileService = userProfileService;
         }
 
@@ -201,6 +203,61 @@ namespace Login
                 forgotPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return forgotPasswordResult;
+            }
+        }
+
+        public async Task<Result<WebUserAccountModel>> ForgotPasswordCodeInput(string code, int accountId)
+        {
+            try
+            {
+                var forgotPasswordCodeResult = new Result<WebUserAccountModel>();
+
+                var userAccountCode = await _userAccountCodeService.GetUserAccountCodeByAccountId(accountId);
+
+                if(userAccountCode == null)
+                {
+                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.ErrorMessage = ErrorMessage.Null;
+
+                    return forgotPasswordCodeResult;
+                }
+
+                var timeExpired = (userAccountCode.ExpirationTime <= DateTimeOffset.UtcNow);
+
+                if (timeExpired == true)
+                {
+                    await _userAccountCodeService.DeleteCode(accountId);
+
+                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.ErrorMessage = ErrorMessage.CodeExpired;
+
+                    return forgotPasswordCodeResult;
+                }
+
+                if (userAccountCode.Code == code)
+                {
+                    await _userAccountCodeService.DeleteCode(accountId);
+
+                    forgotPasswordCodeResult.Success = true;
+                    forgotPasswordCodeResult.SuccessValue = await _userAccountService.GetUserAccount(accountId);
+
+                    return forgotPasswordCodeResult;
+                }
+                else
+                {
+                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.ErrorMessage = ErrorMessage.NoMatch;
+                    
+                    return forgotPasswordCodeResult;
+                }
+            }
+            catch
+            {
+                var forgotPasswordCodeResult = new Result<WebUserAccountModel>();
+                forgotPasswordCodeResult.Success = false;
+                forgotPasswordCodeResult.ErrorMessage = ErrorMessage.AsyncError;
+
+                return forgotPasswordCodeResult;
             }
         }
 

@@ -57,9 +57,8 @@ namespace BusinessLayerUnitTests.Services
         }
 
         [DataTestMethod]
-        [DataRow(1, "127.0.0.13", 1, "3/28/2007 7:13:50 PM +00:00")]
-        public async Task GetLoginAttemptsByIpAddress_IpAddressNotFoundFound_ReturNull(int id, string ipAddress,
-            int loginCounter, string suspensionEndTime)
+        [DataRow("127.0.0.13")]
+        public async Task GetLoginAttemptsByIpAddress_IpAddressNotFoundFound_ReturnNull(string ipAddress)
         {
             // Arrange
             // Setting up each dependency of LoginAttemptsService as a Mock

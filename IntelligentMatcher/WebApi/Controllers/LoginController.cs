@@ -29,6 +29,12 @@ namespace WebApi.Controllers
         public DateTimeOffset dateOfBirth { get; set; }
     }
 
+    public class ForgotPasswordCodeInputModel
+    {
+        public string code { get; set; }
+        public int accountId { get; set; }
+    }
+
     public class ResetPasswordModel
     {
         public string password { get; set; }
@@ -72,6 +78,16 @@ namespace WebApi.Controllers
                 forgotPasswordValidationModel.dateOfBirth);
 
             return forgotPasswordResult;
+        }
+
+        [HttpPost("forgotPasswordCode")]
+        public async Task<ActionResult<Result<WebUserAccountModel>>> ForgotPasswordCodeInput
+            ([FromBody] ForgotPasswordCodeInputModel forgotPasswordCodeInputModel)
+        {
+            var forgotPasswordCodeResult = await _loginManager.ForgotPasswordCodeInput
+                (forgotPasswordCodeInputModel.code, forgotPasswordCodeInputModel.accountId);
+
+            return forgotPasswordCodeResult;
         }
 
         [HttpPost("resetPassword")]

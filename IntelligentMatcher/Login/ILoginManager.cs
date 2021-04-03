@@ -11,6 +11,7 @@ namespace Login
         Task<Result<string>> ForgotUsername(string emailAddress, DateTimeOffset dateOfBirth);
         Task<Result<WebUserAccountModel>> ForgotPasswordValidation(string username, string emailAddress, 
             DateTimeOffset dateOfBirth);
+        Task<Result<WebUserAccountModel>> ForgotPasswordCodeInput(string code, int accountId);
         Task<Result<WebUserAccountModel>> ResetPassword(string password, int accountId);
     }
 }

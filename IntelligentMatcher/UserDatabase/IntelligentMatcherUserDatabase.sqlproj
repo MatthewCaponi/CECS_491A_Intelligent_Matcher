@@ -61,6 +61,7 @@
     <Folder Include="StoredProcedures\UserProfile" />
     <Folder Include="StoredProcedures\UserAccountSettings" />
     <Folder Include="StoredProcedures\LoginAttempts" />
+    <Folder Include="StoredProcedures\UserAccountCode" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -108,6 +109,13 @@
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_UpdateSuspensionEndTime_ByIpAddress.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_All.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Delete_ById.sql" />
+    <Build Include="UserAccountCode.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Create.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_ByUserAccountId.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_DeleteByUserAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

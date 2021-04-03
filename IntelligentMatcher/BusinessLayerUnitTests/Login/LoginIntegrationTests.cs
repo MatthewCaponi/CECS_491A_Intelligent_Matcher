@@ -34,6 +34,7 @@ namespace BusinessLayerUnitTests.Login
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
+            IUserAccountCodeRepository userAccountCodeRepository = new UserAccountCodeRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
 
             for (int i = 1; i <= numTestRows; ++i)
@@ -68,6 +69,14 @@ namespace BusinessLayerUnitTests.Login
                 loginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse("3/28/2014 7:13:50 PM +00:00").AddYears(i);
 
                 await loginAttemptsRepository.CreateLoginAttempts(loginAttemptsModel);
+
+                UserAccountCodeModel userAccountCodeModel = new UserAccountCodeModel();
+                userAccountCodeModel.Id = i;
+                userAccountCodeModel.Code = "ABC" + i;
+                userAccountCodeModel.ExpirationTime = DateTimeOffset.Parse("3/28/2014 7:13:50 PM +00:00").AddYears(i);
+                userAccountCodeModel.UserAccountId = i;
+
+                await userAccountCodeRepository.CreateUserAccountCode(userAccountCodeModel);
             }
         }
 
@@ -97,6 +106,7 @@ namespace BusinessLayerUnitTests.Login
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("LoginAttempts", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
         }
         #endregion
 
@@ -116,6 +126,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -125,7 +137,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -150,6 +162,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -161,7 +175,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -188,6 +202,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -199,7 +215,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -227,6 +243,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -236,7 +254,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -263,6 +281,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -272,7 +292,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -299,6 +319,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -310,7 +332,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -337,6 +359,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -348,7 +372,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -376,6 +400,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -385,7 +411,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -412,6 +438,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -421,7 +449,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -448,6 +476,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -457,7 +487,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -487,6 +517,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -496,7 +528,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
@@ -521,6 +553,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -530,7 +564,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
@@ -557,6 +591,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -576,7 +612,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
@@ -603,6 +639,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -612,7 +650,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, emailAddress, 
@@ -638,6 +676,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -647,7 +687,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, emailAddress,
@@ -673,6 +713,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -682,7 +724,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, emailAddress,
@@ -710,6 +752,8 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
@@ -729,7 +773,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, emailAddress,
@@ -740,6 +784,173 @@ namespace BusinessLayerUnitTests.Login
                 actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id &&
                 actualResult.SuccessValue.Username == expectedResult.SuccessValue.Username &&
                 actualResult.SuccessValue.EmailAddress == expectedResult.SuccessValue.EmailAddress);
+        }
+        #endregion
+
+        #region Integration Tests ForgotPasswordCodeInput
+        [DataTestMethod]
+        [DataRow("ABC11", 11, ErrorMessage.Null)]
+        public async Task ForgotPasswordCodeInput_AccountHasNoCode_ReturnNull(string code, int accountId, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userAccountCodeService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
+
+            // Assert
+            Assert.IsTrue
+                (
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.ErrorMessage == expectedResult.ErrorMessage
+                );
+        }
+
+        [DataTestMethod]
+        [DataRow("ABC1", 1, ErrorMessage.CodeExpired)]
+        public async Task ForgotPasswordCodeInput_TimeExpired_ReturnCodeExpired(string code, int accountId, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userAccountCodeService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
+
+            // Assert
+            Assert.IsTrue
+                (
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.ErrorMessage == expectedResult.ErrorMessage
+                );
+        }
+
+        [DataTestMethod]
+        [DataRow("ABC11", 10, ErrorMessage.NoMatch)]
+        public async Task ForgotPasswordCodeInput_CodeMisMatch_ReturnNoMatch(string code, int accountId, ErrorMessage error)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userAccountCodeService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
+
+            // Assert
+            Assert.IsTrue
+                (
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.ErrorMessage == expectedResult.ErrorMessage
+                );
+        }
+
+        [DataTestMethod]
+        [DataRow("ABC10", 10, "TestUser10", "TestEmailAddress10", "TestAccountType10",
+            "TestAccountStatus10", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00")]
+        public async Task ForgotPasswordCodeInput_InputMatch_ReturnWebUserAccountModel(string code, int accountId,
+            string username, string emailAddress, string accountType, string accountStatus,
+            string creationDate, string updationDate)
+        {
+            // Arrange
+            // Set the dependencies LoginManager uses
+            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+
+            webUserAccountModel.Id = accountId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            var expectedResult = new Result<WebUserAccountModel>();
+            expectedResult.Success = true;
+            expectedResult.SuccessValue = webUserAccountModel;
+
+            // Initialize manager with the dependencies
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
+                userAccountService, userAccountCodeService, userProfileService);
+
+            // Act
+            var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
+
+            // Assert
+            Assert.IsTrue
+                (
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id
+                );
         }
         #endregion
 
@@ -760,6 +971,8 @@ namespace BusinessLayerUnitTests.Login
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
@@ -784,7 +997,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userProfileService);
+                userAccountService, userAccountCodeService, userProfileService);
 
             // Act
             var actualResult = await loginManager.ResetPassword(password, accountId);

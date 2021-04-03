@@ -17,6 +17,7 @@ namespace BusinessModels
         NoUsersExist,
         EmailNotSent,
         NoMatch,
-        TooManyAttempts
+        TooManyAttempts,
+        CodeExpired
     }
 }

@@ -360,7 +360,7 @@ namespace DataAccessUnitTestes
         [DataRow(1)]
         [DataRow(2)]
         [DataRow(3)]
-        public async Task DeleteLoginAttemptsById_AccountExists_AccountIsNull(int id)
+        public async Task DeleteLoginAttemptsById_LoginAttemptsExists_LoginAttemptsIsNull(int id)
         {
             // Arrange
             ILoginAttemptsRepository loginAttemptsRepository =

@@ -70,7 +70,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Registration", "Registratio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHelper", "TestHelper\TestHelper.csproj", "{4C005678-7171-4D26-BC47-5F931C9264F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Login", "Login\Login.csproj", "{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Login", "Login\Login.csproj", "{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerLayerTest", "ControllerLayerTest\ControllerLayerTest.csproj", "{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -152,6 +154,10 @@ Global
 		{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -174,6 +180,7 @@ Global
 		{6EE4E71B-963B-4088-91A0-3868794587F9} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 		{4C005678-7171-4D26-BC47-5F931C9264F9} = {E9EDCAD2-EA48-412C-83E5-587CE431B806}
 		{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
+		{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4} = {E9EDCAD2-EA48-412C-83E5-587CE431B806}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF33D655-7913-49CE-90DE-24BB5A7DA8E0}
