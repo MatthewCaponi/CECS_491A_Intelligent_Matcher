@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import ListingSearch from '../../TraditionalListingSearch/Pages/ListingSearch';
 import './Home.css';
 
 function Home() {
@@ -18,7 +19,8 @@ function Home() {
                 </Grid.Row>
                 <Grid.Row>
                 <Button compact size="tiny" circular inverted color="violet">Create Listing</Button>
-                    <Button compact size="tiny" circular inverted color="blue">Traditional Search</Button> 
+                    <Button compact size="tiny" circular inverted color="blue">Traditional Search</Button>
+
                 </Grid.Row>
             </Grid> 
             </Grid.Column>
@@ -28,5 +30,7 @@ function Home() {
     )
 
 }
+
+
 
 export default Home;

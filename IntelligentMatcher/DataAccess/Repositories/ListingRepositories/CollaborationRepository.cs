@@ -32,7 +32,6 @@ namespace DataAccess.Repositories.ListingRepositories
             p.Add("InvolvementType", dalCollaborationModel.InvolvementType);
             p.Add("Experience", dalCollaborationModel.Experience);
             p.Add("ListingId", dalCollaborationModel.ListingId);
-            p.Add("CreationDate", dalCollaborationModel.CreationDate);
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 

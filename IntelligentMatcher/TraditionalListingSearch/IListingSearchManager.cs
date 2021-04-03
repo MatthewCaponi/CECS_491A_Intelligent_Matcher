@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TraditionalListingSearch
 {
-    public interface ISearchManager
+    public interface IListingSearchManager
     {
-        Task<Tuple<bool, ResultModel<List<BusinessListingModel>>>> GetAllListings();
+        Task<Result<List<BusinessListingModel>>> GetAllListings();
     }
 }

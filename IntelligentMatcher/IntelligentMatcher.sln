@@ -56,11 +56,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailVerification", "EmailV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Security", "Security\Security.csproj", "{AE0FC528-EB30-4A8E-97CD-411434997599}"
 EndProject
-
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalListings", "TraditionalListings\TraditionalListings.csproj", "{3DC611F0-88AC-4A74-8393-9E7C1083A0C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraditionalListingSearch", "TraditionalListingSearch\TraditionalListingSearch.csproj", "{0BCD2109-AA8A-49BA-A754-F796C22EAA2F}"
-
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalListingSearch", "TraditionalListingSearch\TraditionalListingSearch.csproj", "{0BCD2109-AA8A-49BA-A754-F796C22EAA2F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAccountSettings", "UserAccountSettings\UserAccountSettings.csproj", "{8E6B46A7-E35A-49D3-A698-452B1B2CF2AF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentMatcherUI", "IntelligentMatcherUI\IntelligentMatcherUI.csproj", "{7B17477D-B1F6-4C3D-A522-A201040C50EA}"

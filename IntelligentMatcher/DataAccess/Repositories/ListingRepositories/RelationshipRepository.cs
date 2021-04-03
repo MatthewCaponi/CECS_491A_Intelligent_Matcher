@@ -29,9 +29,7 @@ namespace DataAccess.Repositories.ListingRepositories
             p.Add("Age", dalRelationshipModel.Age);
             p.Add("Interests", dalRelationshipModel.Interests);
             p.Add("GenderPreference", dalRelationshipModel.GenderPreference);
-            p.Add("CreationDate", dalRelationshipModel.CreationDate);
             p.Add("ListingId", dalRelationshipModel.ListingId);
-
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);

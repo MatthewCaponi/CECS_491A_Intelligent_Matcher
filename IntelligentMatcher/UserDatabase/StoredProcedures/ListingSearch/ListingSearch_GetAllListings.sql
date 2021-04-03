@@ -4,6 +4,6 @@ AS
 begin
 	set nocount on;
 	Select [Id],[Title],[Details],[City],[State],[NumberOfParticipants],
-	[InPersonOrRemote],[UserAccountID],[CreationDate]
+	[InPersonOrRemote],[UserAccountID]
 	from dbo.Listing;
 end

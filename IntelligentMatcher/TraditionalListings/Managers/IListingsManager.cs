@@ -13,8 +13,6 @@ namespace TraditionalListings.Managers
     {
    
         Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel);
-       
-
         Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id);
         Task<bool> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels);
         Task<bool> GetListing(int Id);

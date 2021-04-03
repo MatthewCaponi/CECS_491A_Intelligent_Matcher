@@ -10,7 +10,6 @@ namespace Models.DALListingModels
         public int Age { get; set; }
         public String Interests { get; set; }
         public String GenderPreference { get; set; }
-        public DateTime CreationDate { get; set; }
         public int ListingId { get; set; }
     }
 }

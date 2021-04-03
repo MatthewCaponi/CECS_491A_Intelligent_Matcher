@@ -33,7 +33,6 @@ namespace DataAccess.Repositories
             p.Add("NumberOfParticipants", dalListingModel.NumberOfParticipants);
             p.Add("InPersonOrRemote", dalListingModel.InPersonOrRemote);
             p.Add("UserAccountId", dalListingModel.UserAccountId);
-            p.Add("CreationDate", dalListingModel.CreationDate);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);

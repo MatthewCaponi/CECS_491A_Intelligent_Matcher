@@ -1,4 +1,6 @@
 import UserManagement from "./Features/CoreFeatures/UserManagement/Pages/UserManagement";
+import ListingSearch from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
+import ListingCategory from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingCategory"
 import Home from "./Features/CoreFeatures/Home/Pages/Home";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
@@ -15,6 +17,12 @@ function App() {
         <Switch>
           <Route path="/UserManagement">
             <UserManagement />
+          </Route>
+          <Route path="/ListingSearch">
+            <ListingSearch />
+          </Route>
+          <Route path="/ListingCategory">
+            <ListingCategory />
           </Route>
           <Route path="/">
           <Home />
