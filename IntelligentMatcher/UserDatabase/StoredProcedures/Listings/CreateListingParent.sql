@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[CreateParentListing]
+﻿CREATE PROCEDURE [dbo].[CreateListingParent]
 	@Title nvarchar(50),
 	@Details nvarchar(1000),
 	@City nvarchar(50),
@@ -12,7 +12,7 @@ AS
 begin 
 	set nocount on;
 	insert into dbo.[Listing]([Title],[Details],[City],[State],[NumberOfParticipants],
-	[InPersonOrRemote],[CreationDate])
+	[InPersonOrRemote])
 	values (@Title,@Details,@City,@State,@NumberOfParticipants,@InPersonOrRemote,
 	@CreationDate);
 

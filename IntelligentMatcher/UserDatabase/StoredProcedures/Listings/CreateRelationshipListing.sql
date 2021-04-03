@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[TraditionalListing_CreateRelationshipListing]
+﻿CREATE PROCEDURE [dbo].[CreateRelationshipListing]
 	@RelationshipType nvarchar(50),
 	@Age int,
 	@Interests nvarchar(50),
