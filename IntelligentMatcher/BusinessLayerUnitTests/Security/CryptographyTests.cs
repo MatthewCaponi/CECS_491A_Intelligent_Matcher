@@ -111,7 +111,7 @@ namespace BusinessLayerUnitTests.Security
             // Act
             ICryptographyService CryptographyService = new CryptographyService(userAccountRepo);
 
-            await CryptographyService.NewPasswordEncryptAsync(password, UserID);
+            await CryptographyService.newPasswordEncryptAsync(password, UserID);
 
 
             var userAccount = await userAccountRepo.GetAccountById(UserID);

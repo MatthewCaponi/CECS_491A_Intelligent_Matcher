@@ -214,8 +214,101 @@ namespace BusinessLayerUnitTests.Messaging
                 Assert.IsTrue(false);
             }
         }
+        [DataTestMethod]
+        [DataRow(1, 1, 1, "My Channel", 2)]
+        public async Task SetOnline_TurnUserOnline_UserSetOnline(int ChannelId, int UserId, int OwnerId, string ChannelName, int NewUserId)
+        {
 
 
+
+            ChannelModel model = new ChannelModel();
+            model.OwnerId = OwnerId;
+            model.Name = ChannelName;
+
+            model.Name = ChannelName;
+            Mock<IMessagesRepo> messagesRepo = new Mock<IMessagesRepo>();
+            Mock<IChannelsRepo> channelsRepo = new Mock<IChannelsRepo>();
+            Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
+            Mock<IUserChannelsRepo> userChannelsRepo = new Mock<IUserChannelsRepo>();
+            IMessagingService messagingService = new MessagingService(messagesRepo.Object, channelsRepo.Object, userChannelsRepo.Object, userAccountRepository.Object);
+
+            try
+            {
+                await messagingService.CreateChannelAsync(model);
+                await messagingService.AddUserToChannelAsync(NewUserId, ChannelId);
+                await messagingService.SetUserOnlineAsync(NewUserId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+            Assert.IsTrue(true);
+
+
+        }
+
+
+
+        [DataTestMethod]
+        [DataRow(1, 1, 1, "My Channel", 2)]
+        public async Task SetOffline_TurnUserOffline_UserSetOffline(int ChannelId, int UserId, int OwnerId, string ChannelName, int NewUserId)
+        {
+
+
+
+            ChannelModel model = new ChannelModel();
+            model.OwnerId = OwnerId;
+            model.Name = ChannelName;
+
+            Mock<IMessagesRepo> messagesRepo = new Mock<IMessagesRepo>();
+            Mock<IChannelsRepo> channelsRepo = new Mock<IChannelsRepo>();
+            Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
+            Mock<IUserChannelsRepo> userChannelsRepo = new Mock<IUserChannelsRepo>();
+            IMessagingService messagingService = new MessagingService(messagesRepo.Object, channelsRepo.Object, userChannelsRepo.Object, userAccountRepository.Object);
+
+            try
+            {
+                await messagingService.CreateChannelAsync(model);
+                await messagingService.AddUserToChannelAsync(NewUserId, ChannelId);
+                await messagingService.SetUserOfflineAsync(NewUserId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+            Assert.IsTrue(true);
+
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 1, "Sending Test Message")]
+        public async Task GetAllChannelMessages_GetMessages_RetrievedAllMessages(int channelId, int userId, string message)
+        {
+
+            MessageModel model = new MessageModel();
+            model.ChannelId = channelId;
+            model.UserId = userId;
+            model.Message = message;
+
+            Mock<IMessagesRepo> messagesRepo = new Mock<IMessagesRepo>();
+            Mock<IChannelsRepo> channelsRepo = new Mock<IChannelsRepo>();
+            Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
+            Mock<IUserChannelsRepo> userChannelsRepo = new Mock<IUserChannelsRepo>();
+            IMessagingService messagingService = new MessagingService(messagesRepo.Object, channelsRepo.Object, userChannelsRepo.Object, userAccountRepository.Object);
+            try
+            {
+                await messagingService.SendMessageAsync(model);
+                IEnumerable<MessageModel> messages = await messagingService.GetAllChannelMessagesAsync(channelId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+            Assert.IsTrue(true);
+
+        }
 
 
     }

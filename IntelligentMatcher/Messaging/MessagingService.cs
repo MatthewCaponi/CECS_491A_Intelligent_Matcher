@@ -54,26 +54,34 @@ namespace Messaging
             {
                 return false;
             }
-
-
         }
 
         public async Task<IEnumerable<MessageModel>> GetAllChannelMessagesAsync(int channelId)
         {
-
+            try
+            {
                 IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelIdAsync(channelId);
-
                 return models;
-
-
+            }
+            catch
+            {
+                IEnumerable<MessageModel> models = null;
+                return models;
+            }
         }
 
         public async Task<bool> CreateChannelAsync(ChannelModel model)
         {
+            try
+            {
+                await _userChannelsRepo.AddUserChannelAsync(model.OwnerId, await _channelsRepo.CreateChannelAsync(model));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
-            await _userChannelsRepo.AddUserChannelAsync(model.OwnerId, await _channelsRepo.CreateChannelAsync(model));
-
-            return true;
         }
 
         public async Task<bool> DeleteChannelAsync(int id)
@@ -132,48 +140,90 @@ namespace Messaging
 
         public async Task<IEnumerable<UserIdModel>> GetAllUsersInChannelAsync(int channelId)
         {
-            IEnumerable<int> userIds = await _userChannelsRepo.GetAllUsersByChannelIdAsync(channelId);
-            List<UserIdModel> userIdModels = new List<UserIdModel>();
-            foreach(int userId in userIds)
+            try
             {
-                UserIdModel model = new UserIdModel();
-                model.UserId = userId;
-                UserAccountModel userAcountModel = await _userAccountRepository.GetAccountById(userId);
-                model.Username = userAcountModel.Username;
-                userIdModels.Add(model);
+                IEnumerable<int> userIds = await _userChannelsRepo.GetAllUsersByChannelIdAsync(channelId);
+                List<UserIdModel> userIdModels = new List<UserIdModel>();
+                foreach (int userId in userIds)
+                {
+                    UserIdModel model = new UserIdModel();
+                    model.UserId = userId;
+                    string status = await _userChannelsRepo.GetStatus(userId);
+                    model.AccountStatus = status;
+                    UserAccountModel userAcountModel = await _userAccountRepository.GetAccountById(userId);
+                    model.Username = userAcountModel.Username;
+                    userIdModels.Add(model);
+                }
+
+                IEnumerable<UserIdModel> userIdModelI = userIdModels;
+
+                return userIdModelI;
             }
-
-            IEnumerable<UserIdModel> userIdModelI = userIdModels;
-
-            return userIdModelI;
-
-
+            catch
+            {
+                IEnumerable<UserIdModel> userIdModelI = null;
+                return userIdModelI;
+            }
         }
 
         public async Task<IEnumerable<ChannelModel>> GetAllUserChannelsAsync(int userId)
         {
-            IEnumerable<int> channelIds = await _userChannelsRepo.GetAllChannelsByUserIdAsync(userId);
-            List<ChannelModel> channelModelsList = new List<ChannelModel>();
-            foreach (int channelId in channelIds)
+            try
             {
-                ChannelModel newModel = await _channelsRepo.GetChannelbyIdAsync(channelId);
-                if(newModel != null)
+                IEnumerable<int> channelIds = await _userChannelsRepo.GetAllChannelsByUserIdAsync(userId);
+                List<ChannelModel> channelModelsList = new List<ChannelModel>();
+                foreach (int channelId in channelIds)
                 {
-                    channelModelsList.Add(newModel);
+                    ChannelModel newModel = await _channelsRepo.GetChannelbyIdAsync(channelId);
+                    if (newModel != null)
+                    {
+                        channelModelsList.Add(newModel);
 
+                    }
                 }
+
+                IEnumerable<ChannelModel> channelModels = channelModelsList;
+
+                return channelModels;
             }
+            catch
+            {
+                IEnumerable<ChannelModel> channelModels = null;
 
-            IEnumerable<ChannelModel> channelModels = channelModelsList;
-
-            return channelModels;
-
-
+                return channelModels;
+            }
         }
 
         public async Task<int> GetChannelOwnerAsync(int id)
         {
-            return await _channelsRepo.GetChannelOwnerbyIdAsync(id);
+           
+               return await _channelsRepo.GetChannelOwnerbyIdAsync(id);
+         
+        }
+
+        public async Task<bool> SetUserOnlineAsync(int id)
+        {
+            try
+            {
+                await _userChannelsRepo.UpdateStatus(id, "Online");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> SetUserOfflineAsync(int id)
+        {
+            try
+            {
+                await _userChannelsRepo.UpdateStatus(id, "Offline");
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

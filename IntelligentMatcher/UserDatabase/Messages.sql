@@ -7,5 +7,8 @@
 	[Message] nvarchar(1000) NOT NULL,
 	[Time] NVARCHAR(100) NOT NULL,
 	[Username] nvarchar(100),
-	[Date] date NOT NULL
+	[Date] date NOT NULL,
+
+
+
 )

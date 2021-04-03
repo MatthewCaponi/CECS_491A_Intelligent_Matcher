@@ -174,5 +174,22 @@ namespace IntelligentMatcherUI.Controllers
             return true;
         }
 
+        [HttpPost]
+        public async Task<bool> SetOnline([FromBody] int userId)
+        {
+
+            await _messagingService.SetUserOnlineAsync(userId);
+
+            return true;
+        }
+
+        [HttpPost]
+        public async Task<bool> SetOffline([FromBody] int userId)
+        {
+
+            await _messagingService.SetUserOfflineAsync(userId);
+
+            return true;
+        }
     }
 }

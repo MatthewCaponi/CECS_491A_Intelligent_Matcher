@@ -31,5 +31,9 @@ namespace Messaging
 
         Task<bool> DeleteMessageAsync(int messageId);
 
+        Task<bool> SetUserOfflineAsync(int id);
+
+        Task<bool> SetUserOnlineAsync(int id);
+
     }
 }

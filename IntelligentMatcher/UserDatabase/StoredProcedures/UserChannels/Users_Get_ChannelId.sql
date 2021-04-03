@@ -3,7 +3,7 @@
 AS
 begin
 	set nocount on;
-	SELECT [UserId]
+	SELECT [UserId], [AccountStatus]
 	from dbo.UserChannels
 	WHERE ChannelId = @ChannelId;
 end

@@ -26,21 +26,16 @@ namespace WebApi
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
 
-            if (accounts != null)
-            {
-                var numRows = accounts.ToList().Count;
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
-                for (int i = 1; i <= numRows; ++i)
-                {                 
-                    await userProfileRepository.DeleteUserProfileByAccountId(i);
-                    await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
-                    await userAccountRepository.DeleteAccountById(i);
-                }
+            foreach (var userChannel in userChannels)
+            {
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
             }
-            
-            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
-            await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
-            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+            await DataAccessTestHelper.ReseedAsync("UserChannels", 0, connectionString, dataGateway);
+
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
             var messages = await messagesRepo.GetAllMessagesAsync();
 
@@ -63,15 +58,24 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
-            foreach (var userChannel in userChannels)
+
+            if (accounts != null)
             {
-                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
-            }
+                var numRows = accounts.ToList().Count;
 
-            await DataAccessTestHelper.ReseedAsync("UserChannels", 0, connectionString, dataGateway);
+                for (int i = 1; i <= numRows; ++i)
+                {                 
+                    await userProfileRepository.DeleteUserProfileByAccountId(i);
+                    await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
+                    await userAccountRepository.DeleteAccountById(i);
+                }
+            }
+            
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
 
             for (int i = 1; i < seedAmount; ++i)
             {

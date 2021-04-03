@@ -7,6 +7,7 @@ namespace Models
     public class UserIdModel
     {
         public string Username { get; set; }
+        public string AccountStatus { get; set; }
 
         public int UserId { get; set; }
     }

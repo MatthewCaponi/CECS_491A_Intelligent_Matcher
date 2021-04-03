@@ -4,8 +4,8 @@ AS
 begin
 	set nocount on;
 
-	delete
-	from dbo.[UserAccount]
+	delete 
+	from dbo.[UserAccount] 
 	where Id = @Id;
 
 end

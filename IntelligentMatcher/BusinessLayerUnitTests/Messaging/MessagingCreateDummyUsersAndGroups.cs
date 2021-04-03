@@ -94,7 +94,7 @@ namespace BusinessLayerUnitTests.Messaging
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -125,7 +125,7 @@ namespace BusinessLayerUnitTests.Messaging
             await userAccountRepository.CreateAccount(userAccountModel);
 
 
-            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             userAccountSettingsModel.Id = 0;
             userAccountSettingsModel.UserId = 1;
@@ -151,7 +151,7 @@ namespace BusinessLayerUnitTests.Messaging
             await userAccountRepository.CreateAccount(userAccountModel);
 
 
-            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             userAccountSettingsModel.Id = 0;
             userAccountSettingsModel.UserId = 1;

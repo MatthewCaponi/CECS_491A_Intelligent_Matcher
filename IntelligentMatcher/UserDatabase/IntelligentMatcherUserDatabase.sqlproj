@@ -117,6 +117,8 @@
     <Build Include="StoredProcedures\Channels\Channels_Get_All.sql" />
     <Build Include="StoredProcedures\UserChannels\UserChannels_Delete_ById.sql" />
     <Build Include="StoredProcedures\UserChannels\UserChannels_Get_All.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannel_UpdateStatus_Id.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannels_GetStatus_ByUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

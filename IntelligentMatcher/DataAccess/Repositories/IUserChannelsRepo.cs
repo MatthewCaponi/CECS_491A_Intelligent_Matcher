@@ -18,5 +18,9 @@ namespace DataAccess.Repositories
         Task<int> DeleteUserChannelsByIdAsync(int id);
 
         Task<IEnumerable<UserChannelModel>> GetAllUserChannelsAsync();
+
+        Task<int> UpdateStatus(int userId, string status);
+
+        Task<String> GetStatus(int userId);
     }
 }

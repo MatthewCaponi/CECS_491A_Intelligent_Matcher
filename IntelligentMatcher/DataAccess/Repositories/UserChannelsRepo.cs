@@ -54,7 +54,9 @@ namespace DataAccess.Repositories
 
             p.Add("UserId", UserId);
             p.Add("ChannelId", ChannelId);
+            p.Add("AccountStatus", "Offline");
 
+            
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
@@ -109,6 +111,33 @@ namespace DataAccess.Repositories
                                                                               ChannelId = channelId
                                                                           },
                                                                           _connectionString.SqlConnectionString);
+        }
+
+
+          public async Task<String> GetStatus(int userId)
+        {
+            var storedProcedure = "dbo.UserChannels_GetStatus_ByUserId";
+
+            var row = await _dataGateway.LoadData<String, dynamic>(storedProcedure,
+                new
+                {
+                    UserId = userId
+                },
+                _connectionString.SqlConnectionString);
+
+            return row.FirstOrDefault();
+        }
+        public async Task<int> UpdateStatus(int userId, string status)
+        {
+            var storedProcedure = "dbo.UserChannel_UpdateStatus_Id";
+
+            return await _dataGateway.SaveData(storedProcedure,
+                                         new
+                                         {
+                                             UserId = userId,
+                                             AccountStatus = status
+                                         },
+                                         _connectionString.SqlConnectionString);
         }
     }
 }

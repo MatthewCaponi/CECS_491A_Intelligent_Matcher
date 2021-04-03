@@ -25,25 +25,15 @@ namespace BusinessLayerUnitTests.Messaging
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
-            var settings = await userAccountSettingsRepository.GetAllSettings();
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
-            foreach (var setting in settings)
+            foreach (var userChannel in userChannels)
             {
-                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
-
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            var accounts = await userAccountRepository.GetAllAccounts();
-
-            foreach (var account in accounts)
-            {
-                await userAccountRepository.DeleteAccountById(account.Id);
-            }
-
-            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
-
+            await DataAccessTestHelper.ReseedAsync("UserChannels", 0, connectionString, dataGateway);
 
 
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
@@ -68,15 +58,32 @@ namespace BusinessLayerUnitTests.Messaging
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
-            foreach (var userChannel in userChannels)
+
+
+
+
+
+
+            var settings = await userAccountSettingsRepository.GetAllSettings();
+
+            foreach (var setting in settings)
             {
-                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
+                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
             }
 
-            await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = await userAccountRepository.GetAllAccounts();
+
+            foreach (var account in accounts)
+            {
+                await userAccountRepository.DeleteAccountById(account.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+
 
 
             int i = 1;
@@ -96,7 +103,7 @@ namespace BusinessLayerUnitTests.Messaging
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -127,7 +134,7 @@ namespace BusinessLayerUnitTests.Messaging
             await userAccountRepository.CreateAccount(userAccountModel);
 
 
-            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             userAccountSettingsModel.Id = 0;
             userAccountSettingsModel.UserId = 1;
@@ -150,28 +157,23 @@ namespace BusinessLayerUnitTests.Messaging
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
-            var settings = await userAccountSettingsRepository.GetAllSettings();
-
-            foreach (var setting in settings)
-            {
-                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
-            }
-
-            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
-
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            var accounts = await userAccountRepository.GetAllAccounts();
-
-            foreach (var account in accounts)
-            {
-                await userAccountRepository.DeleteAccountById(account.Id);
-            }
-
-            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
 
 
 
             IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
+
+            foreach (var userChannel in userChannels)
+            {
+                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserChannels", 0, connectionString, dataGateway);
+
+
+
             var messages = await messagesRepo.GetAllMessagesAsync();
 
             foreach (var message in messages)
@@ -193,15 +195,30 @@ namespace BusinessLayerUnitTests.Messaging
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
-            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
-            var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
+ 
 
-            foreach (var userChannel in userChannels)
+
+            var settings = await userAccountSettingsRepository.GetAllSettings();
+
+            foreach (var setting in settings)
             {
-                await userChannelsRepo.DeleteUserChannelsByIdAsync(userChannel.Id);
+                await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(setting.UserId);
             }
 
-            await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            var accounts = await userAccountRepository.GetAllAccounts();
+
+            foreach (var account in accounts)
+            {
+                await userAccountRepository.DeleteAccountById(account.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+
+
+
 
 
         }
@@ -268,15 +285,10 @@ namespace BusinessLayerUnitTests.Messaging
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            try
-            {
+       
                 await messagingService.SendMessageAsync(model);
                 await messagingService.DeleteMessageAsync(0);
-            }
-            catch
-            {
-                Assert.IsTrue(false);
-            }
+      
 
             IEnumerable<MessageModel> models = await messagesRepo.GetAllMessagesByChannelIdAsync(channelId);
 
@@ -311,10 +323,26 @@ namespace BusinessLayerUnitTests.Messaging
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-            await messagingService.CreateChannelAsync(model);
-     
 
-            Assert.IsTrue(true);
+            try
+            {
+                await messagingService.CreateChannelAsync(model);
+
+                IEnumerable<ChannelModel> channels = await messagingService.GetAllUserChannelsAsync(OwnerId);
+                if(channels.Count() != 0)
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
 
 
         }
@@ -498,6 +526,136 @@ namespace BusinessLayerUnitTests.Messaging
             }
    
         }
+
+
+
+
+        [DataTestMethod]
+        [DataRow(1, 1, 1, "My Channel", 2)]
+        public async Task SetOnline_TurnUserOnline_UserSetOnline(int ChannelId, int UserId, int OwnerId, string ChannelName, int NewUserId)
+        {
+
+
+
+            ChannelModel model = new ChannelModel();
+            model.OwnerId = OwnerId;
+            model.Name = ChannelName;
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+
+            try
+            {
+                await messagingService.CreateChannelAsync(model);
+                await messagingService.AddUserToChannelAsync(NewUserId, ChannelId);
+                await messagingService.SetUserOnlineAsync(NewUserId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+            string newUserStatus = await userChannelsRepo.GetStatus(NewUserId);
+
+            if(newUserStatus == "Online")
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false);
+            }
+
+        }
+
+
+
+        [DataTestMethod]
+        [DataRow(1, 1, 1, "My Channel", 2)]
+        public async Task SetOffline_TurnUserOffline_UserSetOffline(int ChannelId, int UserId, int OwnerId, string ChannelName, int NewUserId)
+        {
+
+
+
+            ChannelModel model = new ChannelModel();
+            model.OwnerId = OwnerId;
+            model.Name = ChannelName;
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+
+            try
+            {
+                await messagingService.CreateChannelAsync(model);
+                await messagingService.AddUserToChannelAsync(NewUserId, ChannelId);
+                await messagingService.SetUserOfflineAsync(NewUserId);
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+            string newUserStatus = await userChannelsRepo.GetStatus(NewUserId);
+
+            if (newUserStatus == "Offline")
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 1, "Sending Test Message")]
+        public async Task GetAllChannelMessages_GetMessages_RetrievedAllMessages(int channelId, int userId, string message)
+        {
+
+            MessageModel model = new MessageModel();
+            model.ChannelId = channelId;
+            model.UserId = userId;
+            model.Message = message;
+
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IMessagesRepo messagesRepo = new MessagesRepo(dataGateway, connectionString);
+            IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
+            IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
+            try
+            {
+                await messagingService.SendMessageAsync(model);
+                IEnumerable<MessageModel> messages = await messagingService.GetAllChannelMessagesAsync(channelId);
+                if (messages.Count() != 0)
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+            }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+        }
+
+
+
 
     }
 }

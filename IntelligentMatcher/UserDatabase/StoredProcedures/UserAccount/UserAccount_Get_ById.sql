@@ -1,11 +1,12 @@
-﻿CREATE PROCEDURE [dbo].[Channel_Get_Id.]
+﻿CREATE PROCEDURE [dbo].[UserAccount_Get_ById]
 	@Id int
 AS
 begin
 
 	set nocount on
 
-	select [Id], [OwnerId], [Name]
-	from dbo.[Channels]
+	select [Id], [Username], [Password], [Salt], [EmailAddress],
+	[AccountType], [AccountStatus], [CreationDate], [UpdationDate]
+	from dbo.[UserAccount]
 	where Id = @Id;
 end

@@ -65,7 +65,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            await cryptographyService.NewPasswordEncryptAsync("Password", 1);
+            await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;

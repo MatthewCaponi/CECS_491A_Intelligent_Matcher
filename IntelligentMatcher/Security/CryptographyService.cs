@@ -67,7 +67,7 @@ namespace Security
             return System.Text.Encoding.ASCII.GetString(Data).ToString();
         }
 
-        public async Task<bool> NewPasswordEncryptAsync(string Password, int UserID)
+        public async Task<bool> newPasswordEncryptAsync(string Password, int UserID)
         {
 
             bool salted = await CreateSalt(UserID);

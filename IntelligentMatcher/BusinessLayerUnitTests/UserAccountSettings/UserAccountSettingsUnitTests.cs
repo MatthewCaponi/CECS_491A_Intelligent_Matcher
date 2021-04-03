@@ -189,7 +189,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUserId(password, userId)).Returns(Task.FromResult(true));
-            mockCryptographyService.Setup(x => x.NewPasswordEncryptAsync(newPassword, userId)).Returns(Task.FromResult(true));
+            mockCryptographyService.Setup(x => x.newPasswordEncryptAsync(newPassword, userId)).Returns(Task.FromResult(true));
 
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
