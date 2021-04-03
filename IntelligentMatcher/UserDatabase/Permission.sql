@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Permission]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [name] NCHAR(10) NOT NULL
+)
