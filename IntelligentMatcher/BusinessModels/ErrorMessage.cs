@@ -7,6 +7,7 @@ namespace BusinessModels
     public enum ErrorMessage
     {
         None,
+        AsyncError,
         Null,
         UsernameExists,
         EmailExists,
@@ -14,6 +15,9 @@ namespace BusinessModels
         UserIsNotActive,
         UserIsActive,
         NoUsersExist,
-        EmailNotSent
+        EmailNotSent,
+        NoMatch,
+        TooManyAttempts,
+        CodeExpired
     }
 }

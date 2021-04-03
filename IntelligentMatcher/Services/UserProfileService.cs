@@ -37,6 +37,27 @@ namespace UserManagement.Services
             return webUserProfileModel;
         }
 
+        public async Task<WebUserProfileModel> GetUserProfileByAccountId(int accountId)
+        {
+            try
+            {
+                var userProfileModel = await _userProfileRepository.GetUserProfileByAccountId(accountId);
+                if (userProfileModel == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    var webUserProfileModel = ModelConverterService.ConvertTo(userProfileModel, new WebUserProfileModel());
+                    return webUserProfileModel;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task<int> CreateUserProfile(WebUserProfileModel webUserProfileModel)
         {
             var userProfileModel = ModelConverterService.ConvertTo(webUserProfileModel, new UserProfileModel());

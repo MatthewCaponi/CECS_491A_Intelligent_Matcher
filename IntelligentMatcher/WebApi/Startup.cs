@@ -2,6 +2,7 @@ using DataAccess;
 using DataAccess.Repositories;
 using IntelligentMatcher.Services;
 using IntelligentMatcher.UserManagement;
+using Login;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Security;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -39,18 +41,32 @@ namespace WebApi
             
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
+            services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+
+            services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<ICryptographyService, CryptographyService>();
+            services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
+
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
+
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IUserAccountService, UserAccountService>();
+            services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+
+            services.AddScoped<ILoginManager, LoginManager>();
+            services.AddScoped<IUserManager, UserManager>();
+
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
+
 
         }
 

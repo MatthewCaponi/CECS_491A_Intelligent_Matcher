@@ -60,9 +60,14 @@
     <Folder Include="StoredProcedures\UserAccount" />
     <Folder Include="StoredProcedures\UserProfile" />
     <Folder Include="StoredProcedures\UserAccountSettings" />
+
+    <Folder Include="StoredProcedures\LoginAttempts" />
+    <Folder Include="StoredProcedures\UserAccountCode" />
+
     <Folder Include="StoredProcedures\Messages" />
     <Folder Include="StoredProcedures\Channels" />
     <Folder Include="StoredProcedures\UserChannels" />
+
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -99,6 +104,27 @@
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
+
+    <Build Include="LoginAttempts.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Create.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_ResetLoginCounter_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_ResetLoginCounter_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_IncrementLoginCounter_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_IncrementLoginCounter_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_UpdateSuspensionEndTime_ById.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_UpdateSuspensionEndTime_ByIpAddress.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_All.sql" />
+    <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Delete_ById.sql" />
+    <Build Include="UserAccountCode.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Create.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_ByUserAccountId.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_DeleteByUserAccountId.sql" />
+
     <Build Include="StoredProcedures\Messages\Messages_Create.sql" />
     <Build Include="StoredProcedures\Messages\Messages_Get_All_By_ChannelId.sql" />
     <Build Include="UserChannels.sql" />
@@ -119,6 +145,7 @@
     <Build Include="StoredProcedures\UserChannels\UserChannels_Get_All.sql" />
     <Build Include="StoredProcedures\UserChannels\UserChannel_UpdateStatus_Id.sql" />
     <Build Include="StoredProcedures\UserChannels\UserChannels_GetStatus_ByUserId.sql" />
+
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
