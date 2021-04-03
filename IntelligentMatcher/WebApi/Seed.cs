@@ -122,24 +122,11 @@ namespace WebApi
             model.Name = "Jakes Group";
             await messagingService.CreateChannelAsync(model);
 
-            await messagingService.AddUserToChannelAsync(2, 1);
-            await messagingService.AddUserToChannelAsync(3, 1);
+            for(int i = 2; i < 19; i++)
+            {
+                await messagingService.AddUserToChannelAsync(i, 1);
 
-            await messagingService.AddUserToChannelAsync(4, 1);
-            await messagingService.AddUserToChannelAsync(5, 1);
-            await messagingService.AddUserToChannelAsync(6, 1);
-            await messagingService.AddUserToChannelAsync(7, 1);
-            await messagingService.AddUserToChannelAsync(8, 1);
-            await messagingService.AddUserToChannelAsync(9, 1);
-            await messagingService.AddUserToChannelAsync(10, 1);
-            await messagingService.AddUserToChannelAsync(11, 1);
-            await messagingService.AddUserToChannelAsync(12, 1); 
-            await messagingService.AddUserToChannelAsync(13, 1);
-            await messagingService.AddUserToChannelAsync(14, 1);
-            await messagingService.AddUserToChannelAsync(15, 1);
-            await messagingService.AddUserToChannelAsync(16, 1);
-            await messagingService.AddUserToChannelAsync(17, 1);
-            await messagingService.AddUserToChannelAsync(18, 1);
+            }
 
 
             MessageModel messageModel = new MessageModel();
