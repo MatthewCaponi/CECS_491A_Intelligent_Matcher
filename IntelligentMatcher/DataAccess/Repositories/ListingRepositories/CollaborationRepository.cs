@@ -25,7 +25,7 @@ namespace DataAccess.Repositories.ListingRepositories
         public async Task<int> CreateListing(DALCollaborationModel dalCollaborationModel)
         {
 
-            string storedProcedure = "dbo.TraditionalListing_CreateCollaboration";
+            string storedProcedure = "dbo.CreateCollaborationListing";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("CollaborationType", dalCollaborationModel.CollaborationType);

@@ -1,7 +1,7 @@
 import { Tab, TableBody, TableRow } from 'material-ui'
 import React, {createRef, useState} from 'react'
 import {Pagination} from 'semantic-ui-react'
-import { Table, Grid, Dimmer, Loader, Segment, Container } from 'semantic-ui-react'
+import { Table, Grid, Dimmer, Loader, Segment, Container ,Message} from 'semantic-ui-react'
 import './ListingTable.css'
 
 
@@ -11,17 +11,12 @@ function ListingTable(props) {
         return (
             <Grid container centered>
                 <Grid.Row />
-                <Grid.Row />
                 <Grid.Row>
-                    <Dimmer inverted active>
-                        <Loader size="massive"/>
-                    </Dimmer>
+                <Message color= "black" size="medium">NoListingsFound</Message>
                 </Grid.Row>          
             </Grid>    
         )
     }
-
-
 const userStyle = {
     display: 'block',
     height: '40vh',

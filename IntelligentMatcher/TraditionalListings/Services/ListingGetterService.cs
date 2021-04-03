@@ -15,47 +15,58 @@ namespace TraditionalListings.Services
     public class ListingGetterService
     {
 
-        private IListingRepository _listingRepository;
-        private  ICollaborationRepository _collaborationRepository;
-        private IDatingRepository _datingRepository;
-        private IRelationshipRepository _relationshipRepository;
-        private  ITeamModelRepository _teamModelRepository;
+        private ITraditionalListingSearchRepository _traditionalListingSearchRepository;
 
-        public ListingGetterService(IListingRepository listingRepository, ICollaborationRepository collaborationRepository, IDatingRepository datingRepository, IRelationshipRepository relationshipRepository,
-            ITeamModelRepository teamModelRepository)
+        public ListingGetterService(ITraditionalListingSearchRepository traditionalListingSearchRepository)
         {
-            _collaborationRepository = collaborationRepository;
-            _datingRepository = datingRepository;
-            _relationshipRepository = relationshipRepository;
-            _teamModelRepository = teamModelRepository;
-            _listingRepository = listingRepository;
+            _traditionalListingSearchRepository = traditionalListingSearchRepository;
+
         }
 
 
-        public async Task<BusinessListingModel> GetListing(int id )
-        {
-            var listing = await _listingRepository.GetListing(id);
-            var businesslistingmodel= ModelConverterService.ConvertTo(listing, new BusinessListingModel());
-            return businesslistingmodel;
-        }
 
         public async Task<List<BusinessListingModel>> GetAllListing()
         {
-            var userAccounts = await _listingRepository.GetAllListings();
-            List<BusinessListingModel> businessListingModel = new List<BusinessListingModel>();
-            foreach (var userAccountModel in userAccounts)
+            var dalListing = await _traditionalListingSearchRepository.GetAllListings();
+            List<BusinessListingModel> businessListings = new List<BusinessListingModel>();
+            foreach (var dalListingModel in dalListing)
             {
-                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new BusinessListingModel());
-                businessListingModel.Add(webUserAccountModel);
+                var businessListing = ModelConverterService.ConvertTo(dalListingModel, new BusinessListingModel());
+                businessListings.Add(businessListing);
             }
 
-            return businessListingModel;
+            return businessListings;
 
-
-
-            
         }
-       
+
+        public async Task<List<BusinessCollaborationModel>> GetAllCollaborationListing()
+        {
+            var dalListing = await _traditionalListingSearchRepository.GetAllCollaborationListings();
+            List<BusinessCollaborationModel> businessListings = new List<BusinessCollaborationModel>();
+            foreach (var dalListingModel in dalListing)
+            {
+                var businessListing = ModelConverterService.ConvertTo(dalListingModel, new BusinessCollaborationModel());
+                businessListings.Add(businessListing);
+            }
+
+            return businessListings;
+        }
+
+        public async Task<List<BusinessRelationshipModel>> GetAllRelationshipListing()
+        {
+            var dalListing = await _traditionalListingSearchRepository.GetAllRelationshipListings();
+            List<BusinessRelationshipModel> businessListings = new List<BusinessRelationshipModel>();
+            foreach (var dalListingModel in dalListing)
+            {
+                var businessListing = ModelConverterService.ConvertTo(dalListingModel, new BusinessRelationshipModel());
+                businessListings.Add(businessListing);
+            }
+
+            return businessListings;
+        }
+
+
+
 
 
     }

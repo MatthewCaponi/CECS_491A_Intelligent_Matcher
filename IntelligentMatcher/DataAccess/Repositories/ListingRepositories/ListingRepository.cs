@@ -23,7 +23,7 @@ namespace DataAccess.Repositories
 
         public async Task<int> CreateListing(DALListingModel dalListingModel)
         {
-            string storedProcedure = "dbo.TraditionalListing_CreateParentListing";
+            string storedProcedure = "dbo.CreateListingParent";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("Title", dalListingModel.Title);
@@ -45,9 +45,9 @@ namespace DataAccess.Repositories
 
         public async Task<int> DeleteListing(int id)// change to DALListingModel dalListingModel 
         {
-            var query = "delete from [Listing] where Id = @Id";
+            string storedProcedure = "dbo.DeleteListing";
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.SaveData(storedProcedure,
                                          new
                                          {
                                              Id = id
@@ -75,30 +75,6 @@ namespace DataAccess.Repositories
            
         }
 
-        public async Task<DALListingModel> GetListing(int id) //change to DALListingModel dalListingModel 
-        {
-            var query = "Select * from Listing where Id = @Id";
-
-            var row = await _dataGateway.LoadData<DALListingModel, dynamic>(query,
-                new
-                {
-                    ID=id
-                },
-                _connectionString.SqlConnectionString);
-
-            return row.FirstOrDefault();
-        }
-
-
-
-        public async Task<IEnumerable<DALListingModel>> GetAllListings()
-        {
-            var query = "Select * from Listing";
-
-            return await _dataGateway.LoadData<DALListingModel, dynamic>(query,
-                                                                          new { },
-                                                                          _connectionString.SqlConnectionString);
-        }
     }
         
 }

@@ -28,12 +28,33 @@ namespace DataAccess.Repositories
                                                                          _connectionString.SqlConnectionString);
         }
 
+        public async Task<IEnumerable<DALCollaborationModel>> GetAllCollaborationListings()
+        {
+            string storedProcedure = "dbo.ListingSearch_GetAllCollaborationListing";
+            return await _dataGateway.LoadData<DALCollaborationModel, dynamic>(storedProcedure,
+                                                                               new { },
+                                                                               _connectionString.SqlConnectionString);
+
+        }
+
+        public async Task<IEnumerable<DALRelationshipModel>> GetAllRelationshipListings()
+        {
+            string storedProcedure = "dbo.ListingSearch_GetAllRelationshipListing";
+            return await _dataGateway.LoadData<DALRelationshipModel, dynamic>(storedProcedure,
+                                                                              new { },
+                                                                              _connectionString.SqlConnectionString);
+        }
+        
+        
+         public async Task<IEnumerable<DALRelationshipModel>> GetAllTeamListings()
+        {
+            string storedProcedure = "dbo.ListingSearch_GetAllTeamListing";
+            return await _dataGateway.LoadData<DALRelationshipModel, dynamic>(storedProcedure,
+                                                                              new { },
+                                                                              _connectionString.SqlConnectionString);
+        }
 
 
-        
-        
-        
-        
         // Gold plating... sorting thats not in the brd....... //Comment out or delete if you run out of time.
         public async Task<IEnumerable<DALListingModel>> SortListingbyCity()
         {
@@ -50,5 +71,7 @@ namespace DataAccess.Repositories
                                                                          new { },
                                                                          _connectionString.SqlConnectionString);
         }
+
+       
     }
 }

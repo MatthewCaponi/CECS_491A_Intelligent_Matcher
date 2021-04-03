@@ -9,6 +9,10 @@ namespace DataAccess.Repositories
     public interface ITraditionalListingSearchRepository
     {
         Task<IEnumerable<DALListingModel>> GetAllListings();
+        Task<IEnumerable<DALCollaborationModel>> GetAllCollaborationListings();
+        Task<IEnumerable<DALRelationshipModel>> GetAllRelationshipListings();
+        Task<IEnumerable<DALRelationshipModel>> GetAllTeamListings();
+
 
 
 

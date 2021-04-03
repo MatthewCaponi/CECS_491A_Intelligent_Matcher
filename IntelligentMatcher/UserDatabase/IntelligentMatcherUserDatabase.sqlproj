@@ -101,6 +101,12 @@
     <Build Include="TeamModel.sql" />
     <Build Include="Listing.sql" />
     <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllListings.sql" />
+    <Build Include="StoredProcedures\CreateCollaborationListing.sql" />
+    <Build Include="StoredProcedures\CreateListingParent.sql" />
+    <Build Include="StoredProcedures\CreateRelationshipListing.sql" />
+    <Build Include="StoredProcedures\CreateTeamModelListing.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllCollaborationListing.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllRelationshipListing.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

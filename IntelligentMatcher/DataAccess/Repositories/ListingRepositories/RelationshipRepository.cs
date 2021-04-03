@@ -22,7 +22,7 @@ namespace DataAccess.Repositories.ListingRepositories
         public async Task<int> CreateListing(DALRelationshipModel dalRelationshipModel)
         {
 
-            string storedProcedure = "dbo.TraditionalListing_CreateRelationshipListing";
+            string storedProcedure = "CreateRelationshipListing";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("RelationshipType", dalRelationshipModel.RelationshipType);

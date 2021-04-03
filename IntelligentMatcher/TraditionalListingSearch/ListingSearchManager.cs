@@ -19,19 +19,28 @@ namespace TraditionalListingSearch
             _listingGetterService = listingGetterService;
         }
 
-
-
         public async Task<Result<List<BusinessListingModel>>> GetAllListings()
         {
-            //ResultModel<List<BusinessListingModel>> resultModel = new ResultModel<List<BusinessListingModel>>();
-            //resultModel.Result = await _listingGetterService.GetAllListing();
-            //return new Tuple<bool, ResultModel<List<BusinessListingModel>>>(true, resultModel);
-
+         
             var result = new Result<List<BusinessListingModel>>();
             result.Success = true;
             result.SuccessValue = await _listingGetterService.GetAllListing();
             return result;
 
+        }
+        public async Task<Result<List<BusinessCollaborationModel>>> GetAllCollaborationListings()
+        {
+            var result = new Result<List<BusinessCollaborationModel>>();
+            result.Success = true;
+            result.SuccessValue = await _listingGetterService.GetAllCollaborationListing();
+            return result;
+        }
+        public async Task<Result<List<BusinessRelationshipModel>>> GetAllRelationshipListings()
+        {
+            var result = new Result<List<BusinessRelationshipModel>>();
+            result.Success = true;
+            result.SuccessValue = await _listingGetterService.GetAllRelationshipListing();
+            return result;
         }
     }
 }

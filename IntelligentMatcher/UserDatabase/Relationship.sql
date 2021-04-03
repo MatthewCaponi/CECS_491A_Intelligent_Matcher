@@ -5,5 +5,6 @@
     [Age] INT NOT NULL, 
     [Interests] NVARCHAR(50) NOT NULL, 
     [GenderPreference] NVARCHAR(50) NOT NULL,
-    [ListingId] INT NOT NULL
+    [ListingId] INT NOT NULL,
+    
 )

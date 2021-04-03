@@ -9,5 +9,9 @@ namespace TraditionalListingSearch
     public interface IListingSearchManager
     {
         Task<Result<List<BusinessListingModel>>> GetAllListings();
+        Task<Result<List<BusinessCollaborationModel>>> GetAllCollaborationListings();
+        Task<Result<List<BusinessRelationshipModel>>> GetAllRelationshipListings();
+
+
     }
 }

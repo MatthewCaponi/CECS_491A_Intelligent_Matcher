@@ -19,7 +19,6 @@ function ListingSearch () {
                 <Divider horizontal centered>Listings</Divider>
             </Grid.Row>
             <Grid.Row>
-                <Search placeholder="Search for Listings"></Search>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column>
