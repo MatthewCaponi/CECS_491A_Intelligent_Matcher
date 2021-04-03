@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Logging;
 using Registration;
 using Microsoft.AspNetCore.Mvc;
-
+/*
 namespace WebUI.Controllers
 {
     public class RegistrationController : Controller
@@ -27,3 +27,4 @@ namespace WebUI.Controllers
         }
     }
 }
+*/

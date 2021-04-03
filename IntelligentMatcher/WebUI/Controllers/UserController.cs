@@ -6,7 +6,7 @@ using Logging;
 using Microsoft.AspNetCore.Mvc;
 using UserManagement;
 using UserManagement.Models;
-
+/*
 namespace WebUI.Controllers
 {
     public class UserController : Controller
@@ -38,4 +38,4 @@ namespace WebUI.Controllers
             return View(model);
         }
     }
-}
+}*/

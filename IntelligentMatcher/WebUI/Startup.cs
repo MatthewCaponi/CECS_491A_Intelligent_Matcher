@@ -11,8 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UserManagement;
-using WebUI.Controllers;
-
+/*
 namespace WebUI
 {
     public class Startup
@@ -70,4 +69,4 @@ namespace WebUI
             });
         }
     }
-}
+}*/
