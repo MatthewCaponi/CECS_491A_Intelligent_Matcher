@@ -7,3 +7,4 @@ begin
 	[InPersonOrRemote],[UserAccountID]
 	from dbo.Listing;
 end
+
