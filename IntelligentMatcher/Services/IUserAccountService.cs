@@ -13,5 +13,7 @@ namespace IntelligentMatcher.Services
         Task<bool> DeleteAccount(int id);
         Task<List<WebUserAccountModel>> GetAllUserAccounts();
         Task<WebUserAccountModel> GetUserAccount(int id);
+        Task<WebUserAccountModel> GetUserAccountByUsername(string username);
+        Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress);
     }
 }

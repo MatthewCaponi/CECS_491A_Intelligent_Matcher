@@ -12,14 +12,11 @@ namespace Security
     public interface ICryptographyService
     {
 
-         Task<String> CreateSalt(int UserID);
 
-         string retreiveSalt(int UserID);
-         string encrypt(string SaltedPassword);
 
-         Task<Boolean> newPasswordEncryptAsync(string Password, int UserID);
+         Task<bool> newPasswordEncryptAsync(string Password, int UserID);
 
-         Task<string> encryptPasswordAsync(string Password, int UserID);
+         Task<string> EncryptPasswordAsync(string Password, int UserID);
 
     }
 }

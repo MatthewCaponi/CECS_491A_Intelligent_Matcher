@@ -33,15 +33,12 @@ namespace Security
             // Act
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            string EnteredHash = await cryptographyService.encryptPasswordAsync(password, model.Id);
-            if (UserHash == EnteredHash)
-            {
-                return true;
-            }
-            else
+            string EnteredHash = await cryptographyService.EncryptPasswordAsync(password, model.Id);
+            if (UserHash != EnteredHash)
             {
                 return false;
             }
+            return true;
         }
 
         public async Task<bool> AuthenticatePasswordWithUsename(string password, string userName)
@@ -56,15 +53,12 @@ namespace Security
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            string EnteredHash = await cryptographyService.encryptPasswordAsync(password, model.Id);
-            if (UserHash == EnteredHash)
-            {
-                return true;
-            }
-            else
+            string EnteredHash = await cryptographyService.EncryptPasswordAsync(password, model.Id);
+            if (UserHash != EnteredHash)
             {
                 return false;
             }
+            return true;
         }
 
         public async Task<bool> AuthenticatePasswordWithUserId(string password, int userId)
@@ -76,15 +70,12 @@ namespace Security
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
-            string EnteredHash = await cryptographyService.encryptPasswordAsync(password, userId);
-            if(UserHash == EnteredHash)
-            {
-                return true;
-            }
-            else
+            string EnteredHash = await cryptographyService.EncryptPasswordAsync(password, userId);
+            if(UserHash != EnteredHash)
             {
                 return false;
             }
+            return true;
         }
     }
 }

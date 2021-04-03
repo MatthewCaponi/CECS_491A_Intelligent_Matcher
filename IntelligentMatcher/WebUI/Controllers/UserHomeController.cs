@@ -11,7 +11,7 @@ using UserManagement;
 using UserManagement.Models;
 using WebUI.Models;
 using static Models.UserProfileModel;
-
+/*
 namespace WebUI.Controllers
 {
     public class UserHomeController : Controller
