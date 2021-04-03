@@ -29,7 +29,6 @@ function App() {
         </Route>
         </Switch>
           </Router>
-      <SiteFooter/>
     </div>
       
   );
