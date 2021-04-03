@@ -28,4 +28,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserAccountId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="4d81b03d-9f72-4042-9439-534f3487c8b0" ChangeDateTime="03/16/2021 00:39:56">
+    <Property Name="ElementName" Value="[dbo].[Messages].[GroupMessageId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Messages]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ChannelId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2d79ed3d-26a8-4cbb-be48-88fe91fa2f41" ChangeDateTime="03/16/2021 00:40:02">
+    <Property Name="ElementName" Value="[dbo].[Messages].[GroupId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Messages]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ChannelId" />
+  </Operation>
 </Operations>

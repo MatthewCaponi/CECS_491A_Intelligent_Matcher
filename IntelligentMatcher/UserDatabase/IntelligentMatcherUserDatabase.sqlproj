@@ -60,13 +60,20 @@
     <Folder Include="StoredProcedures\UserAccount" />
     <Folder Include="StoredProcedures\UserProfile" />
     <Folder Include="StoredProcedures\UserAccountSettings" />
+
     <Folder Include="StoredProcedures\LoginAttempts" />
     <Folder Include="StoredProcedures\UserAccountCode" />
+
+    <Folder Include="StoredProcedures\Messages" />
+    <Folder Include="StoredProcedures\Channels" />
+    <Folder Include="StoredProcedures\UserChannels" />
+
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
     <Build Include="UserProfile.sql" />
     <Build Include="UserAccountSettings.sql" />
+    <Build Include="Messages.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_Create.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_Delete_ById.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_Get_All.sql" />
@@ -97,6 +104,7 @@
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
+
     <Build Include="LoginAttempts.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ById.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ByIpAddress.sql" />
@@ -116,6 +124,28 @@
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_ByUserAccountId.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Delete_ById.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_DeleteByUserAccountId.sql" />
+
+    <Build Include="StoredProcedures\Messages\Messages_Create.sql" />
+    <Build Include="StoredProcedures\Messages\Messages_Get_All_By_ChannelId.sql" />
+    <Build Include="UserChannels.sql" />
+    <Build Include="Channels.sql" />
+    <Build Include="StoredProcedures\Channels\Channels_Create.sql" />
+    <Build Include="StoredProcedures\Channels\Channel_Delete.sql" />
+    <Build Include="StoredProcedures\UserChannels\Channels_Get_UserId.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannel_Add.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannel_RemoveUser.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannel_RemoveChannel.sql" />
+    <Build Include="StoredProcedures\UserChannels\Users_Get_ChannelId.sql" />
+    <Build Include="StoredProcedures\Channels\Channel_Get_Id.sql" />
+    <Build Include="StoredProcedures\Channels\ChannelOwner_Get_Id.sql" />
+    <Build Include="StoredProcedures\Messages\Messages_Get_All.sql" />
+    <Build Include="StoredProcedures\Messages\Messages_Delete_ById.sql" />
+    <Build Include="StoredProcedures\Channels\Channels_Get_All.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannels_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannels_Get_All.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannel_UpdateStatus_Id.sql" />
+    <Build Include="StoredProcedures\UserChannels\UserChannels_GetStatus_ByUserId.sql" />
+
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

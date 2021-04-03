@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[Channels]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[OwnerId] INT NOT NULL,
+	[Name] NVARCHAR(100) NOT NULL,
+	CONSTRAINT [FK_Channels_UserAccount] FOREIGN KEY (OwnerId) REFERENCES [UserAccount]([Id])  ON DELETE CASCADE
+
+	
+)
