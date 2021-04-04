@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
+import UserAccountSettings from "./Features/CoreFeatures/UserAccountSettings/Pages/UserAccountSettings";
+
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
@@ -23,6 +25,9 @@ function App() {
           </Route>
           <Route path="/Messaging">
             <Messaging />
+          </Route>
+          <Route path="/UserAccountSettings">
+            <UserAccountSettings />
           </Route>
           <Route path="/">
           <Home />
