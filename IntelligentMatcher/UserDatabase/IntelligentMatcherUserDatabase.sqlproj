@@ -68,6 +68,7 @@
     <Folder Include="StoredProcedures\FriendsList" />
     <Folder Include="StoredProcedures\FriendRequestsList" />
     <Folder Include="StoredProcedures\FriendBlockList" />
+    <Folder Include="StoredProcedures\PublicUserProfile" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -164,6 +165,23 @@
     <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAllOutgoing_ByUserId.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetBlockingUser_ByUserId.sql" />
     <Build Include="PublicUserProfile.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_Create.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_Delete_ById.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_Get_All.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateDescription.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateIntrests.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateHobbies.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateJobs.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateGoals.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateAge.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateGender.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateEthnicity.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateSexualOrientation.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateHeight.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateVisibility.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateStatus.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdatePhoto.sql" />
+    <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_GetByUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

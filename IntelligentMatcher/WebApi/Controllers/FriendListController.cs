@@ -106,7 +106,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<bool> CancelFriendRequest([FromBody] dualIdModel ids)
         {
 
-            await _friendListManager.CancelFriendRequest(ids.UserId, ids.FriendId);
+            await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
             return true;
         }
 

@@ -8,6 +8,8 @@ namespace FriendList
 {
     public interface IFriendListManager
     {
+
+        Task<string> GetFriendStatusUserIdAsync(int userId1, int userId2);
         Task<bool> RequestFriendAsync(int requestUserId, int requestedUserId);
 
         Task<int> ConfirmFriendAsync(int requetUserId, int requestedUserId);
@@ -16,7 +18,7 @@ namespace FriendList
 
         Task<bool> BlockFriendAsync(int userId, int blockedUserId);
 
-        Task<bool> CancelFriendRequest(int userId, int blockedUserId);
+        Task<bool> CancelFriendRequestAsync(int userId, int blockedUserId);
 
         Task<IEnumerable<FriendListModel>> GetAllBlocksAsync(int userId);
 

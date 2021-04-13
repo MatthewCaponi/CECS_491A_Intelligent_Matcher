@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[PublicUserProfile]
 (
-	[Id] INT NOT NULL PRIMARY KEY,
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[UserId] INT NOT NULL,
 	[Description] NVARCHAR(1000),
 	[Intrests] NVARCHAR(1000),
@@ -13,5 +13,6 @@
 	[SexualOrientation] NVARCHAR(100),
 	[Height] NVARCHAR(1000),
 	[Visibility] NVARCHAR(20),
+	[Status] NVARCHAR(20),
 	[Photo] NVARCHAR(1000)
 )

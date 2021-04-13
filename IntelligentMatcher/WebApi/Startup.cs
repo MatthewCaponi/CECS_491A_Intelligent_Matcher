@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using UserManagement.Services;
 using Messaging;
 using FriendList;
+using PublicUserProfile;
 namespace WebApi
 {
     public class Startup
@@ -47,6 +48,7 @@ namespace WebApi
             services.AddTransient<IFriendBlockListRepo, FriendBlockListRepo>();
             services.AddTransient<IFriendListRepo, FriendListRepo>();
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
+            services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
@@ -58,6 +60,7 @@ namespace WebApi
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
             services.AddTransient<IFriendListManager, FriendListManager>();
+            services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
 
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IUserAccountService, UserAccountService>();

@@ -384,7 +384,7 @@ namespace BusinessLayerUnitTests.FriendList
             IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
-            await friendListManager.CancelFriendRequest(userId1, userId2);
+            await friendListManager.CancelFriendRequestAsync(userId1, userId2);
 
             IEnumerable<FriendsListJunctionModel> model = await friendListRepo.GetAllUserFriends(userId1);
             if(model == null)
@@ -705,7 +705,102 @@ namespace BusinessLayerUnitTests.FriendList
                 }
             }
         }
+
+
+
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetFriendStatusUserIdAsync_GetStatus_StatusBlocked(int userId1, int userId2)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            await friendListManager.BlockFriendAsync(userId1, userId2);
+
+            string status = await friendListManager.GetFriendStatusUserIdAsync(userId1, userId2);
+
+            if(status == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if(status == "Blocked")
+            {
+                Assert.IsTrue(true);
+
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetFriendStatusUserIdAsync_GetStatus_StatusRequested(int userId1, int userId2)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            await friendListManager.RequestFriendAsync(userId1, userId2);
+
+            string status = await friendListManager.GetFriendStatusUserIdAsync(userId1, userId2);
+
+            if (status == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (status == "Requested")
+            {
+                Assert.IsTrue(true);
+
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetFriendStatusUserIdAsync_GetStatus_StatusFriends(int userId1, int userId2)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            await friendListManager.RequestFriendAsync(userId1, userId2);
+
+            await friendListManager.ConfirmFriendAsync(userId1, userId2);
+
+            string status = await friendListManager.GetFriendStatusUserIdAsync(userId1, userId2);
+
+            if (status == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (status == "Friends")
+            {
+                Assert.IsTrue(true);
+
+            }
+        }
+
+
     }
-
-
  }

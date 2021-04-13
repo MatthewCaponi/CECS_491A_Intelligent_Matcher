@@ -26,6 +26,8 @@
     <ProjectReference Include="..\Logging\Logging.csproj" />
 
     <ProjectReference Include="..\Login\Login.csproj" />
+
+    <ProjectReference Include="..\PublicUserProfile\PublicUserProfile.csproj" />
     <ProjectReference Include="..\Registration\Registration.csproj" />
 
     <ProjectReference Include="..\Messaging\Messaging.csproj" />

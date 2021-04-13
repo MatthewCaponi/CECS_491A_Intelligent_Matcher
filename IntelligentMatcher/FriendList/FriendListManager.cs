@@ -24,6 +24,64 @@ namespace FriendList
             _friendBlockListRepo = friendBlockListRepo;
         }
 
+
+        public async Task<string> GetFriendStatusUserIdAsync(int userId1, int userId2)
+        {
+            IEnumerable <FriendsListJunctionModel>  models = await _friendListRepo.GetAllUserFriends(userId1);
+
+            foreach(var model in models)
+            {
+                if(model.User1Id == userId2 || model.User2Id == userId2)
+                {
+                    return "Friends";
+                }
+            }
+
+
+
+            models = await _friendBlockListRepo.GetAllBlockingUser(userId1);
+
+            foreach (var model in models)
+            {
+                if (model.User1Id == userId2 || model.User2Id == userId2)
+                {
+                    return "Blocked";
+                }
+            }
+            models = await _friendBlockListRepo.GetAllBlockingUser(userId2);
+
+            foreach (var model in models)
+            {
+                if (model.User1Id == userId1 || model.User2Id == userId1)
+                {
+                    return "Blocked";
+                }
+            }
+
+            models = await _friendRequestListRepo.GetAllUserFriendRequests(userId1);
+
+            foreach (var model in models)
+            {
+                if (model.User1Id == userId2 || model.User2Id == userId2)
+                {
+                    return "Requested";
+                }
+            }
+            models = await _friendRequestListRepo.GetAllUserFriendRequests(userId2);
+
+            foreach (var model in models)
+            {
+                if (model.User1Id == userId1 || model.User2Id == userId1)
+                {
+                    return "Requested";
+                }
+            }
+            return "None";
+
+
+
+        }
+
         public async Task<bool> BlockFriendAsync(int userId, int blockedUserId)
         {
             await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, blockedUserId);
@@ -200,7 +258,7 @@ namespace FriendList
             return true;
         }
 
-        public async Task<bool> CancelFriendRequest(int userId, int removedUserId)
+        public async Task<bool> CancelFriendRequestAsync(int userId, int removedUserId)
         {
             await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, removedUserId);
             return true;

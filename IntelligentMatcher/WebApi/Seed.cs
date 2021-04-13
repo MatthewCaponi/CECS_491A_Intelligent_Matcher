@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using UserAccountSettings;
 using Messaging;
 using FriendList;
+using PublicUserProfile;
 namespace WebApi
 {
     public class Seed
@@ -22,7 +23,7 @@ namespace WebApi
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-
+            
             var accounts = await userAccountRepository.GetAllAccounts();            
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
@@ -60,6 +61,16 @@ namespace WebApi
 
 
 
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            var publicProfiles = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            foreach (var profile in publicProfiles)
+            {
+                await publicUserProfileRepo.DeletePublicProfileById(profile.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("PublicUserProfile", 0, connectionString, dataGateway);
 
             if (accounts != null)
             {
@@ -77,6 +88,7 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
 
             for (int i = 1; i < seedAmount; ++i)
             {
@@ -110,7 +122,9 @@ namespace WebApi
                 await userProfileRepository.CreateUserProfile(userProfileModel);
                 await userAccountSettingsRepository.CreateUserAccountSettings(userAccountSettingsModel);
 
-
+                PublicUserProfileModel publicUserProfileModel = new PublicUserProfileModel();
+                publicUserProfileModel.UserId = userAccountModel.Id;
+                await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
 
             }
