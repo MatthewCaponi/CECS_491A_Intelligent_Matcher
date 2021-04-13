@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserAccountSettings;
 using Messaging;
+using FriendList;
+using PublicUserProfile;
 namespace WebApi
 {
     public class Seed
@@ -21,7 +23,7 @@ namespace WebApi
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-
+            
             var accounts = await userAccountRepository.GetAllAccounts();            
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
@@ -59,6 +61,16 @@ namespace WebApi
 
 
 
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            var publicProfiles = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            foreach (var profile in publicProfiles)
+            {
+                await publicUserProfileRepo.DeletePublicProfileById(profile.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("PublicUserProfile", 0, connectionString, dataGateway);
 
             if (accounts != null)
             {
@@ -76,6 +88,7 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
 
             for (int i = 1; i < seedAmount; ++i)
             {
@@ -109,7 +122,9 @@ namespace WebApi
                 await userProfileRepository.CreateUserProfile(userProfileModel);
                 await userAccountSettingsRepository.CreateUserAccountSettings(userAccountSettingsModel);
 
-
+                PublicUserProfileModel publicUserProfileModel = new PublicUserProfileModel();
+                publicUserProfileModel.UserId = userAccountModel.Id;
+                await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
 
             }
@@ -128,6 +143,67 @@ namespace WebApi
 
             }
 
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+
+
+
+
+
+            IEnumerable<FriendsListJunctionModel> friends = await friendListRepo.GetAllFriends();
+            foreach (var friend in friends)
+            {
+
+                await friendListRepo.DeleteFriendListbyId(friend.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("FriendsList", 0, connectionString, dataGateway);
+
+
+
+            IEnumerable<FriendsListJunctionModel> requets = await friendRequestListRepo.GetAllFriendRequests();
+            foreach (var request in requets)
+            {
+
+                await friendRequestListRepo.DeleteFriendRequestListbyId(request.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("FriendRequestsList", 0, connectionString, dataGateway);
+
+
+
+            IEnumerable<FriendsListJunctionModel> blocks = await friendBlockListRepo.GetAllFriendBlocks();
+            foreach (var block in blocks)
+            {
+
+                await friendBlockListRepo.DeleteFriendBlockbyId(block.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
+
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            for (int i = 10; i < 15; i++)
+            {
+                await friendListManager.RequestFriendAsync(1, i);
+
+            }
+
+            await friendListManager.RequestFriendAsync(18, 1);
+
+
+            for (int i = 2; i < 10; i++)
+            {
+                await friendListManager.RequestFriendAsync(1, i);
+
+                await friendListManager.ConfirmFriendAsync(1, i);
+            }
+
+            await friendListManager.BlockFriendAsync(19, 1);
 
             MessageModel messageModel = new MessageModel();
             messageModel.ChannelId = 1;
