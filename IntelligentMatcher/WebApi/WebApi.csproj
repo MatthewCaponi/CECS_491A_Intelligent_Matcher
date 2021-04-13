@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ControllerModels\ControllerModels.csproj" />
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
 

@@ -1,4 +1,5 @@
 ﻿using BusinessModels;
+using ControllerModels;
 using Login;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,38 +10,6 @@ using UserManagement.Models;
 
 namespace WebApi.Controllers
 {
-    public class LoginModel
-    {
-        public string username { get; set; }
-        public string password { get; set; }
-        public string ipAddress { get; set; }
-    }
-
-    public class ForgotUsernameModel
-    {
-        public string emailAddress { get; set; }
-        public DateTimeOffset dateOfBirth { get; set; }
-    }
-
-    public class ForgotPasswordValidationModel
-    {
-        public string username { get; set; }
-        public string emailAddress { get; set; }
-        public DateTimeOffset dateOfBirth { get; set; }
-    }
-
-    public class ForgotPasswordCodeInputModel
-    {
-        public string code { get; set; }
-        public int accountId { get; set; }
-    }
-
-    public class ResetPasswordModel
-    {
-        public string password { get; set; }
-        public int accountId { get; set; }
-    }
-
     [Route("[controller]/[action]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -52,35 +21,35 @@ namespace WebApi.Controllers
             _loginManager = loginManager;
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<Result<WebUserAccountModel>>> Login([FromBody] LoginModel loginModel)
+        [HttpPost]
+        public async Task<WebUserAccountModel> Login([FromBody] LoginModel loginModel)
         {
             var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
 
-            return loginResult;
+            return loginResult.SuccessValue;
         }
 
-        [HttpPost("forgotUsername")]
-        public async Task<ActionResult<Result<string>>> ForgotUsername([FromBody] ForgotUsernameModel forgotUsernameModel)
+        [HttpPost]
+        public async Task<ActionResult<Result<string>>> ForgotUsername([FromBody] ForgotInformationModel forgotInformationModel)
         {
-            var forgotUsernameResult = await _loginManager.ForgotUsername(forgotUsernameModel.emailAddress,
-                forgotUsernameModel.dateOfBirth);
+            var forgotUsernameResult = await _loginManager.ForgotUsername(forgotInformationModel.emailAddress,
+                forgotInformationModel.dateOfBirth);
 
             return forgotUsernameResult;
         }
 
-        [HttpPost("forgotPasswordValidation")]
+        [HttpPost]
         public async Task<ActionResult<Result<WebUserAccountModel>>> ForgotPasswordValidation
-            ([FromBody] ForgotPasswordValidationModel forgotPasswordValidationModel)
+            ([FromBody] ForgotInformationModel forgotInformationModel)
         {
             var forgotPasswordResult = await _loginManager.ForgotPasswordValidation
-                (forgotPasswordValidationModel.username, forgotPasswordValidationModel.emailAddress,
-                forgotPasswordValidationModel.dateOfBirth);
+                (forgotInformationModel.username, forgotInformationModel.emailAddress,
+                forgotInformationModel.dateOfBirth);
 
             return forgotPasswordResult;
         }
 
-        [HttpPost("forgotPasswordCode")]
+        [HttpPost]
         public async Task<ActionResult<Result<WebUserAccountModel>>> ForgotPasswordCodeInput
             ([FromBody] ForgotPasswordCodeInputModel forgotPasswordCodeInputModel)
         {
@@ -90,7 +59,7 @@ namespace WebApi.Controllers
             return forgotPasswordCodeResult;
         }
 
-        [HttpPost("resetPassword")]
+        [HttpPost]
         public async Task<ActionResult<Result<WebUserAccountModel>>> ResetPassword
             ([FromBody]ResetPasswordModel resetPasswordModel)
         {

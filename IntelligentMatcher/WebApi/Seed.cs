@@ -10,6 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserAccountSettings;
 using Messaging;
+using Security;
+
 namespace WebApi
 {
     public class Seed
@@ -21,6 +23,7 @@ namespace WebApi
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
 
             var accounts = await userAccountRepository.GetAllAccounts();            
             var profiles = await userProfileRepository.GetAllUserProfiles();
@@ -85,14 +88,14 @@ namespace WebApi
 
                 userAccountModel.Id = i;
                 userAccountModel.Username = "TestUser" + i;
-                userAccountModel.Password = "TestPassword" + i;
-                userAccountModel.Salt = "TestSalt" + i;
+                userAccountModel.Password = "" + i;
+                userAccountModel.Salt = "" + i;
                 userAccountModel.EmailAddress = "TestEmailAddress" + i;
                 userAccountModel.AccountType = "TestAccountType" + i;
                 userAccountModel.AccountStatus = "TestAccountStatus" + i;
                 userAccountModel.CreationDate = DateTimeOffset.UtcNow;
                 userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
-                
+
                 userProfileModel.Id = i;
                 userProfileModel.FirstName = "TestFirstName" + i;
                 userProfileModel.Surname = "TestSurname" + i;
@@ -105,7 +108,8 @@ namespace WebApi
                 userAccountSettingsModel.FontStyle = "Time New Roman";
                 userAccountSettingsModel.ThemeColor = "White";
            
-                await userAccountRepository.CreateAccount(userAccountModel);        
+                await userAccountRepository.CreateAccount(userAccountModel);
+                await cryptographyService.newPasswordEncryptAsync("TestPassword" + i, i);
                 await userProfileRepository.CreateUserProfile(userProfileModel);
                 await userAccountSettingsRepository.CreateUserAccountSettings(userAccountSettingsModel);
 
