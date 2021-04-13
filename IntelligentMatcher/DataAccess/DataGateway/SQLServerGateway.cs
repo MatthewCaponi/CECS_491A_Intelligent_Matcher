@@ -34,7 +34,7 @@ namespace DataAccess
     
         }
 
-        public async Task<int> SaveData<T>(string storedProcedure, T parameters, string connectionString)
+        public async Task<int> Execute<T>(string storedProcedure, T parameters, string connectionString)
         {
             try
             {
