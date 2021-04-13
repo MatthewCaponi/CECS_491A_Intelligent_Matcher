@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserAccountSettings;
 using Messaging;
+using FriendList;
 namespace WebApi
 {
     public class Seed
@@ -128,6 +129,67 @@ namespace WebApi
 
             }
 
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+
+
+
+
+
+            IEnumerable<FriendsListJunctionModel> friends = await friendListRepo.GetAllFriends();
+            foreach (var friend in friends)
+            {
+
+                await friendListRepo.DeleteFriendListbyId(friend.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("FriendsList", 0, connectionString, dataGateway);
+
+
+
+            IEnumerable<FriendsListJunctionModel> requets = await friendRequestListRepo.GetAllFriendRequests();
+            foreach (var request in requets)
+            {
+
+                await friendRequestListRepo.DeleteFriendRequestListbyId(request.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("FriendRequestsList", 0, connectionString, dataGateway);
+
+
+
+            IEnumerable<FriendsListJunctionModel> blocks = await friendBlockListRepo.GetAllFriendBlocks();
+            foreach (var block in blocks)
+            {
+
+                await friendBlockListRepo.DeleteFriendBlockbyId(block.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
+
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            for (int i = 10; i < 15; i++)
+            {
+                await friendListManager.RequestFriendAsync(1, i);
+
+            }
+
+            await friendListManager.RequestFriendAsync(18, 1);
+
+
+            for (int i = 2; i < 10; i++)
+            {
+                await friendListManager.RequestFriendAsync(1, i);
+
+                await friendListManager.ConfirmFriendAsync(1, i);
+            }
+
+            await friendListManager.BlockFriendAsync(19, 1);
 
             MessageModel messageModel = new MessageModel();
             messageModel.ChannelId = 1;

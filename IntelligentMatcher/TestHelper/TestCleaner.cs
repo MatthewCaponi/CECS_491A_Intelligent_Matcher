@@ -44,13 +44,15 @@ namespace TestHelper
         {
             var storedProcedure = "dbo.Testing_Reseed";
 
-            await dataGateway.SaveData(storedProcedure, new
+            await dataGateway.Execute(storedProcedure, new
             {
                 @tableName = tableName,
                 @NEWSEEDNUMBER = NEWSEEDNUMBER
             },
                                          connectionString.SqlConnectionString);
         }
+
+
 
     }
 }

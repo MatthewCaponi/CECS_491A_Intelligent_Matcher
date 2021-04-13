@@ -60,14 +60,14 @@
     <Folder Include="StoredProcedures\UserAccount" />
     <Folder Include="StoredProcedures\UserProfile" />
     <Folder Include="StoredProcedures\UserAccountSettings" />
-
     <Folder Include="StoredProcedures\LoginAttempts" />
     <Folder Include="StoredProcedures\UserAccountCode" />
-
     <Folder Include="StoredProcedures\Messages" />
     <Folder Include="StoredProcedures\Channels" />
     <Folder Include="StoredProcedures\UserChannels" />
-
+    <Folder Include="StoredProcedures\FriendsList" />
+    <Folder Include="StoredProcedures\FriendRequestsList" />
+    <Folder Include="StoredProcedures\FriendBlockList" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -104,7 +104,6 @@
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
-
     <Build Include="LoginAttempts.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ById.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ByIpAddress.sql" />
@@ -124,7 +123,6 @@
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Get_ByUserAccountId.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Delete_ById.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_DeleteByUserAccountId.sql" />
-
     <Build Include="StoredProcedures\Messages\Messages_Create.sql" />
     <Build Include="StoredProcedures\Messages\Messages_Get_All_By_ChannelId.sql" />
     <Build Include="UserChannels.sql" />
@@ -145,7 +143,27 @@
     <Build Include="StoredProcedures\UserChannels\UserChannels_Get_All.sql" />
     <Build Include="StoredProcedures\UserChannels\UserChannel_UpdateStatus_Id.sql" />
     <Build Include="StoredProcedures\UserChannels\UserChannels_GetStatus_ByUserId.sql" />
-
+    <Build Include="FriendsList.sql" />
+    <Build Include="StoredProcedures\FriendsList\FriendsList_Create.sql" />
+    <Build Include="StoredProcedures\FriendsList\FriendList_Delete.sql" />
+    <Build Include="StoredProcedures\FriendsList\FriendsList_GetAll_ByUserId.sql" />
+    <Build Include="StoredProcedures\FriendsList\FriendsList_GetAll.sql" />
+    <Build Include="StoredProcedures\FriendsList\FriendsList_Delete_ById.sql" />
+    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestList_Delete.sql" />
+    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_Create.sql" />
+    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_Delete_ById.sql" />
+    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAll.sql" />
+    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAll_ByUserId.sql" />
+    <Build Include="FriendRequestsList.sql" />
+    <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_Delete.sql" />
+    <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_Create.sql" />
+    <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_Delete_ById.sql" />
+    <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetAll.sql" />
+    <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetAll_ByUserId.sql" />
+    <Build Include="FriendBlockList.sql" />
+    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAllOutgoing_ByUserId.sql" />
+    <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetBlockingUser_ByUserId.sql" />
+    <Build Include="PublicUserProfile.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

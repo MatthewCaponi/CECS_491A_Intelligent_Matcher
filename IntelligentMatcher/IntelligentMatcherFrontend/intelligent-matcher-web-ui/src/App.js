@@ -5,6 +5,7 @@ import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import UserAccountSettings from "./Features/CoreFeatures/UserAccountSettings/Pages/UserAccountSettings";
+import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
@@ -28,6 +29,9 @@ function App() {
           </Route>
           <Route path="/UserAccountSettings">
             <UserAccountSettings />
+          </Route>
+          <Route path="/FriendsList">
+            <FriendsList />
           </Route>
           <Route path="/">
           <Home />

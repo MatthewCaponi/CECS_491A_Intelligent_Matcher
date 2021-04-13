@@ -32,7 +32,7 @@ namespace DataAccess.Repositories
                 p.Add("UserAccountId", model.UserAccountId);
                 p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                return await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+                return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
             }
             catch
             {
@@ -46,7 +46,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.UserAccountCode_Delete_ById";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  Id = id
@@ -65,7 +65,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.UserAccountCode_Delete_ByUserAccountId";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  UserAccountId = accountId

@@ -249,6 +249,8 @@ async getGroupData(){
             this.setState({channelUsers: res});
         }   
         ); 
+
+        
         await fetch('http://localhost:5000/Messaging/GetChannelMessages',
         {
         method: "POST",

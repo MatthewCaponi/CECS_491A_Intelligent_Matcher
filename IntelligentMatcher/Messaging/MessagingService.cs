@@ -35,8 +35,8 @@ namespace Messaging
                 IEnumerable<MessageModel> models = await _messagesRepo.GetAllMessagesByChannelIdAsync(model.ChannelId);
 
                 model.ChannelMessageId = models.Count();
-                model.Date = DateTime.Now;
-                model.Time = DateTime.Now.ToString().Split(' ')[1];
+                model.Date = DateTime.UtcNow;
+                model.Time = DateTime.UtcNow.ToString().Split(' ')[1];
                 if(model.UserId != 0)
                 {
                     UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(model.UserId);
@@ -47,8 +47,16 @@ namespace Messaging
                     model.Username = "SystemNotification";
                 }
 
-                await _messagesRepo.CreateMessageAsync(model);
-                return true;
+                if(model.Message.Length <= 1000)
+                {
+                    await _messagesRepo.CreateMessageAsync(model);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
             }
             catch
             {
