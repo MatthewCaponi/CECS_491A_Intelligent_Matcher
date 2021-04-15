@@ -1,54 +1,81 @@
 import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
+import ProfileData from "../Components/ProfileData";
+import TopBar from "../Components/TopBar";
 
 import _ from 'lodash'
 
 export class UserProfile extends Component {
   static displayName = UserProfile.name;
+
   constructor(props) {
 
     super(props);
 
     this.state = {  
-        viewingId: 'UserId'  ,
-        accountProfileData: []
+        userId: 1,
+        viewingId: 0,
+
+        visibility: false
         };
+        this.getViewStatus = this.getViewStatus.bind(this);
+        let url = window.location.href;
+        url = url.split("id=")
+        this.state.viewingId = parseInt(url[1]);   
+        this.getViewStatus();
+  }
 
 
-    let url = window.location.href;
-    url = url.split("id=")
-    this.state.viewingId = parseInt(url[1]);   
+  async getViewStatus(){
 
-    this.getAccountData = this.getAccountData.bind(this);
-}
+    var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-
-async getAccountData(){
-    await fetch('http://localhost:5000/UserProfile/GetUserProfile',
+    await fetch('http://localhost:5000/UserProfile/GetViewStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
-        body: JSON.stringify(this.state.viewingId)
+        body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
-        this.setState({accountProfileData: res});
+        this.setState({visibility: res});
+        console.log(this.state.visibility);
     }   
     ); 
 }
 
-
-
   render () {
-    this.getAccountData();
 
 
   
     return (
-        
-  <div>
-                     
-{this.state.accountProfileData.userId}
+        <Grid centered divided='vertically'>
+
+        <Grid.Row columns={1} >
+            <Grid.Column width={9} centered>
+            <TopBar />
+
+
+
+            </Grid.Column>
+    </Grid.Row>
+
+    <Grid.Row columns={2}>
+    <Grid.Column>
+</Grid.Column>
+<Grid.Column>
+<div>
+{
+(this.state.visibility == true || this.state.viewingId == this.state.userId) ?
+                                    ( <div>Change your profile picture         <ProfileData /></div>  
+                                        ) : ("Private")}
+                            
+
   </div>
+</Grid.Column>
+
+  </Grid.Row>
+  </Grid>
+
     );
   }
 }

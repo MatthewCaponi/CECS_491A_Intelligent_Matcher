@@ -34,7 +34,7 @@ function App() {
           <Route path="/FriendsList">
             <FriendsList />
           </Route>
-          <Route path="/UserProfile">
+          <Route path="/profile">
             <UserProfile />
           </Route>
           <Route path="/">

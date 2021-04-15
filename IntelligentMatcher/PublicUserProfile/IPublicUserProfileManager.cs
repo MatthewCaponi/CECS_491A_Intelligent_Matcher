@@ -13,5 +13,7 @@ namespace PublicUserProfile
         Task<bool> editPublicUserProfileAsync(PublicUserProfileModel model);
 
         Task<PublicUserProfileModel> GetUserProfile(int userId);
+         
+        Task<bool> editUserProfilePicture(PublicUserProfileModel model);
      }
 }

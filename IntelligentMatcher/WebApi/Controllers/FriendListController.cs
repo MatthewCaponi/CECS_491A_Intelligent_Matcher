@@ -135,5 +135,8 @@ namespace IntelligentMatcherUI.Controllers
             await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
             return true;
         }
+
+
+
     }
 }

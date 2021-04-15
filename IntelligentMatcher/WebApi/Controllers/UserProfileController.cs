@@ -8,6 +8,14 @@ using FriendList;
 using DataAccess;
 using PublicUserProfile;
 using DataAccess.Repositories;
+using System.IO;
+using System.Net.Http.Headers;
+
+using System.Linq;    
+
+
+using System.Net.Http;    
+
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -17,7 +25,25 @@ namespace IntelligentMatcherUI.Controllers
     public class UserProfileController : ControllerBase
     {
 
-     
+        public class OtherData
+        {
+            public string Username { get; set; }
+            public string JoinDate { get; set; }
+        }
+
+        public class dualIdModel
+        {
+            public int UserId { get; set; }
+            public int FriendId { get; set; }
+        }
+
+
+
+
+        public class FriendStatus
+        {
+            public string Status { get; set; }
+        }
 
         /*
         [HttpGet]
@@ -33,10 +59,14 @@ namespace IntelligentMatcherUI.Controllers
             .ToArray();
         }*/
         private readonly IPublicUserProfileManager _publicUserProfileManager;
+        private readonly IFriendListManager _friendListManager;
+        private readonly IUserAccountRepository _userAccountRepository;
 
-        public UserProfileController(IPublicUserProfileManager publicUserProfileManager)
+        public UserProfileController(IPublicUserProfileManager publicUserProfileManager, IFriendListManager friendListManager, IUserAccountRepository userAccountRepository)
         {
             _publicUserProfileManager = publicUserProfileManager;
+            _friendListManager = friendListManager;
+            _userAccountRepository = userAccountRepository;
         }
 
 
@@ -48,6 +78,107 @@ namespace IntelligentMatcherUI.Controllers
 
         }
 
+        [HttpPost]
+        public async Task<bool> SaveUserProfile([FromBody] PublicUserProfileModel model)
+        {
+
+            await _publicUserProfileManager.editPublicUserProfileAsync(model);
+            return true;
+
+        }
+
+
+        [HttpPost]
+        public async Task<bool> GetViewStatus([FromBody] dualIdModel model)
+        {
+
+            string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+            var profileModel = await _publicUserProfileManager.GetUserProfile(model.FriendId);
+            if(status == "Friends" && profileModel.Visibility == "Friends")
+            {
+                return true;
+
+            }
+            if (profileModel.Visibility == "Public")
+            {
+                return true;
+
+            }
+            return false;
+
+        }
+
+
+        [HttpPost]
+        public async Task<FriendStatus> GetFriendStatus([FromBody] dualIdModel model)
+        {
+
+            string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+            FriendStatus friendStatus = new FriendStatus();
+            friendStatus.Status = status;
+            return friendStatus;
+
+        }
+
+        [HttpPost]
+        public async Task<OtherData> GetOtherData([FromBody] int userId)
+        {
+
+            OtherData model = new OtherData();
+            UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
+            model.Username = userAccountModel.Username;
+            string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
+            model.JoinDate = dates[0];
+            return model;
+
+        }
+
+        [HttpPost]
+        public async Task<bool> UploadPhoto()
+        {
+                Console.WriteLine("In File Upload");
+                int userId = 0;
+                foreach (string key in Request.Form.Keys)
+                {
+                    if (key.StartsWith("userId"))
+                    {
+                       userId = Convert.ToInt32(Request.Form[key]);
+                    }
+                }
+
+                var postedFile = Request.Form.Files[0];
+                var uploadFolder = Path.Combine("..\\IntelligentMatcherFrontend\\intelligent-matcher-web-ui\\public\\uploaded");
+                if (postedFile.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(postedFile.ContentDisposition)
+                        .FileName.Trim('"');
+                    string[] filetype = fileName.Split(".");
+                    string newFileName = userId.ToString() + "profileImage." + filetype[1];
+                    var finalPath = Path.Combine(uploadFolder, newFileName);
+                    using (var fileStream = new FileStream(finalPath, FileMode.Create))
+                    {
+                        postedFile.CopyTo(fileStream);
+                    }
+                    Console.WriteLine("File Uploaded");
+                    PublicUserProfileModel model = new PublicUserProfileModel();
+                    model.UserId = userId;
+                    model.Photo = newFileName;
+                    await _publicUserProfileManager.editUserProfilePicture(model);
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Uploade Failed");
+
+                    return false;
+                }
+
+
+            
+
+
+        }
 
     }
 }
+

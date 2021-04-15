@@ -124,7 +124,16 @@ namespace WebApi
 
                 PublicUserProfileModel publicUserProfileModel = new PublicUserProfileModel();
                 publicUserProfileModel.UserId = userAccountModel.Id;
+                
+                publicUserProfileModel.Description = "My name is " + userAccountModel.Username;
+                publicUserProfileModel.Visibility = "Public";
+                publicUserProfileModel.Age = userAccountModel.Id + 20;
+                publicUserProfileModel.Hobbies = "These are my hobbies";
+                publicUserProfileModel.Intrests = "These are my intrests";
+                publicUserProfileModel.Height = "This is how tall I am";
                 await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+
+
 
 
             }
