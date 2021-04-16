@@ -171,7 +171,7 @@ namespace WebApi
                 await friendRequestListRepo.DeleteFriendRequestListbyId(request.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("FriendRequestsList", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("FriendsRequestsList", 0, connectionString, dataGateway);
 
 
 
