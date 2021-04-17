@@ -1,4 +1,5 @@
 ﻿using BusinessModels;
+using ControllerModels;
 using DataAccess;
 using DataAccess.Repositories;
 using DataAccessUnitTestes;
@@ -178,17 +179,17 @@ namespace ControllerLayerTest.Login
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userAccountCodeService, userProfileService);
 
-            var forgotUsernameModel = new ForgotUsernameModel();
+            var forgotInformationModel = new ForgotInformationModel();
 
-            forgotUsernameModel.emailAddress = emailAddress;
-            forgotUsernameModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.emailAddress = emailAddress;
+            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
 
             // Initialize controller with the dependencies
             LoginController loginController = new LoginController(loginManager);
 
             // Act
             var timer = Stopwatch.StartNew();
-            await loginController.ForgotUsername(forgotUsernameModel);
+            await loginController.ForgotUsername(forgotInformationModel);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;
@@ -220,18 +221,18 @@ namespace ControllerLayerTest.Login
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
                 userAccountService, userAccountCodeService, userProfileService);
 
-            var forgotPasswordValidationModel = new ForgotPasswordValidationModel();
+            var forgotInformationModel = new ForgotInformationModel();
 
-            forgotPasswordValidationModel.username = username;
-            forgotPasswordValidationModel.emailAddress = emailAddress;
-            forgotPasswordValidationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.username = username;
+            forgotInformationModel.emailAddress = emailAddress;
+            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
 
             // Initialize controller with the dependencies
             LoginController loginController = new LoginController(loginManager);
 
             // Act
             var timer = Stopwatch.StartNew();
-            await loginController.ForgotPasswordValidation(forgotPasswordValidationModel);
+            await loginController.ForgotPasswordValidation(forgotInformationModel);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;

@@ -73,7 +73,7 @@ namespace Login
                     }
 
                     loginResult.Success = false;
-                    loginResult.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                    loginResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return loginResult;
                 }
@@ -124,7 +124,7 @@ namespace Login
                 if (account == null)
                 {
                     forgotUsernameResult.Success = false;
-                    forgotUsernameResult.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                    forgotUsernameResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotUsernameResult;
                 }
@@ -167,7 +167,7 @@ namespace Login
                 if (account == null)
                 {
                     forgotPasswordResult.Success = false;
-                    forgotPasswordResult.ErrorMessage = ErrorMessage.UserDoesNotExist;
+                    forgotPasswordResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotPasswordResult;
                 }

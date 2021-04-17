@@ -19,8 +19,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Services;
 using Messaging;
+using Registration;
+using Registration.Services;
 using FriendList;
 using PublicUserProfile;
+
 namespace WebApi
 {
     public class Startup
@@ -59,6 +62,7 @@ namespace WebApi
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
+            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
 
@@ -69,6 +73,7 @@ namespace WebApi
             services.AddTransient<IUserAccessService, UserAccessService>();
 
             services.AddScoped<ILoginManager, LoginManager>();
+            services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
 
             services.AddScoped<IUserManager, UserManager>();

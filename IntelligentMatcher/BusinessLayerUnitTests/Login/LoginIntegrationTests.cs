@@ -148,8 +148,8 @@ namespace BusinessLayerUnitTests.Login
         }
 
         [DataTestMethod]
-        [DataRow("TestUser11", "TestPassword1", "127.0.0.1", ErrorMessage.UserDoesNotExist)]
-        public async Task Login_IpAddressExistsButUsernameDoesntExist_ReturnUserDoesNotExist
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.1", ErrorMessage.NoMatch)]
+        public async Task Login_IpAddressExistsButUsernameDoesntExist_ReturnNoMatch
             (string username, string password, string ipAddress, ErrorMessage error)
         {
             // Arrange
@@ -188,8 +188,8 @@ namespace BusinessLayerUnitTests.Login
         }
 
         [DataTestMethod]
-        [DataRow("TestUser11", "TestPassword1", "127.0.0.4", ErrorMessage.UserDoesNotExist)]
-        public async Task Login_IpAddressExistsButUsernameDoesntExistAndLoginCounterIsFive_ReturnUserDoesNotExist
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.4", ErrorMessage.NoMatch)]
+        public async Task Login_IpAddressExistsButUsernameDoesntExistAndLoginCounterIsFive_ReturnNoMatch
             (string username, string password, string ipAddress, ErrorMessage error)
         {
             // Arrange
@@ -229,8 +229,8 @@ namespace BusinessLayerUnitTests.Login
         }
 
         [DataTestMethod]
-        [DataRow("TestUser11", "TestPassword1", "127.0.0.5", ErrorMessage.UserDoesNotExist)]
-        public async Task Login_TooManyLoginAttemptsAfterSuspensionEndTimeButUsernameDoesntExist_ReturnUserDoesNotExist
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.5", ErrorMessage.NoMatch)]
+        public async Task Login_TooManyLoginAttemptsAfterSuspensionEndTimeButUsernameDoesntExist_ReturnNoMatch
             (string username, string password, string ipAddress, ErrorMessage error)
         {
             // Arrange
@@ -267,8 +267,8 @@ namespace BusinessLayerUnitTests.Login
         }
 
         [DataTestMethod]
-        [DataRow("TestUser11", "TestPassword1", "127.0.0.11", ErrorMessage.UserDoesNotExist)]
-        public async Task Login_IpAddressDoesntExistAndUsernameDoesntExist_ReturnUserDoesNotExist
+        [DataRow("TestUser11", "TestPassword1", "127.0.0.11", ErrorMessage.NoMatch)]
+        public async Task Login_IpAddressDoesntExistAndUsernameDoesntExist_ReturnNoMatch
             (string username, string password, string ipAddress, ErrorMessage error)
         {
             // Arrange
@@ -503,8 +503,8 @@ namespace BusinessLayerUnitTests.Login
 
         #region Integration Tests ForgotUsername
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress11", ErrorMessage.UserDoesNotExist)]
-        public async Task ForgotUsername_WrongEmail_ReturnUserDoesNotExist(string dateOfBirth,
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress11", ErrorMessage.NoMatch)]
+        public async Task ForgotUsername_WrongEmail_ReturnNoMatch(string dateOfBirth,
             string emailAddress, ErrorMessage error)
         {
             // Arrange
@@ -625,8 +625,8 @@ namespace BusinessLayerUnitTests.Login
 
         #region Integration Tests ForgotPasswordValidation
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress11", "TestUser11", ErrorMessage.UserDoesNotExist)]
-        public async Task ForgotPasswordValidation_WrongUsername_ReturnUserDoesNotExist(string dateOfBirth,
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress11", "TestUser11", ErrorMessage.NoMatch)]
+        public async Task ForgotPasswordValidation_WrongUsername_ReturnNoMatch(string dateOfBirth,
             string emailAddress, string username, ErrorMessage error)
         {
             // Arrange

@@ -83,7 +83,7 @@ namespace BusinessLayerUnitTests.FriendList
                 await friendListRepo.DeleteFriendListbyId(request.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("FriendRequestsList", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("FriendsRequestsList", 0, connectionString, dataGateway);
 
 
             var settings = await userAccountSettingsRepository.GetAllSettings();
@@ -308,7 +308,7 @@ namespace BusinessLayerUnitTests.FriendList
                 await friendRequestListRepo.DeleteFriendRequestListbyId(request.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("FriendRequestsList", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("FriendsRequestsList", 0, connectionString, dataGateway);
 
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);

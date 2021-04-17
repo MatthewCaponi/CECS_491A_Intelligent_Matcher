@@ -62,9 +62,9 @@ namespace BusinessLayerUnitTests.Login
         }
 
         [DataTestMethod]
-        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 0, "3/28/2007 7:13:50 PM +00:00", ErrorMessage.UserDoesNotExist)]
-        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 5, "3/28/2007 7:13:50 PM +00:00", ErrorMessage.UserDoesNotExist)]
-        public async Task Login_UsernameDoesntExistWithLoginAttempts_ReturnUserDoesNotExist(string username, string password,
+        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 0, "3/28/2007 7:13:50 PM +00:00", ErrorMessage.NoMatch)]
+        [DataRow("TestUser1", "TestPassword1", 1, "127.0.0.1", 5, "3/28/2007 7:13:50 PM +00:00", ErrorMessage.NoMatch)]
+        public async Task Login_UsernameDoesntExistWithLoginAttempts_ReturnNoMatch(string username, string password,
             int loginAttemptsId, string ipAddress, int loginCounter, string suspensionEndTime, ErrorMessage error)
         {
             // Arrange
@@ -236,8 +236,8 @@ namespace BusinessLayerUnitTests.Login
 
         #region Unit Tests ForgotUsername
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress2", ErrorMessage.UserDoesNotExist)]
-        public async Task ForgotUsername_UserAccountNotFound_ReturnUserDoesNotExist(string dateOfBirth,
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestEmailAddress2", ErrorMessage.NoMatch)]
+        public async Task ForgotUsername_UserAccountNotFound_ReturnNoMatch(string dateOfBirth,
             string givenEmail, ErrorMessage error)
         {
             // Arrange
@@ -393,8 +393,8 @@ namespace BusinessLayerUnitTests.Login
 
         #region Unit Tests ForgotPasswordValidation
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestUser2", "TestEmailAddress2", ErrorMessage.UserDoesNotExist)]
-        public async Task ForgotPasswordValidation_UserAccountNotFound_ReturnUserDoesNotExist(string dateOfBirth, 
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "TestUser2", "TestEmailAddress2", ErrorMessage.NoMatch)]
+        public async Task ForgotPasswordValidation_UserAccountNotFound_ReturnNoMatch(string dateOfBirth, 
             string givenUsername, string givenEmail, ErrorMessage error)
         {
             // Arrange
