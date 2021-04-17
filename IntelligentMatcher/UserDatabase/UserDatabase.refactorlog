@@ -42,4 +42,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ChannelId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="850e36df-c5db-435b-926d-1f27e0db9234" ChangeDateTime="04/17/2021 07:36:54">
+    <Property Name="ElementName" Value="[dbo].[AccessPolicy].[resourceId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AccessPolicy]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="priority" />
+  </Operation>
 </Operations>

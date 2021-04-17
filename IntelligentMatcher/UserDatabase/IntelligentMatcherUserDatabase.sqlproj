@@ -180,6 +180,14 @@
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateStatus.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdatePhoto.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_GetByUserId.sql" />
+    <Build Include="Resource.sql" />
+    <Build Include="Scope.sql" />
+    <Build Include="Claim.sql" />
+    <Build Include="AssignmentPolicy.sql" />
+    <Build Include="AssignmentPolicyPairing.sql" />
+    <Build Include="AccessPolicy.sql" />
+    <Build Include="AccessPolicyPairing.sql" />
+    <Build Include="ScopeClaim.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
