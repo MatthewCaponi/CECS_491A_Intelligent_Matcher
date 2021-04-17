@@ -13,7 +13,7 @@ using BusinessModels.ListingModels;
 
 namespace TraditionalListings.Managers
 {
-    class ListingsManager : IListingsManager
+    public class ListingsManager : IListingsManager
     {
         private ListingCreationService _listingCreationService;
         private ListingDeletionService _listingDeletionService;

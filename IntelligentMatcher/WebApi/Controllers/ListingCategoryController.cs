@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TraditionalListingSearch;
+using DataAccess.Repositories;
+using DataAccess;
+using TraditionalListings.Services;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -14,9 +17,14 @@ namespace IntelligentMatcherUI.Controllers
 
         private readonly IListingSearchManager _listingSearchManager;
 
-        public ListingCategoryController(IListingSearchManager listingSearchManager)
+
+        public ListingCategoryController()
         {
-            _listingSearchManager = listingSearchManager;
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            ITraditionalListingSearchRepository traditionalListingSearchRepository = new TraditionalListingSearchRepository(dataGateway, connectionString);
+            ListingGetterService listingGetterService= new ListingGetterService(traditionalListingSearchRepository);
+            _listingSearchManager =new ListingSearchManager(listingGetterService);
         }
 
         [HttpGet]

@@ -1,9 +1,12 @@
 ﻿using BusinessModels.ListingModels;
+using DataAccess;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TraditionalListings.Services;
 using TraditionalListingSearch;
 
 namespace IntelligentMatcherUI.Controllers
@@ -14,9 +17,13 @@ namespace IntelligentMatcherUI.Controllers
     {
         private readonly IListingSearchManager _listingSearchManager;
 
-        public ListingFormController(IListingSearchManager listingSearchManager)
+        public ListingFormController()
         {
-            _listingSearchManager = listingSearchManager;
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            ITraditionalListingSearchRepository traditionalListingSearchRepository = new TraditionalListingSearchRepository(dataGateway, connectionString);
+            ListingGetterService listingGetterService = new ListingGetterService(traditionalListingSearchRepository);
+            _listingSearchManager = new ListingSearchManager(listingGetterService);
         }
 
         [HttpGet]

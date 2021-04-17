@@ -8,7 +8,7 @@ using BusinessModels.ListingModels;
 
 namespace TraditionalListings.Managers
 {
-    interface IListingsManager 
+    public interface IListingsManager 
 
     {
    
