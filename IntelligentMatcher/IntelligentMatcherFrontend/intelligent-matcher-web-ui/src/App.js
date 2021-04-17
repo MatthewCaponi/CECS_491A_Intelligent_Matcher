@@ -60,13 +60,14 @@ function App() {
             <Login />
           </Route>
           <Route path="/ForgotUsername">
-              <ForgotUsername />
+            <ForgotUsername />
           </Route>
           <Route path="/ForgotPasswordValidation">
-              <ForgotPasswordValidation />
+            <ForgotPasswordValidation />
           </Route>
           <Route path="/Registration">
             <Registration />
+          </Route>
           <Route path="/UserAccountSettings">
             <UserAccountSettings />
           </Route>
@@ -77,10 +78,10 @@ function App() {
             <UserProfile />
           </Route>
           <Route path="/">
-          <Home />
-        </Route>
+            <Home />
+          </Route>
         </Switch>
-          </Router>
+      </Router>
     </div>
       
   );
