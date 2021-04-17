@@ -35,7 +35,7 @@ namespace DataAccess.Repositories
             p.Add("UserAccountId", dalListingModel.UserAccountId);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
 
@@ -47,7 +47,7 @@ namespace DataAccess.Repositories
         {
             string storedProcedure = "dbo.DeleteListing";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id
@@ -63,7 +63,7 @@ namespace DataAccess.Repositories
             var query = "update Listing set Title = @Title , Details = @Details  where Id= @Id";
 
 
-            return await _dataGateway.SaveData(query,
+            return await _dataGateway.Execute(query,
                                           new
                                           {
                                               Title = dalListingModel.Title,

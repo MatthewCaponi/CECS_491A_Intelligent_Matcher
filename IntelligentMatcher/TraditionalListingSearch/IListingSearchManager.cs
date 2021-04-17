@@ -11,6 +11,8 @@ namespace TraditionalListingSearch
         Task<Result<List<BusinessListingModel>>> GetAllListings();
         Task<Result<List<BusinessCollaborationModel>>> GetAllCollaborationListings();
         Task<Result<List<BusinessRelationshipModel>>> GetAllRelationshipListings();
+        Task<Result<List<BusinessTeamModel>>> GetAllTeamListings();
+
 
 
     }

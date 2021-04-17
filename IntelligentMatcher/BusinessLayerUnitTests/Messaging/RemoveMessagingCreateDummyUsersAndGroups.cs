@@ -79,10 +79,6 @@ namespace BusinessLayerUnitTests.Messaging
 
         }
 
-        [DataTestMethod]
-        public async Task dummy()
-        {
-            Assert.IsTrue(true);
-        }
+       
     }
 }

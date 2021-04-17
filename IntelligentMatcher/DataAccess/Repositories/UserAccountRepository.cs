@@ -114,7 +114,7 @@ namespace DataAccess.Repositories
             p.Add("UpdationDate", model.UpdationDate);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
         }
@@ -123,7 +123,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Delete_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id
@@ -135,7 +135,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Update_Username";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -148,7 +148,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Update_Email";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -161,7 +161,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Update_Password";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -174,7 +174,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Update_Salt";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id,
@@ -188,7 +188,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              AccountStatus = accountStatus,
@@ -201,7 +201,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccount_Update_AccountType";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              AccountType = accountType,

@@ -42,5 +42,13 @@ namespace TraditionalListingSearch
             result.SuccessValue = await _listingGetterService.GetAllRelationshipListing();
             return result;
         }
+
+        public async Task<Result<List<BusinessTeamModel>>> GetAllTeamListings()
+        {
+            var result = new Result<List<BusinessTeamModel>>();
+            result.Success = true;
+            result.SuccessValue = await _listingGetterService.GetAllTeamModelListing();
+            return result;
+        }
     }
 }

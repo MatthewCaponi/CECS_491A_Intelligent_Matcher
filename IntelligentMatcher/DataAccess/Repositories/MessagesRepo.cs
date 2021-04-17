@@ -33,7 +33,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.Messages_Delete_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id
@@ -68,7 +68,7 @@ namespace DataAccess.Repositories
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
         }

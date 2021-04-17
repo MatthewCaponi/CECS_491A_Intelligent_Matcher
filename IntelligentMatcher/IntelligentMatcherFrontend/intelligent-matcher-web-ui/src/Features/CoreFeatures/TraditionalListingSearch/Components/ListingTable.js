@@ -5,6 +5,7 @@ import { Table, Grid, Dimmer, Loader, Segment, Container ,Message} from 'semanti
 import './ListingTable.css'
 
 
+
 function ListingTable(props) {
     const [timedOut, setTimedOut] = useState('False');
     if (props.rows.length === 0) {

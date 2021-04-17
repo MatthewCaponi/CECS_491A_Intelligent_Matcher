@@ -65,6 +65,19 @@ namespace TraditionalListings.Services
             return businessListings;
         }
 
+        public async Task<List<BusinessTeamModel>> GetAllTeamModelListing()
+        {
+            var dalListing = await _traditionalListingSearchRepository.GetAllTeamListings();
+            List<BusinessTeamModel> businessListings = new List<BusinessTeamModel>();
+            foreach (var dalListingModel in dalListing)
+            {
+                var businessListing = ModelConverterService.ConvertTo(dalListingModel, new BusinessTeamModel());
+                businessListings.Add(businessListing);
+            }
+
+            return businessListings;
+        }
+
 
 
 

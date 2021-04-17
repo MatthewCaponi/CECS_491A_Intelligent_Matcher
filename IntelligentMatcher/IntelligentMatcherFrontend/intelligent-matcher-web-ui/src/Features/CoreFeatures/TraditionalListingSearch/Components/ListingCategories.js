@@ -5,21 +5,14 @@ import { Table, Grid, Dimmer, Loader, Segment, Container } from 'semantic-ui-rea
 import './ListingCategories.css'
 
 
-function ListingCategories(props) {
-    const [timedOut, setTimedOut] = useState('False');
-    if (props.rows.length === 0) {
-        return (
-            <Grid container centered>
-                <Grid.Row />
-                <Grid.Row />
-                <Grid.Row>
-                </Grid.Row>  
-                <Grid.Row>
-                </Grid.Row>          
-            </Grid>    
-        )
-    }
+function ListingCategories(props) {  
+    return (
+            <div></div>
+           
+    )
 }
+
+
 
 
 export default ListingCategories;

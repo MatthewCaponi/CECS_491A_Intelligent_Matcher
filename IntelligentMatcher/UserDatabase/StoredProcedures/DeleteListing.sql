@@ -1,9 +1,11 @@
 ﻿CREATE PROCEDURE [dbo].[DeleteListing]
+	@Id int 
 AS
 begin
 	set nocount on;
-	Delete  from dbo.[Listing];
-	
+
+	delete
+	from dbo.[Listing]
+	where Id = @Id;
+
 end
-
-

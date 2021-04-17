@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
-import ListingSearch from '../../TraditionalListingSearch/Pages/ListingSearch';
 import './Home.css';
 
 function Home() {
@@ -18,8 +18,10 @@ function Home() {
                     <Search placeholder="Start smart search..." size="massive"></Search>
                 </Grid.Row>
                 <Grid.Row>
-                <Button compact size="tiny" circular inverted color="violet">Create Listing</Button>
-                    <Button compact size="tiny" circular inverted color="blue">Traditional Search</Button>
+                <Button href="http://localhost:3000/ListingForm"compact size="tiny" circular inverted color="violet">Create Listing
+               
+                </Button>
+                    <Button href="http://localhost:3000/ListingCategoryPage" compact size="tiny" circular inverted color="blue">Traditional Search</Button>
 
                 </Grid.Row>
             </Grid> 

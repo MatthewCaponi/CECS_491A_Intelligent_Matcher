@@ -30,7 +30,7 @@ function SiteHeader() {
                 <Menu inverted pointing secondary>
                     <Menu.Item href="http://localhost:3000" name='home' />
                     <Menu.Item link name='profile' />
-                    <Menu.Item link name='Listings' />
+                    <Menu.Item href="http://localhost:3000/ListingTable" name='Listings' />
                     </Menu>
                 </Grid.Column>
                 <Grid.Column container>

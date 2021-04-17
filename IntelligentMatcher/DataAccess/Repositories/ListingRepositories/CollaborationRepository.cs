@@ -35,7 +35,7 @@ namespace DataAccess.Repositories.ListingRepositories
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
 
