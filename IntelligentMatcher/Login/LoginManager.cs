@@ -155,12 +155,12 @@ namespace Login
             }
         }
 
-        public async Task<Result<WebUserAccountModel>> ForgotPasswordValidation(string username, string emailAddress, 
+        public async Task<Result<BusinessUserAccountCodeModel>> ForgotPasswordValidation(string username, string emailAddress, 
             DateTimeOffset dateOfBirth)
         {
             try
             {
-                var forgotPasswordResult = new Result<WebUserAccountModel>();
+                var forgotPasswordResult = new Result<BusinessUserAccountCodeModel>();
                 var account = await _userAccountService.GetUserAccountByUsername(username);
 
                 // Account will be null if an account with the given email address can't be found
@@ -200,15 +200,16 @@ namespace Login
                 }
 
                 await _userAccountCodeService.AddCode(code, DateTimeOffset.UtcNow.AddHours(1), account.Id);
+                var accountCode = await _userAccountCodeService.GetUserAccountCodeByAccountId(account.Id);
 
                 forgotPasswordResult.Success = true;
-                forgotPasswordResult.SuccessValue = account;
+                forgotPasswordResult.SuccessValue = accountCode;
 
                 return forgotPasswordResult;
             }
             catch
             {
-                var forgotPasswordResult = new Result<WebUserAccountModel>();
+                var forgotPasswordResult = new Result<BusinessUserAccountCodeModel>();
                 forgotPasswordResult.Success = false;
                 forgotPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
 
