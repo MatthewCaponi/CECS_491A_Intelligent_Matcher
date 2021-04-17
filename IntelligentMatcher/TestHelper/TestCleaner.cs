@@ -19,13 +19,21 @@ namespace TestHelper
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             IResourceRepository resourceRepository = new ResourceRepository(dataGateway, connectionString);
+            IClaimRepository claimRepository = new ClaimRepository(dataGateway, connectionString);
             IScopeRepository scopeRepository = new ScopeRepository(dataGateway, connectionString);
+            IScopeClaimRepository scopeClaimRepository = new ScopeClaimRepository(dataGateway, connectionString);
+            IAssignmentPolicyRepository assignmentPolicyRepository = new AssignmentPolicyRepository(dataGateway, connectionString);
+            IAssignmentPolicyPairingRepository assignmentPolicyPairingRepository = new AssignmentPolicyPairingRepository(dataGateway, connectionString);
 
             var accounts = await userAccountRepository.GetAllAccounts();
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
             var resources = await resourceRepository.GetAllResources();
+            var claims = await claimRepository.GetAllClaims();
             var scopes = await scopeRepository.GetAllScopes();
+            var scopeClaims = await scopeClaimRepository.GetAllScopeClaims();
+            var assignmentPolicies = await assignmentPolicyRepository.GetAllAssignmentPolicies();
+            var assignmentPolicyPairings = await assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings();
 
 
             if (accounts != null)
@@ -48,7 +56,16 @@ namespace TestHelper
                     await resourceRepository.DeleteResource(i);
                 }
             }
-            
+
+            if (claimRepository != null)
+            {
+                var num = claims.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await claimRepository.DeleteClaim(i);
+                }
+            }
+
             if (scopeRepository != null)
             {
                 var num = scopes.ToList().Count;
@@ -58,11 +75,42 @@ namespace TestHelper
                 }
             }
 
+            if (scopeClaims != null)
+            {
+                var num = scopeClaims.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await scopeClaimRepository.DeleteScopeClaim(i);
+                }
+            }
+            if (assignmentPolicies != null)
+            {
+                var num = assignmentPolicies.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await assignmentPolicyRepository.DeleteAssignmentPolicy(i);
+                }
+            }
+
+            if (assignmentPolicyPairings != null)
+            {
+                var num = assignmentPolicyPairings.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await assignmentPolicyPairingRepository.DeleteAssignmentPolicyPairing(i);
+                }
+            }
+
+
             await ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
             await ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
             await ReseedAsync("Resource", 0, connectionString, dataGateway);
+            await ReseedAsync("Claim", 0, connectionString, dataGateway);
             await ReseedAsync("Scope", 0, connectionString, dataGateway);
+            await ReseedAsync("ScopeClaim", 0, connectionString, dataGateway);
+            await ReseedAsync("AssignmentPolicy", 0, connectionString, dataGateway);
+            await ReseedAsync("AssignmentPolicyPairing", 0, connectionString, dataGateway);
         }
 
         private static async Task ReseedAsync(string tableName, int NEWSEEDNUMBER, IConnectionStringData connectionString,

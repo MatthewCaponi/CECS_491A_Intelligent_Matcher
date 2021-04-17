@@ -5,4 +5,5 @@
     [scopeId] INT NOT NULL, 
     CONSTRAINT [FK_AssignmentPolicyPairing_AssignmentPolicy] FOREIGN KEY ([policyId]) REFERENCES [AssignmentPolicy]([Id]), 
     CONSTRAINT [FK_AssignmentPolicyPairing_Scope] FOREIGN KEY ([scopeId]) REFERENCES [Scope]([Id])
+    ON DELETE CASCADE
 )
