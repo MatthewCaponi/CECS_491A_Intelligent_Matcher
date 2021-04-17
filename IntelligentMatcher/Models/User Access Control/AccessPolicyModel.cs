@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models.User_Access_Control
 {
-    public class AcccessPolicyModel
+    public class AccessPolicyModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

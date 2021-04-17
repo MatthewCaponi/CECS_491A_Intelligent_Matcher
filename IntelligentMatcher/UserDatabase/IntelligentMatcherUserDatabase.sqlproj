@@ -75,6 +75,9 @@
     <Folder Include="StoredProcedures\UserAccessControl\ScopeClaim" />
     <Folder Include="StoredProcedures\UserAccessControl\AssignmentPolicy" />
     <Folder Include="StoredProcedures\UserAccessControl\AssignmentPolicyPairing" />
+    <Folder Include="StoredProcedures\UserAccessControl\UserScopeClaim" />
+    <Folder Include="StoredProcedures\UserAccessControl\AccessPolicy" />
+    <Folder Include="StoredProcedures\UserAccessControl\AccessPolicyPairing" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -238,6 +241,21 @@
     <Build Include="StoredProcedures\UserAccessControl\AssignmentPolicyPairing\AssignmentPolicyPairing_Create.sql" />
     <Build Include="StoredProcedures\UserAccessControl\AssignmentPolicyPairing\AssignmentPolicyPairing_Update.sql" />
     <Build Include="StoredProcedures\UserAccessControl\AssignmentPolicyPairing\AssignmentPolicyPairing_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicy\AccessPolicy_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicy\AccessPolicy_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicy\AccessPolicy_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicy\AccessPolicy_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicy\AccessPolicy_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Delete_ById.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

@@ -5,4 +5,5 @@
     [priority] INT NOT NULL, 
     [resourceId] INT NOT NULL, 
     CONSTRAINT [FK_AccessPolicy_Resource] FOREIGN KEY ([resourceId]) REFERENCES [Resource]([Id])
+    ON DELETE CASCADE
 )

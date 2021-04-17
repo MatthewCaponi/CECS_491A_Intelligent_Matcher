@@ -24,6 +24,9 @@ namespace TestHelper
             IScopeClaimRepository scopeClaimRepository = new ScopeClaimRepository(dataGateway, connectionString);
             IAssignmentPolicyRepository assignmentPolicyRepository = new AssignmentPolicyRepository(dataGateway, connectionString);
             IAssignmentPolicyPairingRepository assignmentPolicyPairingRepository = new AssignmentPolicyPairingRepository(dataGateway, connectionString);
+            IUserScopeClaimRepository userScopeClaimRepository = new UserScopeClaimRepository(dataGateway, connectionString);
+            IAccessPolicyRepository accessPolicyRepository = new AccessPolicyRepository(dataGateway, connectionString);
+            IAccessPolicyPairingRepository accessPolicyPairingRepository = new AccessPolicyPairingRepository(dataGateway, connectionString);
 
             var accounts = await userAccountRepository.GetAllAccounts();
             var profiles = await userProfileRepository.GetAllUserProfiles();
@@ -34,19 +37,9 @@ namespace TestHelper
             var scopeClaims = await scopeClaimRepository.GetAllScopeClaims();
             var assignmentPolicies = await assignmentPolicyRepository.GetAllAssignmentPolicies();
             var assignmentPolicyPairings = await assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings();
-
-
-            if (accounts != null)
-            {
-                var numRows = accounts.ToList().Count;
-
-                for (int i = 1; i <= numRows; ++i)
-                {
-                    await userProfileRepository.DeleteUserProfileByAccountId(i);
-                    await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
-                    await userAccountRepository.DeleteAccountById(i);
-                }
-            }
+            var userScopeClaims = await userScopeClaimRepository.GetAllUserUserScopeClaims();
+            var accessPolicies = await accessPolicyRepository.GetAllAccessPolicies();
+            var accesssPolicyPairings = await accessPolicyPairingRepository.GetAllAccessPoliciesPairings();
 
             if (resources != null)
             {
@@ -101,6 +94,45 @@ namespace TestHelper
                 }
             }
 
+            if (userScopeClaims != null)
+            {
+                var num = userScopeClaims.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await userScopeClaimRepository.DeleteUserScopeClaim(i);
+                }
+            }
+
+            if (accessPolicies != null)
+            {
+                var num = accessPolicies.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await accessPolicyRepository.DeleteAccessPolicy(i);
+                }
+            }
+
+            if (accesssPolicyPairings != null)
+            {
+                var num = accesssPolicyPairings.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await accessPolicyPairingRepository.DeleteAccessPairingPolicy(i);
+                }
+            }
+
+            if (accounts != null)
+            {
+                var numRows = accounts.ToList().Count;
+
+                for (int i = 1; i <= numRows; ++i)
+                {
+                    await userProfileRepository.DeleteUserProfileByAccountId(i);
+                    await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
+                    await userAccountRepository.DeleteAccountById(i);
+                }
+            }
+
 
             await ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
@@ -111,6 +143,9 @@ namespace TestHelper
             await ReseedAsync("ScopeClaim", 0, connectionString, dataGateway);
             await ReseedAsync("AssignmentPolicy", 0, connectionString, dataGateway);
             await ReseedAsync("AssignmentPolicyPairing", 0, connectionString, dataGateway);
+            await ReseedAsync("UserScopeClaim", 0, connectionString, dataGateway);
+            await ReseedAsync("AccessPolicy", 0, connectionString, dataGateway);
+            await ReseedAsync("AccessPolicyPairing", 0, connectionString, dataGateway);
         }
 
         private static async Task ReseedAsync(string tableName, int NEWSEEDNUMBER, IConnectionStringData connectionString,
