@@ -22,11 +22,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<WebUserAccountModel> Login([FromBody] LoginModel loginModel)
+        public async Task<ActionResult<Result<WebUserAccountModel>>> Login([FromBody] LoginModel loginModel)
         {
             var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
 
-            return loginResult.SuccessValue;
+            return loginResult;
         }
 
         [HttpPost]

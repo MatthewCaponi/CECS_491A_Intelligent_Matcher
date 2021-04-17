@@ -19,6 +19,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Services;
 using Messaging;
+using Registration;
+using Registration.Services;
 
 namespace WebApi
 {
@@ -54,7 +56,7 @@ namespace WebApi
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
-
+            services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IUserAccountService, UserAccountService>();
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
@@ -62,6 +64,7 @@ namespace WebApi
             services.AddTransient<IUserAccessService, UserAccessService>();
 
             services.AddScoped<ILoginManager, LoginManager>();
+            services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
 
             services.AddScoped<IUserManager, UserManager>();

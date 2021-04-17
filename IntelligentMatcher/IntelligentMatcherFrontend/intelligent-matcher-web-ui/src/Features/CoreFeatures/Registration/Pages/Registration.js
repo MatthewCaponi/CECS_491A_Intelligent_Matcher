@@ -8,7 +8,7 @@ function Registration() {
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
     const [emailState, setEmailState] = useState("");
-    const [dateOfBirthState, setDateOfBirthState] = useState("");
+    const [dateOfBirthState, setDateOfBirthState] = useState("2000-01-01");
     function submitHandler(e){
         var RegistrationModel = e;
         // e.preventDefault();
@@ -19,7 +19,13 @@ function Registration() {
         body: JSON.stringify(RegistrationModel)
         }).
         then(r => r.json()).then(res=>{
-            alert(res);
+            console.log(JSON.stringify(res));
+            if(res.success){
+                alert("Success for " + res.accountId);
+            }
+            else{
+                alert(res.errorMessage);
+            }
         }
         );
     }
@@ -85,7 +91,8 @@ function Registration() {
         </Grid.Row>
         <Grid.Row verticalAlign="middle">
             <div class="ui input">
-                <input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY" onChange={e => setDateOfBirthState(e.target.value)}/>
+                <input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY"
+                onChange={e => setDateOfBirthState(e.target.value)}/>
             </div>
         </Grid.Row>
         <Grid.Row>
@@ -96,7 +103,8 @@ function Registration() {
                     username:usernameState,
                     password:passwordState,
                     emailAddress:emailState,
-                    dateOfBirth:Date.parse(dateOfBirthState)
+                    dateOfBirth:dateOfBirthState,
+                    ipAddress:"127.0.0.1"
                 })}
                 compact size="tiny"
                 circular inverted color="red"

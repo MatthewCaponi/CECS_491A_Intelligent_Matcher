@@ -38,11 +38,11 @@ namespace Registration
             _logger = factory.CreateLogService<RegistrationManager>();
         }
 
-        public async Task<Tuple<bool, ResultModel<int>>> RegisterAccount(WebUserAccountModel accountModel,
+        public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
             WebUserProfileModel userModel, string password, string ipAddress)
         {
-            // Create Tuple to determine the result and message the UI will present
-            Tuple<bool, ResultModel<int>> resultModel = new Tuple<bool, ResultModel<int>>(false, new ResultModel<int>());
+            // Create Result to determine the result and message the UI will present
+            var resultModel = new Result<int>();
             // Clarify the logging event
             ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountModel.Id, AccountType.User.ToString());
@@ -53,7 +53,8 @@ namespace Registration
             {
                 // Log and return Username existing result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
-                resultModel.Item2.ErrorMessage = ErrorMessage.UsernameExists;
+                resultModel.Success = false;
+                resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 
                 return resultModel;
             }
@@ -64,7 +65,8 @@ namespace Registration
             {
                 // Log and return Email existing result
                 _logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
-                resultModel.Item2.ErrorMessage = ErrorMessage.EmailExists;
+                resultModel.Success = false;
+                resultModel.ErrorMessage = ErrorMessage.EmailExists;
 
                 return resultModel;
             }
@@ -84,9 +86,14 @@ namespace Registration
             // Create New Email Model
             var emailModel = new EmailModel();
 
+            // Re-Clarify the logging event
+            _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
+                    accountID, AccountType.User.ToString());
+
             //Log and Return result
             _logger.LogInfo(_loggingEvent, "User Registered");
-            resultModel.Item2.Result = accountID;
+            resultModel.Success = true;
+            resultModel.SuccessValue = accountID;
 
             // Set the Email Model Attributes
             emailModel.Recipient = accountModel.EmailAddress;
@@ -101,25 +108,14 @@ namespace Registration
             emailModel.Tag = "Welcome";
 
             //Send Verification Email
-            if (!await _emailService.SendEmail(emailModel))
-            {
-                if (!await _emailService.SendEmail(emailModel))
-                {
-                    //Log Email Result
-                    _logger.LogInfo(_loggingEvent, ErrorMessage.EmailNotSent.ToString());
-                    resultModel.Item2.ErrorMessage = ErrorMessage.EmailNotSent;
-
-                    // First items of these tuples are immutable
-                    // A new one must be returned for the success conditional
-                    return new Tuple<bool, ResultModel<int>>(true, resultModel.Item2);
-                }
-            }
+            await _emailService.SendEmail(emailModel);
+            
             //Log Email Result
             _logger.LogInfo(_loggingEvent, "Email Sent");
 
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
-            return new Tuple<bool, ResultModel<int>>(true, resultModel.Item2);
+            return resultModel;
         }
     }
 }

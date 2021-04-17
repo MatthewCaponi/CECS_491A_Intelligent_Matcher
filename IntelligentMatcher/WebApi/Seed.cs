@@ -20,11 +20,13 @@ namespace WebApi
         {
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
 
+            var loginAttempts = await loginAttemptsRepository.GetAllLoginAttempts();
             var accounts = await userAccountRepository.GetAllAccounts();            
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
@@ -60,8 +62,17 @@ namespace WebApi
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
+            if (loginAttempts != null)
+            {
+                var numRows = loginAttempts.ToList().Count;
 
+                for (int i = 1; i <= numRows; ++i)
+                {
+                    await loginAttemptsRepository.DeleteLoginAttemptsById(i);
+                }
+            }
 
+            await DataAccessTestHelper.ReseedAsync("LoginAttempts", 0, connectionString, dataGateway);
 
             if (accounts != null)
             {
