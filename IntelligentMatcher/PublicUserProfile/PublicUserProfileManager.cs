@@ -17,6 +17,24 @@ namespace PublicUserProfile
             _publicUserProfileRepo = publicUserProfileRepo;
  
         }
+        public async Task<bool> editUserProfilePicture(PublicUserProfileModel model)
+        {
+            await _publicUserProfileRepo.UpdatePhoto(model.UserId, model.Photo);
+            return true;
+
+        }
+
+        public async Task<bool> setUserOnline(int UserId)
+        {
+            await _publicUserProfileRepo.UpdateStatus(UserId, "Online");
+            return true;
+        }
+
+        public async Task<bool> setUserOffline(int UserId)
+        {
+            await _publicUserProfileRepo.UpdateStatus(UserId, "Offline");
+            return true;
+        }
 
         public async Task<bool> editPublicUserProfileAsync(PublicUserProfileModel model)
         {
@@ -29,16 +47,17 @@ namespace PublicUserProfile
             await _publicUserProfileRepo.UpdateHobbies(model.UserId, model.Hobbies);
             await _publicUserProfileRepo.UpdateIntrests(model.UserId, model.Intrests);
             await _publicUserProfileRepo.UpdateJobs(model.UserId, model.Jobs);
-            await _publicUserProfileRepo.UpdatePhoto(model.UserId, model.Photo);
             await _publicUserProfileRepo.UpdateSexualOrientation(model.UserId, model.SexualOrientation);
             await _publicUserProfileRepo.UpdateVisibility(model.UserId, model.Visibility);
-            await _publicUserProfileRepo.UpdateStatus(model.UserId, model.Status);
 
             return true;
         }
 
         public async Task<bool> createPublicUserProfileAsync(PublicUserProfileModel model)
         {
+            model.Status = "Offline";
+            model.Visibility = "Public";
+
             await _publicUserProfileRepo.CreatePublicProfile(model);
             return true;
 

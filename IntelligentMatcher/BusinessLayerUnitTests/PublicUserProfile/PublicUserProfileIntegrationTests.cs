@@ -326,7 +326,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             }
             foreach (var profile in models)
             {
-                if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility && profile.Status == status && profile.Photo == photo && profile.Intrests == intrests)
+                if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility &&   profile.Intrests == intrests)
                 {
                     Assert.IsTrue(true);
                 }
@@ -339,6 +339,149 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
         }
 
+        [DataTestMethod]
+        [DataRow(1, "Photo")]
+        public async Task editUserProfilePicture_EditPhoto_PhotoSuccessfullyEdited(int userId, string photo)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+
+            PublicUserProfileModel model = new PublicUserProfileModel();
+
+            model.UserId = userId;
+
+            await publicUserProfileManager.createPublicUserProfileAsync(model);
+
+
+            model.Photo = photo;
+
+
+            await publicUserProfileManager.editUserProfilePicture(model);
+
+
+            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            if (models == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (models.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var profile in models)
+            {
+                if (profile.Photo == photo )
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+            }
+
+
+        }
+
+
+        [DataTestMethod]
+        [DataRow(1)]
+        public async Task setUserOffline_SetOffline_UserSetOffline(int userId)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+
+            PublicUserProfileModel model = new PublicUserProfileModel();
+
+            model.UserId = userId;
+
+            await publicUserProfileManager.createPublicUserProfileAsync(model);
+
+
+            await publicUserProfileManager.setUserOnline(userId);
+
+
+            await publicUserProfileManager.setUserOffline(userId);
+
+
+            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            if (models == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (models.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var profile in models)
+            {
+                if (profile.Status == "Offline")
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+            }
+
+
+        }
+
+
+        [DataTestMethod]
+        [DataRow(1)]
+        public async Task setUserOnline_SetOnline_UserSetOnline(int userId)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+
+            PublicUserProfileModel model = new PublicUserProfileModel();
+
+            model.UserId = userId;
+
+            await publicUserProfileManager.createPublicUserProfileAsync(model);
+
+
+            await publicUserProfileManager.setUserOnline(userId);
+
+
+
+            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            if (models == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (models.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var profile in models)
+            {
+                if (profile.Status == "Online")
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+            }
+
+
+        }
 
         [DataTestMethod]
         [DataRow(1, "Description", "Job", "Goal", 21, "Gender", "Ethnicity", "SexualOrientation", "Height", "Visible", "Online", "Photo", "Intrests", "Hobbies")]
@@ -376,7 +519,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             PublicUserProfileModel profile = await publicUserProfileManager.GetUserProfile(userId);
 
        
-            if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility && profile.Status == status && profile.Photo == photo && profile.Intrests == intrests)
+            if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility &&  profile.Intrests == intrests)
             {
                 Assert.IsTrue(true);
              }

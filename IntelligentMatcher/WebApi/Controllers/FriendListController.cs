@@ -110,7 +110,14 @@ namespace IntelligentMatcherUI.Controllers
             return true;
         }
 
-        
+        [HttpPost]
+        public async Task<IEnumerable<FriendListModel>> GetMutualFriends([FromBody] dualIdModel ids)
+        {
+
+            return await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId);
+
+        }
+
 
         [HttpPost]
         public async Task<IEnumerable<FriendListModel>> GetAllBlocking([FromBody] int userId)
@@ -135,5 +142,8 @@ namespace IntelligentMatcherUI.Controllers
             await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
             return true;
         }
+
+
+
     }
 }

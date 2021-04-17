@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
+import { Image } from 'semantic-ui-react'
 
 import _ from 'lodash'
 
@@ -315,7 +316,10 @@ async search(){
     overflowY: "auto"
   };
 
-  
+
+
+  var filePath = "\\uploaded\\";
+
     return (
   <div>
                         <div class="ui action input">
@@ -351,9 +355,29 @@ async search(){
                             {this.state.friends.map(friend =>
                             <Table.Row>        
                                 <Table.Cell>
-                                {friend.username}
+
+                                {
+(friend.userProfileImage != null && friend.userProfileImage != "") ?
+                                    (                                           <Image avatar src= {filePath + friend.userProfileImage}  circular />
+
+                                      ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
+                                      )}
+
+
+                                </Table.Cell> 
+
+                                <Table.Cell>
+
+                                <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
+
+                                <br />
+                {   
+                                    (friend.status == "Offline") ?
+                                        ("🔴") : ("🟢")
+                                } 
+                        {friend.status}
                             
-                            </Table.Cell>
+                            </Table.Cell> 
                             <Table.Cell>
                             <a onClick={() => {
                         this.removeFriend(friend.userId);
@@ -379,12 +403,30 @@ async search(){
                 <Table stackable striped style={friendrequests}>
                         <Table.Body>
                             <Table.Row>        
-                                <Table.Cell>Friend Requests</Table.Cell>
+                                <Table.Cell>Requests</Table.Cell>
                             </Table.Row>
                             {this.state.requests.map(friend =>
-                            <Table.Row>        
+                            <Table.Row>  
+                                                  <Table.Cell>
+
+{
+(friend.userProfileImage != null && friend.userProfileImage != "") ?
+    (                                           <Image avatar src= {filePath + friend.userProfileImage}  circular />
+
+      ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
+      )}
+
+
+</Table.Cell>       
                                 <Table.Cell>
-                                {friend.username}
+                                  
+                                <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
+                                <br />
+                {   
+                                    (friend.status == "Offline") ?
+                                        ("🔴") : ("🟢")
+                                } 
+                        {friend.status}
                             
                             </Table.Cell>
                             <Table.Cell>
@@ -412,12 +454,29 @@ async search(){
                                <Table stackable striped style={pendingrequests} >
                         <Table.Body>
                             <Table.Row>        
-                                <Table.Cell>Pending Friend Requests</Table.Cell>
+                                <Table.Cell>Pending</Table.Cell>
                             </Table.Row>
                             {this.state.outgoing.map(friend =>
-                            <Table.Row>        
+                            <Table.Row> 
+                                                  <Table.Cell>
+
+{
+(friend.userProfileImage != null && friend.userProfileImage != "") ?
+    (                                           <Image avatar src= {filePath + friend.userProfileImage}  circular />
+
+      ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
+      )}
+
+
+</Table.Cell>        
                                 <Table.Cell>
-                                {friend.username}
+                                <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
+                                <br />
+                {   
+                                    (friend.status == "Offline") ?
+                                        ("🔴") : ("🟢")
+                                } 
+                        {friend.status}
                             
                             </Table.Cell>
                             <Table.Cell>

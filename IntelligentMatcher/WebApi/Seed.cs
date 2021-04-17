@@ -124,7 +124,16 @@ namespace WebApi
 
                 PublicUserProfileModel publicUserProfileModel = new PublicUserProfileModel();
                 publicUserProfileModel.UserId = userAccountModel.Id;
+                
+                publicUserProfileModel.Description = "My name is " + userAccountModel.Username;
+                publicUserProfileModel.Visibility = "Public";
+                publicUserProfileModel.Age = userAccountModel.Id + 20;
+                publicUserProfileModel.Hobbies = "These are my hobbies";
+                publicUserProfileModel.Intrests = "These are my intrests";
+                publicUserProfileModel.Height = "This is how tall I am";
                 await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+
+
 
 
             }
@@ -185,7 +194,8 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
 
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             for (int i = 10; i < 15; i++)
             {
@@ -201,6 +211,13 @@ namespace WebApi
                 await friendListManager.RequestFriendAsync(1, i);
 
                 await friendListManager.ConfirmFriendAsync(1, i);
+            }
+
+            for (int i = 3; i < 10; i++)
+            {
+                await friendListManager.RequestFriendAsync(2, i);
+
+                await friendListManager.ConfirmFriendAsync(2, i);
             }
 
             await friendListManager.BlockFriendAsync(19, 1);

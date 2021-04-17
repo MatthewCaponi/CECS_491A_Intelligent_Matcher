@@ -29,5 +29,7 @@ namespace FriendList
         Task<IEnumerable<FriendListModel>> GetAllRequestsAsync(int userId);
 
         Task<IEnumerable<FriendListModel>> GetAllRequestsOutgoingAsync(int userId);
+
+        Task<IEnumerable<FriendListModel>> GetMutualFriends(int userId1, int userId2);
     }
 }
