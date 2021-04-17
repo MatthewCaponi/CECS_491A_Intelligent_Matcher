@@ -58,6 +58,7 @@
     <Folder Include="StoredProcedures\UserAccount" />
     <Folder Include="StoredProcedures\UserProfile" />
     <Folder Include="StoredProcedures\UserAccountSettings" />
+    <Folder Include="StoredProcedures\ListingSearch" />
     <Folder Include="StoredProcedures\LoginAttempts" />
     <Folder Include="StoredProcedures\UserAccountCode" />
     <Folder Include="StoredProcedures\Messages" />
@@ -103,6 +104,17 @@
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetThemeColor_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontStyle_ById.sql" />
     <Build Include="StoredProcedures\UserAccountSettings\UserAccountSettings_GetFontSize_ById.sql" />
+    <Build Include="Collaboration.sql" />
+    <Build Include="Relationship.sql" />
+    <Build Include="TeamModel.sql" />
+    <Build Include="Listing.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllListings.sql" />
+    <Build Include="StoredProcedures\CreateCollaborationListing.sql" />
+    <Build Include="StoredProcedures\CreateListingParent.sql" />
+    <Build Include="StoredProcedures\CreateRelationshipListing.sql" />
+    <Build Include="StoredProcedures\CreateTeamModelListing.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllCollaborationListing.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllRelationshipListing.sql" />
     <Build Include="LoginAttempts.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ById.sql" />
     <Build Include="StoredProcedures\LoginAttempts\LoginAttempts_Get_ByIpAddress.sql" />

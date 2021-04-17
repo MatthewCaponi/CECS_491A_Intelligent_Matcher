@@ -644,7 +644,7 @@ namespace BusinessLayerUnitTests.Login
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
@@ -681,7 +681,7 @@ namespace BusinessLayerUnitTests.Login
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
@@ -718,7 +718,7 @@ namespace BusinessLayerUnitTests.Login
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
@@ -738,7 +738,7 @@ namespace BusinessLayerUnitTests.Login
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
             "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 12:00:00 AM -07:00")]
-        public async Task ForgotPasswordValidation_InfoMatch_ReturnWebUserAccountModel(int accountId, string username,
+        public async Task ForgotPasswordValidation_InfoMatch_ReturnBusinessUserAccountCodeModel(int accountId, string username,
             string emailAddress, string accountType, string accountStatus, string creationDate,
             string updationDate, string dateOfBirth)
         {
@@ -767,9 +767,13 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            BusinessUserAccountCodeModel businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
+
+            businessUserAccountCodeModel.UserAccountId = accountId;
+
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = true;
-            expectedResult.SuccessValue = webUserAccountModel;
+            expectedResult.SuccessValue = businessUserAccountCodeModel;
 
             // Initialize manager with the dependencies
             ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
@@ -781,9 +785,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success &&
-                actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id &&
-                actualResult.SuccessValue.Username == expectedResult.SuccessValue.Username &&
-                actualResult.SuccessValue.EmailAddress == expectedResult.SuccessValue.EmailAddress);
+                actualResult.SuccessValue.UserAccountId == expectedResult.SuccessValue.UserAccountId);
         }
         #endregion
 

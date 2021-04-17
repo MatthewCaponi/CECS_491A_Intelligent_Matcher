@@ -24,11 +24,13 @@ namespace WebApi
             IConnectionStringData connectionString = new ConnectionStringData();
             ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserAccountCodeRepository userAccountCodeRepository = new UserAccountCodeRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
 
             var loginAttempts = await loginAttemptsRepository.GetAllLoginAttempts();
+            var userAccountCodes = await userAccountCodeRepository.GetAllUserAccountCodes();
 
             var accounts = await userAccountRepository.GetAllAccounts();            
             var profiles = await userProfileRepository.GetAllUserProfiles();
@@ -102,6 +104,7 @@ namespace WebApi
             
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);

@@ -408,7 +408,7 @@ namespace BusinessLayerUnitTests.Login
 
             WebUserAccountModel webUserAccountModel = null;
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
@@ -465,7 +465,7 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.DateOfBirth = DateTimeOffset.Parse(dateOfBirth);
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
@@ -523,7 +523,7 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.DateOfBirth = DateTimeOffset.Parse(dateOfBirth);
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
@@ -553,7 +553,7 @@ namespace BusinessLayerUnitTests.Login
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1",
             "TestAccountStatus1", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", 1, "TestFirstName1",
             "TestSurname1", "3/28/2007 7:13:50 PM +00:00")]
-        public async Task ForgotPasswordValidation_Success_ReturnWebUserAccountModel(int accountId, string username,
+        public async Task ForgotPasswordValidation_Success_ReturnBusinessUserAccountCodeModel(int accountId, string username,
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
             int profileId, string firstName, string surname, string dateOfBirth)
         {
@@ -584,15 +584,19 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.DateOfBirth = DateTimeOffset.Parse(dateOfBirth);
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            BusinessUserAccountCodeModel businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
+
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = true;
-            expectedResult.SuccessValue = webUserAccountModel;
+            expectedResult.SuccessValue = businessUserAccountCodeModel;
 
             // Set conditional for the used mock object
             mockUserAccountService.Setup(x => x.GetUserAccountByUsername(username))
                 .Returns(Task.FromResult(webUserAccountModel));
             mockUserProfileService.Setup(x => x.GetUserProfileByAccountId(accountId))
                 .Returns(Task.FromResult(webUserProfileModel));
+            mockUserAccountCodeService.Setup(x => x.GetUserAccountCodeByAccountId(accountId))
+                .Returns(Task.FromResult(businessUserAccountCodeModel));
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,

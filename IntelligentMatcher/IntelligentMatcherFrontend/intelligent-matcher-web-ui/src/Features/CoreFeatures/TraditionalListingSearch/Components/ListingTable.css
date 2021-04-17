@@ -1,0 +1,16 @@
+  
+.listingHeader {
+    background-color: black;
+}
+
+.listingRow {
+    border-width: 10px;
+    border-style: solid;
+
+    color: black;
+}
+
+.container__table {
+    height: 100px;
+    overflow-y: scroll;
+}

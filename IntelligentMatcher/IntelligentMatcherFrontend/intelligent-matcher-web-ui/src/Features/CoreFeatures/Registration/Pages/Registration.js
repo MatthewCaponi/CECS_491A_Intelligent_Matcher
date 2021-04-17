@@ -19,7 +19,6 @@ function Registration() {
         body: JSON.stringify(RegistrationModel)
         }).
         then(r => r.json()).then(res=>{
-            console.log(JSON.stringify(res));
             if(res.success){
                 alert("Success for " + res.accountId);
             }
@@ -68,6 +67,26 @@ function Registration() {
             <label htmlFor="password">
                 Password:
             </label>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Be At Least 8 Characters Long   
+            </p>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Countain At Least 1 Number
+            </p>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Contain At Least 1 Capital Letter  
+            </p>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Countain At Least 1 Lowercase Letter
+            </p>
         </Grid.Row>
         <Grid.Row verticalAlign="middle">
             <div class="ui input">

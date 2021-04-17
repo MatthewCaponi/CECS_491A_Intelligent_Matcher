@@ -18,7 +18,7 @@ namespace BusinessLayerUnitTests.WebApi
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestPassword1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
             "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "127.0.0.1")]
-        public async Task Login_GotWebUserAccountModel_ReturnWebUserAccountModel(int accountId,
+        public async Task Login_GotWebUserAccountModel_ReturnUserInformation(int accountId,
             string username, string password, string emailAddress, string accountType,
             string accountStatus, string creationDate, string updationDate, string ipAddress)
         {
@@ -56,8 +56,10 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Value.Success == expectedResult.Success &&
-                    actualResult.Value.SuccessValue == expectedResult.SuccessValue
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Username == expectedResult.SuccessValue.Username &&
+                    actualResult.AccountType == expectedResult.SuccessValue.AccountType.ToString() &&
+                    actualResult.AccountStatus == expectedResult.SuccessValue.AccountStatus.ToString()
                 );
         }
 
@@ -89,15 +91,15 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Value.Success == expectedResult.Success &&
-                    actualResult.Value.SuccessValue == expectedResult.SuccessValue
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Username == expectedResult.SuccessValue
                 );
         }
 
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
             "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 12:00:00 AM -07:00")]
-        public async Task ForgotPasswordValidation_GotWebUserAccount_ReturnWebUserAccount(int accountId,
+        public async Task ForgotPasswordValidation_GotBusinessUserAccountCode_ReturnAccountId(int accountId,
             string username, string emailAddress, string accountType, string accountStatus, string creationDate,
             string updationDate, string dateOfBirth)
         {
@@ -121,9 +123,11 @@ namespace BusinessLayerUnitTests.WebApi
             webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
-            var expectedResult = new Result<WebUserAccountModel>();
+            var businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
+
+            var expectedResult = new Result<BusinessUserAccountCodeModel>();
             expectedResult.Success = true;
-            expectedResult.SuccessValue = webUserAccountModel;
+            expectedResult.SuccessValue = businessUserAccountCodeModel;
 
             mockLoginManager.Setup(x => x.ForgotPasswordValidation(username, emailAddress, DateTimeOffset.Parse(dateOfBirth)))
                 .Returns(Task.FromResult(expectedResult));
@@ -136,15 +140,15 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Value.Success == expectedResult.Success &&
-                    actualResult.Value.SuccessValue == expectedResult.SuccessValue
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.AccountId == expectedResult.SuccessValue.UserAccountId
                 );
         }
 
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
             "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "ABC1")]
-        public async Task ForgotPasswordCodeInput_GotWebUserAccount_ReturnWebUserAccount(int accountId,
+        public async Task ForgotPasswordCodeInput_GotWebUserAccount_ReturnAccountId(int accountId,
             string username, string emailAddress, string accountType, string accountStatus, string creationDate,
             string updationDate, string code)
         {
@@ -181,15 +185,15 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Value.Success == expectedResult.Success &&
-                    actualResult.Value.SuccessValue == expectedResult.SuccessValue
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.AccountId == expectedResult.SuccessValue.Id
                 );
         }
 
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1", "TestAccountStatus1",
             "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestPassword1")]
-        public async Task ResetPassword_GotWebUserAccount_ReturnWebUserAccount(int accountId,
+        public async Task ResetPassword_GotWebUserAccount_ReturnAccountId(int accountId,
             string username, string emailAddress, string accountType, string accountStatus, string creationDate,
             string updationDate, string password)
         {
@@ -226,8 +230,8 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Value.Success == expectedResult.Success &&
-                    actualResult.Value.SuccessValue == expectedResult.SuccessValue
+                    actualResult.Success == expectedResult.Success &&
+                    actualResult.AccountId == expectedResult.SuccessValue.Id
                 );
         }
     }
