@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Grid } from 'semantic-ui-react'
+import { Table, Grid, Form } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
@@ -16,6 +16,8 @@ export class UserProfile extends Component {
     this.state = {  
         userId: 1,
         viewingId: 0,
+        otherData: [],
+        friendStatus: "",
 
         visibility: false
         };
@@ -41,13 +43,37 @@ export class UserProfile extends Component {
         console.log(this.state.visibility);
     }   
     ); 
+
+    await fetch('http://localhost:5000/UserProfile/GetOtherData',
+    {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(this.state.viewingId)
+    }).then(r => r.json()).then(res=>{
+        this.setState({otherData: res});
+    }   
+    ); 
+
+    var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
+
+    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(IdsModel)
+    }).then(r => r.json()).then(res=>{
+        this.setState({friendStatus: res});
+    }   
+    ); 
 }
 
   render () {
 
 
-  
+    if(this.state.otherData.username != null && this.state.friendStatus.status != "Blocked"){
+
     return (
+
         <Grid centered divided='vertically'>
 
         <Grid.Row columns={1} >
@@ -66,7 +92,7 @@ export class UserProfile extends Component {
 <div>
 {
 (this.state.visibility == true || this.state.viewingId == this.state.userId) ?
-                                    ( <div>Change your profile picture         <ProfileData /></div>  
+                                    ( <ProfileData />
                                         ) : ("Private")}
                             
 
@@ -77,6 +103,16 @@ export class UserProfile extends Component {
   </Grid>
 
     );
+  }
+    else{
+
+
+      return (      
+        <Grid className="segment centered">
+                User Not Found
+        </Grid>
+    );
+    }
   }
 }
 export default UserProfile;

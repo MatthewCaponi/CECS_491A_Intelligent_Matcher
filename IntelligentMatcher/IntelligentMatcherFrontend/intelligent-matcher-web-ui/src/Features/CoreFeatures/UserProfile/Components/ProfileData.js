@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Table, Grid } from 'semantic-ui-react'
+import { Table, Grid, Image } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
+import FriendsList from "../../FriendsList/Pages/FriendsList";
 
 import _ from 'lodash'
 
@@ -13,7 +14,10 @@ export class ProfileData extends Component {
     this.state = {  
         viewingId: 0  ,
         accountProfileData: [],
-        userId: 1
+        userId: 1,
+        mutualFriends: [],
+        friendStatus: "",
+
         };
 
 
@@ -56,12 +60,85 @@ async getAccountData(){
     }).then(r => r.json()).then(res=>{
         this.setState({accountProfileData: res});
     }   
+
+    ); 
+    var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
+
+    await fetch('http://localhost:5000/FriendList/GetMutualFriends',
+    {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(IdsModel)
+    }).then(r => r.json()).then(res=>{
+        this.setState({mutualFriends: res});
+    }   
+    ); 
+
+    var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
+
+    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(IdsModel)
+    }).then(r => r.json()).then(res=>{
+        this.setState({friendStatus: res});
+    }   
     ); 
 }
 
 
 
   render () {
+
+
+    const mutualFriendTable = () => {
+        if(this.state.friendStatus.status == "Friends"){
+
+      
+        return (
+<Table sortable striped style={friendstable}>
+
+<Table.Body>
+    <Table.Row>    
+    <Table.Cell >Mutual Friends</Table.Cell>
+    </Table.Row>
+    {this.state.mutualFriends.map(friend =>
+    <Table.Row>        
+        <Table.Cell>
+
+        {
+(friend.userProfileImage != null && friend.userProfileImage != "") ?
+            (                                           <Image avatar src= {filePath + friend.userProfileImage}  circular />
+
+              ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
+              )}
+
+
+        </Table.Cell> 
+
+        <Table.Cell>
+
+       <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
+       <br />
+                {   
+                                    (friend.status == "Offline") ?
+                                        ("🔴") : ("🟢")
+                                } 
+                        {friend.status}
+    
+    </Table.Cell> 
+
+</Table.Row>
+)}
+</Table.Body>
+</Table>    ); 
+          }
+          else{
+              return(<div></div>);
+          }
+
+    }
 
     const renderTable = () => {
 
@@ -316,15 +393,68 @@ async getAccountData(){
                      </Table.Body>
                 
                 </Table>
+
+
+                
                   </div>
             );
         }
 
     }
 
-  
+    var filePath = "\\uploaded\\";
+    const friendstable = {
+        display: 'block',
+        width: '30vh',
+        height: '30vh',
+        overflowY: "auto"
+      };
     return (
-    renderTable()
+        <div>
+                <Grid>
+  <Grid.Row columns={1}>
+                <Grid.Column>
+
+            {renderTable()}
+            </Grid.Column>
+
+            <Grid.Column>
+
+
+        {
+         (this.state.userId != this.state.viewingId) ?( mutualFriendTable()) : (<FriendsList />)
+
+        
+       }
+        </Grid.Column>
+        </Grid.Row>
+
+        </Grid>
+
+        
+        
+        
+                        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </div>
+
+
+    
     );
   }
 }

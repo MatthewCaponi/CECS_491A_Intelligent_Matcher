@@ -7,13 +7,38 @@ import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import UserAccountSettings from "./Features/CoreFeatures/UserAccountSettings/Pages/UserAccountSettings";
 import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 import UserProfile from "./Features/CoreFeatures/UserProfile/Pages/UserProfile";
+import { useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
 
 function App() {
+  
 
+  fetch('http://localhost:5000/UserProfile/SetOnline',
+    {
+        method: "POST",
+        headers: {'Content-type':'application/json'},
+        body: JSON.stringify(1)
+    }).then(r => r.json()).then(res=>{
+    }   
+    ); 
+
+
+    const onWindowOrTabClose = event => {
+      fetch('http://localhost:5000/UserProfile/SetOffline',
+      {
+          method: "POST",
+          headers: {'Content-type':'application/json'},
+          body: JSON.stringify(1)
+      }).then(r => r.json()).then(res=>{
+      }   
+      ); 
+    };
+
+    window.addEventListener('beforeunload', onWindowOrTabClose);
 
 
   return (

@@ -38,8 +38,10 @@ class ImageUpload extends React.Component {
 
         render() {    
                 return (    
-                 <form class="ui form" onSubmit={e => this.submit(e)}>    
-                         <input class="ui button" type="file" onChange={e => this.setFile(e)} />    
+                 <form class="ui input" onSubmit={e => this.submit(e)}>    
+                            Upload A New Profile Picture
+                            <br />
+                         <input class="ui input" type="file" onChange={e => this.setFile(e)} />    
                  </form>    
              )    
         }    

@@ -13,7 +13,7 @@ using Security;
 using UserAccountSettings;
 using System.Linq;
 using FriendList;
-
+using PublicUserProfile;
 namespace BusinessLayerUnitTests.FriendList
 {
     [TestClass]
@@ -106,6 +106,19 @@ namespace BusinessLayerUnitTests.FriendList
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
 
 
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            var profiles = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            foreach (var profile in profiles)
+            {
+                await publicUserProfileRepo.DeletePublicProfileById(profile.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("PublicUserProfile", 0, connectionString, dataGateway);
+
+
+
             int i = 1;
             UserAccountModel userAccountModel = new UserAccountModel();
             userAccountModel.Id = i;
@@ -123,7 +136,17 @@ namespace BusinessLayerUnitTests.FriendList
             UserAccountRepository userAccountRepo = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepo);
 
+
+
             await cryptographyService.newPasswordEncryptAsync("Password", 1);
+
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+
+            PublicUserProfileModel publicUserProfileModel = new PublicUserProfileModel();
+
+            publicUserProfileModel.UserId = i;
+
+            await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -131,7 +154,6 @@ namespace BusinessLayerUnitTests.FriendList
             userAccountSettingsModel.FontSize = 12;
             userAccountSettingsModel.FontStyle = "Time New Roman";
             userAccountSettingsModel.ThemeColor = "White";
-
 
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
             IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
@@ -153,9 +175,26 @@ namespace BusinessLayerUnitTests.FriendList
 
             await userAccountRepository.CreateAccount(userAccountModel);
 
+            publicUserProfileModel = new PublicUserProfileModel();
+            publicUserProfileModel.UserId = i;
+            await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
+            i = 3;
+            userAccountModel.Id = i;
+            userAccountModel.Username = "TestUser" + i;
+            userAccountModel.Password = "" + i;
+            userAccountModel.Salt = "" + i;
+            userAccountModel.EmailAddress = "TestEmailAddress" + i;
+            userAccountModel.AccountType = "TestAccountType" + i;
+            userAccountModel.AccountStatus = "TestAccountStatus" + i;
+            userAccountModel.CreationDate = DateTimeOffset.UtcNow;
+            userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
+
+            await userAccountRepository.CreateAccount(userAccountModel);
             await cryptographyService.newPasswordEncryptAsync("Password", 1);
-
+            publicUserProfileModel = new PublicUserProfileModel();
+            publicUserProfileModel.UserId = i;
+            await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
             userAccountSettingsModel.Id = 1;
             userAccountSettingsModel.UserId = 2;
             userAccountSettingsModel.FontSize = 12;
@@ -214,6 +253,17 @@ namespace BusinessLayerUnitTests.FriendList
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
+
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            var profiles = await publicUserProfileRepo.GetAllPublicProfiles();
+
+            foreach (var profile in profiles)
+            {
+                await publicUserProfileRepo.DeletePublicProfileById(profile.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("PublicUserProfile", 0, connectionString, dataGateway);
 
 
 
@@ -288,7 +338,9 @@ namespace BusinessLayerUnitTests.FriendList
             IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
@@ -334,7 +386,9 @@ namespace BusinessLayerUnitTests.FriendList
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             await friendListManager.ConfirmFriendAsync(userId1, userId2);
@@ -381,7 +435,9 @@ namespace BusinessLayerUnitTests.FriendList
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             await friendListManager.CancelFriendRequestAsync(userId1, userId2);
@@ -417,7 +473,9 @@ namespace BusinessLayerUnitTests.FriendList
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             await friendListManager.ConfirmFriendAsync(userId1, userId2);
@@ -462,7 +520,9 @@ namespace BusinessLayerUnitTests.FriendList
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             await friendListManager.ConfirmFriendAsync(userId1, userId2);
@@ -497,6 +557,64 @@ namespace BusinessLayerUnitTests.FriendList
 
         }
 
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetMutualFriends_GetMutualFriends_CheckMutualFriends(int userId1, int userId2)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
+            await friendListManager.RequestFriendAsync(userId1, userId2);
+
+            await friendListManager.ConfirmFriendAsync(userId1, userId2);
+
+            await friendListManager.RequestFriendAsync(userId1, 3);
+
+            await friendListManager.ConfirmFriendAsync(userId1, 3);
+
+            await friendListManager.RequestFriendAsync(userId2, 3);
+
+            await friendListManager.ConfirmFriendAsync(userId2, 3);
+
+            IEnumerable<FriendListModel> models = await friendListManager.GetMutualFriends(userId1, userId2);
+            if (models == null)
+            {
+                Assert.IsTrue(false);
+
+            }
+            if (models.Count() == 0)
+            {
+                Assert.IsTrue(false);
+
+            }
+
+            foreach (var friend in models)
+            {
+                if (friend.userId == 3)
+                {
+                    Assert.IsTrue(true);
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+            }
+
+
+
+
+
+        }
+
 
         [DataTestMethod]
         [DataRow(1, 2)]
@@ -511,7 +629,9 @@ namespace BusinessLayerUnitTests.FriendList
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             IEnumerable<FriendListModel> models = await friendListManager.GetAllRequestsAsync(userId1);
@@ -553,7 +673,9 @@ namespace BusinessLayerUnitTests.FriendList
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             IEnumerable<FriendListModel> models = await friendListManager.GetAllRequestsOutgoingAsync(userId2);
@@ -595,9 +717,11 @@ namespace BusinessLayerUnitTests.FriendList
             IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
-            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);     
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
-            
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
+
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
             await friendListManager.ConfirmFriendAsync(userId1, userId2);
@@ -634,7 +758,9 @@ namespace BusinessLayerUnitTests.FriendList
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             await friendListManager.BlockFriendAsync(userId1, userId2);
 
@@ -678,7 +804,9 @@ namespace BusinessLayerUnitTests.FriendList
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             await friendListManager.BlockFriendAsync(userId1, userId2);
 
@@ -722,7 +850,9 @@ namespace BusinessLayerUnitTests.FriendList
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             await friendListManager.BlockFriendAsync(userId1, userId2);
 
@@ -752,7 +882,9 @@ namespace BusinessLayerUnitTests.FriendList
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             await friendListManager.RequestFriendAsync(userId1, userId2);
 
@@ -782,7 +914,9 @@ namespace BusinessLayerUnitTests.FriendList
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             await friendListManager.RequestFriendAsync(userId1, userId2);
 

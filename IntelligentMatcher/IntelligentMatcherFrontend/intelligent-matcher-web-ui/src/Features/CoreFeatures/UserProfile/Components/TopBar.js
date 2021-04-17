@@ -174,13 +174,25 @@ setFile(e) {
   render () {
 
     var filePath = "\\uploaded\\";
-  
     return (
         <Grid centered  divided='vertically'>
         <Grid.Row columns={2}>
             <Grid.Column textAlign='center'>
 
-            <Grid.Row ><Image src= {filePath +this.state.accountProfileData.photo} size='small' circular onClick={this.setFile} /></Grid.Row>
+            <Grid.Row >
+
+            {
+(this.state.accountProfileData.photo != null && this.state.accountProfileData.photo != "") ?
+    (                                                         <Image avatar src= {filePath +this.state.accountProfileData.photo} size='small' circular />
+
+
+      ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='small' circular />
+      )}
+
+                
+                
+                
+                </Grid.Row>
 
             <Grid.Row>            {
 (this.state.viewingId == this.state.userId) ?
@@ -214,9 +226,15 @@ setFile(e) {
             <Grid.Column>
                 <Grid.Row >
                 {this.state.otherData.username}
+                <br />
+                {   
+                                    (this.state.accountProfileData.status == "Offline") ?
+                                        ("🔴") : ("🟢")
+                                } 
+                        {this.state.accountProfileData.status}
                 </Grid.Row>
                 <Grid.Row >
-                Member Since: {this.state.otherData.joinDate}
+                Joined: {this.state.otherData.joinDate}
                 </Grid.Row>
                 <Grid.Row >
 

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using DataAccess;
 using DataAccess.Repositories;
 using Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 namespace FriendList
 {
     public class FriendListManager : IFriendListManager
@@ -15,13 +18,15 @@ namespace FriendList
         private readonly IFriendRequestListRepo _friendRequestListRepo;
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IFriendBlockListRepo _friendBlockListRepo;
+        private readonly IPublicUserProfileRepo _publicUserProfileRepo;
 
-        public FriendListManager(IFriendListRepo friendListRepo, IFriendRequestListRepo friendRequestListRepo, IUserAccountRepository userAccountRepository, IFriendBlockListRepo friendBlockListRepo)
+        public FriendListManager(IFriendListRepo friendListRepo, IFriendRequestListRepo friendRequestListRepo, IUserAccountRepository userAccountRepository, IFriendBlockListRepo friendBlockListRepo, IPublicUserProfileRepo publicUserProfileRepo)
         {
             _friendListRepo = friendListRepo;
             _friendRequestListRepo = friendRequestListRepo;
             _userAccountRepository = userAccountRepository;
             _friendBlockListRepo = friendBlockListRepo;
+            _publicUserProfileRepo = publicUserProfileRepo;
         }
 
 
@@ -105,12 +110,81 @@ namespace FriendList
 
         }
 
+
+
+        public async Task<IEnumerable<FriendListModel>> GetMutualFriends(int userId1, int userId2)
+        {
+
+            IEnumerable<FriendsListJunctionModel> junctionModel1 = await _friendListRepo.GetAllUserFriends(userId1);
+
+
+
+            IEnumerable<FriendsListJunctionModel> junctionModel2 = await _friendListRepo.GetAllUserFriends(userId2);
+
+            List<FriendsListJunctionModel> junctionModel = new List<FriendsListJunctionModel>();
+
+
+            foreach (var user1 in junctionModel1)
+            {
+                foreach(var user2 in junctionModel2)
+                {
+                    if(user1.User2Id == user2.User2Id)
+                    {
+                        junctionModel.Add(user1);
+                    }
+                    if (user1.User1Id == user2.User2Id)
+                    {
+                        junctionModel.Add(user1);
+
+                    }
+                    if (user1.User2Id == user2.User1Id)
+                    {
+                        junctionModel.Add(user1);
+
+                    }
+                }
+            }
+
+            List<FriendListModel> friendListModel = new List<FriendListModel>();
+
+            foreach (var junction in junctionModel)
+            {
+                if ((junction.User1Id != userId1 && junction.User2Id != userId2) || (junction.User2Id != userId1 && junction.User1Id != userId2))
+                {
+                    FriendListModel model = new FriendListModel();
+                    model.userId = junction.User2Id;
+
+
+                    UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
+                    PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                    model.userProfileImage = publicUserProfileModel.Photo;
+                    model.username = userAccount.Username;
+                    model.date = DateTime.UtcNow;
+                    model.status = publicUserProfileModel.Status;
+
+                    if (model.userId != userId1 && model.userId != userId2)
+                    {
+                        friendListModel.Add(model);
+
+                    }
+                }
+
+               
+            }
+ 
+            return friendListModel;
+
+        }
+
+
+
+
         public async Task<IEnumerable<FriendListModel>> GetAllFriendAsync(int userId)
         {
             IEnumerable<FriendsListJunctionModel> junctionModel = await _friendListRepo.GetAllUserFriends(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
-            foreach (FriendsListJunctionModel junction in junctionModel)
+            foreach (var junction in junctionModel)
             {
                 FriendListModel model = new FriendListModel();
                 if (userId == junction.User1Id)
@@ -123,9 +197,11 @@ namespace FriendList
                 }
 
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                model.userProfileImage = publicUserProfileModel.Photo;
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
-
+                model.status = publicUserProfileModel.Status;
                 friendListModel.Add(model);
             }
 
@@ -137,7 +213,7 @@ namespace FriendList
             IEnumerable<FriendsListJunctionModel> junctionModel = await _friendBlockListRepo.GetAllUserFriendBlocks(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
-            foreach (FriendsListJunctionModel junction in junctionModel)
+            foreach (var junction in junctionModel)
             {
                 FriendListModel model = new FriendListModel();
                 if (userId == junction.User1Id)
@@ -150,8 +226,11 @@ namespace FriendList
                 }
 
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                model.userProfileImage = publicUserProfileModel.Photo;
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
+                model.status = publicUserProfileModel.Status;
 
                 friendListModel.Add(model);
             }
@@ -167,7 +246,7 @@ namespace FriendList
             IEnumerable<FriendsListJunctionModel> junctionModel = await _friendBlockListRepo.GetAllBlockingUser(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
-            foreach (FriendsListJunctionModel junction in junctionModel)
+            foreach (var junction in junctionModel)
             {
                 FriendListModel model = new FriendListModel();
                 if (userId == junction.User1Id)
@@ -178,10 +257,12 @@ namespace FriendList
                 {
                     model.userId = junction.User1Id;
                 }
-
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                model.userProfileImage = publicUserProfileModel.Photo;
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
+                model.status = publicUserProfileModel.Status;
 
                 friendListModel.Add(model);
             }
@@ -197,8 +278,9 @@ namespace FriendList
             IEnumerable< FriendsListJunctionModel> junctionModel = await _friendRequestListRepo.GetAllUserFriendRequests(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
-            foreach(FriendsListJunctionModel junction in junctionModel)
+            foreach (var junction in junctionModel)
             {
+
                 FriendListModel model = new FriendListModel();
                 if(userId == junction.User1Id)
                 {
@@ -209,9 +291,12 @@ namespace FriendList
                     model.userId = junction.User1Id;
                 }
 
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                model.userProfileImage = publicUserProfileModel.Photo;
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
+                model.status = publicUserProfileModel.Status;
 
                 friendListModel.Add(model);
             }
@@ -225,10 +310,12 @@ namespace FriendList
         public async Task<IEnumerable<FriendListModel>> GetAllRequestsOutgoingAsync(int userId)
         {
             IEnumerable<FriendsListJunctionModel> junctionModel = await _friendRequestListRepo.GetAllUserFriendRequestsOutgoing(userId);
+
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
-            foreach (FriendsListJunctionModel junction in junctionModel)
+            foreach (var junction in junctionModel)
             {
+
                 FriendListModel model = new FriendListModel();
                 if (userId == junction.User1Id)
                 {
@@ -239,9 +326,12 @@ namespace FriendList
                     model.userId = junction.User1Id;
                 }
 
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                model.userProfileImage = publicUserProfileModel.Photo;
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
+                model.status = publicUserProfileModel.Status;
 
                 friendListModel.Add(model);
             }

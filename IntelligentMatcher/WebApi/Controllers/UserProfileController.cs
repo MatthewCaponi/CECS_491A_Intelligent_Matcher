@@ -121,6 +121,26 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
+        public async Task<bool> SetOnline([FromBody] int userId)
+        {
+
+            await _publicUserProfileManager.setUserOnline(userId);
+
+            return true;
+
+        }
+
+        [HttpPost]
+        public async Task<bool> SetOffline([FromBody] int userId)
+        {
+
+            await _publicUserProfileManager.setUserOffline(userId);
+
+            return true;
+
+        }
+
+        [HttpPost]
         public async Task<OtherData> GetOtherData([FromBody] int userId)
         {
 
@@ -136,7 +156,6 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<bool> UploadPhoto()
         {
-                Console.WriteLine("In File Upload");
                 int userId = 0;
                 foreach (string key in Request.Form.Keys)
                 {
@@ -159,7 +178,6 @@ namespace IntelligentMatcherUI.Controllers
                     {
                         postedFile.CopyTo(fileStream);
                     }
-                    Console.WriteLine("File Uploaded");
                     PublicUserProfileModel model = new PublicUserProfileModel();
                     model.UserId = userId;
                     model.Photo = newFileName;
@@ -168,7 +186,6 @@ namespace IntelligentMatcherUI.Controllers
                 }
                 else
                 {
-                    Console.WriteLine("Uploade Failed");
 
                     return false;
                 }

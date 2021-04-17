@@ -194,7 +194,8 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
 
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo);
+
+            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
 
             for (int i = 10; i < 15; i++)
             {
@@ -210,6 +211,13 @@ namespace WebApi
                 await friendListManager.RequestFriendAsync(1, i);
 
                 await friendListManager.ConfirmFriendAsync(1, i);
+            }
+
+            for (int i = 3; i < 10; i++)
+            {
+                await friendListManager.RequestFriendAsync(2, i);
+
+                await friendListManager.ConfirmFriendAsync(2, i);
             }
 
             await friendListManager.BlockFriendAsync(19, 1);
