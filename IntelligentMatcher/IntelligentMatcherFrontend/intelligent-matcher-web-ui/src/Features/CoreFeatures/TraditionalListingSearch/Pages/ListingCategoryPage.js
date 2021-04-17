@@ -68,7 +68,7 @@ function ListingCategoryPage () {
             </Grid>
             <Divider hidden></Divider>
             <Divider hidden>
-                <Grid container leftcolumns row>
+                <Grid container left columns row>
                 <Button inverted color="orange"size="medium" content="Single Player" />
                 <Button  inverted color="orange"size="medium" content="MultiPlayer" />
                 </Grid>

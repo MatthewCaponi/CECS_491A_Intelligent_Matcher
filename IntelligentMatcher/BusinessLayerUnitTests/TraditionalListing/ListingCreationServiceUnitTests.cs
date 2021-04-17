@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 ﻿//using BusinessModels.ListingModels;
 //using DataAccess;
 //using DataAccess.Repositories;
@@ -138,6 +138,3 @@
 
 //    }
 //}
-=======
-﻿
->>>>>>> Stashed changes

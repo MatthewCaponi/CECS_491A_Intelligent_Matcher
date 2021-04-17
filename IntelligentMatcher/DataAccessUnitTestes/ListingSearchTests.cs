@@ -1,4 +1,4 @@
-<<<<<<< Updated upstream
+
 ﻿//using DataAccess;
 //using DataAccess.Repositories;
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -80,6 +80,4 @@
     
 
 //}
-=======
-﻿
->>>>>>> Stashed changes
+
