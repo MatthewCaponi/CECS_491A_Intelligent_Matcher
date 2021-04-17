@@ -3,6 +3,7 @@ import { Table, Grid } from 'semantic-ui-react'
 import { animateScroll } from "react-scroll";
 import Picker from 'emoji-picker-react';
 import Gifs from 'react-giphy-picker'
+import '../.././../../App'
 
 export class Messaging extends Component {
 
@@ -57,7 +58,7 @@ export class Messaging extends Component {
     var message = "messagesentasagif:" + gif["original"].url;
     var MessageModel = {ChannelId: this.state.channelId, UserId: this.state.userId, Message: message};
 
-    await fetch('http://localhost:5000/Messaging/SendMessage',
+    await fetch(global.url + 'Messaging/SendMessage',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
@@ -83,7 +84,7 @@ export class Messaging extends Component {
   }
 
  async handleUnload(e) {
-    fetch('http://localhost:5000/Messaging/SetOffline',
+    fetch(global.url + 'Messaging/SetOffline',
    {
      method: "POST",
      headers: {'Content-type':'application/json'},
@@ -99,7 +100,7 @@ changeUser(){
   }
 
   async getOnline(){
-    await fetch('http://localhost:5000/Messaging/SetOnline',
+    await fetch(global.url + 'Messaging/SetOnline',
     {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -116,7 +117,7 @@ changeUser(){
 
     this.setState({channelId: Number(this.currentchannelselect.value)});
 
-    await fetch('http://localhost:5000/Messaging/GetChannelOwner',
+    await fetch(global.url + 'Messaging/GetChannelOwner',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -142,7 +143,7 @@ scrollToBottom() {
 
 async deletChannel(){
 
-    await fetch('http://localhost:5000/Messaging/DeleteChannel',
+    await fetch(global.url + 'Messaging/DeleteChannel',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -157,7 +158,7 @@ async deletChannel(){
 
 async removeMessage(id){
   
-    await fetch('http://localhost:5000/Messaging/DeleteMessage',
+    await fetch(global.url + 'Messaging/DeleteMessage',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -173,7 +174,7 @@ async removeUser(id, username){
 
   var removeUserModel = {ChannelId: this.state.channelId,  UserId: id};
 
-  await fetch('http://localhost:5000/Messaging/RemoveUserChannel',
+  await fetch(global.url + 'Messaging/RemoveUserChannel',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -181,7 +182,7 @@ async removeUser(id, username){
     }).then(r => r.json()).then(res=>{
         var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: username + " was removed from the channel by " + this.state.currentUsername};
 
-        fetch('http://localhost:5000/Messaging/SendMessage',
+        fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -201,7 +202,7 @@ async leaveChannel(){
 
     var removeUserModel = {ChannelId: this.state.channelId,  UserId: this.state.userId};
 
-    await fetch('http://localhost:5000/Messaging/RemoveUserChannel',
+    await fetch(global.url + 'Messaging/RemoveUserChannel',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -209,7 +210,7 @@ async leaveChannel(){
       }).then(r => r.json()).then(res=>{
         var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: this.state.currentUsername + " left the channel"};
 
-        fetch('http://localhost:5000/Messaging/SendMessage',
+        fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -228,7 +229,7 @@ async leaveChannel(){
 async getGroupData(){
 
     if(this.state.channelId != 0){
-    await fetch('http://localhost:5000/Messaging/GetChannelOwner',
+    await fetch(global.url + 'Messaging/GetChannelOwner',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -240,7 +241,7 @@ async getGroupData(){
 
     
 
-        await fetch('http://localhost:5000/Messaging/GetAllUsersInGroup',
+        await fetch(global.url + 'Messaging/GetAllUsersInGroup',
         {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -251,7 +252,7 @@ async getGroupData(){
         ); 
 
         
-        await fetch('http://localhost:5000/Messaging/GetChannelMessages',
+        await fetch(global.url + 'Messaging/GetChannelMessages',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -271,7 +272,7 @@ async getGroupData(){
 
 
 
-    await fetch('http://localhost:5000/Messaging/GetUserChannels',
+    await fetch(global.url + 'Messaging/GetUserChannels',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -327,7 +328,7 @@ async addUser() {
     try{
         var AddUserModel = {ChannelId: this.state.channelId,  Username: this.username.value};
 
-        await fetch('http://localhost:5000/Messaging/AddUserChannel',
+        await fetch(global.url + 'Messaging/AddUserChannel',
         {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -338,7 +339,7 @@ async addUser() {
 
             var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: this.username.value +  " was added by " + this.state.currentUsername};
 
-            fetch('http://localhost:5000/Messaging/SendMessage',
+            fetch(global.url + 'Messaging/SendMessage',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -374,7 +375,7 @@ async createChannel() {
 
     if(this.channelname.value != ""){
         var ChannelModel = {OwnerId: this.state.userId, Name: this.channelname.value};    
-        await fetch('http://localhost:5000/Messaging/CreateChannel',
+        await fetch(global.url + 'Messaging/CreateChannel',
         {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -402,7 +403,7 @@ async createChannel() {
     if(this.message.value != ""){
         var MessageModel = {ChannelId: this.state.channelId, UserId: this.state.userId, Message: this.message.value};
 
-        await fetch('http://localhost:5000/Messaging/SendMessage',
+        await fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -431,7 +432,7 @@ async createChannel() {
       if(this.message.value != ""){
         var MessageModel = {ChannelId: this.state.channelId, UserId: this.state.userId, Message: message};
 
-        await fetch('http://localhost:5000/Messaging/SendMessage',
+        await fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -601,7 +602,7 @@ async createChannel() {
                   return (  
                     <div>
                         <div class="ui fluid action input">
-                            <input type="text" name="message" placeholder="Message" placeholder="Message..."  ref={(input) => this.message = input}></input>
+                            <input type="text" name="message" placeholder="Message" placeholder="Message..."  ref={(input) => this.message = input} maxlength="1000"></input>
                             <button class="ui button" onClick={this.sendMessage}>Send Message</button>
                         </div>
                         <Table>

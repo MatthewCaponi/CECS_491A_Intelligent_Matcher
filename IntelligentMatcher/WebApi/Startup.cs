@@ -52,11 +52,15 @@ namespace WebApi
             services.AddTransient<IFriendListRepo, FriendListRepo>();
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
+            services.AddTransient<IUserReportsRepo, UserReportsRepo>();
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
+
+            services.AddTransient<IUserReportsRepo, UserReportsRepo>();
+
 
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
@@ -71,6 +75,9 @@ namespace WebApi
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+
+            services.AddTransient<IUserInteractionService, UserInteractionService>();
+
 
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();

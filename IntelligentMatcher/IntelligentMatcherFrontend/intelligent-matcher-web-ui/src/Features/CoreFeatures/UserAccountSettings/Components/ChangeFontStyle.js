@@ -1,5 +1,6 @@
 
   import React, { Component } from 'react';
+  import '../.././../../App'
 
   export class ChangeFontStyle extends Component {
     static displayName = ChangeFontStyle.name;
@@ -8,7 +9,7 @@
       super(props);
       this.state = {};
       this.changeFontStyle = this.changeFontStyle.bind(this);
-      fetch('http://localhost:5000/useraccountsettings/getFontStyle',
+      fetch(global.url + 'useraccountsettings/getFontStyle',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
