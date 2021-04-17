@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[FriendsRequestsList] 
+﻿CREATE TABLE [dbo].[FriendRequestList] 
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
 	[User1Id] INT NOT NULL,

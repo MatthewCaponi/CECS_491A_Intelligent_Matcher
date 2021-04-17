@@ -21,7 +21,7 @@ namespace DataAccess.Repositories
 
         public async Task<int> DeleteFriendRequestListbyUserIds(int userId1, int userId2)
         {
-            var storedProcedure = "dbo.FriendRequestsList_Delete";
+            var storedProcedure = "dbo.FriendRequestList_Delete";
 
             return await _dataGateway.Execute(storedProcedure,
                                          new
@@ -34,7 +34,7 @@ namespace DataAccess.Repositories
 
         public async Task<int> DeleteFriendRequestListbyId(int id)
         {
-            var storedProcedure = "dbo.FriendRequestsList_Delete_ById";
+            var storedProcedure = "dbo.FriendRequestList_Delete_ById";
 
             return await _dataGateway.Execute(storedProcedure,
                                          new
@@ -46,7 +46,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendRequests(int userId)
         {
-            string storedProcedure = "dbo.FriendRequestsList_GetAll_ByUserId";
+            string storedProcedure = "dbo.FriendRequestList_GetAll_ByUserId";
 
             return await _dataGateway.LoadData<FriendsListJunctionModel, dynamic>(storedProcedure,
                                                                           new
@@ -58,7 +58,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendRequestsOutgoing(int userId)
         {
-            string storedProcedure = "dbo.FriendRequestsList_GetAllOutgoing_ByUserId";
+            string storedProcedure = "dbo.FriendRequestList_GetAllOutgoing_ByUserId";
 
             return await _dataGateway.LoadData<FriendsListJunctionModel, dynamic>(storedProcedure,
                                                                           new
@@ -87,7 +87,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<FriendsListJunctionModel>> GetAllFriendRequests()
         {
-            string storedProcedure = "dbo.FriendRequestsList_GetAll";
+            string storedProcedure = "dbo.FriendRequestList_GetAll";
 
             return await _dataGateway.LoadData<FriendsListJunctionModel, dynamic>(storedProcedure,
                                                                           new { },

@@ -64,7 +64,7 @@
     <Folder Include="StoredProcedures\Channels" />
     <Folder Include="StoredProcedures\UserChannels" />
     <Folder Include="StoredProcedures\FriendsList" />
-    <Folder Include="StoredProcedures\FriendRequestsList" />
+    <Folder Include="StoredProcedures\FriendRequestList" />
     <Folder Include="StoredProcedures\FriendBlockList" />
     <Folder Include="StoredProcedures\PublicUserProfile" />
   </ItemGroup>
@@ -148,19 +148,19 @@
     <Build Include="StoredProcedures\FriendsList\FriendsList_GetAll_ByUserId.sql" />
     <Build Include="StoredProcedures\FriendsList\FriendsList_GetAll.sql" />
     <Build Include="StoredProcedures\FriendsList\FriendsList_Delete_ById.sql" />
-    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestList_Delete.sql" />
-    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_Create.sql" />
-    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_Delete_ById.sql" />
-    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAll.sql" />
-    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAll_ByUserId.sql" />
-    <Build Include="FriendRequestsList.sql" />
+    <Build Include="StoredProcedures\FriendRequestList\FriendRequestList_Delete.sql" />
+    <Build Include="StoredProcedures\FriendRequestList\FriendRequestList_Create.sql" />
+    <Build Include="StoredProcedures\FriendRequestList\FriendRequestList_Delete_ById.sql" />
+    <Build Include="StoredProcedures\FriendRequestList\FriendRequestList_GetAll.sql" />
+    <Build Include="StoredProcedures\FriendRequestList\FriendRequestList_GetAll_ByUserId.sql" />
+    <Build Include="FriendRequestList.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_Delete.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_Create.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_Delete_ById.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetAll.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetAll_ByUserId.sql" />
     <Build Include="FriendBlockList.sql" />
-    <Build Include="StoredProcedures\FriendRequestsList\FriendRequestsList_GetAllOutgoing_ByUserId.sql" />
+    <Build Include="StoredProcedures\FriendRequestList\FriendRequestList_GetAllOutgoing_ByUserId.sql" />
     <Build Include="StoredProcedures\FriendBlockList\FriendBlockList_GetBlockingUser_ByUserId.sql" />
     <Build Include="PublicUserProfile.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_Create.sql" />
