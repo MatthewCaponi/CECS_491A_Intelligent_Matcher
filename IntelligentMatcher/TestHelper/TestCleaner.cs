@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
+using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,15 @@ namespace TestHelper
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IResourceRepository resourceRepository = new ResourceRepository(dataGateway, connectionString);
+            IScopeRepository scopeRepository = new ScopeRepository(dataGateway, connectionString);
 
             var accounts = await userAccountRepository.GetAllAccounts();
             var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
+            var resources = await resourceRepository.GetAllResources();
+            var scopes = await scopeRepository.GetAllScopes();
+
 
             if (accounts != null)
             {
@@ -34,9 +40,29 @@ namespace TestHelper
                 }
             }
 
+            if (resources != null)
+            {
+                var num = resources.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await resourceRepository.DeleteResource(i);
+                }
+            }
+            
+            if (scopeRepository != null)
+            {
+                var num = scopes.ToList().Count;
+                for (int i = 1; i <= num; ++i)
+                {
+                    await scopeRepository.DeleteScope(i);
+                }
+            }
+
             await ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
             await ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+            await ReseedAsync("Resource", 0, connectionString, dataGateway);
+            await ReseedAsync("Scope", 0, connectionString, dataGateway);
         }
 
         private static async Task ReseedAsync(string tableName, int NEWSEEDNUMBER, IConnectionStringData connectionString,

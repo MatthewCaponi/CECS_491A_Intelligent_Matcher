@@ -68,6 +68,9 @@
     <Folder Include="StoredProcedures\FriendRequestList" />
     <Folder Include="StoredProcedures\FriendBlockList" />
     <Folder Include="StoredProcedures\PublicUserProfile" />
+    <Folder Include="StoredProcedures\UserAccessControl" />
+    <Folder Include="StoredProcedures\UserAccessControl\Resource" />
+    <Folder Include="StoredProcedures\UserAccessControl\Scope" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -201,6 +204,16 @@
     <Build Include="AccessPolicyPairing.sql" />
     <Build Include="ScopeClaim.sql" />
     <Build Include="UserScopeClaim.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Resource\Resource_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Resource\Resource_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Resource\Resource_Delete_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Resource\Resource_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Resource\Resource_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Scope\Scope_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Scope\Scope_Get_ById.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Scope\Scope_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Scope\Scope_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\Scope\Scope_Delete_ById.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

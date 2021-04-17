@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Models.User_Access_Control
 {
-    public class AssignmentPolicyPairingModel
+    public class UserScopeClaimModel
     {
         public int Id { get; set; }
-        public int PolicyId { get; set; }
-        public int ScopeId { get; set; }
+        public int UserAccountId { get; set; }
+        public int ScopeClaimId { get; set; }
     }
 }

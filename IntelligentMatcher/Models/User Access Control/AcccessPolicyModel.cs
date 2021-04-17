@@ -6,5 +6,9 @@ namespace Models.User_Access_Control
 {
     public class AcccessPolicyModel
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int ResourceId { get; set; }
+        public int Priority { get; set; }
     }
 }

@@ -6,5 +6,7 @@ namespace Models.User_Access_Control
 {
     public class ScopeClaimModel
     {
+        public int ScopeId { get; set; }
+        public int ClaimId { get; set; }
     }
 }
