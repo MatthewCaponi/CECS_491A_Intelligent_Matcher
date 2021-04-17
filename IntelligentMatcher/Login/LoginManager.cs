@@ -191,6 +191,16 @@ namespace Login
                     return forgotPasswordResult;
                 }
 
+                Random random = new Random();
+
+                string code = "";
+                for(var i = 0; i < 15; i++)
+                {
+                    code += ((char)(random.Next(1, 10) + 47)).ToString();
+                }
+
+                await _userAccountCodeService.AddCode(code, DateTimeOffset.UtcNow.AddHours(1), account.Id);
+
                 forgotPasswordResult.Success = true;
                 forgotPasswordResult.SuccessValue = account;
 

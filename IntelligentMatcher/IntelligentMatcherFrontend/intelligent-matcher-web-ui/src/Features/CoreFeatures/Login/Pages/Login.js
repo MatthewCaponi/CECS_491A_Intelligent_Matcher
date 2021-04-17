@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { BrowserRouter as Redirect } from 'react-router-dom'
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import './Login.css';
 
@@ -15,7 +16,12 @@ function Login() {
         body: JSON.stringify(LoginModel)
         }).
         then(r => r.json()).then(res=>{
-            alert(res.username);
+            if(res.success){
+                alert("Successful Login for " + res.username);
+            }
+            else{
+                alert(res.errorMessage);
+            }
         }
         );
     }

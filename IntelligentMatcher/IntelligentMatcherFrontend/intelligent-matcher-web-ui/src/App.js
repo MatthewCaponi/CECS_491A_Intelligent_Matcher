@@ -1,12 +1,14 @@
 import UserManagement from "./Features/CoreFeatures/UserManagement/Pages/UserManagement";
 import Home from "./Features/CoreFeatures/Home/Pages/Home";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import Login from "./Features/CoreFeatures/Login/Pages/Login";
 import ForgotUsername from "./Features/CoreFeatures/Login/Pages/ForgotUsername";
 import ForgotPasswordValidation from "./Features/CoreFeatures/Login/Pages/ForgotPasswordValidation";
+import ForgotPasswordCodeInput from "./Features/CoreFeatures/Login/Pages/ForgotPasswordCodeInput";
+import ResetPassword from "./Features/CoreFeatures/Login/Pages/ResetPassword";
 import Registration from "./Features/CoreFeatures/Registration/Pages/Registration";
 import UserAccountSettings from "./Features/CoreFeatures/UserAccountSettings/Pages/UserAccountSettings";
 import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
@@ -64,6 +66,12 @@ function App() {
           </Route>
           <Route path="/ForgotPasswordValidation">
             <ForgotPasswordValidation />
+          </Route>
+          <Route path='/ForgotPasswordCodeInput'>
+            <ForgotPasswordCodeInput />
+          </Route>
+          <Route path="/ResetPassword">
+            <ResetPassword />
           </Route>
           <Route path="/Registration">
             <Registration />
