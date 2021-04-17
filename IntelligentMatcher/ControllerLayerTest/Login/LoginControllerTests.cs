@@ -1,4 +1,5 @@
 ﻿using BusinessModels;
+using ControllerModels;
 using Login;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -68,10 +69,10 @@ namespace BusinessLayerUnitTests.WebApi
             // Setting up each dependency of LoginController as a Mock
             Mock<ILoginManager> mockLoginManager = new Mock<ILoginManager>();
 
-            var forgotUsernameModel = new ForgotUsernameModel();
+            var forgotInformationModel = new ForgotInformationModel();
 
-            forgotUsernameModel.emailAddress = emailAddress;
-            forgotUsernameModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.emailAddress = emailAddress;
+            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
 
             var expectedResult = new Result<string>();
             expectedResult.Success = true;
@@ -83,7 +84,7 @@ namespace BusinessLayerUnitTests.WebApi
             LoginController loginController = new LoginController(mockLoginManager.Object);
 
             // Act
-            var actualResult = await loginController.ForgotUsername(forgotUsernameModel);
+            var actualResult = await loginController.ForgotUsername(forgotInformationModel);
 
             // Assert
             Assert.IsTrue
@@ -104,11 +105,11 @@ namespace BusinessLayerUnitTests.WebApi
             // Setting up each dependency of LoginController as a Mock
             Mock<ILoginManager> mockLoginManager = new Mock<ILoginManager>();
 
-            var forgotPasswordValidationModel = new ForgotPasswordValidationModel();
+            var forgotInformationModel = new ForgotInformationModel();
 
-            forgotPasswordValidationModel.username = username;
-            forgotPasswordValidationModel.emailAddress = emailAddress;
-            forgotPasswordValidationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.username = username;
+            forgotInformationModel.emailAddress = emailAddress;
+            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
 
             var webUserAccountModel = new WebUserAccountModel();
 
@@ -130,7 +131,7 @@ namespace BusinessLayerUnitTests.WebApi
             LoginController loginController = new LoginController(mockLoginManager.Object);
 
             // Act
-            var actualResult = await loginController.ForgotPasswordValidation(forgotPasswordValidationModel);
+            var actualResult = await loginController.ForgotPasswordValidation(forgotInformationModel);
 
             // Assert
             Assert.IsTrue

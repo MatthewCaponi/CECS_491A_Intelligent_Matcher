@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestHelper;
 using UserManagement.Services;
-/*
+
 namespace BusinessLayerUnitTests.Registration
 {
     [TestClass]
@@ -165,4 +165,4 @@ namespace BusinessLayerUnitTests.Registration
         }
         #endregion
     }
-}*/
+}

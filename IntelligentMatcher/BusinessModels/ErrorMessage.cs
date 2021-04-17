@@ -15,9 +15,9 @@ namespace BusinessModels
         UserIsNotActive,
         UserIsActive,
         NoUsersExist,
-        EmailNotSent,
         NoMatch,
         TooManyAttempts,
-        CodeExpired
+        CodeExpired,
+        InvalidPassword
     }
 }
