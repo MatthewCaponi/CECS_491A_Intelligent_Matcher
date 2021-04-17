@@ -188,6 +188,7 @@
     <Build Include="AccessPolicy.sql" />
     <Build Include="AccessPolicyPairing.sql" />
     <Build Include="ScopeClaim.sql" />
+    <Build Include="UserScopeClaim.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
