@@ -22,10 +22,11 @@ namespace IntelligentMatcherUI.Controllers
             _userAccountService = userAccountService;
         }
 
-        [HttpGet]
-        public ActionResult<List<string>> GetAllAccounts()
+        //[HttpGet]
+        /*public async Task<ActionResult<List<string>>> GetAllAccounts()
         {
-            return _userManager.GetAllUserAccounts();
+            return (await _userManager.GetAllUserAccounts());
         }
+        */
     }
 }
