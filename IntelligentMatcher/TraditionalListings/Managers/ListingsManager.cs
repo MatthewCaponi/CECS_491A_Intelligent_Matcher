@@ -18,7 +18,6 @@ namespace TraditionalListings.Managers
         private ListingCreationService _listingCreationService;
         private ListingDeletionService _listingDeletionService;
         private ListingUpdationService _listUpdationService;
-        private ListingGetterService _listingGetterService;
 
 
         public ListingsManager(ListingCreationService listingCreationService, ListingDeletionService listingDeletionService,

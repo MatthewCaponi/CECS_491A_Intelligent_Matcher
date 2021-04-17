@@ -64,9 +64,6 @@ function App() {
           <Route path="/ListingCategoryPage">
             <ListingCategoryPage />
             </Route>    
-          <Route path="/"> 
-        </Route>
-         <Home />
           <Route path="/Login">
             <Login />
           </Route>
@@ -84,6 +81,9 @@ function App() {
           </Route>
           <Route path="/FriendsList">
             <FriendsList />
+          </Route>
+          <Route path="/Messaging">
+            <Messaging />
           </Route>
           <Route path="/profile">
             <UserProfile />
