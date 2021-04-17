@@ -10,7 +10,7 @@ namespace DataAccess.Repositories
 
         Task<int> DeleteReportById(int id);
 
-        Task<IEnumerable<UserReportsModel>> GetAllReports(int userId);
+        Task<IEnumerable<UserReportsModel>> GetAllReports();
 
         Task<int> CreateReport(UserReportsModel model);
     }

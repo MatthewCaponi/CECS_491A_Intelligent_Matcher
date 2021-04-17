@@ -8,7 +8,7 @@ using Models;
 
 namespace DataAccess.Repositories
 {
-    public class UserReportsRepo
+    public class UserReportsRepo : IUserReportsRepo
     {
 
         private readonly IDataGateway _dataGateway;
@@ -33,14 +33,13 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public async Task<IEnumerable<UserReportsModel>> GetAllReports(int userId)
+        public async Task<IEnumerable<UserReportsModel>> GetAllReports()
         {
             string storedProcedure = "dbo.UserReports_GetAll";
 
             return await _dataGateway.LoadData<UserReportsModel, dynamic>(storedProcedure,
                                                                           new
                                                                           {
-                                                                              UserId = userId
                                                                           },
                                                                           _connectionString.SqlConnectionString);
         }
