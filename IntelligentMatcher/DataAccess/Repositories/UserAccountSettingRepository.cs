@@ -23,7 +23,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccountSettings_Delete_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              UserId = userId
@@ -51,7 +51,7 @@ namespace DataAccess.Repositories
                 p.Add("ThemeColor", model.ThemeColor);
                 p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
                 return true;            
 
         }
@@ -75,7 +75,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccountSettings_Update_FontSize";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              UserId = id,
@@ -87,7 +87,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccountSettings_Update_FontStyle";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              UserId = userId,
@@ -100,7 +100,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserAccountSettings_Update_ThemeColor";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              ThemeColor = themeColor,

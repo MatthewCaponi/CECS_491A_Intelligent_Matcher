@@ -35,7 +35,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserChannels_Delete_ById";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id
@@ -60,7 +60,7 @@ namespace DataAccess.Repositories
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
         }
@@ -69,7 +69,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserChannel_RemoveUser";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              UserId = userId,
@@ -81,7 +81,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserChannel_RemoveChannel";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              ChannelId = channelId
@@ -131,7 +131,7 @@ namespace DataAccess.Repositories
         {
             var storedProcedure = "dbo.UserChannel_UpdateStatus_Id";
 
-            return await _dataGateway.SaveData(storedProcedure,
+            return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              UserId = userId,

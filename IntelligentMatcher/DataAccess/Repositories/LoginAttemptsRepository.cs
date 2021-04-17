@@ -32,7 +32,7 @@ namespace DataAccess.Repositories
                 p.Add("SuspensionEndTime", model.SuspensionEndTime);
                 p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                return await _dataGateway.SaveData(storedProcedure, p, _connectionString.SqlConnectionString);
+                return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
             }
             catch
             {
@@ -46,7 +46,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_Delete_ById";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  Id = id
@@ -123,7 +123,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_IncrementLoginCounter_ById";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  Id = id
@@ -142,7 +142,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_IncrementLoginCounter_ByIpAddress";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  IpAddress = ipAddress
@@ -161,7 +161,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_ResetLoginCounter_ById";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  Id = id
@@ -180,7 +180,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_ResetLoginCounter_ByIpAddress";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  IpAddress = ipAddress
@@ -199,7 +199,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_UpdateSuspensionEndTime_ById";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  Id = id,
@@ -219,7 +219,7 @@ namespace DataAccess.Repositories
             {
                 var storedProcedure = "dbo.LoginAttempts_UpdateSuspensionEndTime_ByIpAddress";
 
-                return await _dataGateway.SaveData(storedProcedure,
+                return await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  IpAddress = ipAddress,

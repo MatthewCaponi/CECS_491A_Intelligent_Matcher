@@ -21,6 +21,8 @@ using UserManagement.Services;
 using Messaging;
 using Registration;
 using Registration.Services;
+using FriendList;
+using PublicUserProfile;
 
 namespace WebApi
 {
@@ -46,6 +48,10 @@ namespace WebApi
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+            services.AddTransient<IFriendBlockListRepo, FriendBlockListRepo>();
+            services.AddTransient<IFriendListRepo, FriendListRepo>();
+            services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
+            services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
@@ -57,6 +63,9 @@ namespace WebApi
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IFriendListManager, FriendListManager>();
+            services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
+
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IUserAccountService, UserAccountService>();
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
