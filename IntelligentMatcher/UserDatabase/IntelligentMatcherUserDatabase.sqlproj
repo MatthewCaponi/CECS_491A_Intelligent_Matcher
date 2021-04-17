@@ -67,6 +67,7 @@
     <Folder Include="StoredProcedures\FriendRequestList" />
     <Folder Include="StoredProcedures\FriendBlockList" />
     <Folder Include="StoredProcedures\PublicUserProfile" />
+    <Folder Include="StoredProcedures\UserReports" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -180,6 +181,10 @@
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateStatus.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdatePhoto.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_GetByUserId.sql" />
+    <Build Include="UserReports.sql" />
+    <Build Include="StoredProcedures\UserReports\UserReports_Create.sql" />
+    <Build Include="StoredProcedures\UserReports\UserReports_Delete.sql" />
+    <Build Include="StoredProcedures\UserReports\UserReports_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
