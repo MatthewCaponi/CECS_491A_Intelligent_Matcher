@@ -28,6 +28,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -50,8 +51,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object, 
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -71,6 +72,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -97,8 +99,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object, 
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -124,6 +126,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -160,8 +163,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -186,6 +189,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -222,8 +226,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.Login(username, password, ipAddress);
@@ -244,6 +248,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -261,8 +266,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotUsername(givenEmail, DateTimeOffset.Parse(dateOfBirth));
@@ -284,6 +289,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -319,8 +325,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(givenDateOfBirth));
@@ -343,6 +349,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -378,8 +385,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
@@ -401,6 +408,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -418,8 +426,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(givenUsername, givenEmail,
@@ -442,6 +450,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -475,8 +484,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, givenEmail,
@@ -500,6 +509,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -535,8 +545,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, emailAddress,
@@ -561,6 +571,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -586,9 +597,9 @@ namespace BusinessLayerUnitTests.Login
 
             BusinessUserAccountCodeModel businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
 
-            var expectedResult = new Result<BusinessUserAccountCodeModel>();
+            var expectedResult = new Result<WebUserAccountModel>();
             expectedResult.Success = true;
-            expectedResult.SuccessValue = businessUserAccountCodeModel;
+            expectedResult.SuccessValue = webUserAccountModel;
 
             // Set conditional for the used mock object
             mockUserAccountService.Setup(x => x.GetUserAccountByUsername(username))
@@ -600,8 +611,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordValidation(username, emailAddress,
@@ -624,6 +635,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -641,8 +653,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
@@ -664,6 +676,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -686,8 +699,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
@@ -709,6 +722,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -731,8 +745,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordCodeInput(givenCode, accountId);
@@ -756,6 +770,7 @@ namespace BusinessLayerUnitTests.Login
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             Mock<IUserAccountCodeService> mockUserAccountCodeService = new Mock<IUserAccountCodeService>();
@@ -790,8 +805,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ForgotPasswordCodeInput(code, accountId);
@@ -816,6 +831,7 @@ namespace BusinessLayerUnitTests.Login
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
             Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
@@ -856,8 +872,8 @@ namespace BusinessLayerUnitTests.Login
 
             // Initialize manager with the mock objects
             ILoginManager loginManager = new LoginManager(mockAuthenticationService.Object, mockCryptographyService.Object,
-                mockLoginAttemptsService.Object, mockUserAccountService.Object, mockUserAccountCodeService.Object,
-                mockUserProfileService.Object);
+                mockEmailService.Object, mockLoginAttemptsService.Object, mockUserAccountService.Object,
+                mockUserAccountCodeService.Object, mockUserProfileService.Object);
 
             // Act
             var actualResult = await loginManager.ResetPassword(password, accountId);

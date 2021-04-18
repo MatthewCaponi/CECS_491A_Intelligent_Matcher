@@ -192,6 +192,8 @@
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateStatus.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdatePhoto.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_GetByUserId.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Update_ById.sql" />
+    <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Update_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

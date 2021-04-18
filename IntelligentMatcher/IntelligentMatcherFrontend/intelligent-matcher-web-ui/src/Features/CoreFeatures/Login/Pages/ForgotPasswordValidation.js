@@ -17,7 +17,7 @@ function ForgotPasswordValidation() {
         }).
         then(r => r.json()).then(res=>{
             if(res.success){
-                alert("Enter: " + res.code + " in the next page.");
+                alert("A Code Has Been Emailed to You.");
             }
             else{
                 alert(res.errorMessage);

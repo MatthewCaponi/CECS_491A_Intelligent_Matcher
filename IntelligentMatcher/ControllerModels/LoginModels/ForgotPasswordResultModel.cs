@@ -8,7 +8,6 @@ namespace ControllerModels.LoginModels
     {
         public bool Success { get; set; }
         public int AccountId { get; set; }
-        public string Code { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

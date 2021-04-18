@@ -102,7 +102,7 @@ namespace Registration
             emailModel.Subject = "Welcome!";
             emailModel.TextBody = "Welcome to InfiniMuse!";
             emailModel.HtmlBody = "Thank you for registering! " +
-                "Please <a href='index.cshtml'>Enter the Site!</a> " +
+                "Please <a href='http://localhost:3000'>Enter the Site!</a> " +
                 "<strong>You now have access to the features.</strong>";
             emailModel.MessageStream = "outbound";
             emailModel.Tag = "Welcome";

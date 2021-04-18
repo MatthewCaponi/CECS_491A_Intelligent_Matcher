@@ -14,5 +14,7 @@ namespace DataAccess.Repositories
         Task<IEnumerable<UserAccountCodeModel>> GetAllUserAccountCodes();
         Task<UserAccountCodeModel> GetUserAccountCodeById(int id);
         Task<UserAccountCodeModel> GetUserAccountCodeByAccountId(int accountId);
+        Task<int> UpdateUserAccountCodeById(string code, DateTimeOffset expirationTime, int id);
+        Task<int> UpdateUserAccountCodeByAccountId(string code, DateTimeOffset expirationTime, int accountId);
     }
 }

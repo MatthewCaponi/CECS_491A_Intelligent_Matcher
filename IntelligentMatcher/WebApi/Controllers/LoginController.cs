@@ -104,8 +104,7 @@ namespace WebApi.Controllers
 
             if (forgotPasswordResultModel.Success)
             {
-                forgotPasswordResultModel.AccountId = forgotPasswordResult.SuccessValue.UserAccountId;
-                forgotPasswordResultModel.Code = forgotPasswordResult.SuccessValue.Code;
+                forgotPasswordResultModel.AccountId = forgotPasswordResult.SuccessValue.Id;
             }
             else
             {

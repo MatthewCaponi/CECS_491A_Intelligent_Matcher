@@ -115,10 +115,10 @@ namespace BusinessLayerUnitTests.Services
         }
         #endregion
 
-        #region Integration Tests DeleteCode
+        #region Integration Tests DeleteCodeByAccountId
         [DataTestMethod]
         [DataRow(1)]
-        public async Task DeleteCode_AccountIdExists_ReturnTrue(int accountId)
+        public async Task DeleteCodeByAccountId_AccountIdExists_ReturnTrue(int accountId)
         {
             // Arrange
             IDataGateway dataGateway = new SQLServerGateway();
@@ -130,7 +130,7 @@ namespace BusinessLayerUnitTests.Services
             IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(userAccountCodeRepository);
 
             // Act
-            var actualResult = await userAccountCodeService.DeleteCode(accountId);
+            var actualResult = await userAccountCodeService.DeleteCodeByAccountId(accountId);
 
             // Assert
             Assert.IsTrue(actualResult == expectedResult);
@@ -186,6 +186,29 @@ namespace BusinessLayerUnitTests.Services
 
             // Assert
             Assert.IsNull(actualResult);
+        }
+        #endregion
+
+        #region Integration Tests UpdateUserAccountCodeByAccountId
+        [DataTestMethod]
+        [DataRow("ABC11", "3/28/2007 7:13:50 PM +00:00", 1)]
+        public async Task UpdateCode_AccountIdExists_ReturnTrue(string code, string expirationTime, int accountId)
+        {
+            // Arrange
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IUserAccountCodeRepository userAccountCodeRepository = new UserAccountCodeRepository(dataGateway, connectionString);
+
+            var expectedResult = true;
+
+            IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(userAccountCodeRepository);
+
+            // Act
+            var actualResult = await userAccountCodeService.UpdateCodeByAccountId(code, DateTimeOffset.Parse(expirationTime),
+                accountId);
+
+            // Assert
+            Assert.IsTrue(actualResult == expectedResult);
         }
         #endregion
     }

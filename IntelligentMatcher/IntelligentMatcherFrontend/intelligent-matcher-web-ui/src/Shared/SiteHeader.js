@@ -38,7 +38,7 @@ function SiteHeader() {
                 </Grid.Column>
                 <Grid.Column container />
                 <Grid.Column container>
-                    <Button href="http://localhost:3000/Login" className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
+                    <Button href="http://localhost:3000/Login" name='Login' circular inverted>
                         Login
                     </Button>
                 </Grid.Column>
