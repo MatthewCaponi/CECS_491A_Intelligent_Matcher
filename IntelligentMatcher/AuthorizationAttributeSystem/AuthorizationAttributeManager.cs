@@ -4,5 +4,6 @@ namespace AuthorizationAttributeSystem
 {
     public class AuthorizationAttributeManager
     {
+
     }
 }
