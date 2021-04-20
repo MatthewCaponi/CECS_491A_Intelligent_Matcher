@@ -34,6 +34,8 @@ namespace DataAccessUnitTestes.UserAccessControl
                 scopeModel.Name = "TestScope" + i;
                 scopeModel.Description = "TestDescription" + i;
 
+                var scopeId = await scopeRepository.CreateScope(scopeModel);
+
                 scopeModel.IsDefault = true;
                 AssignmentPolicyModel assignmentPolicyModel = new AssignmentPolicyModel();
                 assignmentPolicyModel.Id = i;
@@ -42,13 +44,13 @@ namespace DataAccessUnitTestes.UserAccessControl
                 assignmentPolicyModel.RequiredAccountType = "TestAccountType" + i;
                 assignmentPolicyModel.Priority = i % 4;
 
+                var policyId = await assignmentPolicyRepository.CreateAssignmentPolicy(assignmentPolicyModel);
+
                 AssignmentPolicyPairingModel assignmentPolicyPairingModel = new AssignmentPolicyPairingModel();
                 assignmentPolicyPairingModel.Id = i;
-                assignmentPolicyPairingModel.PolicyId = i;
-                assignmentPolicyPairingModel.ScopeId = i;
+                assignmentPolicyPairingModel.PolicyId = policyId;
+                assignmentPolicyPairingModel.ScopeId = scopeId;
 
-                await scopeRepository.CreateScope(scopeModel);
-                await assignmentPolicyRepository.CreateAssignmentPolicy(assignmentPolicyModel);
                 await assignmentPolicyPairingRepository.CreateAssignmentPolicyPairing(assignmentPolicyPairingModel);
             }
         }

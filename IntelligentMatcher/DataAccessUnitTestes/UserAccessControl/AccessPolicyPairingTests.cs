@@ -48,22 +48,24 @@ namespace DataAccessUnitTestes.UserAccessControl
                 claimModel.Description = "TestDescription" + i;
                 claimModel.IsDefault = true;
 
+                var resourceId = await resourceRepository.CreateResource(resourceModel);
+                var claimId = await claimRepository.CreateClaim(claimModel);
+                var scopeId = await scopeRepository.CreateScope(scopeModel);
+
                 AccessPolicyModel accessPolicyModel = new AccessPolicyModel();
                 accessPolicyModel.Id = i;
                 accessPolicyModel.Name = "TestAccessPolicy" + i;
-                accessPolicyModel.ResourceId = i;
+                accessPolicyModel.ResourceId = resourceId;
                 accessPolicyModel.Priority = i % 4;
+
+                var accessPolicyId = await accessPolicyRepository.CreateAccessPolicy(accessPolicyModel);
 
                 AccessPolicyPairingModel accessPolicyPairingModel = new AccessPolicyPairingModel();
                 accessPolicyPairingModel.Id = i;
-                accessPolicyPairingModel.ScopeId = i;
-                accessPolicyPairingModel.ClaimId = i;
-                accessPolicyPairingModel.AccessPolicyId = i;
+                accessPolicyPairingModel.ScopeId = scopeId;
+                accessPolicyPairingModel.ClaimId = claimId;
+                accessPolicyPairingModel.AccessPolicyId = accessPolicyId;
 
-                await resourceRepository.CreateResource(resourceModel);
-                await claimRepository.CreateClaim(claimModel);
-                await scopeRepository.CreateScope(scopeModel);
-                await accessPolicyRepository.CreateAccessPolicy(accessPolicyModel);
                 await accessPolicyPairingRepository.CreateAccessPolicyPairing(accessPolicyPairingModel);
             }
         }
