@@ -1,8 +1,10 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
 using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,109 +45,68 @@ namespace TestHelper
 
             if (resources != null)
             {
-                var num = resources.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await resourceRepository.DeleteResource(i);
-                }
+                await DeleteAllFromTable("Resource");
+                await ReseedAsync("Resource", 0, connectionString, dataGateway);
             }
 
             if (claimRepository != null)
             {
-                var num = claims.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await claimRepository.DeleteClaim(i);
-                }
+                await DeleteAllFromTable("Claim");
+                await ReseedAsync("Claim", 0, connectionString, dataGateway);
             }
 
             if (scopeRepository != null)
             {
-                var num = scopes.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await scopeRepository.DeleteScope(i);
-                }
+                await DeleteAllFromTable("Scope");
+                await ReseedAsync("Scope", 0, connectionString, dataGateway);
             }
 
             if (scopeClaims != null)
             {
-                var num = scopeClaims.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await scopeClaimRepository.DeleteScopeClaim(i);
-                }
+                await DeleteAllFromTable("ScopeClaim");
+                await ReseedAsync("ScopeClaim", 0, connectionString, dataGateway);
             }
             if (assignmentPolicies != null)
             {
-                var num = assignmentPolicies.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await assignmentPolicyRepository.DeleteAssignmentPolicy(i);
-                }
+                await DeleteAllFromTable("AssignmentPolicy");
+                await ReseedAsync("AssignmentPolicy", 0, connectionString, dataGateway);
             }
 
             if (assignmentPolicyPairings != null)
             {
-                var num = assignmentPolicyPairings.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await assignmentPolicyPairingRepository.DeleteAssignmentPolicyPairing(i);
-                }
+                await DeleteAllFromTable("AssignmentPolicyPairing");
             }
 
             if (userScopeClaims != null)
             {
-                var num = userScopeClaims.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await userScopeClaimRepository.DeleteUserScopeClaim(i);
-                }
+                await DeleteAllFromTable("UserScopeClaim");
+                await ReseedAsync("UserScopeClaim", 0, connectionString, dataGateway);
             }
 
             if (accessPolicies != null)
             {
-                var num = accessPolicies.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await accessPolicyRepository.DeleteAccessPolicy(i);
-                }
+                await DeleteAllFromTable("AccessPolicy");
+                await ReseedAsync("AccessPolicy", 0, connectionString, dataGateway);
             }
 
             if (accesssPolicyPairings != null)
             {
-                var num = accesssPolicyPairings.ToList().Count;
-                for (int i = 1; i <= num; ++i)
-                {
-                    await accessPolicyPairingRepository.DeleteAccessPairingPolicy(i);
-                }
+                await DeleteAllFromTable("AccessPolicyPairing");
+                await ReseedAsync("AssignmentPolicyPairing", 0, connectionString, dataGateway);
+                await ReseedAsync("AccessPolicyPairing", 0, connectionString, dataGateway);
             }
 
             if (accounts != null)
             {
-                var numRows = accounts.ToList().Count;
+                await DeleteAllFromTable("UserProfile");
+                await DeleteAllFromTable("UserAccountSettings");
+                await DeleteAllFromTable("UserAccount");
 
-                for (int i = 1; i <= numRows; ++i)
-                {
-                    await userProfileRepository.DeleteUserProfileByAccountId(i);
-                    await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
-                    await userAccountRepository.DeleteAccountById(i);
-                }
+                await ReseedAsync("UserAccount", 0, connectionString, dataGateway);
+                await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+                await ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
             }
-
-
-            await ReseedAsync("UserAccount", 0, connectionString, dataGateway);
-            await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
-            await ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
-            await ReseedAsync("Resource", 0, connectionString, dataGateway);
-            await ReseedAsync("Claim", 0, connectionString, dataGateway);
-            await ReseedAsync("Scope", 0, connectionString, dataGateway);
-            await ReseedAsync("ScopeClaim", 0, connectionString, dataGateway);
-            await ReseedAsync("AssignmentPolicy", 0, connectionString, dataGateway);
-            await ReseedAsync("AssignmentPolicyPairing", 0, connectionString, dataGateway);
-            await ReseedAsync("UserScopeClaim", 0, connectionString, dataGateway);
-            await ReseedAsync("AccessPolicy", 0, connectionString, dataGateway);
-            await ReseedAsync("AccessPolicyPairing", 0, connectionString, dataGateway);
         }
 
         private static async Task ReseedAsync(string tableName, int NEWSEEDNUMBER, IConnectionStringData connectionString,
@@ -155,10 +116,30 @@ namespace TestHelper
 
             await dataGateway.Execute(storedProcedure, new
             {
-                @tableName = tableName,
+                @TableName = tableName,
                 @NEWSEEDNUMBER = NEWSEEDNUMBER
             },
                                          connectionString.SqlConnectionString);
+        }
+
+        private static async Task DeleteAllFromTable(string tableName)
+        {
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IDataGateway datagateway = new SQLServerGateway();
+
+            try
+            {
+                var storedProcedure = "dbo.TestCleaner_Delete_All";
+                await datagateway.Execute(storedProcedure, new
+                {
+                    @tableName = tableName
+                },
+               connectionString.SqlConnectionString);
+            }
+            catch (SqlException e)
+            {
+                Debug.WriteLine("Error deleting table: " + tableName);
+            }
         }
 
 
