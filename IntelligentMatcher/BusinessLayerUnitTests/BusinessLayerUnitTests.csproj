@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\FriendList\FriendList.csproj" />
+    <ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
 
     <ProjectReference Include="..\Login\Login.csproj" />
