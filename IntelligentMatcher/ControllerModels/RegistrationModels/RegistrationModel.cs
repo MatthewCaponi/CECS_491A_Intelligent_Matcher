@@ -11,7 +11,7 @@ namespace ControllerModels
         public string username { get; set; }
         public string password { get; set; }
         public string emailAddress { get; set; }
-        public DateTimeOffset dateOfBirth { get; set; }
+        public string dateOfBirth { get; set; }
         public string ipAddress { get; set; }
     }
 }

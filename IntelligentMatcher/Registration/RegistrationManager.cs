@@ -83,9 +83,6 @@ namespace Registration
             // Create User Profile with the Passed on Account ID
             await _userProfileService.CreateUserProfile(userModel);
 
-            // Create New Email Model
-            var emailModel = new EmailModel();
-
             // Re-Clarify the logging event
             _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountID, AccountType.User.ToString());
@@ -95,27 +92,46 @@ namespace Registration
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
 
+            var emailResult = await SendVerificationEmail(accountID);
+            
+            //Log Email Result
+            if(emailResult == true)
+            {
+                _logger.LogInfo(_loggingEvent, "Email Sent");
+            }
+            else
+            {
+                _logger.LogInfo(_loggingEvent, "Email Not Sent");
+            }
+
+            // First items of these tuples are immutable
+            // A new one must be returned for the success conditional
+            return resultModel;
+        }
+
+        public async Task<bool> SendVerificationEmail(int accountId)
+        {
+            var account = await _userAccountService.GetUserAccount(accountId);
+
+            // Create New Email Model
+            var emailModel = new EmailModel();
+
             // Set the Email Model Attributes
-            emailModel.Recipient = accountModel.EmailAddress;
+            emailModel.Recipient = account.EmailAddress;
             emailModel.Sender = "support@infinimuse.com";
             emailModel.TrackOpens = true;
             emailModel.Subject = "Welcome!";
             emailModel.TextBody = "Welcome to InfiniMuse!";
             emailModel.HtmlBody = "Thank you for registering! " +
-                "Please <a href='index.cshtml'>Enter the Site!</a> " +
+                "Please <a href='http://localhost:3000'>Enter the Site!</a> " +
                 "<strong>You now have access to the features.</strong>";
             emailModel.MessageStream = "outbound";
             emailModel.Tag = "Welcome";
 
             //Send Verification Email
-            await _emailService.SendEmail(emailModel);
-            
-            //Log Email Result
-            _logger.LogInfo(_loggingEvent, "Email Sent");
+            var result = await _emailService.SendEmail(emailModel);
 
-            // First items of these tuples are immutable
-            // A new one must be returned for the success conditional
-            return resultModel;
+            return result;
         }
     }
 }

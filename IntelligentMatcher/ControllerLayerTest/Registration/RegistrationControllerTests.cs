@@ -110,7 +110,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = "";
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -153,7 +153,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = "";
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -196,7 +196,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -239,7 +239,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -282,7 +282,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -325,7 +325,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -368,7 +368,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationResultModel expectedResult = new RegistrationResultModel();
@@ -383,6 +383,75 @@ namespace ControllerLayerTest.Registration
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
             Assert.IsTrue(actualResult.AccountId == expectedResult.AccountId);
+        }
+
+        [DataTestMethod]
+        [DataRow(1)]
+        public async Task ResendEmail_BadEmail_ReturnFalse(int accountId)
+        {
+            // Arrange
+            IEmailService emailService = new EmailService();
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+
+            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
+                userProfileService, validationService, cryptographyService);
+
+            var expectedResult = false;
+
+            RegistrationController registrationController = new RegistrationController(registrationManager);
+
+            // Act
+            var actualResult = await registrationController.ResendEmail(accountId);
+
+            // Assert
+            Assert.IsTrue(actualResult == expectedResult);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestFirstName11", "TestSurname11", "TestUser11", "TestPassword11", "matt@infinimuse.com",
+            "3/28/2007 7:13:50 PM +00:00", "127.0.0.1", 11)]
+        public async Task RegisterUser_GoodEmail_ReturnTrue(string firstName, string surname,
+            string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int accountId)
+        {
+            // Arrange
+            IEmailService emailService = new EmailService();
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+
+            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
+                userProfileService, validationService, cryptographyService);
+
+            var registrationModel = new RegistrationModel();
+
+            registrationModel.firstName = firstName;
+            registrationModel.surname = surname;
+            registrationModel.username = username;
+            registrationModel.password = password;
+            registrationModel.emailAddress = emailAddress;
+            registrationModel.dateOfBirth = dateOfBirth;
+            registrationModel.ipAddress = ipAddress;
+
+            RegistrationController registrationController = new RegistrationController(registrationManager);
+            await registrationController.RegisterUser(registrationModel);
+
+            var expectedResult = true;
+
+            // Act
+            var actualResult = await registrationController.ResendEmail(accountId);
+
+            // Assert
+            Assert.IsTrue(actualResult == expectedResult);
         }
         #endregion
 
@@ -412,7 +481,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.username = username;
             registrationModel.password = password;
             registrationModel.emailAddress = emailAddress;
-            registrationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
             RegistrationController registrationController = new RegistrationController(registrationManager);
@@ -420,6 +489,37 @@ namespace ControllerLayerTest.Registration
             // Act
             var timer = Stopwatch.StartNew();
             await registrationController.RegisterUser(registrationModel);
+            timer.Stop();
+
+            var actualTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualTime);
+
+            // Assert
+            Assert.IsTrue(actualTime <= expectedTime);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 5000)]
+        public async Task ResendEmail_ExecuteLessThan5Seconds(int accountId, int expectedTime)
+        {
+            // Arrange
+            IEmailService emailService = new EmailService();
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
+                new ConnectionStringData()));
+
+            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
+                userProfileService, validationService, cryptographyService);
+
+            RegistrationController registrationController = new RegistrationController(registrationManager);
+
+            // Act
+            var timer = Stopwatch.StartNew();
+            await registrationController.ResendEmail(accountId);
             timer.Stop();
 
             var actualTime = timer.ElapsedMilliseconds;

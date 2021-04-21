@@ -74,7 +74,7 @@ namespace BusinessLayerUnitTests.WebApi
             var forgotInformationModel = new ForgotInformationModel();
 
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             var expectedResult = new Result<string>();
             expectedResult.Success = true;
@@ -111,7 +111,7 @@ namespace BusinessLayerUnitTests.WebApi
 
             forgotInformationModel.username = username;
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             var webUserAccountModel = new WebUserAccountModel();
 
@@ -125,9 +125,9 @@ namespace BusinessLayerUnitTests.WebApi
 
             var businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
 
-            var expectedResult = new Result<BusinessUserAccountCodeModel>();
+            var expectedResult = new Result<WebUserAccountModel>();
             expectedResult.Success = true;
-            expectedResult.SuccessValue = businessUserAccountCodeModel;
+            expectedResult.SuccessValue = webUserAccountModel;
 
             mockLoginManager.Setup(x => x.ForgotPasswordValidation(username, emailAddress, DateTimeOffset.Parse(dateOfBirth)))
                 .Returns(Task.FromResult(expectedResult));
@@ -141,7 +141,7 @@ namespace BusinessLayerUnitTests.WebApi
             Assert.IsTrue
                 (
                     actualResult.Success == expectedResult.Success &&
-                    actualResult.AccountId == expectedResult.SuccessValue.UserAccountId
+                    actualResult.AccountId == expectedResult.SuccessValue.Id
                 );
         }
 

@@ -5,7 +5,7 @@ import './Login.css';
 function ForgotPasswordValidation() {
     const [usernameState, setUsernameState] = useState("");
     const [emailState, setEmailState] = useState("");
-    const [dateOfBirthState, setDateOfBirthState] = useState("2000-01-01");
+    const [dateOfBirthState, setDateOfBirthState] = useState("");
     function submitHandler(e){
         var ForgotInformationModel = e;
         // e.preventDefault();
@@ -17,7 +17,7 @@ function ForgotPasswordValidation() {
         }).
         then(r => r.json()).then(res=>{
             if(res.success){
-                alert("Enter: " + res.code + " in the next page.");
+                alert("A Code Has Been Emailed to You.");
             }
             else{
                 alert(res.errorMessage);

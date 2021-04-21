@@ -119,7 +119,7 @@ namespace BusinessLayerUnitTests.Services
         }
         #endregion
 
-        #region Integration Tests GetUseraccountByEmail
+        #region Integration Tests GetUserAccountByEmail
         [DataTestMethod]
         [DataRow(1, "TestUser1", "TestEmailAddress1", "TestAccountType1",
             "TestAccountStatus1", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00")]

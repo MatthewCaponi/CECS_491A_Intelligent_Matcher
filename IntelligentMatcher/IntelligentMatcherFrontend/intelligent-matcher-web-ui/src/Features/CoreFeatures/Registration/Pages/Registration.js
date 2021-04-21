@@ -8,7 +8,7 @@ function Registration() {
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
     const [emailState, setEmailState] = useState("");
-    const [dateOfBirthState, setDateOfBirthState] = useState("2000-01-01");
+    const [dateOfBirthState, setDateOfBirthState] = useState("");
     function submitHandler(e){
         var RegistrationModel = e;
         // e.preventDefault();
@@ -130,7 +130,12 @@ function Registration() {
             >
             Register
             </Button>
-            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">Go Back</Button>
+            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
+                Go Back to Login
+            </Button>
+            <Button href="http://localhost:3000/ResendEmail" compact size="tiny" circular inverted color="blue">
+                To Resend Email
+            </Button>
         </Grid.Row>
         </Grid>
     )

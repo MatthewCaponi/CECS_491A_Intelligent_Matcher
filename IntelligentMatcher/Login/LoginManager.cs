@@ -17,17 +17,19 @@ namespace Login
         private const int suspensionHours = 1;
         private readonly IAuthenticationService _authenticationService;
         private readonly ICryptographyService _cryptographyService;
+        private readonly IEmailService _emailService;
         private readonly ILoginAttemptsService _loginAttemptService;
         private readonly IUserAccountService _userAccountService;
         private readonly IUserAccountCodeService _userAccountCodeService;
         private readonly IUserProfileService _userProfileService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
-            ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
+            IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
             IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
+            _emailService = emailService;
             _loginAttemptService = loginAttemptsService;
             _userAccountService = userAccountService;
             _userAccountCodeService = userAccountCodeService;
@@ -155,12 +157,12 @@ namespace Login
             }
         }
 
-        public async Task<Result<BusinessUserAccountCodeModel>> ForgotPasswordValidation(string username, string emailAddress, 
+        public async Task<Result<WebUserAccountModel>> ForgotPasswordValidation(string username, string emailAddress, 
             DateTimeOffset dateOfBirth)
         {
             try
             {
-                var forgotPasswordResult = new Result<BusinessUserAccountCodeModel>();
+                var forgotPasswordResult = new Result<WebUserAccountModel>();
                 var account = await _userAccountService.GetUserAccountByUsername(username);
 
                 // Account will be null if an account with the given email address can't be found
@@ -199,17 +201,45 @@ namespace Login
                     code += ((char)(random.Next(1, 10) + 47)).ToString();
                 }
 
-                await _userAccountCodeService.AddCode(code, DateTimeOffset.UtcNow.AddHours(1), account.Id);
                 var accountCode = await _userAccountCodeService.GetUserAccountCodeByAccountId(account.Id);
 
+                if(accountCode != null)
+                {
+                    await _userAccountCodeService.UpdateCodeByAccountId(code, DateTimeOffset.UtcNow.AddHours(suspensionHours),
+                        account.Id);
+                }
+                else
+                {
+                    await _userAccountCodeService.AddCode(code, DateTimeOffset.UtcNow.AddHours(suspensionHours), account.Id);
+                }
+
+                // Create New Email Model
+                var emailModel = new EmailModel();
+
+                // Set the Email Model Attributes
+                emailModel.Recipient = emailAddress;
+                emailModel.Sender = "support@infinimuse.com";
+                emailModel.TrackOpens = true;
+                emailModel.Subject = "Reset Password Code";
+                emailModel.TextBody = "Here is your code: " + code;
+                emailModel.HtmlBody = "This code will expire in 1 hour. " + 
+                    "Please enter <strong> " + code + " </strong> on the Code Entry Page.";
+                emailModel.MessageStream = "outbound";
+                emailModel.Tag = "Reset Password Code";
+
+                // Send Reset Password Email
+                await _emailService.SendEmail(emailModel);
+
+                accountCode = await _userAccountCodeService.GetUserAccountCodeByAccountId(account.Id);
+
                 forgotPasswordResult.Success = true;
-                forgotPasswordResult.SuccessValue = accountCode;
+                forgotPasswordResult.SuccessValue = account;
 
                 return forgotPasswordResult;
             }
             catch
             {
-                var forgotPasswordResult = new Result<BusinessUserAccountCodeModel>();
+                var forgotPasswordResult = new Result<WebUserAccountModel>();
                 forgotPasswordResult.Success = false;
                 forgotPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
 
@@ -237,7 +267,7 @@ namespace Login
 
                 if (timeExpired == true)
                 {
-                    await _userAccountCodeService.DeleteCode(accountId);
+                    await _userAccountCodeService.DeleteCodeByAccountId(accountId);
 
                     forgotPasswordCodeResult.Success = false;
                     forgotPasswordCodeResult.ErrorMessage = ErrorMessage.CodeExpired;
@@ -247,7 +277,7 @@ namespace Login
 
                 if (userAccountCode.Code == code)
                 {
-                    await _userAccountCodeService.DeleteCode(accountId);
+                    await _userAccountCodeService.DeleteCodeByAccountId(accountId);
 
                     forgotPasswordCodeResult.Success = true;
                     forgotPasswordCodeResult.SuccessValue = await _userAccountService.GetUserAccount(accountId);
