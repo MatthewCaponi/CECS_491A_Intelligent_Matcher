@@ -58,7 +58,7 @@ namespace WebApi.Controllers
         {
             var forgotUsernameResultModel = new ForgotUsernameResultModel();
 
-            if(forgotInformationModel.emailAddress == "")
+            if(forgotInformationModel.emailAddress == "" || forgotInformationModel.dateOfBirth == "")
             {
                 forgotUsernameResultModel.Success = false;
                 forgotUsernameResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -66,7 +66,7 @@ namespace WebApi.Controllers
                 return forgotUsernameResultModel;
             }
             var forgotUsernameResult = await _loginManager.ForgotUsername(forgotInformationModel.emailAddress,
-                forgotInformationModel.dateOfBirth);
+                DateTimeOffset.Parse(forgotInformationModel.dateOfBirth));
 
             forgotUsernameResultModel.Success = forgotUsernameResult.Success;
 
@@ -88,7 +88,8 @@ namespace WebApi.Controllers
         {
             var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
-            if (forgotInformationModel.emailAddress == "" || forgotInformationModel.username == "")
+            if (forgotInformationModel.emailAddress == "" || forgotInformationModel.username == "" ||
+                forgotInformationModel.dateOfBirth == "")
             {
                 forgotPasswordResultModel.Success = false;
                 forgotPasswordResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -98,7 +99,7 @@ namespace WebApi.Controllers
 
             var forgotPasswordResult = await _loginManager.ForgotPasswordValidation
                 (forgotInformationModel.username, forgotInformationModel.emailAddress,
-                forgotInformationModel.dateOfBirth);
+                DateTimeOffset.Parse(forgotInformationModel.dateOfBirth));
 
             forgotPasswordResultModel.Success = forgotPasswordResult.Success;
 

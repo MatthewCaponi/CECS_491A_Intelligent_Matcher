@@ -13,6 +13,7 @@ import ForgotPasswordValidation from "./Features/CoreFeatures/Login/Pages/Forgot
 import ForgotPasswordCodeInput from "./Features/CoreFeatures/Login/Pages/ForgotPasswordCodeInput";
 import ResetPassword from "./Features/CoreFeatures/Login/Pages/ResetPassword";
 import Registration from "./Features/CoreFeatures/Registration/Pages/Registration";
+import ResendEmail from "./Features/CoreFeatures/Registration/Pages/ResendEmail";
 import UserAccountSettings from "./Features/CoreFeatures/UserAccountSettings/Pages/UserAccountSettings";
 import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 import UserProfile from "./Features/CoreFeatures/UserProfile/Pages/UserProfile";
@@ -83,6 +84,9 @@ function App() {
           </Route>
           <Route path="/Registration">
             <Registration />
+          </Route>
+          <Route path="/ResendEmail">
+            <ResendEmail />
           </Route>
           <Route path="/UserAccountSettings">
             <UserAccountSettings />

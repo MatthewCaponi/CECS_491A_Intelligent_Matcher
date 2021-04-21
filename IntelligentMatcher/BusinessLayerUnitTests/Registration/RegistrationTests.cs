@@ -208,6 +208,7 @@ namespace BusinessLayerUnitTests.Registration
             mockEmailService.Setup(x => x.SendEmail(new EmailModel())).Returns(Task.FromResult(true));
             Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
             mockUserAccountService.Setup(x => x.CreateAccount(webUserAccountModel)).Returns(Task.FromResult(expectedId));
+            mockUserAccountService.Setup(x => x.GetUserAccount(expectedId)).Returns(Task.FromResult(webUserAccountModel));
             Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
@@ -227,6 +228,52 @@ namespace BusinessLayerUnitTests.Registration
             //Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
+        }
+
+        [DataTestMethod]
+        [DataRow(11, "TestUser11", "TestPassword11", "TestEmailAddress11", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00", "TestFirstName11",
+            "TestSurname11")]
+        public async Task SendVerificationEmail_Failure_ReturnFalse(int expectedId, string username, string password,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
+            string firstName, string lastName)
+        {
+            //Arrange
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            WebUserProfileModel webUserProfileModel = new WebUserProfileModel();
+            webUserProfileModel.Id = expectedId;
+            webUserProfileModel.FirstName = firstName;
+            webUserProfileModel.Surname = lastName;
+            webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
+            webUserProfileModel.UserAccountId = webUserAccountModel.Id;
+
+            Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
+            mockEmailService.Setup(x => x.SendEmail(new EmailModel())).Returns(Task.FromResult(false));
+            Mock<IUserAccountService> mockUserAccountService = new Mock<IUserAccountService>();
+            mockUserAccountService.Setup(x => x.GetUserAccount(expectedId)).Returns(Task.FromResult(webUserAccountModel));
+            Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
+            Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
+            Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+
+            var expectedResult = false;
+
+            IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
+                mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
+                mockCryptographyService.Object);
+
+            //Act
+            var actualResult = await registrationManager.SendVerificationEmail(expectedId);
+
+            //Assert
+            Assert.IsTrue(actualResult == expectedResult);
         }
         #endregion
 
@@ -377,6 +424,82 @@ namespace BusinessLayerUnitTests.Registration
             //Assert
             Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
                 (actualResult.SuccessValue == expectedResult.SuccessValue));
+        }
+
+        [DataTestMethod]
+        [DataRow(11, "TestUser11", "matt@infinimuse.com", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00")]
+        public async Task SendVerificationEmail_GoodEmail_ReturnTrue(int expectedId, string username,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate)
+        {
+            //Arrange
+            EmailService emailService = new EmailService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
+
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            await userAccountService.CreateAccount(webUserAccountModel);
+
+            var expectedResult = true;
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService);
+
+            //Act
+            var actualResult = await registrationManager.SendVerificationEmail(expectedId);
+
+            //Assert
+            Assert.IsTrue(actualResult == expectedResult);
+        }
+
+        [DataTestMethod]
+        [DataRow(11, "TestUser11", "TestEmailAddress11", "TestAccountType11",
+            "TestAccountStatus11", "3/28/2007 7:13:50 PM +00:00", "3/28/2007 7:13:50 PM +00:00")]
+        public async Task SendVerificationEmail_BadEmail_ReturnFalse(int expectedId, string username,
+            string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate)
+        {
+            //Arrange
+            EmailService emailService = new EmailService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
+
+            WebUserAccountModel webUserAccountModel = new WebUserAccountModel();
+            webUserAccountModel.Id = expectedId;
+            webUserAccountModel.Username = username;
+            webUserAccountModel.EmailAddress = emailAddress;
+            webUserAccountModel.AccountType = accountType;
+            webUserAccountModel.AccountStatus = accountStatus;
+            webUserAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
+            webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
+
+            await userAccountService.CreateAccount(webUserAccountModel);
+
+            var expectedResult = false;
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService);
+
+            //Act
+            var actualResult = await registrationManager.SendVerificationEmail(expectedId);
+
+            //Assert
+            Assert.IsTrue(actualResult == expectedResult);
         }
         #endregion
 

@@ -74,7 +74,7 @@ namespace BusinessLayerUnitTests.WebApi
             var forgotInformationModel = new ForgotInformationModel();
 
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             var expectedResult = new Result<string>();
             expectedResult.Success = true;
@@ -111,7 +111,7 @@ namespace BusinessLayerUnitTests.WebApi
 
             forgotInformationModel.username = username;
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             var webUserAccountModel = new WebUserAccountModel();
 

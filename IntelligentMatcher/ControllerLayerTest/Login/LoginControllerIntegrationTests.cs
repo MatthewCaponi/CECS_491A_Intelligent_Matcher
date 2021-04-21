@@ -185,7 +185,7 @@ namespace ControllerLayerTest.Login
             var forgotInformationModel = new ForgotInformationModel();
 
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             // Initialize controller with the dependencies
             LoginController loginController = new LoginController(loginManager);
@@ -229,7 +229,7 @@ namespace ControllerLayerTest.Login
 
             forgotInformationModel.username = username;
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             // Initialize controller with the dependencies
             LoginController loginController = new LoginController(loginManager);

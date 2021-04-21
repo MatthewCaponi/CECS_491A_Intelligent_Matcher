@@ -222,7 +222,7 @@ namespace Login
                 emailModel.TrackOpens = true;
                 emailModel.Subject = "Reset Password Code";
                 emailModel.TextBody = "Here is your code: " + code;
-                emailModel.HtmlBody = "This code will expire in 1 hour." + 
+                emailModel.HtmlBody = "This code will expire in 1 hour. " + 
                     "Please enter <strong> " + code + " </strong> on the Code Entry Page.";
                 emailModel.MessageStream = "outbound";
                 emailModel.Tag = "Reset Password Code";

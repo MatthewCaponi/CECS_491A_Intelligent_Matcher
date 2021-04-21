@@ -28,7 +28,7 @@ namespace WebApi.Controllers
             var registrationResultModel = new RegistrationResultModel();
 
             if(registrationModel.username == "" || registrationModel.password == "" || registrationModel.emailAddress == ""
-                || registrationModel.firstName == "" || registrationModel.surname == "" || registrationModel.dateOfBirth == null)
+                || registrationModel.firstName == "" || registrationModel.surname == "" || registrationModel.dateOfBirth == "")
             {
                 registrationResultModel.Success = false;
                 registrationResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -52,7 +52,7 @@ namespace WebApi.Controllers
 
                 userProfile.FirstName = registrationModel.firstName;
                 userProfile.Surname = registrationModel.surname;
-                userProfile.DateOfBirth = registrationModel.dateOfBirth;
+                userProfile.DateOfBirth = DateTimeOffset.Parse(registrationModel.dateOfBirth);
 
                 var registrationResult = await _registrationManager.RegisterAccount(userAccount, userProfile,
                     registrationModel.password, registrationModel.ipAddress);
@@ -79,6 +79,14 @@ namespace WebApi.Controllers
 
             return registrationResultModel;
 
+        }
+
+        [HttpPost]
+        public async Task<bool> ResendEmail([FromBody] int accountId)
+        {
+            var emailResult = await _registrationManager.SendVerificationEmail(accountId);
+
+            return emailResult;
         }
     }
 }

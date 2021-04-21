@@ -5,7 +5,7 @@ import './Login.css';
 function ForgotPasswordValidation() {
     const [usernameState, setUsernameState] = useState("");
     const [emailState, setEmailState] = useState("");
-    const [dateOfBirthState, setDateOfBirthState] = useState("2000-01-01");
+    const [dateOfBirthState, setDateOfBirthState] = useState("");
     function submitHandler(e){
         var ForgotInformationModel = e;
         // e.preventDefault();
