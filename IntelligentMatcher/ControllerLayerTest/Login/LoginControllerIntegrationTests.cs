@@ -7,6 +7,7 @@ using IntelligentMatcher.Services;
 using Login;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
+using Registration.Services;
 using Security;
 using Services;
 using System;
@@ -125,6 +126,7 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IEmailService emailService = new EmailService();
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -133,8 +135,8 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userAccountCodeService, userProfileService);
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, emailService,
+                loginAttemptsService, userAccountService, userAccountCodeService, userProfileService);
 
             var loginModel = new LoginModel();
 
@@ -168,6 +170,7 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IEmailService emailService = new EmailService();
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -176,13 +179,13 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userAccountCodeService, userProfileService);
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, emailService,
+                loginAttemptsService, userAccountService, userAccountCodeService, userProfileService);
 
             var forgotInformationModel = new ForgotInformationModel();
 
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             // Initialize controller with the dependencies
             LoginController loginController = new LoginController(loginManager);
@@ -210,6 +213,7 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IEmailService emailService = new EmailService();
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -218,14 +222,14 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userAccountCodeService, userProfileService);
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, emailService,
+                loginAttemptsService, userAccountService, userAccountCodeService, userProfileService);
 
             var forgotInformationModel = new ForgotInformationModel();
 
             forgotInformationModel.username = username;
             forgotInformationModel.emailAddress = emailAddress;
-            forgotInformationModel.dateOfBirth = DateTimeOffset.Parse(dateOfBirth);
+            forgotInformationModel.dateOfBirth = dateOfBirth;
 
             // Initialize controller with the dependencies
             LoginController loginController = new LoginController(loginManager);
@@ -253,6 +257,7 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IEmailService emailService = new EmailService();
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -261,8 +266,8 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userAccountCodeService, userProfileService);
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, emailService,
+                loginAttemptsService, userAccountService, userAccountCodeService, userProfileService);
 
             var forgotPasswordCodeInputModel = new ForgotPasswordCodeInputModel();
 
@@ -295,6 +300,7 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IEmailService emailService = new EmailService();
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -303,8 +309,8 @@ namespace ControllerLayerTest.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
-            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, loginAttemptsService,
-                userAccountService, userAccountCodeService, userProfileService);
+            ILoginManager loginManager = new LoginManager(authenticationService, cryptographyService, emailService,
+                loginAttemptsService, userAccountService, userAccountCodeService, userProfileService);
 
             var resetPasswordModel = new ResetPasswordModel();
 

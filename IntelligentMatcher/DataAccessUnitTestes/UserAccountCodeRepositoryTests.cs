@@ -325,6 +325,44 @@ namespace DataAccessUnitTestes
             // Assert
             Assert.IsNull(retrievedUserAccountCode);
         }
+
+        [DataTestMethod]
+        [DataRow(1, "ABC21", "3/28/2008 7:13:50 PM +00:00", 400)]
+        public async Task UpdateAccountCodeById_UserAccountCodeExists_DataIsAccurate
+            (int id, string code, string expirationTime, long expectedMaxExecutionTime)
+        {
+            // Arrange
+            IUserAccountCodeRepository userAccountCodeRepository =
+                new UserAccountCodeRepository(new SQLServerGateway(), new ConnectionStringData());
+
+            // Act
+            await userAccountCodeRepository.UpdateUserAccountCodeById(code, DateTimeOffset.Parse(expirationTime), id);
+            var newUserAccountCode = await userAccountCodeRepository.GetUserAccountCodeById(id);
+
+            // Assert
+            Assert.IsTrue(newUserAccountCode.Id == id);
+            Assert.IsTrue(newUserAccountCode.Code == code);
+            Assert.IsTrue(newUserAccountCode.ExpirationTime == DateTimeOffset.Parse(expirationTime));
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "ABC21", "3/28/2008 7:13:50 PM +00:00", 400)]
+        public async Task UpdateAccountCodeByAccountId_UserAccountCodeExists_DataIsAccurate
+            (int accountId, string code, string expirationTime, long expectedMaxExecutionTime)
+        {
+            // Arrange
+            IUserAccountCodeRepository userAccountCodeRepository =
+                new UserAccountCodeRepository(new SQLServerGateway(), new ConnectionStringData());
+
+            // Act
+            await userAccountCodeRepository.UpdateUserAccountCodeById(code, DateTimeOffset.Parse(expirationTime), accountId);
+            var newUserAccountCode = await userAccountCodeRepository.GetUserAccountCodeByAccountId(accountId);
+
+            // Assert
+            Assert.IsTrue(newUserAccountCode.UserAccountId == accountId);
+            Assert.IsTrue(newUserAccountCode.Code == code);
+            Assert.IsTrue(newUserAccountCode.ExpirationTime == DateTimeOffset.Parse(expirationTime));
+        }
         #endregion
 
         #region Non-Functional Tests
@@ -408,6 +446,27 @@ namespace DataAccessUnitTestes
             // Act
             var timer = Stopwatch.StartNew();
             await userAccountCodeRepository.DeleteUserAccountCodeById(id);
+            timer.Stop();
+
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            // Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "ABC21", "3/28/2007 7:13:50 PM +00:00", 400)]
+        public async Task UpdateAccountCodeById_ExecutionTimeLessThan400Milliseconds
+            (int id, string code, string expirationTime, long expectedMaxExecutionTime)
+        {
+            // Arrange
+            IUserAccountCodeRepository userAccountCodeRepository =
+                new UserAccountCodeRepository(new SQLServerGateway(), new ConnectionStringData());
+
+            // Act
+            var timer = Stopwatch.StartNew();
+            await userAccountCodeRepository.UpdateUserAccountCodeById(code, DateTimeOffset.Parse(expirationTime), id);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;

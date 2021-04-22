@@ -91,29 +91,44 @@ namespace Registration
             // Create User Profile with the Passed on Account ID
             await _userProfileService.CreateUserProfile(userModel);
 
-            // Create New Email Model
-            var emailModel = new EmailModel();
-
             // Re-Clarify the logging event
             _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountID, AccountType.User.ToString());
 
 
-            string token = await _userAccountService.GetStatusToken(accountID);
-            string confirmUrl = "https://localhost:3000/confirm?id=" + accountID.ToString() + "?key=" + token;
             //Log and Return result
             _logger.LogInfo(_loggingEvent, "User Registered");
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
 
+            var emailResult = await SendVerificationEmail(accountID);
+            
+            //Log Email Result
+            if(emailResult == true)
+            {
+                _logger.LogInfo(_loggingEvent, "Email Sent");
+            }
+            else
+            {
+                _logger.LogInfo(_loggingEvent, "Email Not Sent");
+            }
 
+            // First items of these tuples are immutable
+            // A new one must be returned for the success conditional
+            return resultModel;
+        }
 
+        public async Task<bool> SendVerificationEmail(int accountId)
+        {
+            var account = await _userAccountService.GetUserAccount(accountId);
 
-
-
+            string token = await _userAccountService.GetStatusToken(accountId);
+            string confirmUrl = "https://localhost:3000/confirm?id=" + accountId.ToString() + "?key=" + token;
+            // Create New Email Model
+            var emailModel = new EmailModel();
 
             // Set the Email Model Attributes
-            emailModel.Recipient = accountModel.EmailAddress;
+            emailModel.Recipient = account.EmailAddress;
             emailModel.Sender = "support@infinimuse.com";
             emailModel.TrackOpens = true;
             emailModel.Subject = "Welcome!";
@@ -131,10 +146,7 @@ namespace Registration
 
 
             //Send Verification Email
-            await _emailService.SendEmail(emailModel);
-            
-            //Log Email Result
-            _logger.LogInfo(_loggingEvent, "Email Sent");
+            var result = await _emailService.SendEmail(emailModel);
 
 
 
@@ -147,7 +159,7 @@ namespace Registration
             {
                 Thread.CurrentThread.IsBackground = true;
                 _timer = new System.Timers.Timer(10800000);
-                _timer.Elapsed += async (sender, e) => await _userAccountService.DeleteIfNotActive(accountID);
+                _timer.Elapsed += async (sender, e) => await _userAccountService.DeleteIfNotActive(accountId);
 
             }).Start();
 
@@ -158,7 +170,8 @@ namespace Registration
 
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
-            return resultModel;
+
+            return true;
         }
     }
 }

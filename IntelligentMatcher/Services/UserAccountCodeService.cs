@@ -42,7 +42,27 @@ namespace Services
             }
         }
 
-        public async Task<bool> DeleteCode(int accountId)
+        public async Task<bool> UpdateCodeByAccountId(string code, DateTimeOffset expirationTime, int accountId)
+        {
+            try
+            {
+                var changesMade = await _userAccountCodeRepository.UpdateUserAccountCodeByAccountId(code, expirationTime,
+                    accountId);
+
+                if (changesMade == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteCodeByAccountId(int accountId)
         {
             try
             {

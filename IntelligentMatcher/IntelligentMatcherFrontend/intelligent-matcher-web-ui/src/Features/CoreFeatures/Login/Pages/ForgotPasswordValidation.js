@@ -16,7 +16,12 @@ function ForgotPasswordValidation() {
         body: JSON.stringify(ForgotInformationModel)
         }).
         then(r => r.json()).then(res=>{
-            alert(res);
+            if(res.success){
+                alert("A Code Has Been Emailed to You.");
+            }
+            else{
+                alert(res.errorMessage);
+            }
         }
         );
     }
@@ -60,7 +65,7 @@ function ForgotPasswordValidation() {
                 onClick={()=>submitHandler({
                     username:usernameState,
                     emailAddress:emailState,
-                    dateOfBirth:Date.parse(dateOfBirthState)
+                    dateOfBirth:dateOfBirthState
                 })}
                 compact size="tiny"
                 circular inverted color="red"
@@ -68,6 +73,9 @@ function ForgotPasswordValidation() {
             Submit
             </Button>
             <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">Go Back</Button>
+            <Button href="http://localhost:3000/ForgotPasswordCodeInput" compact size="tiny" circular inverted color="blue">
+                To Enter The Code
+            </Button>
         </Grid.Row>
         </Grid>
     )

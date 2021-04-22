@@ -82,7 +82,7 @@ namespace DataAccess.Repositories
         {
             try
             {
-                string storedProcedure = "dbo.UserAccountCode_Get_All";
+                var storedProcedure = "dbo.UserAccountCode_Get_All";
 
                 return await _dataGateway.LoadData<UserAccountCodeModel, dynamic>(storedProcedure,
                                                                               new { },
@@ -98,7 +98,7 @@ namespace DataAccess.Repositories
         {
             try
             {
-                string storedProcedure = "dbo.UserAccountCode_Get_ById";
+                var storedProcedure = "dbo.UserAccountCode_Get_ById";
 
                 var row = await _dataGateway.LoadData<UserAccountCodeModel, dynamic>(storedProcedure,
                     new
@@ -119,7 +119,7 @@ namespace DataAccess.Repositories
         {
             try
             {
-                string storedProcedure = "dbo.UserAccountCode_Get_ByUserAccountId";
+                var storedProcedure = "dbo.UserAccountCode_Get_ByUserAccountId";
 
                 var row = await _dataGateway.LoadData<UserAccountCodeModel, dynamic>(storedProcedure,
                     new
@@ -129,6 +129,48 @@ namespace DataAccess.Repositories
                     _connectionString.SqlConnectionString);
 
                 return row.FirstOrDefault();
+            }
+            catch
+            {
+                return default;
+            }
+        }
+
+        public async Task<int> UpdateUserAccountCodeById(string code, DateTimeOffset expirationTime, int id)
+        {
+            try
+            {
+                var storedProcedure = "dbo.UserAccountCode_Update_ById";
+
+                return await _dataGateway.Execute(storedProcedure,
+                                             new
+                                             {
+                                                 Code = code,
+                                                 ExpirationTime = expirationTime,
+                                                 Id = id
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch
+            {
+                return default;
+            }
+        }
+
+        public async Task<int> UpdateUserAccountCodeByAccountId(string code, DateTimeOffset expirationTime, int accountId)
+        {
+            try
+            {
+                var storedProcedure = "dbo.UserAccountCode_Update_ByUserAccountId";
+
+                return await _dataGateway.Execute(storedProcedure,
+                                             new
+                                             {
+                                                 Code = code,
+                                                 ExpirationTime = expirationTime,
+                                                 UserAccountId = accountId
+                                             },
+                                             _connectionString.SqlConnectionString);
             }
             catch
             {

@@ -30,7 +30,7 @@ function SiteHeader() {
                 <Menu inverted pointing secondary>
                     <Menu.Item href="http://localhost:3000" name='home' />
                     <Menu.Item link name='profile' />
-                    <Menu.Item link name='Listings' />
+                    <Menu.Item href="http://localhost:3000/ListingTable" name='Listings' />
                     </Menu>
                 </Grid.Column>
                 <Grid.Column container>
@@ -38,7 +38,7 @@ function SiteHeader() {
                 </Grid.Column>
                 <Grid.Column container />
                 <Grid.Column container>
-                    <Button href="http://localhost:3000/Login" className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
+                    <Button href="http://localhost:3000/Login" name='Login' circular inverted>
                         Login
                     </Button>
                 </Grid.Column>

@@ -10,7 +10,7 @@ function Registration() {
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
     const [emailState, setEmailState] = useState("");
-    const [dateOfBirthState, setDateOfBirthState] = useState("2000-01-01");
+    const [dateOfBirthState, setDateOfBirthState] = useState("");
     function submitHandler(e){
         var RegistrationModel = e;
         // e.preventDefault();
@@ -21,7 +21,6 @@ function Registration() {
         body: JSON.stringify(RegistrationModel)
         }).
         then(r => r.json()).then(res=>{
-            console.log(JSON.stringify(res));
             if(res.success){
                 alert("Success for " + res.accountId);
             }
@@ -71,6 +70,26 @@ function Registration() {
                 Password:
             </label>
         </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Be At Least 8 Characters Long   
+            </p>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Countain At Least 1 Number
+            </p>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Contain At Least 1 Capital Letter  
+            </p>
+        </Grid.Row>
+        <Grid.Row>
+            <p>
+                - Password Must Countain At Least 1 Lowercase Letter
+            </p>
+        </Grid.Row>
         <Grid.Row verticalAlign="middle">
             <div class="ui input">
                 <input type="password" name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
@@ -113,7 +132,12 @@ function Registration() {
             >
             Register
             </Button>
-            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">Go Back</Button>
+            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
+                Go Back to Login
+            </Button>
+            <Button href="http://localhost:3000/ResendEmail" compact size="tiny" circular inverted color="blue">
+                To Resend Email
+            </Button>
         </Grid.Row>
         </Grid>
     )

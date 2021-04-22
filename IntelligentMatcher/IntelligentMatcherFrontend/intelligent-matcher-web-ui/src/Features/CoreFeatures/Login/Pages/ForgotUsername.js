@@ -15,7 +15,12 @@ function ForgotUsername() {
         body: JSON.stringify(ForgotInformationModel)
         }).
         then(r => r.json()).then(res=>{
-            alert(res);
+            if(res.success){
+                alert("Here is your username: " + res.username);
+            }
+            else{
+                alert(res.errorMessage);
+            }
         }
         );
     }
@@ -49,7 +54,7 @@ function ForgotUsername() {
                 onClick={()=>submitHandler({
                     username:"",
                     emailAddress:emailState,
-                    dateOfBirth:Date.parse(dateOfBirthState)
+                    dateOfBirth:dateOfBirthState
                 })}
                 compact size="tiny"
                 circular inverted color="red"
