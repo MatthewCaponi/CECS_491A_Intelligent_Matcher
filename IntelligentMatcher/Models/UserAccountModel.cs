@@ -13,6 +13,9 @@ namespace Models
         public string EmailAddress { get; set; }
         public string AccountType { get; set; }
         public string AccountStatus { get; set; }
+
+        public string StatusToken { get; set; }
+
         public DateTimeOffset CreationDate { get; set; }
         public DateTimeOffset UpdationDate { get; set; }
     }

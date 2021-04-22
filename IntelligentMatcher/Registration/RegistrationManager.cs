@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using UserManagement.Services;
 using Registration.Services;
 using Security;
+using System.Timers;
+using System.Threading;
 
 namespace Registration
 {
@@ -23,6 +25,7 @@ namespace Registration
         private IUserProfileService _userProfileService;
         private readonly IValidationService _validationService;
         private readonly ICryptographyService _cryptographyService;
+        private static System.Timers.Timer _timer;
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
             IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService)
@@ -37,6 +40,11 @@ namespace Registration
 
             _logger = factory.CreateLogService<RegistrationManager>();
         }
+
+
+
+
+
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
             WebUserProfileModel userModel, string password, string ipAddress)
@@ -90,10 +98,19 @@ namespace Registration
             _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
                     accountID, AccountType.User.ToString());
 
+
+            string token = await _userAccountService.GetStatusToken(accountID);
+            string confirmUrl = "https://localhost:3000/confirm?id=" + accountID.ToString() + "?key=" + token;
             //Log and Return result
             _logger.LogInfo(_loggingEvent, "User Registered");
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
+
+
+
+
+
+
 
             // Set the Email Model Attributes
             emailModel.Recipient = accountModel.EmailAddress;
@@ -102,16 +119,42 @@ namespace Registration
             emailModel.Subject = "Welcome!";
             emailModel.TextBody = "Welcome to InfiniMuse!";
             emailModel.HtmlBody = "Thank you for registering! " +
-                "Please <a href='index.cshtml'>Enter the Site!</a> " +
-                "<strong>You now have access to the features.</strong>";
+                "Please confirm your account with the link: <a href='"+ confirmUrl +"'>Confirm Your Account!</a> " +
+                "<strong>Once confirmed you will have access to the features.</strong>";
             emailModel.MessageStream = "outbound";
             emailModel.Tag = "Welcome";
+
+
+
+
+
+
 
             //Send Verification Email
             await _emailService.SendEmail(emailModel);
             
             //Log Email Result
             _logger.LogInfo(_loggingEvent, "Email Sent");
+
+
+
+
+
+            //create auto expiration service 
+            //run function below 
+
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                _timer = new System.Timers.Timer(10800000);
+                _timer.Elapsed += async (sender, e) => await _userAccountService.DeleteIfNotActive(accountID);
+
+            }).Start();
+
+
+
+
+
 
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional

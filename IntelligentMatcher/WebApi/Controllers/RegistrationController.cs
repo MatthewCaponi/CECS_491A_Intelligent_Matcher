@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Models;
+using UserManagement;
+using IntelligentMatcher.Services;
 
 namespace WebApi.Controllers
 {
@@ -16,10 +18,26 @@ namespace WebApi.Controllers
     public class RegistrationController : ControllerBase
     {
         private readonly IRegistrationManager _registrationManager;
+        private readonly IUserAccountService _userAccountService;
 
-        public RegistrationController(IRegistrationManager registrationManager)
+        public class TokenIdModel
+        {
+            public int UserId { get; set; }
+            public string Token { get; set; }
+        }
+
+        public RegistrationController(IRegistrationManager registrationManager, IUserAccountService userAccountService)
         {
             _registrationManager = registrationManager;
+            _userAccountService = userAccountService;
+        }
+
+
+        [HttpPost]
+        public async Task<bool> ConfirmUser([FromBody] TokenIdModel tokenIds)
+        {
+            Console.WriteLine("In Confirm User");
+            return await _userAccountService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
         }
 
         [HttpPost]

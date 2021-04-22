@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Timers;
 using UserManagement.Models;
 
 namespace IntelligentMatcher.Services
@@ -15,5 +17,8 @@ namespace IntelligentMatcher.Services
         Task<WebUserAccountModel> GetUserAccount(int id);
         Task<WebUserAccountModel> GetUserAccountByUsername(string username);
         Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress);
+        Task<bool> ValidateStatusToken(int userId, string token);
+        Task DeleteIfNotActive(int userId);
+        Task<string> GetStatusToken(int userId);
     }
 }

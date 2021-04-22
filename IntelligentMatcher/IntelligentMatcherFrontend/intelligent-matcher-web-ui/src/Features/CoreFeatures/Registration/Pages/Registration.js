@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { Redirect } from "react-router-dom";
+
 import './Registration.css';
 
 function Registration() {

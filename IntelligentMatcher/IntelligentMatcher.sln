@@ -80,6 +80,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendList", "FriendList\Fr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicUserProfile", "PublicUserProfile\PublicUserProfile.csproj", "{B11B5A59-9268-4D8C-9516-1E297F71A015}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistrationBridge", "RegistrationBridge\RegistrationBridge.csproj", "{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -176,6 +178,10 @@ Global
 		{B11B5A59-9268-4D8C-9516-1E297F71A015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B11B5A59-9268-4D8C-9516-1E297F71A015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B11B5A59-9268-4D8C-9516-1E297F71A015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,6 +208,7 @@ Global
 		{0AA63432-BEF6-4936-8161-B1BD95193E11} = {938CCB21-ABFE-4F2D-9FE1-4024A3E7F237}
 		{1186FC83-C5D3-4716-92B8-EE86A8FF2D65} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 		{B11B5A59-9268-4D8C-9516-1E297F71A015} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
+		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF33D655-7913-49CE-90DE-24BB5A7DA8E0}

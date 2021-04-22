@@ -24,15 +24,15 @@ namespace PublicUserProfile
 
         }
 
-        public async Task<bool> setUserOnline(int UserId)
+        public async Task<bool> setUserOnline(int userId)
         {
-            await _publicUserProfileRepo.UpdateStatus(UserId, "Online");
+            await _publicUserProfileRepo.UpdateStatus(userId, "Online");
             return true;
         }
 
-        public async Task<bool> setUserOffline(int UserId)
+        public async Task<bool> setUserOffline(int userId)
         {
-            await _publicUserProfileRepo.UpdateStatus(UserId, "Offline");
+            await _publicUserProfileRepo.UpdateStatus(userId, "Offline");
             return true;
         }
 
