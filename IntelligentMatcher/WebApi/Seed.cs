@@ -13,6 +13,7 @@ using Messaging;
 using Security;
 using FriendList;
 using PublicUserProfile;
+using TestHelper;
 
 namespace WebApi
 {
@@ -33,7 +34,6 @@ namespace WebApi
             var userAccountCodes = await userAccountCodeRepository.GetAllUserAccountCodes();
 
             var accounts = await userAccountRepository.GetAllAccounts();            
-            var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
 
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
@@ -96,14 +96,11 @@ namespace WebApi
 
                 for (int i = 1; i <= numRows; ++i)
                 {                 
-                    await userProfileRepository.DeleteUserProfileByAccountId(i);
                     await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
-                    await userAccountRepository.DeleteAccountById(i);
                 }
             }
-            
-            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
-            await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+
+            await TestCleaner.CleanDatabase();
             await DataAccessTestHelper.ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
