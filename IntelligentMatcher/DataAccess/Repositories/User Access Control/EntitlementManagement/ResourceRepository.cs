@@ -61,7 +61,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
             }
             catch(SqlCustomException e)
             {
-                throw new SqlCustomException("Name is Missing to create Resource.", e.InnerException);
+                throw new SqlCustomException("Resource could not be created.", e.InnerException);
             }
         }
 

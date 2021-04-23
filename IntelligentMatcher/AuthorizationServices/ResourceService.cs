@@ -37,7 +37,7 @@ namespace UserAccessControlServices
 
                 return resourceList;
             }
-            catch (SqlException e)
+            catch (SqlCustomException e)
             {
                 throw new SqlCustomException("No Resources Found.", e.InnerException);
             }
@@ -53,7 +53,7 @@ namespace UserAccessControlServices
 
                 return resource;
             }
-            catch (SqlException e)
+            catch (SqlCustomException e)
             {
                 throw new SqlCustomException("Resource Not Found.", e.InnerException);
             }
@@ -75,7 +75,7 @@ namespace UserAccessControlServices
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException("Name is Missing to create Resource.", e.InnerException);
+                throw new SqlCustomException("Resource could not be created.", e.InnerException);
             }
             
         }
@@ -93,7 +93,7 @@ namespace UserAccessControlServices
 
                 return true;
             }
-            catch (SqlException e)
+            catch (SqlCustomException e)
             {
                 throw new SqlCustomException("Resource could not be deleted.", e.InnerException);
             }

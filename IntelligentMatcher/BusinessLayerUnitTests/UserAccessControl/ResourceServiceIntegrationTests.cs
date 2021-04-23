@@ -144,7 +144,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
         }
 
         [DataTestMethod]
-        [DataRow(1, "TestResource1", "Name is Missing to create Resource.")]
+        [DataRow(1, "TestResource1", "Resource could not be created.")]
         public async Task RegisterResource_ResourceIdExists_ReturnError(int id, string name, string error)
         {
             // Arrange
