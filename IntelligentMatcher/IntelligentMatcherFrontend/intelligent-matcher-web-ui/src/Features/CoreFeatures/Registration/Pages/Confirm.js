@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import '../.././../../App'
+import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { Redirect } from 'react-router'
 
+import './Registration.css';
 
 export class Confirm extends Component {
     static displayName = Confirm.name;
@@ -13,7 +16,8 @@ export class Confirm extends Component {
           userId: 0,
           token: "",
           confirmStatus: "",
-          message: "Account is being confirmed"
+          message: "Account is being confirmed",
+          navigate: false
           };
           let url = window.location.href;
           url = url.split("id=")
@@ -46,21 +50,36 @@ export class Confirm extends Component {
     
         if(this.state.confirmStatus == true){
             this.setState({message: "Account Confirmed, redirecting to login"});
-        }else{
-            this.setState({message: "Account not confirmed"});
+            this.setState({ navigate: true });
 
+        }else{
+            this.setState({message: "Account not confirmed. Link is expired or invalid"});
+        
+   
+       
         }
     }
 
     
   render () {
 
+    if (this.state.navigate) {
 
+
+
+
+      return <Redirect to={{ pathname:"/Login", state: { message: "UserConfirmed"}}}      push={true} />
+    }
 
     return (
+      <Grid container>
 
-      <div>{this.state.message}</div>
-    );
+      <Grid.Row>
+      <h1>{this.state.message}</h1>
+  </Grid.Row>    
+  </Grid>
+  
+  );
   }
 }
 export default Confirm;

@@ -257,7 +257,7 @@ namespace DataAccess.Repositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             AccountStatus = GenerateToken(),
+                                             StatusToken = GenerateToken(),
                                              Id = id
                                          },
                                          _connectionString.SqlConnectionString);

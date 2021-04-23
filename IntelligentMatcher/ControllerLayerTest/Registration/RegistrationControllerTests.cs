@@ -117,7 +117,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -160,7 +160,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -203,7 +203,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -246,7 +246,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -289,7 +289,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -332,7 +332,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -375,7 +375,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = true;
             expectedResult.AccountId = expectedId;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -404,7 +404,7 @@ namespace ControllerLayerTest.Registration
 
             var expectedResult = false;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var actualResult = await registrationController.ResendEmail(accountId);
@@ -442,7 +442,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
             await registrationController.RegisterUser(registrationModel);
 
             var expectedResult = true;
@@ -475,7 +475,7 @@ namespace ControllerLayerTest.Registration
                 userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
-
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
             registrationModel.firstName = firstName;
             registrationModel.surname = surname;
             registrationModel.username = username;
@@ -484,7 +484,6 @@ namespace ControllerLayerTest.Registration
             registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
 
             // Act
             var timer = Stopwatch.StartNew();
@@ -515,7 +514,7 @@ namespace ControllerLayerTest.Registration
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService);
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 
             // Act
             var timer = Stopwatch.StartNew();

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[UserAccount_Update_StatusToken]
+﻿CREATE PROCEDURE [dbo].[UserAccount_Update_AccountStatusToken]
 	@Id int,
 	@StatusToken nvarchar(200)
 AS

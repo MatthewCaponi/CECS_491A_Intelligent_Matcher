@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { Redirect } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 import './Registration.css';
 
@@ -11,6 +12,8 @@ function Registration() {
     const [passwordState, setPasswordState] = useState("");
     const [emailState, setEmailState] = useState("");
     const [dateOfBirthState, setDateOfBirthState] = useState("");
+    const history = useHistory();
+
     function submitHandler(e){
         var RegistrationModel = e;
         // e.preventDefault();
@@ -23,6 +26,8 @@ function Registration() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("Success for " + res.accountId);
+                history.push("/ResendEmail", { accountId: res.accountId });
+
             }
             else{
                 alert(res.errorMessage);

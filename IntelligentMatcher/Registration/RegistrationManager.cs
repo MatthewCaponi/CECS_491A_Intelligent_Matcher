@@ -171,7 +171,7 @@ namespace Registration
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
 
-            return true;
+            return result;
         }
     }
 }

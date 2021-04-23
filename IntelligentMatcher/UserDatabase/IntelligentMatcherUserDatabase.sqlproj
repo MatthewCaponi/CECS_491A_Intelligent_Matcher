@@ -207,7 +207,7 @@
     <Build Include="StoredProcedures\UserReports\UserReports_Create.sql" />
     <Build Include="StoredProcedures\UserReports\UserReports_Delete.sql" />
     <Build Include="StoredProcedures\UserReports\UserReports_GetAll.sql" />
-    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_StatusToken.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_Update_AccountStatusToken.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_GetStatusToken_ById.sql" />
     <Build Include="StoredProcedures\UserAccount\UserAccount_GetStatus_ById.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Update_ById.sql" />

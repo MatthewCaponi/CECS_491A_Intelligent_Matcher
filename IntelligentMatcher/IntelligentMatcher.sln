@@ -73,22 +73,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendList", "FriendList\Fr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicUserProfile", "PublicUserProfile\PublicUserProfile.csproj", "{B11B5A59-9268-4D8C-9516-1E297F71A015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistrationBridge", "RegistrationBridge\RegistrationBridge.csproj", "{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}"
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{FDF976BE-07F0-4474-BDA2-645B43134555}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User Access Control", "User Access Control", "{D1CFDE0D-5FBD-4143-B164-C77527F9E84F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationPolicySystem", "AuthorizationPolicySystem\AuthorizationPolicySystem.csproj", "{08567F0C-34E4-4DEE-9094-064C68D6578F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationPolicySystem", "AuthorizationPolicySystem\AuthorizationPolicySystem.csproj", "{08567F0C-34E4-4DEE-9094-064C68D6578F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServices", "IdentityServices\IdentityServices.csproj", "{2E73177C-1375-40FC-A703-1458F73A6887}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServices", "IdentityServices\IdentityServices.csproj", "{2E73177C-1375-40FC-A703-1458F73A6887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationServices", "AuthorizationServices\AuthorizationServices.csproj", "{F23C98F0-E2F9-4766-894C-2503CDBAA9C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationServices", "AuthorizationServices\AuthorizationServices.csproj", "{F23C98F0-E2F9-4766-894C-2503CDBAA9C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationAttributeSystem", "AuthorizationAttributeSystem\AuthorizationAttributeSystem.csproj", "{240A1EF9-06E9-41F1-88F9-E3CA32AF88B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationAttributeSystem", "AuthorizationAttributeSystem\AuthorizationAttributeSystem.csproj", "{240A1EF9-06E9-41F1-88F9-E3CA32AF88B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAccessControl", "UserAccessControl\UserAccessControl.csproj", "{280B529E-D3ED-43B5-8778-0ABD2AC5C346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAccessControl", "UserAccessControl\UserAccessControl.csproj", "{280B529E-D3ED-43B5-8778-0ABD2AC5C346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationResolutionSystem", "AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj", "{102B2F75-66E3-4FF0-8549-1F5B8E26854B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationResolutionSystem", "AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj", "{102B2F75-66E3-4FF0-8549-1F5B8E26854B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -186,10 +185,6 @@ Global
 		{B11B5A59-9268-4D8C-9516-1E297F71A015}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B11B5A59-9268-4D8C-9516-1E297F71A015}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B11B5A59-9268-4D8C-9516-1E297F71A015}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDF976BE-07F0-4474-BDA2-645B43134555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDF976BE-07F0-4474-BDA2-645B43134555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDF976BE-07F0-4474-BDA2-645B43134555}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -244,7 +239,6 @@ Global
 		{0AA63432-BEF6-4936-8161-B1BD95193E11} = {938CCB21-ABFE-4F2D-9FE1-4024A3E7F237}
 		{1186FC83-C5D3-4716-92B8-EE86A8FF2D65} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 		{B11B5A59-9268-4D8C-9516-1E297F71A015} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
-		{DE23F6E2-1C0A-4B54-BEB0-2CD52A070BA3} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 		{FDF976BE-07F0-4474-BDA2-645B43134555} = {938CCB21-ABFE-4F2D-9FE1-4024A3E7F237}
 		{D1CFDE0D-5FBD-4143-B164-C77527F9E84F} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
 		{08567F0C-34E4-4DEE-9094-064C68D6578F} = {D1CFDE0D-5FBD-4143-B164-C77527F9E84F}
