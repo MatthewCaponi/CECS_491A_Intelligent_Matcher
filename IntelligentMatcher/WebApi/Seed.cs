@@ -23,15 +23,10 @@ namespace WebApi
         {
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
-            ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountCodeRepository userAccountCodeRepository = new UserAccountCodeRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-
-            var loginAttempts = await loginAttemptsRepository.GetAllLoginAttempts();
-            var userAccountCodes = await userAccountCodeRepository.GetAllUserAccountCodes();
 
             var accounts = await userAccountRepository.GetAllAccounts();            
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
@@ -56,7 +51,6 @@ namespace WebApi
 
             await DataAccessTestHelper.ReseedAsync("Messages", 0, connectionString, dataGateway);
 
-
             IChannelsRepo channelsRepo = new ChannelsRepo(dataGateway, connectionString);
             var channels = await channelsRepo.GetAllChannelsAsync();
 
@@ -67,20 +61,7 @@ namespace WebApi
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
-            if (loginAttempts != null)
-            {
-                var numRows = loginAttempts.ToList().Count;
-
-                for (int i = 1; i <= numRows; ++i)
-                {
-                    await loginAttemptsRepository.DeleteLoginAttemptsById(i);
-                }
-            }
-
-            await DataAccessTestHelper.ReseedAsync("LoginAttempts", 0, connectionString, dataGateway);
-
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-
             var publicProfiles = await publicUserProfileRepo.GetAllPublicProfiles();
 
             foreach (var profile in publicProfiles)
@@ -101,7 +82,6 @@ namespace WebApi
             }
 
             await TestCleaner.CleanDatabase();
-            await DataAccessTestHelper.ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);

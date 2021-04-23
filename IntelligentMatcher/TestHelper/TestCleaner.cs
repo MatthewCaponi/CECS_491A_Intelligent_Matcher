@@ -19,7 +19,9 @@ namespace TestHelper
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserAccountCodeRepository userAccountCodeRepository = new UserAccountCodeRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            ILoginAttemptsRepository loginAttemptsRepository = new LoginAttemptsRepository(dataGateway, connectionString);
             IResourceRepository resourceRepository = new ResourceRepository(dataGateway, connectionString);
             IClaimRepository claimRepository = new ClaimRepository(dataGateway, connectionString);
             IScopeRepository scopeRepository = new ScopeRepository(dataGateway, connectionString);
@@ -32,7 +34,9 @@ namespace TestHelper
 
             var accounts = await userAccountRepository.GetAllAccounts();
             var profiles = await userProfileRepository.GetAllUserProfiles();
+            var accountCodes = await userAccountCodeRepository.GetAllUserAccountCodes();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
+            var loginAttempts = await loginAttemptsRepository.GetAllLoginAttempts();
             var resources = await resourceRepository.GetAllResources();
             var claims = await claimRepository.GetAllClaims();
             var scopes = await scopeRepository.GetAllScopes();
@@ -96,14 +100,22 @@ namespace TestHelper
                 await ReseedAsync("AccessPolicyPairing", 0, connectionString, dataGateway);
             }
 
+            if (loginAttempts != null)
+            {
+                await DeleteAllFromTable("LoginAttempts");
+                await ReseedAsync("LoginAttempts", 0, connectionString, dataGateway);
+            }
+
             if (accounts != null)
             {
                 await DeleteAllFromTable("UserProfile");
                 await DeleteAllFromTable("UserAccountSettings");
+                await DeleteAllFromTable("UserAccountCode");
                 await DeleteAllFromTable("UserAccount");
 
                 await ReseedAsync("UserAccount", 0, connectionString, dataGateway);
                 await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+                await ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
                 await ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
             }

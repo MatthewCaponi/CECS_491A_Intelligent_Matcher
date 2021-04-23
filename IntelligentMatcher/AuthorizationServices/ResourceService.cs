@@ -1,4 +1,6 @@
 ﻿using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+using Exceptions;
+using Microsoft.Data.SqlClient;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -18,43 +20,83 @@ namespace UserAccessControlServices
 
         public async Task<List<BusinessModels.UserAccessControl.ResourceModel>> GetAllResources()
         {
-            var resources = await _resourceRepository.GetAllResources();
-
-            List<BusinessModels.UserAccessControl.ResourceModel> resourceList =
-                new List<BusinessModels.UserAccessControl.ResourceModel>();
-
-            foreach (var dataResourceModel in resources)
+            try
             {
-                var resourceModel = ModelConverterService.ConvertTo(dataResourceModel,
-                    new BusinessModels.UserAccessControl.ResourceModel());
+                var resources = await _resourceRepository.GetAllResources();
 
-                resourceList.Add(resourceModel);
+                List<BusinessModels.UserAccessControl.ResourceModel> resourceList =
+                    new List<BusinessModels.UserAccessControl.ResourceModel>();
+
+                foreach (var dataResourceModel in resources)
+                {
+                    var resourceModel = ModelConverterService.ConvertTo(dataResourceModel,
+                        new BusinessModels.UserAccessControl.ResourceModel());
+
+                    resourceList.Add(resourceModel);
+                }
+
+                return resourceList;
             }
-
-            return resourceList;
+            catch (SqlException e)
+            {
+                throw new SqlCustomException("No Resources Found.", e.InnerException);
+            }
+            
         }
 
         public async Task<BusinessModels.UserAccessControl.ResourceModel> GetResource(int id)
         {
-            var dataResource = await _resourceRepository.GetResourceById(id);
-            var resource = ModelConverterService.ConvertTo(dataResource, new BusinessModels.UserAccessControl.ResourceModel());
+            try
+            {
+                var dataResource = await _resourceRepository.GetResourceById(id);
+                var resource = ModelConverterService.ConvertTo(dataResource, new BusinessModels.UserAccessControl.ResourceModel());
 
-            return resource;
+                return resource;
+            }
+            catch (SqlException e)
+            {
+                throw new SqlCustomException("Resource Not Found.", e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException("Resource was Null.", e.InnerException);
+            }
+
         }
 
         public async Task<int> RegisterResource(BusinessModels.UserAccessControl.ResourceModel resourceModel)
         {
-            var dataResource = ModelConverterService.ConvertTo(resourceModel, new Models.User_Access_Control.ResourceModel());
-            var resourceId = await _resourceRepository.CreateResource(dataResource);
+            try
+            {
+                var dataResource = ModelConverterService.ConvertTo(resourceModel, new Models.User_Access_Control.ResourceModel());
+                var resourceId = await _resourceRepository.CreateResource(dataResource);
 
-            return resourceId;
+                return resourceId;
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException("Name is Missing to create Resource.", e.InnerException);
+            }
+            
         }
 
-        public async Task<int> RemoveResource(int id)
+        public async Task<bool> RemoveResource(int id)
         {
-            var changesMade = await _resourceRepository.DeleteResource(id);
+            try
+            {
+                var changesMade = await _resourceRepository.DeleteResource(id);
 
-            return changesMade;
+                if (changesMade == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (SqlException e)
+            {
+                throw new SqlCustomException("Resource could not be deleted.", e.InnerException);
+            }
         }
     }
 }

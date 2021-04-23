@@ -1,6 +1,8 @@
 ﻿using DataAccess;
 using DataAccess.Repositories;
 using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+using Exceptions;
+using Microsoft.Data.SqlClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -99,13 +101,35 @@ namespace BusinessLayerUnitTests.UserAccessControl
         }
 
         [DataTestMethod]
+        [DataRow(21, "Resource was Null.")]
+        public async Task GetResource_ResourceIdDoesNotExists_ReturnError(int id, string error)
+        {
+            // Arrange
+            var expectedMessage = error;
+            string actualMessage = "";
+            IResourceService resourceService = new ResourceService(resourceRepository);
+
+            // Act
+            try
+            {
+                var actualResult = await resourceService.GetResource(id);
+            }
+            catch (NullReferenceException e)
+            {
+                actualMessage = e.Message;
+            }
+
+            // Assert
+            Assert.IsTrue(actualMessage == expectedMessage);
+        }
+
+        [DataTestMethod]
         [DataRow(21, "TestResource21")]
         public async Task RegisterResource_ResourceIdDoesNotExists_ReturnResourceId(int id, string name)
         {
             // Arrange
             var resource = new BusinessModels.UserAccessControl.ResourceModel();
 
-            resource.Id = id;
             resource.Name = name;
 
             var expectedResult = id;
@@ -117,6 +141,34 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(actualResult == expectedResult);
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "TestResource1", "Name is Missing to create Resource.")]
+        public async Task RegisterResource_ResourceIdExists_ReturnError(int id, string name, string error)
+        {
+            // Arrange
+            var resource = new BusinessModels.UserAccessControl.ResourceModel();
+
+            resource.Id = id;
+
+            var expectedMessage = error;
+            string actualMessage = "";
+
+            IResourceService resourceService = new ResourceService(resourceRepository);
+
+            // Act
+            try
+            {
+                var actualResult = await resourceService.RegisterResource(resource);
+            }
+            catch(SqlCustomException e)
+            {
+                actualMessage = e.Message;
+            }
+
+            // Assert
+            Assert.IsTrue(actualMessage == expectedMessage);
         }
 
         [DataTestMethod]
@@ -153,6 +205,20 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsNull(actualResult);
+        }
+
+        [DataTestMethod]
+        [DataRow(1)]
+        public async Task RemoveResource_ResourceIdExists_ReturnTrue(int id)
+        {
+            // Arrange
+            IResourceService resourceService = new ResourceService(resourceRepository);
+
+            // Act
+            var actualResult = await resourceService.RemoveResource(id);
+
+            // Assert
+            Assert.IsTrue(actualResult);
         }
         #endregion
     }

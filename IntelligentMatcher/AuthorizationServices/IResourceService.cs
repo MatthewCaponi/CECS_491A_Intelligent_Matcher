@@ -10,6 +10,6 @@ namespace UserAccessControlServices
         Task<List<BusinessModels.UserAccessControl.ResourceModel>> GetAllResources();
         Task<BusinessModels.UserAccessControl.ResourceModel> GetResource(int id);
         Task<int> RegisterResource(BusinessModels.UserAccessControl.ResourceModel resourceModel);
-        Task<int> RemoveResource(int id);
+        Task<bool> RemoveResource(int id);
     }
 }
