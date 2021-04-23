@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Mailjet.Api" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
