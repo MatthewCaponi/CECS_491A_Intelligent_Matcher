@@ -34,7 +34,6 @@ namespace WebApi
             var userAccountCodes = await userAccountCodeRepository.GetAllUserAccountCodes();
 
             var accounts = await userAccountRepository.GetAllAccounts();            
-            var profiles = await userProfileRepository.GetAllUserProfiles();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
 
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
@@ -97,9 +96,7 @@ namespace WebApi
 
                 for (int i = 1; i <= numRows; ++i)
                 {                 
-                    await userProfileRepository.DeleteUserProfileByAccountId(i);
                     await userAccountSettingsRepository.DeleteUserAccountSettingsByUserId(i);
-                    await userAccountRepository.DeleteAccountById(i);
                 }
             }
 
