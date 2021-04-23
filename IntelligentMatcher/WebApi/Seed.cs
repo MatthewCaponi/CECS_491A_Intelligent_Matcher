@@ -13,6 +13,7 @@ using Messaging;
 using Security;
 using FriendList;
 using PublicUserProfile;
+using TestHelper;
 
 namespace WebApi
 {
@@ -101,9 +102,8 @@ namespace WebApi
                     await userAccountRepository.DeleteAccountById(i);
                 }
             }
-            
-            await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
-            await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+
+            await TestCleaner.CleanDatabase();
             await DataAccessTestHelper.ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
