@@ -1,7 +1,10 @@
-﻿namespace IdentityServices
+﻿using BusinessModels.UserAccessControl;
+using System.Collections.Generic;
+
+namespace IdentityServices
 {
     public interface ITokenService
     {
-        string CreateToken();
+        string CreateToken(List<UserClaimModel> userClaims);
     }
 }

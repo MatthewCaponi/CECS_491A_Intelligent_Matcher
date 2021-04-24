@@ -10,9 +10,16 @@ namespace BusinessModels.UserAccessControl
         public UserClaimModel Issuer { get; set; }
         public UserClaimModel Subject { get; set; }
         public UserClaimModel Audience { get; set; }
-        public int ExpirationTime { get; set; }
+        public UserClaimModel ExpirationTime { get; set; }
         public UserClaimModel NotBefore { get; set; }
         public UserClaimModel IssuedAt { get; set; }
-        public UserClaimModel JWTId { get; set; }
+        public UserClaimModel JwtId { get; set; }
+
+        public JwtPayloadModel()
+        {
+            {
+                PublicClaims = new List<UserClaimModel>();
+            }
+        }
     }
 }
