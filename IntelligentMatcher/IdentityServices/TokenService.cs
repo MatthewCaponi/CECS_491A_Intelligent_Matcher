@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -22,9 +24,6 @@ namespace IdentityServices
         }
         public string CreateToken(List<UserClaimModel> userClaims)
         {
-            var secret = _configuration["TestSecret"];
-            var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
-            var securityKey = new RsaSecurityKey(RSA.Create(keySize));
             var jwtPayloadModel = new JwtPayloadModel();
 
             foreach (var userClaim in userClaims)
@@ -63,9 +62,39 @@ namespace IdentityServices
                 }
             }
 
-            var token = _tokenBuilderService.CreateToken(jwtPayloadModel, secret, securityKey);
+            var token = _tokenBuilderService.CreateToken(jwtPayloadModel);
 
             return token;
+        }
+
+        public bool ValidateToken(string token)
+        {
+            var tokenhandler = new JwtSecurityTokenHandler();
+            var secret = _configuration["TestSecret"];
+            var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
+            using RSA rsa = RSA.Create();
+            rsa.ImportRSAPublicKey(secret, out _);
+
+            try
+            {
+                tokenhandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new RsaSecurityKey(RSA.Create(keySize)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                //var jwtToken = (JwtSecurityToken)validatedToken;
+                //var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

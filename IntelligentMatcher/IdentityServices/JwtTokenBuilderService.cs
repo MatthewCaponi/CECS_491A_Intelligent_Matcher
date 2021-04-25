@@ -1,4 +1,5 @@
 ﻿using BusinessModels.UserAccessControl;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,15 +12,26 @@ namespace IdentityServices
 {
     public class JwtTokenBuilderService : ITokenBuilderService
     {
-        public string CreateToken(JwtPayloadModel jwtPayloadModel, string secret, RsaSecurityKey key)
+        private readonly IConfiguration _configuration;
+
+        public JwtTokenBuilderService(IConfiguration configuration)
         {
+            _configuration = configuration;
+        }
+        public string CreateToken(JwtPayloadModel jwtPayloadModel)
+        {
+            var secret = Encoding.ASCII.GetBytes(_configuration["TestSecret"]);
+            var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
+
+            using RSA rsa = RSA.Create(keySize);
+            rsa.ImportRSAPrivateKey(secret, out _);
+            var signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256);
+
             var claims = new List<Claim>();
             foreach (var userClaim in jwtPayloadModel.PublicClaims)
             {
                 claims.Add(new Claim(userClaim.Key, userClaim.Value));
             }
-
-            //var key = new RsaSecurityKey(RSA.Create(2048));
 
             var tokenHandler = new JsonWebTokenHandler();
             var now = DateTime.UtcNow;
@@ -32,7 +44,7 @@ namespace IdentityServices
                 NotBefore = DateTime.Parse(jwtPayloadModel.NotBefore.Value),
                 Expires = now.AddMinutes(Double.Parse(jwtPayloadModel.ExpirationTime.Value)),
                 Subject = new ClaimsIdentity(claims),
-                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSsaPssSha256)
+                SigningCredentials = signingCredentials
             };
 
             string finalToken = tokenHandler.CreateToken(tokenDescriptor);
