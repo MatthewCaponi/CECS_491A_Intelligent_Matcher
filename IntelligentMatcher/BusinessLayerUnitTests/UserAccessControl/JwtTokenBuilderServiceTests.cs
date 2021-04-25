@@ -28,7 +28,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             Issuer = new UserClaimModel("iss", "TestIssuer1"),
             Subject = new UserClaimModel("sub", "TestSubject1"),
             Audience = new UserClaimModel("aud", "TestAudience1"),
-            ExpirationTime = 30,
+            ExpirationTime = new UserClaimModel("exp", DateTime.UtcNow.AddMinutes(30).ToString()),
             NotBefore = new UserClaimModel("nbf", "TestNotBefore1"),
             IssuedAt = new UserClaimModel("iat", "TestIssuedAt1")
         };
