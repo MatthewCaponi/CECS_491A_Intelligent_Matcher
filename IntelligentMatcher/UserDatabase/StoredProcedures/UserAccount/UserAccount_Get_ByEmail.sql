@@ -6,7 +6,7 @@ begin
 	set nocount on
 
 	select [Id], [Username], [Password], [Salt], [EmailAddress],
-	[AccountType], [AccountStatus], [CreationDate], [UpdationDate], [StatusToken]
+	[AccountType], [AccountStatus], [CreationDate], [UpdationDate]
 	from dbo.[UserAccount]
 	where EmailAddress = @EmailAddress;
 end

@@ -53,7 +53,7 @@ export class Confirm extends Component {
             this.setState({ navigate: true });
 
         }else{
-            this.setState({message: "Account not confirmed. Link is expired or invalid"});
+            this.setState({message: "Account not confirmed. Link is expired, invalid or has already been used"});
         
    
        

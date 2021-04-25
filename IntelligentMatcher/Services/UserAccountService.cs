@@ -88,42 +88,6 @@ namespace IntelligentMatcher.Services
             }
         }
 
-        public async Task<string> GetStatusToken(int userId)
-        {
-            return await _userAccountRepository.GetStatusTokenById(userId);
-        }
-
-        public async Task DeleteIfNotActive(int userId)
-        {
-            string status = await _userAccountRepository.GetStatusTokenById(userId);
-
-            if(status != "Active")
-            {
-                await DeleteAccount(userId);
-            }
-
-        }
-
-        public async Task<bool> ValidateStatusToken(int userId, string token)
-        {
-            Console.WriteLine("Validating");
-            string existingStatusToken = await _userAccountRepository.GetStatusTokenById(userId);
-            Console.WriteLine(token);
-            Console.WriteLine(existingStatusToken);
-            if (existingStatusToken == token)
-            {
-
-
-                await _userAccountRepository.UpdateAccountStatus(userId, "Active");
-                await _userAccountRepository.UpdateAccountStatusToken(userId);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
 
         public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
         {

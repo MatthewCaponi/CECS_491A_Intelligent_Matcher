@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import './Login.css';
 
 function Login() {
+    const history = useHistory();
 
     let location = useLocation()
     let confMessage = "";
@@ -35,6 +37,7 @@ function Login() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("Successful Login for " + res.username);
+                history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
 
             }
             else{

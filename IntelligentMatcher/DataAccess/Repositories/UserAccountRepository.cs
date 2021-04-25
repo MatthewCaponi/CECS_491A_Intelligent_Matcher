@@ -13,36 +13,13 @@ namespace DataAccess.Repositories
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
-        private const int TOKEN_LENGTH = 200;
 
         public UserAccountRepository(IDataGateway dataGateway, IConnectionStringData connectionString)
         {
             _dataGateway = dataGateway;
             _connectionString = connectionString;
         }
-        private string GenerateToken()
-        {
-
-
-            // creating a StringBuilder object()
-            StringBuilder str_build = new StringBuilder();
-            Random random = new Random();
-
-            char letter;
-
-            for (int i = 0; i < TOKEN_LENGTH; i++)
-            {
-                double flt = random.NextDouble();
-                int shift = Convert.ToInt32(Math.Floor(25 * flt));
-                letter = Convert.ToChar(shift + 65);
-                str_build.Append(letter);
-            }
-
-            string token = str_build.ToString();
-
-            return token;
-
-        }
+ 
         public async Task<IEnumerable<UserAccountModel>> GetAllAccounts()
         {
             string storedProcedure = "dbo.UserAccount_Get_All";
@@ -121,19 +98,7 @@ namespace DataAccess.Repositories
             return row.FirstOrDefault();
         }
 
-        public async Task<string> GetStatusTokenById(int id)
-        {
-            var storedProcedure = "dbo.UserAccount_GetStatusToken_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
-                new
-                {
-                    Id = id
-                },
-                _connectionString.SqlConnectionString);
-
-            return row.FirstOrDefault();
-        }
 
         public async Task<string> GetStatusById(int id)
         {
@@ -163,7 +128,6 @@ namespace DataAccess.Repositories
             p.Add("AccountStatus", model.AccountStatus);
             p.Add("CreationDate", model.CreationDate);
             p.Add("UpdationDate", model.UpdationDate);
-            p.Add("StatusToken", GenerateToken());
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
@@ -250,18 +214,7 @@ namespace DataAccess.Repositories
                                          _connectionString.SqlConnectionString);
         }
 
-        public async Task<int> UpdateAccountStatusToken(int id)
-        {
-            var storedProcedure = "dbo.UserAccount_Update_AccountStatusToken";
 
-            return await _dataGateway.Execute(storedProcedure,
-                                         new
-                                         {
-                                             StatusToken = GenerateToken(),
-                                             Id = id
-                                         },
-                                         _connectionString.SqlConnectionString);
-        }
 
         public async Task<int> UpdateAccountType(int id, string accountType)
         {

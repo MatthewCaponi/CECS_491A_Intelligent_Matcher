@@ -100,8 +100,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -143,8 +147,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -186,8 +194,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -229,8 +241,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -272,8 +288,11 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -315,8 +334,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -358,8 +381,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -399,8 +426,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var expectedResult = false;
 
@@ -429,8 +460,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
 
@@ -471,8 +506,12 @@ namespace ControllerLayerTest.Registration
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             var registrationModel = new RegistrationModel();
             RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
@@ -511,8 +550,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
-            IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
 

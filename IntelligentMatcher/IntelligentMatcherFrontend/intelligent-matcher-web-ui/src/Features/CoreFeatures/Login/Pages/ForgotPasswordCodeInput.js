@@ -1,10 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import './Login.css';
+import { useHistory } from 'react-router-dom';
 
 function ForgotPasswordCodeInput() {
     const [accountState, setAccountState] = useState(1);
     const [codeState, setCodeState] = useState("");
+    const history = useHistory();
+    //history.location.state.accountId
+
+
+
     function submitHandler(e){
         var ForgotPasswordCodeInputModel = e;
         // e.preventDefault();
@@ -17,6 +23,8 @@ function ForgotPasswordCodeInput() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("Code Entered Successfully! Moving to Next Page!");
+                history.push("/ResetPassword", { accountId: res.accountId });
+
             }
             else{
                 alert(res.errorMessage);

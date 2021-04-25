@@ -53,6 +53,7 @@ namespace WebApi
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
+            services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();

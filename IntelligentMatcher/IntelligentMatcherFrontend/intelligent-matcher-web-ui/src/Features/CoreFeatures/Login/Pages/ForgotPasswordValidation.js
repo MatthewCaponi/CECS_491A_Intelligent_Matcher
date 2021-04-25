@@ -22,7 +22,7 @@ function ForgotPasswordValidation() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("A Code Has Been Emailed to You.");
-                history.push("/home");
+                history.push("/ForgotPasswordCodeInput", { accountId: res.accountId });
 
             }
             else{

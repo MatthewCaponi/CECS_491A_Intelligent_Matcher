@@ -1,9 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+
 import './Home.css';
 
 function Home() {
+
+
+    const history = useHistory();
+    //history.location.state.routerdatayouwanttoaccess
     return (
         <Grid container centered style={{height: '60%'}}>
         <Grid.Row />

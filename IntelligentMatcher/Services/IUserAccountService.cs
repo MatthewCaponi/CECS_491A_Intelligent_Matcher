@@ -17,8 +17,6 @@ namespace IntelligentMatcher.Services
         Task<WebUserAccountModel> GetUserAccount(int id);
         Task<WebUserAccountModel> GetUserAccountByUsername(string username);
         Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress);
-        Task<bool> ValidateStatusToken(int userId, string token);
-        Task DeleteIfNotActive(int userId);
-        Task<string> GetStatusToken(int userId);
+
     }
 }

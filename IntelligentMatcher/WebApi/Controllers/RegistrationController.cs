@@ -36,8 +36,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<bool> ConfirmUser([FromBody] TokenIdModel tokenIds)
         {
-            Console.WriteLine("In Confirm User");
-            return await _userAccountService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
+            return await _registrationManager.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
         }
 
         [HttpPost]

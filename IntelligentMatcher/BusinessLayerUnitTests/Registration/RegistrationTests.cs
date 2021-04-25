@@ -36,6 +36,7 @@ namespace BusinessLayerUnitTests.Registration
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(dataGateway, connectionString);
 
             for (int i = 1; i <= numTestRows; ++i)
             {
@@ -50,6 +51,8 @@ namespace BusinessLayerUnitTests.Registration
                 userAccountModel.CreationDate = DateTimeOffset.UtcNow;
                 userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
                 await userAccountRepository.CreateAccount(userAccountModel);
+
+                await accountVerificationRepo.CreateAccountVerification(1);
 
                 UserProfileModel userProfileModel = new UserProfileModel();
                 userProfileModel.Id = i;
@@ -75,8 +78,18 @@ namespace BusinessLayerUnitTests.Registration
             {
                 await userAccountRepository.DeleteAccountById(account.Id);
             }
+
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(dataGateway, connectionString);
+            IEnumerable< VerficationTokenModel>  verficationTokens = await accountVerificationRepo.GetAllAccountVerifications();
+
+            foreach (VerficationTokenModel token in verficationTokens)
+            {
+                await accountVerificationRepo.DeleteAccountVerificationById(token.Id);
+            }
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("AccountVerification", 0, connectionString, dataGateway);
+
         }
         #endregion
 
@@ -112,14 +125,16 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             mockValidationService.Setup(x => x.UsernameExists(username)).Returns(Task.FromResult(true));
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
+
 
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
-
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockAccountVerificionRepo.Object, mockUserAccountRepository.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -166,9 +181,11 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockAccountVerificionRepo.Object, mockUserAccountRepository.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -217,9 +234,11 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = true;
             expectedResult.SuccessValue = expectedId;
 
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockAccountVerificionRepo.Object, mockUserAccountRepository.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -265,9 +284,11 @@ namespace BusinessLayerUnitTests.Registration
 
             var expectedResult = false;
 
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockAccountVerificionRepo.Object, mockUserAccountRepository.Object);
 
             //Act
             var actualResult = await registrationManager.SendVerificationEmail(expectedId);
@@ -316,8 +337,11 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -365,12 +389,19 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
                 password, ipAddress);
+
+
+            expectedResult.ErrorMessage = error;
+
 
             //Assert
             Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
@@ -414,8 +445,11 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = true;
             expectedResult.SuccessValue = expectedId;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -454,8 +488,11 @@ namespace BusinessLayerUnitTests.Registration
 
             var expectedResult = true;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             //Act
             var actualResult = await registrationManager.SendVerificationEmail(expectedId);
@@ -492,8 +529,11 @@ namespace BusinessLayerUnitTests.Registration
 
             var expectedResult = false;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             //Act
             var actualResult = await registrationManager.SendVerificationEmail(expectedId);
@@ -502,6 +542,71 @@ namespace BusinessLayerUnitTests.Registration
             Assert.IsTrue(actualResult == expectedResult);
         }
         #endregion
+
+
+
+
+
+
+        #region Integration Tests DeleteIfNotActive
+        [DataTestMethod]
+        [DataRow(1)]
+        public async Task ValidateToken_TokenValidataetd_TokenSuccess(int userId)
+        {
+            EmailService emailService = new EmailService();
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
+
+
+
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+           
+
+
+            try
+            {
+
+                string token = await registrationManager.GetStatusToken(userId);
+                bool result = await registrationManager.ValidateStatusToken(userId, token);
+                if(result == true)
+                {
+                    string status = await userAccountRepository.GetStatusById(userId);
+                    if(status == "Active")
+                    {
+                        Assert.IsTrue(true);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(false);
+
+                    }
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+
+            }
+        }
+        #endregion
+
+
+
+
 
         #region Non-Functional Tests
         [DataTestMethod]
@@ -537,8 +642,11 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
 
             //Act
             var timer = Stopwatch.StartNew();

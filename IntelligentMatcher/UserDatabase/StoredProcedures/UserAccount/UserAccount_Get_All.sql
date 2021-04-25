@@ -2,6 +2,6 @@
 AS
 begin
 	set nocount on;
-	SELECT [Id], [Username], [Password], [Salt], [EmailAddress], [AccountType], [AccountStatus], [CreationDate], [UpdationDate], [StatusToken]
+	SELECT [Id], [Username], [Password], [Salt], [EmailAddress], [AccountType], [AccountStatus], [CreationDate], [UpdationDate]
 	from dbo.UserAccount;
 end

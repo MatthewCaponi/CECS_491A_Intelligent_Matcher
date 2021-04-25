@@ -6,7 +6,7 @@ import './Registration.css';
 
 function ResendEmail() {
     const history = useHistory();
-
+    console.log(history);
     const [accountState, setAccountState] = useState(1);
     function submitHandler(e){
         var accountId = e;

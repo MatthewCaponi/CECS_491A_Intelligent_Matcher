@@ -7,16 +7,15 @@
 	@AccountStatus nvarchar(50),
 	@CreationDate date,
 	@UpdationDate date,
-	@StatusToken nvarchar(200),
 	@Id int output
 AS
 begin
 	set nocount on;
 
 	insert into dbo.[UserAccount]([Username], [Password], [Salt], [EmailAddress], 
-	[AccountType], [AccountStatus], [CreationDate], [UpdationDate], [StatusToken])
+	[AccountType], [AccountStatus], [CreationDate], [UpdationDate])
 	values (@Username, @Password, @Salt, @EmailAddress,
-	@AccountType, @AccountStatus, @CreationDate, @UpdationDate, @StatusToken);
+	@AccountType, @AccountStatus, @CreationDate, @UpdationDate);
 
 	set @Id = SCOPE_IDENTITY();
 end

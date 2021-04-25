@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+
 import './Login.css';
 
 function ForgotUsername() {
     const [emailState, setEmailState] = useState("");
     const [dateOfBirthState, setDateOfBirthState] = useState("");
+    const history = useHistory();
+
     function submitHandler(e){
         var ForgotInformationModel = e;
         // e.preventDefault();
@@ -17,6 +21,8 @@ function ForgotUsername() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("Here is your username: " + res.username);
+                history.push("/Login");
+
             }
             else{
                 alert(res.errorMessage);

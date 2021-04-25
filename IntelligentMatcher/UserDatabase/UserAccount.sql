@@ -7,7 +7,6 @@
     [EmailAddress] NVARCHAR(50) NOT NULL, 
     [AccountType] NVARCHAR(50) NOT NULL, 
     [AccountStatus] NVARCHAR(50) NOT NULL, 
-    [StatusToken] NVARCHAR(200), 
 
     [CreationDate] DATE NOT NULL, 
     [UpdationDate] DATE NOT NULL, 
