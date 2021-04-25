@@ -23,7 +23,7 @@ namespace IdentityServices
         public string CreateToken(List<UserClaimModel> userClaims)
         {
             var secret = _configuration["TestSecret"];
-            var keySize = _configuration["KeySize"];
+            var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
             var securityKey = new RsaSecurityKey(RSA.Create(keySize));
             var jwtPayloadModel = new JwtPayloadModel();
 
@@ -37,8 +37,8 @@ namespace IdentityServices
                         break;
 
                     case "Subject":
-                        jwtPayloadModel.Audience.Key = "sub";
-                        jwtPayloadModel.Issuer.Value = userClaim.Value;
+                        jwtPayloadModel.Subject.Key = "sub";
+                        jwtPayloadModel.Audience.Value = userClaim.Value;
                         break;
 
                     case "Audience":
@@ -57,7 +57,7 @@ namespace IdentityServices
                         break;
 
                     case "IssuedAt":
-                        jwtPayloadModel.Subject.Key = "sub";
+                        jwtPayloadModel.IssuedAt.Key = "iat";
                         jwtPayloadModel.Issuer.Value = userClaim.Value;
                         break;
 
