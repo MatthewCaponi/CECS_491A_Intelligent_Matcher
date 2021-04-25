@@ -82,7 +82,7 @@ namespace DataAccess.Repositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             StatusToken = GenerateToken(),
+                                             Token = GenerateToken(),
                                              UserId = userId
                                          },
                                          _connectionString.SqlConnectionString);

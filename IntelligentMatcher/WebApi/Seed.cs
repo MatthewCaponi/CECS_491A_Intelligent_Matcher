@@ -112,6 +112,7 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             for (int i = 1; i < seedAmount; ++i)
             {
@@ -157,7 +158,7 @@ namespace WebApi
                 publicUserProfileModel.Height = "This is how tall I am";
                 await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
-
+                await accountVerificationRepo.CreateAccountVerification(publicUserProfileModel.UserId);
 
 
             }
