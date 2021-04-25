@@ -40,6 +40,8 @@ namespace UserAccessControlServices
                     var claimModel = ModelConverterService.ConvertTo(dataClaimModel,
                         new BusinessModels.UserAccessControl.ClaimModel());
 
+                    claimModel.Scopes = new List<BusinessModels.UserAccessControl.ScopeModel>();
+
                     var scopeClaims = await _scopeClaimRepository.GetAllScopeClaims();
 
                     foreach (var dataScopeClaimModel in scopeClaims)
@@ -100,6 +102,7 @@ namespace UserAccessControlServices
             {
                 var dataClaim = await _claimRepository.GetClaimById(id);
                 var claim = ModelConverterService.ConvertTo(dataClaim, new BusinessModels.UserAccessControl.ClaimModel());
+                claim.Scopes = new List<BusinessModels.UserAccessControl.ScopeModel>();
 
                 var scopeClaims = await _scopeClaimRepository.GetAllScopeClaims();
 

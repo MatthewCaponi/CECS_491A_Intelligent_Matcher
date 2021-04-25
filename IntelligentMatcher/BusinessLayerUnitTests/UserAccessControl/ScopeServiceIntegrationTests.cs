@@ -182,8 +182,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
         }
 
         [DataTestMethod]
-        [DataRow(1, "TestScope1", "TestDescription1", true)]
-        public async Task GetScope_ScopeIdExists_NumberOfClaimsIsAccurate(int id, string name, string description, bool isDefault)
+        [DataRow(1)]
+        public async Task GetScope_ScopeIdExists_NumberOfClaimsIsAccurate(int id)
         {
             // Arrange
             IScopeService scopeService = new ScopeService(claimRepository, scopeRepository,
@@ -277,7 +277,6 @@ namespace BusinessLayerUnitTests.UserAccessControl
                 actualMessage = e.Message;
             }
             
-
             // Assert
             Assert.IsTrue(actualMessage == expectedMessage);
         }
