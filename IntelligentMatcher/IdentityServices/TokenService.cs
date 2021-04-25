@@ -70,17 +70,17 @@ namespace IdentityServices
         public bool ValidateToken(string token)
         {
             var tokenhandler = new JwtSecurityTokenHandler();
-            var secret = _configuration["TestSecret"];
+            var publicKey = Encoding.ASCII.GetBytes(_configuration["PublicKey"]);
             var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
-            using RSA rsa = RSA.Create();
-            rsa.ImportRSAPublicKey(secret, out _);
+            using RSA rsa = RSA.Create(keySize);
+            rsa.ImportRSAPublicKey(publicKey, out _);
 
             try
             {
                 tokenhandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new RsaSecurityKey(RSA.Create(keySize)),
+                    IssuerSigningKey = new RsaSecurityKey(rsa),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero

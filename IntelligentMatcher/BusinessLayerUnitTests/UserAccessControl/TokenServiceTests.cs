@@ -16,12 +16,24 @@ namespace BusinessLayerUnitTests.UserAccessControl.UnitTests
     [TestClass]
     public class TokenServiceTests
     {
+        #region Setup
+        private static IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+        private const string PRIVATE_KEY_CONFIG = "PrivateKey";
+        private const string PUBLIC_KEY_CONFIG = "PublicKey";
+        private const string KEY_SIZE_CONFIG = "SecurityKeySettings:KeySize";
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            _testConfigKeys.Add({PrivateKey });
+        }
+        #endregion
         #region Unit Tests
         [DataTestMethod]
-        [DataRow("TestSecret", "SecurityKeySettings:KeySize", "SuperSecretTestKey", "2048", "TestKey", "TestValue", 10, "iss", "sub", "aud", "exp", "nbf", "iat",
+        [DataRow("TestKey", "TestValue", 10, "iss", "sub", "aud", "exp", "nbf", "iat",
             "30")]
-        public void CreateToken_ValidInfo_InfoIsValid(string secretKey, string keySizeKey, string secret, string keySize, string key, string value, int numClaims,
-            string issuer, string subject, string audience, string expiration, string notBefore, string issuedAt, string expirationMinutes)
+        public void CreateToken_ValidInfo_InfoIsValid( string key, string value, 
+            int numClaims, string issuer, string subject, string audience, 
+            string expiration, string notBefore, string issuedAt, string expirationMinutes)
         {
             // Arrange
             var now = DateTime.UtcNow.ToString();

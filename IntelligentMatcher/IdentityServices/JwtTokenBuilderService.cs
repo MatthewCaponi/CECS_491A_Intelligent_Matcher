@@ -20,12 +20,15 @@ namespace IdentityServices
         }
         public string CreateToken(JwtPayloadModel jwtPayloadModel)
         {
-            var secret = Encoding.ASCII.GetBytes(_configuration["TestSecret"]);
+            var privateKey = Encoding.ASCII.GetBytes(_configuration["PrivateKey"]);
             var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
 
             using RSA rsa = RSA.Create(keySize);
-            rsa.ImportRSAPrivateKey(secret, out _);
-            var signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256);
+            rsa.ImportRSAPrivateKey(privateKey, out _);
+            var signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
+            {
+                CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false }
+            };
 
             var claims = new List<Claim>();
             foreach (var userClaim in jwtPayloadModel.PublicClaims)
