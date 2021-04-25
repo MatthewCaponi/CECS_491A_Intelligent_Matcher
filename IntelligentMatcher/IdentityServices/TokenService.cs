@@ -31,34 +31,28 @@ namespace IdentityServices
             {
                 switch (userClaim.Key)
                 {
-                    case "Issuer":
-                        jwtPayloadModel.Issuer.Key = "iss";
-                        jwtPayloadModel.Issuer.Value = userClaim.Value;
+                    case "iss":
+                        jwtPayloadModel.Issuer = new UserClaimModel("iss", userClaim.Value);
                         break;
 
-                    case "Subject":
-                        jwtPayloadModel.Subject.Key = "sub";
-                        jwtPayloadModel.Audience.Value = userClaim.Value;
+                    case "sub":
+                        jwtPayloadModel.Subject = new UserClaimModel("sub", userClaim.Value);
                         break;
 
-                    case "Audience":
-                        jwtPayloadModel.Audience.Key = "aud";
-                        jwtPayloadModel.Issuer.Value = userClaim.Value;
+                    case "aud":
+                        jwtPayloadModel.Audience = new UserClaimModel("aud", userClaim.Value);
                         break;
 
-                    case "ExpirationTime":
-                        jwtPayloadModel.ExpirationTime.Key = "exp";
-                        jwtPayloadModel.Issuer.Value = userClaim.Value;
+                    case "exp":
+                        jwtPayloadModel.ExpirationTime = new UserClaimModel("exp", userClaim.Value);
                         break;
 
-                    case "NotBefore":
-                        jwtPayloadModel.NotBefore.Key = "nbf";
-                        jwtPayloadModel.Issuer.Value = userClaim.Value;
+                    case "nbf":
+                        jwtPayloadModel.NotBefore = new UserClaimModel("nbf", userClaim.Value);
                         break;
 
-                    case "IssuedAt":
-                        jwtPayloadModel.IssuedAt.Key = "iat";
-                        jwtPayloadModel.Issuer.Value = userClaim.Value;
+                    case "iat":
+                        jwtPayloadModel.IssuedAt = new UserClaimModel("iat", userClaim.Value);
                         break;
 
                     default:

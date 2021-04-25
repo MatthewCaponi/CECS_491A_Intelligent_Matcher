@@ -28,8 +28,8 @@ namespace IdentityServices
             {
                 Issuer = jwtPayloadModel.Issuer.Value,
                 Audience = jwtPayloadModel.Audience.Value,
-                IssuedAt = now,
-                NotBefore = now,
+                IssuedAt = DateTime.Parse(jwtPayloadModel.IssuedAt.Value),
+                NotBefore = DateTime.Parse(jwtPayloadModel.NotBefore.Value),
                 Expires = now.AddMinutes(Double.Parse(jwtPayloadModel.ExpirationTime.Value)),
                 Subject = new ClaimsIdentity(claims),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSsaPssSha256)

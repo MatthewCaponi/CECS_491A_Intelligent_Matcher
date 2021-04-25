@@ -18,11 +18,13 @@ namespace BusinessLayerUnitTests.UserAccessControl.UnitTests
     {
         #region Unit Tests
         [DataTestMethod]
-        [DataRow("TestSecret1", 2048, "TestKey", "TestValue", 10, "iss", "sub", "aud", "exp", "nbf", "iat")]
+        [DataRow("TestSecret1", 2048, "TestKey", "TestValue", 10, "iss", "sub", "aud", "exp", "nbf", "iat",
+            "30")]
         public void CreateToken_ValidInfo_InfoIsValid(string secret, int keySize, string key, string value, int numClaims,
-            string issuer, string subject, string audience, string expiration, string notBefore, string issuedAt)
+            string issuer, string subject, string audience, string expiration, string notBefore, string issuedAt, string expirationMinutes)
         {
             // Arrange
+            var now = DateTime.UtcNow.ToString();
             var testConfigSettings = new Dictionary<string, string>
             {
                 { "TestSecret", "SuperSecretTestKey"},
@@ -46,9 +48,9 @@ namespace BusinessLayerUnitTests.UserAccessControl.UnitTests
             userClaims.Add(new UserClaimModel(issuer, value));
             userClaims.Add(new UserClaimModel(subject, value));
             userClaims.Add(new UserClaimModel(audience, value));
-            userClaims.Add(new UserClaimModel(expiration, value));
-            userClaims.Add(new UserClaimModel(notBefore, value));
-            userClaims.Add(new UserClaimModel(issuedAt, value));
+            userClaims.Add(new UserClaimModel(expiration, expirationMinutes));
+            userClaims.Add(new UserClaimModel(notBefore, now));
+            userClaims.Add(new UserClaimModel(issuedAt, now));
 
             // Act
             var token = tokenService.CreateToken(userClaims);
