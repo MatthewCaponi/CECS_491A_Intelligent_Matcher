@@ -10,14 +10,15 @@ using UserManagement.Models;
 
 using Services;
 using BusinessModels.ListingModels;
+using Models.DALListingModels;
 
 namespace TraditionalListings.Managers
 {
     public class ListingsManager : IListingsManager
     {
-        private ListingCreationService _listingCreationService;
-        private ListingDeletionService _listingDeletionService;
-        private ListingUpdationService _listUpdationService;
+        private IListingCreationService _listingCreationService;
+        private IListingDeletionService _listingDeletionService;
+        private IListingUpdationService _listUpdationService;
 
 
         public ListingsManager(ListingCreationService listingCreationService, ListingDeletionService listingDeletionService,
@@ -29,9 +30,18 @@ namespace TraditionalListings.Managers
 
         }
 
-        public Task<bool> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels)
+        public async Task<Result<int>> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels)
         {
-            throw new NotImplementedException();
+            var result = new Result<int>();
+            result.Success = false;
+            var listingID = await _listingCreationService.CreateListing(businessListingModels);
+            businessListingModels.UserAccountId = listingID;
+            await _listingCreationService.CreateListing(businessListingModels);
+            result.Success = true;
+            result.SuccessValue = listingID;
+            return result;
+
+
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id)
@@ -42,39 +52,29 @@ namespace TraditionalListings.Managers
             return new Tuple<bool, ResultModel<int>>(true, resultModel);
         }
 
-        public Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
+        public async Task<Tuple<bool, ErrorMessage>> UpdateCollaborationListing(BusinessCollaborationModel businessCollaborationModel)
         {
-            throw new NotImplementedException();
+            await _listUpdationService.UpdateCollaborationListing(businessCollaborationModel);
+            return new Tuple<bool, ErrorMessage>(true, ErrorMessage.None);
+
         }
 
-        public Task<bool> GetListing(int Id)
+        public async Task<Tuple<bool, ErrorMessage>> UpdateParentListing(BusinessListingModel businessListingModel)
         {
-            throw new NotImplementedException();
+            await _listUpdationService.UpdateParentListing(businessListingModel);
+            return new Tuple<bool, ErrorMessage>(true, ErrorMessage.None);
         }
 
-
-        //public async Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
-        //{
-        //    ResultModel<int> resultModel = new ResultModel<int>();
-
-        //    await _listUpdationService.UpdateListing(businessListingModel);
-
-        //    return new Tuple<bool, ResultModel<int>>(true, resultModel);
-        //}
-
-        /*public async Task<bool> GetListing(int Id)
+        public async Task<Tuple<bool, ErrorMessage>> UpdateRelationshipListing(BusinessRelationshipModel businessRelationshipModel)
         {
-            ResultModel<int> resultModel = new ResultModel<int>();
-
-            resultModel.Result=await _listingGetterService.GetListing(Id);
-
-            return new Tuple<bool, ResultModel<int>>(true, resultModel);
+            await _listUpdationService.UpdateRelationshipListing(businessRelationshipModel);
+            return new Tuple<bool, ErrorMessage>(true, ErrorMessage.None);
         }
-        */
 
-        public Task<bool> UpdateListing(BusinessListingModel businessListingModel)
+        public async Task<Tuple<bool, ErrorMessage>> UpdateTeamListing(BusinessTeamModel businessTeamModel)
         {
-            throw new NotImplementedException();
+            await _listUpdationService.UpdateTeamListing(businessTeamModel);
+            return new Tuple<bool, ErrorMessage>(true, ErrorMessage.None);
         }
     }
 }

@@ -45,9 +45,20 @@ namespace DataAccess.Repositories.ListingRepositories
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateListing(DALRelationshipModel dalRelationshipModell)
+        public async Task<int> UpdateListing(DALRelationshipModel dalRelationshipModell)
         {
-            throw new NotImplementedException();
+            var storedProcedure = "dbo.EditRelationshipAttributes";
+
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             DalRelationshipModel_RelationshipType = dalRelationshipModell.RelationshipType,
+                                             DalRelationshipModel_Age = dalRelationshipModell.Age,
+                                             DalRelationshipModel_Interests = dalRelationshipModell.Interests,
+                                             DalRelationshipModel_GenderPreference = dalRelationshipModell.GenderPreference
+
+                                         },
+                                         _connectionString.SqlConnectionString);
         }
     }
 }

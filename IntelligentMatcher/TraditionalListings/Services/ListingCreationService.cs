@@ -6,7 +6,7 @@ using Services;
 
 namespace TraditionalListings.Services
 {
-    public class ListingCreationService
+    public class ListingCreationService : IListingCreationService
     {
         private IListingRepository _listingRepository;
         private ICollaborationRepository _collaborationRepository;

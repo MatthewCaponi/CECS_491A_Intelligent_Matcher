@@ -47,9 +47,20 @@ namespace DataAccess.Repositories.ListingRepositories
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateListing(DALTeamModel dalTeamModel)
+        public async Task<int> UpdateListing(DALTeamModel dalTeamModel)
         {
-            throw new NotImplementedException();
+            var storedProcedure = "dbo.EditTeamAttributes";
+
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             DalTeamModel_TeamType = dalTeamModel.TeamType,
+                                             DalTeamModel_GameType=dalTeamModel.GameType,
+                                             DalTeamModel_Platform = dalTeamModel.Platform,
+                                             DalTeamModel_Experience = dalTeamModel.Experience,
+
+                                         },
+                                         _connectionString.SqlConnectionString);
         }
     }
 

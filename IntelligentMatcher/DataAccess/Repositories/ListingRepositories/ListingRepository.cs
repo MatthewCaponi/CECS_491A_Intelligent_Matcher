@@ -43,7 +43,7 @@ namespace DataAccess.Repositories
 
         }
 
-        public async Task<int> DeleteListing(int id)// change to DALListingModel dalListingModel 
+        public async Task<int> DeleteListing(int id) 
         {
             string storedProcedure = "dbo.DeleteListing";
 
@@ -54,25 +54,25 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
-        // combine into one update.. UpdateListing(DALListingModel dalListingModel)... multiple queries.
-        // UpdateCollaborationListing(CollaborationModel collaborationmodel) ...multiple queries
-        // ditto for the rest. 
+       
         public async Task<int> UpdateListing(DALListingModel dalListingModel)
         {
-        
-            var query = "update Listing set Title = @Title , Details = @Details  where Id= @Id";
+            var storedProcedure = "dbo.EditParentAttributes";
 
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             DalistingModel_Title = dalListingModel.Title,
+                                             DalistingModel_Details = dalListingModel.Details,
+                                             DalistingModel_City = dalListingModel.City,
+                                             DalistingModel_State = dalListingModel.State,
+                                             DalistingModel_NumberofParticipants = dalListingModel.NumberOfParticipants,
+                                             DalistingModel_InpersonOrRemote = dalListingModel.InPersonOrRemote
 
-            return await _dataGateway.Execute(query,
-                                          new
-                                          {
-                                              Title = dalListingModel.Title,
-                                              Details = dalListingModel.Details
-                                          },
-                                          _connectionString.SqlConnectionString) ; ;
-            ;
+                                         },
+                                         _connectionString.SqlConnectionString);
+            ; 
 
-           
         }
 
     }

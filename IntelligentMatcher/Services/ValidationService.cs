@@ -11,6 +11,7 @@ namespace Services
     {
         private readonly IUserAccountService _userAccountService;
         private readonly IUserProfileService _userProfileService;
+        
 
         public ValidationService(IUserAccountService userAccountService, IUserProfileService userProfileService)
         {
@@ -72,5 +73,7 @@ namespace Services
 
             return false;
         }
+
+       
     }
 }

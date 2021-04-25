@@ -9,6 +9,8 @@ namespace DataAccess.Repositories.ListingRepositories
 {
     public class DatingRepository : IDatingRepository
     {
+        private readonly IDataGateway _dataGateway;
+        private readonly IConnectionStringData _connectionString;
         public Task<int> CreateListing(DALDatingModel dalDatingModel)
         {
             throw new NotImplementedException();
@@ -19,9 +21,16 @@ namespace DataAccess.Repositories.ListingRepositories
             throw new NotImplementedException();
         }
 
-        public Task<int> UpdateListing(DALDatingModel dalDatingModel)
+        public async Task<int> UpdateListing(DALDatingModel dalDatingModel)
         {
-            throw new NotImplementedException();
+            var storedProcedure = "dbo.EditDatingAttributes";
+
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             DalDatingModel = dalDatingModel
+                                         },
+                                         _connectionString.SqlConnectionString) ;
         }
     }
 }

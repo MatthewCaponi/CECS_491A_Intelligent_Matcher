@@ -57,9 +57,19 @@ namespace DataAccess.Repositories.ListingRepositories
             return row.FirstOrDefault();
         }
 
-        public Task<int> UpdateListing(DALListingModel dalListingModel)
+        public async Task<int> UpdateListing(DALCollaborationModel dALCollaborationModel)
         {
-            throw new NotImplementedException();
+            var storedProcedure = "dbo.EditCollaborationAttributes";
+
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             DalCollaborationModel_CollaborationType = dALCollaborationModel.CollaborationType,
+                                             DalCollaborationModel_InvolvementType = dALCollaborationModel.InvolvementType,
+                                             DalCollaborationModel_Experience = dALCollaborationModel.Experience
+
+                                         },
+                                         _connectionString.SqlConnectionString) ;
         }
     }
 

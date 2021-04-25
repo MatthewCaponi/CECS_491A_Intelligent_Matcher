@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TraditionalListings.Services
 {
-    public class ListingDeletionService
+    public class ListingDeletionService : IListingDeletionService
     {
         private IListingRepository _listingRepository;
 
@@ -15,7 +15,7 @@ namespace TraditionalListings.Services
         {
             _listingRepository = listingRepository;
         }
-
+        
         public async Task<bool> DeleteListing(int id)
         {
             int returnValue = await _listingRepository.DeleteListing(id);

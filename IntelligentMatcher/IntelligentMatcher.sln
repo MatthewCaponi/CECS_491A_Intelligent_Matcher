@@ -77,17 +77,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User Access Control", "User Access Control", "{D1CFDE0D-5FBD-4143-B164-C77527F9E84F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationPolicySystem", "AuthorizationPolicySystem\AuthorizationPolicySystem.csproj", "{08567F0C-34E4-4DEE-9094-064C68D6578F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationPolicySystem", "AuthorizationPolicySystem\AuthorizationPolicySystem.csproj", "{08567F0C-34E4-4DEE-9094-064C68D6578F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServices", "IdentityServices\IdentityServices.csproj", "{2E73177C-1375-40FC-A703-1458F73A6887}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServices", "IdentityServices\IdentityServices.csproj", "{2E73177C-1375-40FC-A703-1458F73A6887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationServices", "AuthorizationServices\AuthorizationServices.csproj", "{F23C98F0-E2F9-4766-894C-2503CDBAA9C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationServices", "AuthorizationServices\AuthorizationServices.csproj", "{F23C98F0-E2F9-4766-894C-2503CDBAA9C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationAttributeSystem", "AuthorizationAttributeSystem\AuthorizationAttributeSystem.csproj", "{240A1EF9-06E9-41F1-88F9-E3CA32AF88B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationAttributeSystem", "AuthorizationAttributeSystem\AuthorizationAttributeSystem.csproj", "{240A1EF9-06E9-41F1-88F9-E3CA32AF88B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAccessControl", "UserAccessControl\UserAccessControl.csproj", "{280B529E-D3ED-43B5-8778-0ABD2AC5C346}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAccessControl", "UserAccessControl\UserAccessControl.csproj", "{280B529E-D3ED-43B5-8778-0ABD2AC5C346}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizationResolutionSystem", "AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj", "{102B2F75-66E3-4FF0-8549-1F5B8E26854B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationResolutionSystem", "AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj", "{102B2F75-66E3-4FF0-8549-1F5B8E26854B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

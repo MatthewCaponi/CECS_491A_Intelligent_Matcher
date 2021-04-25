@@ -7,6 +7,6 @@ namespace TraditionalListings.Services
     {
         Task<int> CreateListing(DALCollaborationModel dalCollaborationModel);
         Task<DALCollaborationModel> GetListing(int id);
-        Task<int> UpdateListing(DALListingModel dalListingModel);
+        Task<int> UpdateListing(DALCollaborationModel dALCollaborationModel);
     }
 }

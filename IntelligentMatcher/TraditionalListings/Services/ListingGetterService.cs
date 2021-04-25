@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace TraditionalListings.Services
 {
-    public class ListingGetterService
+    public class ListingGetterService : IListingGetterService
     {
 
         private ITraditionalListingSearchRepository _traditionalListingSearchRepository;
