@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Exceptions;
 using Models.User_Access_Control;
 using System;
 using System.Collections.Generic;
@@ -45,33 +46,47 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
 
         public async Task<int> CreateScope(ScopeModel model)
         {
-            var storedProcedure = "dbo.Scope_Create";
+            try
+            {
+                var storedProcedure = "dbo.Scope_Create";
 
-            DynamicParameters p = new DynamicParameters();
+                DynamicParameters p = new DynamicParameters();
 
-            p.Add("name", model.Name);
-            p.Add("description", model.Description);
-            p.Add("isDefault", model.IsDefault);
-            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("name", model.Name);
+                p.Add("description", model.Description);
+                p.Add("isDefault", model.IsDefault);
+                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
-            return p.Get<int>("Id");
+                return p.Get<int>("Id");
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException("Scope could not be created.", e.InnerException);
+            }    
         }
 
         public async Task<int> UpdateScope(ScopeModel model)
         {
-            var storedProcedure = "dbo.Scope_Update";
+            try
+            {
+                var storedProcedure = "dbo.Scope_Update";
 
-            return await _dataGateway.Execute(storedProcedure,
-                                         new
-                                         {
-                                             Id = model.Id,
-                                             name = model.Name,
-                                             description = model.Description,
-                                             isDefault = model.IsDefault
-                                         },
-                                         _connectionString.SqlConnectionString);
+                return await _dataGateway.Execute(storedProcedure,
+                                             new
+                                             {
+                                                 Id = model.Id,
+                                                 name = model.Name,
+                                                 description = model.Description,
+                                                 isDefault = model.IsDefault
+                                             },
+                                             _connectionString.SqlConnectionString);
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException("Scope could not be updated.", e.InnerException);
+            }
         }
 
         public async Task<int> DeleteScope(int id)
