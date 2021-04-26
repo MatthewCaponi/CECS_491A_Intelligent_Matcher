@@ -23,9 +23,6 @@ using Registration;
 using Registration.Services;
 using FriendList;
 using PublicUserProfile;
-using DataAccess.Repositories.ListingRepositories;
-using TraditionalListings;
-using TraditionalListings.Services;
 
 namespace WebApi
 {
@@ -71,9 +68,6 @@ namespace WebApi
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
 
-            //services.AddTransient<IListingCreationService, ListingCreationService>(); Could not be found
-            //services.AddTransient<IListingDeletionService, ListingDeletionService>();
-            services.AddTransient< IListingUpdationService, ListingUpdationService >();
 
 
             services.AddTransient<IMessagesRepo, MessagesRepo>();
