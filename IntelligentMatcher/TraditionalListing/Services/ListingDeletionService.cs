@@ -15,7 +15,7 @@ namespace TraditionalListings.Services
         {
             _listingRepository = listingRepository;
         }
-        
+
         public async Task<bool> DeleteListing(int id)
         {
             int returnValue = await _listingRepository.DeleteListing(id);

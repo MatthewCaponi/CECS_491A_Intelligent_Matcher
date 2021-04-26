@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TraditionalListings.Services
 {
-    public interface  IListingDeletionService
+    public interface IListingDeletionService
     {
         Task<bool> DeleteListing(int id);
     }

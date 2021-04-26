@@ -36,11 +36,11 @@ namespace TraditionalListings.Services
                 // Step 2: Access parent props of collaboration Model to the step 1 model 
                 newBusinessListingModel.Title = newBusinessCollaborationModel.Title;
                 newBusinessListingModel.Details = newBusinessCollaborationModel.Details;
-                newBusinessListingModel.City= newBusinessCollaborationModel.City;
+                newBusinessListingModel.City = newBusinessCollaborationModel.City;
                 newBusinessListingModel.State = newBusinessCollaborationModel.State;
                 newBusinessListingModel.NumberOfParticipants = newBusinessCollaborationModel.NumberOfParticipants;
                 newBusinessListingModel.InPersonOrRemote = newBusinessCollaborationModel.InPersonOrRemote;
-                newBusinessListingModel.UserAccountId= newBusinessCollaborationModel.UserAccountId;
+                newBusinessListingModel.UserAccountId = newBusinessCollaborationModel.UserAccountId;
 
 
                 DALListingModel dALListingModel = new DALListingModel();
@@ -58,10 +58,10 @@ namespace TraditionalListings.Services
 
                 return result;
             }
-          
-                
-            
-            else if(businessListingmodel is BusinessRelationshipModel)
+
+
+
+            else if (businessListingmodel is BusinessRelationshipModel)
             {
                 // Same steps as is BusinessCollaborationModel 
                 // Step 1: Create businessListingModel
@@ -96,7 +96,7 @@ namespace TraditionalListings.Services
 
 
             }
-            else if(businessListingmodel is BusinessDatingModel)
+            else if (businessListingmodel is BusinessDatingModel)
             {
                 // Create ListingModel, RelationshipModel, DatingModel 
                 // Same steps but instead of 2 models to be created, i need to create 3 
@@ -111,7 +111,7 @@ namespace TraditionalListings.Services
                 newBusinessListingModel.NumberOfParticipants = newBusinessRelationshipModel.NumberOfParticipants;
                 newBusinessListingModel.InPersonOrRemote = newBusinessRelationshipModel.InPersonOrRemote;
                 newBusinessListingModel.UserAccountId = newBusinessRelationshipModel.UserAccountId;
-                
+
 
                 DALListingModel dALListingModel = new DALListingModel();
                 DALRelationshipModel dALRelationshipModel = new DALRelationshipModel();
@@ -120,9 +120,9 @@ namespace TraditionalListings.Services
 
 
             }
-            else if(businessListingmodel is BusinessTeamModel)
+            else if (businessListingmodel is BusinessTeamModel)
             {
-                
+
                 BusinessTeamModel newBusinessTeamModel = (BusinessTeamModel)businessListingmodel;
                 BusinessListingModel newBusinessListingModel = new BusinessListingModel();
                 DALListingModel dALListingModel = new DALListingModel();
@@ -142,15 +142,14 @@ namespace TraditionalListings.Services
             }
 
             return 0;
-          
-               
+
+
         }
 
     }
-
-
-
-    
-
-
 }
+
+
+
+
+

@@ -1,6 +1,4 @@
-﻿
-using BusinessModels.ListingModels;
-using DataAccess;
+﻿using BusinessModels.ListingModels;
 using DataAccess.Repositories;
 using Models.DALListingModels;
 using Services;
@@ -55,4 +53,3 @@ namespace TraditionalListings.Services
 
     }
 }
-
