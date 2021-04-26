@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Dapper;
 using System.Data;
 
-namespace DataAccess.Repositories
+namespace DataAccess.Repositories.ListingRepositories
 {
     public class ListingRepository : IListingRepository
     {

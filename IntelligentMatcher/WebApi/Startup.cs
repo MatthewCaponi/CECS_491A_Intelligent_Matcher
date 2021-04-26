@@ -23,6 +23,9 @@ using Registration;
 using Registration.Services;
 using FriendList;
 using PublicUserProfile;
+using DataAccess.Repositories.ListingRepositories;
+using TraditionalListings;
+using TraditionalListings.Services;
 
 namespace WebApi
 {
@@ -53,10 +56,25 @@ namespace WebApi
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
 
+
+            services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<ICollaborationRepository, CollaborationRepository>();
+            services.AddTransient<IRelationshipRepository, RelationshipRepository>();
+            services.AddTransient<IDatingRepository, DatingRepository>();
+            services.AddTransient<ITeamModelRepository, TeamModelRepository>();
+
+
+
+
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
+
+            //services.AddTransient<IListingCreationService, ListingCreationService>(); Could not be found
+            //services.AddTransient<IListingDeletionService, ListingDeletionService>();
+            services.AddTransient< IListingUpdationService, ListingUpdationService >();
+
 
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();

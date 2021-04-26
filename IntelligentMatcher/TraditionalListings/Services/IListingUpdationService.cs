@@ -1,8 +1,5 @@
 ﻿using BusinessModels.ListingModels;
-using Models.DALListingModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using System.Threading.Tasks;
 
 namespace TraditionalListings.Services

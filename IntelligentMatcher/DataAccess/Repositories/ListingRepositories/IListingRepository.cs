@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Repositories
+namespace DataAccess.Repositories.ListingRepositories
 {
     public interface IListingRepository
     {

@@ -1,12 +1,10 @@
 ﻿
 using BusinessModels.ListingModels;
-using DataAccess;
 using DataAccess.Repositories;
 using Models.DALListingModels;
 using Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using DataAccess.Repositories.ListingRepositories;
+
 using System.Threading.Tasks;
 
 namespace TraditionalListings.Services
@@ -18,9 +16,12 @@ namespace TraditionalListings.Services
         private IRelationshipRepository _relationshipRepository;
         private ITeamModelRepository _teamModelRepository;
 
-        public ListingUpdationService(IListingRepository listingRepository)
+        public ListingUpdationService(IListingRepository listingRepository, ICollaborationRepository collaborationRepository, IRelationshipRepository relationshipRepository, ITeamModelRepository teamModelRepository)
         {
             _listingRepository = listingRepository;
+            _collaborationRepository = collaborationRepository;
+            _relationshipRepository = relationshipRepository;
+            _teamModelRepository = teamModelRepository;
         }
 
         public async Task<int> UpdateParentListing(BusinessListingModel businessListingModel)

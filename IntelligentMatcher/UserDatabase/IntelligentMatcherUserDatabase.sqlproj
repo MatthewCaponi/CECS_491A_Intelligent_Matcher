@@ -259,6 +259,12 @@
     <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Update.sql" />
     <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Delete_ById.sql" />
     <Build Include="StoredProcedures\TestCleaner_Delete_All.sql" />
+    <Build Include="StoredProcedures\DeleteListing.sql" />
+    <Build Include="StoredProcedures\EditCollaborationAttributes.sql" />
+    <Build Include="StoredProcedures\EditDatingAttributes.sql" />
+    <Build Include="StoredProcedures\EditParentAttributes.sql" />
+    <Build Include="StoredProcedures\EditRelationshipAttributes.sql" />
+    <Build Include="StoredProcedures\EditTeamAttributes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

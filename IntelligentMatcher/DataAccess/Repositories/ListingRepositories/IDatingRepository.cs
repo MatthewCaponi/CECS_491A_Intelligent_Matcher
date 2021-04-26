@@ -1,7 +1,7 @@
 ﻿using Models.DALListingModels;
 using System.Threading.Tasks;
 
-namespace TraditionalListings.Services
+namespace DataAccess.Repositories.ListingRepositories
 {
     public interface IDatingRepository
     {
