@@ -22,7 +22,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
 
         public async Task<IEnumerable<ScopeClaimModel>> GetAllScopeClaims()
         {
-            string storedProcedure = "dbo.Claim_Get_All";
+            string storedProcedure = "dbo.ScopeClaim_Get_All";
 
             return await _dataGateway.LoadData<ScopeClaimModel, dynamic>(storedProcedure,
                                                                           new { },

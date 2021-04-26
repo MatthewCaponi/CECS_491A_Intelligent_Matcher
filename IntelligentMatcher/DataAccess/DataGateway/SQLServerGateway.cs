@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Logging;
 using static Models.UserProfileModel;
+using Exceptions;
 
 namespace DataAccess
 {
@@ -29,9 +30,9 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                return null;
+                throw new SqlCustomException("SqlException thrown by '" + nameof(LoadData) +"' in SQLServerGateway.\n" +
+                                             "Please see the inner exception for more information.", e.InnerException);
             }
-    
         }
 
         public async Task<int> Execute<T>(string storedProcedure, T parameters, string connectionString)
@@ -47,18 +48,8 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                if (e.Message.Contains("duplicate") && e.Message.Contains("Username"))
-                {
-                    throw new Exception("Username already exists", e.InnerException);
-                }
-                else if (e.Message.Contains("duplicate") && e.Message.Contains("EmailAddress"))
-                {
-                    throw new Exception("Email already exists", e.InnerException);
-                }
-                else
-                {
-                    throw new Exception(e.Message);
-                }                                 
+                throw new SqlCustomException("SqlException thrown by '" + nameof(Execute) + "' in SQLServerGateway.\n" +
+                                             "Please see the inner exception for more information.", e.InnerException);           
             }                 
         }
     }
