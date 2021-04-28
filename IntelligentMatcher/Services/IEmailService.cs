@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using WebApi.Models;
 
 namespace Services
 {
     public interface IEmailService
     {
         Task<bool> SendEmail(EmailModel emailModel);
+
+        EmailOptionsModel GetEmailOptions();
     }
 }

@@ -13,6 +13,9 @@ using Registration.Services;
 using Security;
 using System.Timers;
 using System.Threading;
+using Microsoft.Extensions.Configuration;
+using WebApi.Models;
+using System.IO;
 
 namespace Registration
 {
@@ -30,6 +33,9 @@ namespace Registration
 
         private static System.Timers.Timer _timer;
 
+
+
+
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
             IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, IAccountVerificationRepo accountVerificationRepo, IUserAccountRepository userAccountRepository)
         {
@@ -45,6 +51,11 @@ namespace Registration
 
             _logger = factory.CreateLogService<RegistrationManager>();
         }
+
+
+
+
+    
 
         public async Task<string> GetStatusToken(int userId)
         {
@@ -171,20 +182,27 @@ namespace Registration
 
             string token = await _accountVerificationRepo.GetStatusTokenByUserId(accountId);
             string confirmUrl = "https://localhost:3000/confirm?id=" + accountId.ToString() + "?key=" + token;
+
+            EmailService emailService = new EmailService();
+
+            EmailOptionsModel emailOptionsModel = emailService.GetEmailOptions();
+
             // Create New Email Model
             var emailModel = new EmailModel();
 
+
+
             // Set the Email Model Attributes
             emailModel.Recipient = account.EmailAddress;
-            emailModel.Sender = "support@infinimuse.com";
-            emailModel.TrackOpens = true;
-            emailModel.Subject = "Welcome!";
-            emailModel.TextBody = "Welcome to InfiniMuse!";
+            emailModel.Sender = emailOptionsModel.Sender;
+            emailModel.TrackOpens = emailOptionsModel.TrackOpens;
+            emailModel.Subject = emailOptionsModel.Subject;
+            emailModel.TextBody = emailOptionsModel.TextBody;
             emailModel.HtmlBody = "Thank you for registering! " +
                 "Please confirm your account with the link: <a href='"+ confirmUrl +"'>Confirm Your Account!</a> " +
                 "<strong>Once confirmed you will have access to the features.</strong>";
-            emailModel.MessageStream = "outbound";
-            emailModel.Tag = "Welcome";
+            emailModel.MessageStream = emailOptionsModel.MessageStream;
+            emailModel.Tag = emailOptionsModel.Tag;
 
 
 
