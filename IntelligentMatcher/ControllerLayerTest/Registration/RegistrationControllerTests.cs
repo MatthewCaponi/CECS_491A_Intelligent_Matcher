@@ -5,6 +5,7 @@ using DataAccess;
 using DataAccess.Repositories;
 using DataAccessUnitTestes;
 using IntelligentMatcher.Services;
+using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Moq;
@@ -101,7 +102,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -144,7 +145,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -187,7 +188,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -230,7 +231,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -273,7 +274,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -316,7 +317,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -359,7 +360,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -400,7 +401,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var expectedResult = false;
 
@@ -430,7 +431,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -472,7 +473,7 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             var registrationModel = new RegistrationModel();
 
@@ -513,7 +514,7 @@ namespace ControllerLayerTest.Registration
                 new ConnectionStringData()));
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
-                userProfileService, validationService, cryptographyService);
+                userProfileService, validationService, cryptographyService, new LogService());
 
             RegistrationController registrationController = new RegistrationController(registrationManager);
 

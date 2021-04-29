@@ -17,7 +17,7 @@ namespace Registration
     public class RegistrationManager : IRegistrationManager
     {
 
-        ILogService _logger;
+        private readonly ILogService _logger;
         private IEmailService _emailService;
         private IUserAccountService _userAccountService;
         private IUserProfileService _userProfileService;
@@ -25,17 +25,14 @@ namespace Registration
         private readonly ICryptographyService _cryptographyService;
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
-            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService)
+            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _validationService = validationService;
             _cryptographyService = cryptographyService;
-            ILogServiceFactory factory = new LogSeviceFactory();
-            factory.AddTarget(TargetType.Text);
-
-            _logger = factory.CreateLogService<RegistrationManager>();
+            _logger = logger;
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -43,16 +40,13 @@ namespace Registration
         {
             // Create Result to determine the result and message the UI will present
             var resultModel = new Result<int>();
-            // Clarify the logging event
-            ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
-                    accountModel.Id, AccountType.User.ToString());
 
             var usernameAlreadyExists = await _validationService.UsernameExists(accountModel.Username);
 
             if (usernameAlreadyExists)
             {
                 // Log and return Username existing result
-                _logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
+                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
                 resultModel.Success = false;
                 resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 
@@ -64,7 +58,7 @@ namespace Registration
             if (emailAlreadyExists)
             {
                 // Log and return Email existing result
-                _logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
+                _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
                 resultModel.Success = false;
                 resultModel.ErrorMessage = ErrorMessage.EmailExists;
 
@@ -81,14 +75,12 @@ namespace Registration
             userModel.UserAccountId = accountID;
 
             // Create User Profile with the Passed on Account ID
-            await _userProfileService.CreateUserProfile(userModel);
+            var userProfileId = await _userProfileService.CreateUserProfile(userModel);
 
             // Re-Clarify the logging event
-            _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
-                    accountID, AccountType.User.ToString());
 
             //Log and Return result
-            _logger.LogInfo(_loggingEvent, "User Registered");
+            _logger.Log("User: " +  accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
 
@@ -97,11 +89,11 @@ namespace Registration
             //Log Email Result
             if(emailResult == true)
             {
-                _logger.LogInfo(_loggingEvent, "Email Sent");
+                _logger.Log("Verification email sent to " + accountModel.Username, LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
             }
             else
             {
-                _logger.LogInfo(_loggingEvent, "Email Not Sent");
+                _logger.Log("Verification email failed to send to " + accountModel.Username, LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
             }
 
             // First items of these tuples are immutable
