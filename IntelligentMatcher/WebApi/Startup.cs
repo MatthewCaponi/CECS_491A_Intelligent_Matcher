@@ -42,7 +42,7 @@ namespace WebApi
             services.AddCors();
 
             services.AddControllers();
-            
+            services.AddSingleton(Configuration);
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
