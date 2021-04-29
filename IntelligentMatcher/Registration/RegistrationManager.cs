@@ -47,8 +47,8 @@ namespace Registration
             {
                 // Log and return Username existing result
                 //_logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
-                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.Text, this.ToString());
-                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.Json, this.ToString());
+                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.Text, LogLevel.error, this.ToString(), "User Logging");
+                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.Json, LogLevel.error, this.ToString(), "User Logging");
                 resultModel.Success = false;
                 resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 

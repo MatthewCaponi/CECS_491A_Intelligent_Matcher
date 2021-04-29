@@ -7,22 +7,12 @@ namespace Logging
 {
     public class LogService : ILogService
     {
-        public void Log(string message, LogTarget logTarget, string caller)
+        public void Log(string message, LogTarget logTarget, LogLevel logLevel, string caller, string folder)
         {
-            Log(message, logTarget, LogLevel.info, null, caller);
+            Log(message, logTarget, logLevel, null, caller, folder);
         }
 
-        public void Log(string message, LogTarget logTarget, LogLevel logLevel, string caller)
-        {
-            Log(message, logTarget, logLevel, null, caller);
-        }
-
-        public void Log(string message, LogTarget logTarget, Exception exception, string caller)
-        {
-            Log(message, logTarget, LogLevel.info, exception, caller);
-        }
-
-        public void Log(string message, LogTarget logTarget, LogLevel logLevel, Exception exception, string caller)
+        public void Log(string message, LogTarget logTarget, LogLevel logLevel, Exception exception, string caller, string folder)
         {
             DateTime date = DateTime.UtcNow;
 
@@ -39,13 +29,13 @@ namespace Logging
                 typeValues.Add("Exception", exception.Message);
             }
 
-            WriteToTarget(typeValues, logTarget);
+            WriteToTarget(typeValues, logTarget, folder);
         }
 
-        private void WriteToTarget(IDictionary<string, string> finalMessage, LogTarget logTarget)
+        private void WriteToTarget(IDictionary<string, string> finalMessage, LogTarget logTarget, string folder)
         {
             ILogWriter logger = (ILogWriter)Activator.CreateInstance(Type.GetType($"{Type.GetType(this.ToString()).Namespace}.{logTarget}LogWriter"));
-            logger.Write(finalMessage);
+            logger.Write(finalMessage, folder);
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Logging
 {
     public class JsonLogWriter : ILogWriter
     {
-        public void Write(IDictionary<string, string> message)
+        public void Write(IDictionary<string, string> message, string folder)
         {
             // Read the file as one string. 
             string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.json";
             string currentDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
-            string jsonDirectory = $"{projectDirectory}\\logs\\json";
+            string jsonDirectory = $"{projectDirectory}\\logs\\{folder}\\json";
             string logPath = Path.Combine(jsonDirectory, fileName);
 
             Debug.WriteLine("Json Log Created At: " + jsonDirectory);

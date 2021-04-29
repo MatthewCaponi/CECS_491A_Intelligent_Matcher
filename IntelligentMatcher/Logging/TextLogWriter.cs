@@ -8,12 +8,12 @@ namespace Logging
 {
     public class TextLogWriter : ILogWriter
     {
-        public void Write(IDictionary<string, string> message)
+        public void Write(IDictionary<string, string> message, string folder)
         {
             string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
             string currentDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
-            string textDirectory = $"{projectDirectory}\\logs\\text";
+            string textDirectory = $"{projectDirectory}\\logs\\{folder}\\text";
             string logPath = Path.Combine(textDirectory, fileName);
 
             string builtMessage = "";
