@@ -20,11 +20,34 @@ namespace Registration.Services
 		//private const string API_KEY = "7e3947d6-ad88-41aa-91ae-8166ae128b21";
 		private const string API_KEY = "POSTMARK_API_TEST";
 		private IConfigurationRoot Configuration { get; set; }
+		private const int TOKEN_LENGTH = 200;
 
 		private readonly IUserAccountRepository _userAccountRepository;
 		private readonly IAccountVerificationRepo _accountVerificationRepo;
 		private readonly IUserAccountService _userAccountService;
+		private string GenerateToken()
+		{
 
+
+			// creating a StringBuilder object()
+			StringBuilder str_build = new StringBuilder();
+			Random random = new Random();
+
+			char letter;
+
+			for (int i = 0; i < TOKEN_LENGTH; i++)
+			{
+				double flt = random.NextDouble();
+				int shift = Convert.ToInt32(Math.Floor(25 * flt));
+				letter = Convert.ToChar(shift + 65);
+				str_build.Append(letter);
+			}
+
+			string token = str_build.ToString();
+
+			return token;
+
+		}
 
 		public EmailService(IUserAccountRepository userAccountRepository, IAccountVerificationRepo accountVerificationRepo, IUserAccountService userAccountService)
         {
@@ -54,6 +77,7 @@ namespace Registration.Services
 			emailOptions.TextBody = Configuration.GetSection("Email:TextBody").Value;
 			emailOptions.Tag = Configuration.GetSection("Email:Tag").Value;
 			emailOptions.TrackOpens = bool.Parse(Configuration.GetSection("Email:TrackOpens").Value);
+			emailOptions.HtmlBody = Configuration.GetSection("Email:HtmlBody").Value;
 
 
 			return emailOptions;
@@ -65,7 +89,7 @@ namespace Registration.Services
         {
             try
             {
-				await _accountVerificationRepo.CreateAccountVerification(userId);
+				await _accountVerificationRepo.CreateAccountVerification(userId, GenerateToken());
 				return true;
             }
             catch
@@ -102,7 +126,7 @@ namespace Registration.Services
 
 
 				await _userAccountRepository.UpdateAccountStatus(userId, "Active");
-				await _accountVerificationRepo.UpdateAccountStatusToken(userId);
+				await _accountVerificationRepo.UpdateAccountStatusToken(userId, GenerateToken());
 				return true;
 			}
 			else

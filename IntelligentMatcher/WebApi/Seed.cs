@@ -14,6 +14,8 @@ using Security;
 using FriendList;
 using PublicUserProfile;
 using TestHelper;
+using Registration.Services;
+using IntelligentMatcher.Services;
 
 namespace WebApi
 {
@@ -91,6 +93,10 @@ namespace WebApi
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             for (int i = 1; i < seedAmount; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();
@@ -135,7 +141,7 @@ namespace WebApi
                 publicUserProfileModel.Height = "This is how tall I am";
                 await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
-                await accountVerificationRepo.CreateAccountVerification(publicUserProfileModel.UserId);
+                await emailService.CreateVerificationToken(publicUserProfileModel.UserId);
 
 
             }

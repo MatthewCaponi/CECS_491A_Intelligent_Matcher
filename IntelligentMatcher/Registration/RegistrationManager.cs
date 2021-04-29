@@ -161,9 +161,7 @@ namespace Registration
             emailModel.TrackOpens = emailOptionsModel.TrackOpens;
             emailModel.Subject = emailOptionsModel.Subject;
             emailModel.TextBody = emailOptionsModel.TextBody;
-            emailModel.HtmlBody = "Thank you for registering! " +
-                "Please confirm your account with the link: <a href='"+ confirmUrl +"'>Confirm Your Account!</a> " +
-                "<strong>Once confirmed you will have access to the features.</strong>";
+            emailModel.HtmlBody = string.Format(emailOptionsModel.HtmlBody, confirmUrl);
             emailModel.MessageStream = emailOptionsModel.MessageStream;
             emailModel.Tag = emailOptionsModel.Tag;
 

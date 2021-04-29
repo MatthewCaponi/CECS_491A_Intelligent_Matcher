@@ -20,5 +20,7 @@ namespace WebApi.Models
 
         public string Tag { get; set; }
 
+        public string HtmlBody { get; set; }
+
     }
 }

@@ -11,31 +11,8 @@ namespace DataAccess.Repositories
 {
     public class AccountVerificationRepo : IAccountVerificationRepo
     {
-        private const int TOKEN_LENGTH = 200;
-
-        private string GenerateToken()
-        {
 
 
-            // creating a StringBuilder object()
-            StringBuilder str_build = new StringBuilder();
-            Random random = new Random();
-
-            char letter;
-
-            for (int i = 0; i < TOKEN_LENGTH; i++)
-            {
-                double flt = random.NextDouble();
-                int shift = Convert.ToInt32(Math.Floor(25 * flt));
-                letter = Convert.ToChar(shift + 65);
-                str_build.Append(letter);
-            }
-
-            string token = str_build.ToString();
-
-            return token;
-
-        }
 
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
@@ -45,13 +22,13 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
-        public async Task<int> CreateAccountVerification(int userId)
+        public async Task<int> CreateAccountVerification(int userId, string token)
         {
             var storedProcedure = "dbo.AccountVerification_Create";
 
             DynamicParameters p = new DynamicParameters();
 
-            p.Add("Token", GenerateToken());
+            p.Add("Token", token);
             p.Add("UserId", userId);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
@@ -75,14 +52,14 @@ namespace DataAccess.Repositories
             return row.FirstOrDefault();
         }
 
-        public async Task<int> UpdateAccountStatusToken(int userId)
+        public async Task<int> UpdateAccountStatusToken(int userId, string token)
         {
             var storedProcedure = "dbo.AccountVerification_Update_AccountStatusToken";
 
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             Token = GenerateToken(),
+                                             Token = token,
                                              UserId = userId
                                          },
                                          _connectionString.SqlConnectionString);

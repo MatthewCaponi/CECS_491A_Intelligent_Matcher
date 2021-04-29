@@ -11,9 +11,9 @@ namespace DataAccess.Repositories
 
         Task<string> GetStatusTokenByUserId(int userId);
 
-        Task<int> UpdateAccountStatusToken(int userId);
+        Task<int> UpdateAccountStatusToken(int userId, string token);
 
-        Task<int> CreateAccountVerification(int userId);
+        Task<int> CreateAccountVerification(int userId, string token);
 
         Task<int> DeleteAccountVerificationById(int id);
         

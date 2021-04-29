@@ -38,6 +38,10 @@ namespace BusinessLayerUnitTests.Registration
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(dataGateway, connectionString);
 
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             for (int i = 1; i <= numTestRows; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();
@@ -52,7 +56,7 @@ namespace BusinessLayerUnitTests.Registration
                 userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
                 await userAccountRepository.CreateAccount(userAccountModel);
 
-                await accountVerificationRepo.CreateAccountVerification(1);
+                await emailService.CreateVerificationToken(i);
 
                 UserProfileModel userProfileModel = new UserProfileModel();
                 userProfileModel.Id = i;
