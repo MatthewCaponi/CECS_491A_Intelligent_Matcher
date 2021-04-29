@@ -37,7 +37,6 @@ namespace Logging
         {
             if (logTarget == LogTarget.All)
             {
-                
                 var type = typeof(ILogWriter);
                 foreach (var writer in GetLogWriterTypes(type))
                 {
