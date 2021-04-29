@@ -141,7 +141,7 @@ namespace Registration
             var account = await _userAccountService.GetUserAccount(accountId);
 
             string token = await _emailService.GetStatusToken(accountId);
-            string confirmUrl = "https://localhost:3000/ConfirmAccount?id=" + accountId.ToString() + "?key=" + token;
+            string confirmUrl = "http://localhost:3000/ConfirmAccount?id=" + accountId.ToString() + "?key=" + token;
 
 
 
@@ -151,40 +151,49 @@ namespace Registration
             var emailModel = new EmailModel();
 
 
-
-            // Set the Email Model Attributes
-            emailModel.Recipient = account.EmailAddress;
-            emailModel.Sender = emailOptionsModel.Sender;
-            emailModel.TrackOpens = emailOptionsModel.TrackOpens;
-            emailModel.Subject = emailOptionsModel.Subject;
-            emailModel.TextBody = emailOptionsModel.TextBody;
-            emailModel.HtmlBody = string.Format(emailOptionsModel.HtmlBody, confirmUrl);
-            emailModel.MessageStream = emailOptionsModel.MessageStream;
-            emailModel.Tag = emailOptionsModel.Tag;
-
-
-
-
-
-
-
-            //Send Verification Email
-            var result = await _emailService.SendEmail(emailModel);
-
-
-
-
-
-            //create auto expiration service 
-            //run function below 
-
-            new Thread(() =>
+            if(emailOptionsModel != null)
             {
-                Thread.CurrentThread.IsBackground = true;
-                _timer = new System.Timers.Timer(10800000);
-                _timer.Elapsed += async (sender, e) => await _emailService.DeleteIfNotActive(accountId);
+                // Set the Email Model Attributes
+                emailModel.Recipient = account.EmailAddress;
+                emailModel.Sender = emailOptionsModel.Sender;
+                emailModel.TrackOpens = emailOptionsModel.TrackOpens;
+                emailModel.Subject = emailOptionsModel.Subject;
+                emailModel.TextBody = emailOptionsModel.TextBody;
+                emailModel.HtmlBody = string.Format(emailOptionsModel.HtmlBody, confirmUrl);
+                emailModel.MessageStream = emailOptionsModel.MessageStream;
+                emailModel.Tag = emailOptionsModel.Tag;
 
-            }).Start();
+
+
+
+
+
+
+                //Send Verification Email
+                var result = await _emailService.SendEmail(emailModel);
+
+
+
+
+
+                //create auto expiration service 
+                //run function below 
+
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    _timer = new System.Timers.Timer(10800000);
+                    _timer.Elapsed += async (sender, e) => await _emailService.DeleteIfNotActive(accountId);
+
+                }).Start();
+                return result;
+
+            }
+            else
+            {
+                return false;
+            }
+
 
 
 
@@ -194,7 +203,6 @@ namespace Registration
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
 
-            return result;
         }
     }
 }

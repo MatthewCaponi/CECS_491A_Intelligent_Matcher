@@ -11,6 +11,7 @@ using UserManagement.Models;
 using UserManagement;
 using IntelligentMatcher.Services;
 using Services;
+using Registration.Services;
 
 namespace WebApi.Controllers
 {
@@ -39,6 +40,9 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<bool> ConfirmUser([FromBody] TokenIdModel tokenIds)
         {
+
+
+
             return await _emailService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
         }
 

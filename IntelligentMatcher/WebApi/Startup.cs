@@ -42,7 +42,7 @@ namespace WebApi
             services.AddCors();
 
             services.AddControllers();
-
+            services.AddSingleton(Configuration);
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
@@ -52,21 +52,17 @@ namespace WebApi
             services.AddTransient<IFriendListRepo, FriendListRepo>();
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
-            services.AddTransient<IUserReportsRepo, UserReportsRepo>();
-            services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
-
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
+
+            services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
 
-            services.AddTransient<IUserReportsRepo, UserReportsRepo>();
-
-
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
-            services.AddSingleton(Configuration);
+
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
@@ -77,17 +73,12 @@ namespace WebApi
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
 
-            services.AddTransient<IUserInteractionService, UserInteractionService>();
-
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
-
-
-
 
 
         }

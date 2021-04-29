@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using DataAccessUnitTestes;
 using IntelligentMatcher.Services;
 using Login;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Registration.Services;
@@ -123,10 +124,24 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+
+           IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -163,17 +178,32 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
-            (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
-            (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                (new SQLServerGateway(), new ConnectionStringData()))); ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
-                (new SQLServerGateway(), new ConnectionStringData()));
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountCodeService userAccountCodeService = new UserAccountCodeService(new UserAccountCodeRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+
+            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository(new SQLServerGateway(), new ConnectionStringData()));
+
 
             var expectedResult = new Result<WebUserAccountModel>();
             expectedResult.Success = false;
@@ -206,10 +236,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
-            (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
-            (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                (new SQLServerGateway(), new ConnectionStringData())));
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -251,10 +294,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -293,10 +349,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -335,10 +404,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -379,10 +461,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -424,10 +519,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -466,10 +574,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -508,10 +629,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -553,10 +687,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), 
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -593,10 +740,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -635,10 +795,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -687,10 +860,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
-            (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
-            (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                (new SQLServerGateway(), new ConnectionStringData()))); 
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -728,10 +914,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -769,10 +968,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -812,10 +1024,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -864,10 +1089,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -906,10 +1144,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -948,10 +1199,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -993,10 +1257,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -1050,10 +1327,23 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository

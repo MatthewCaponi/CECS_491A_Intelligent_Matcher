@@ -2,6 +2,7 @@
 using DataAccess;
 using DataAccess.Repositories;
 using IntelligentMatcher.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Registration.Services;
 using System;
@@ -34,10 +35,23 @@ namespace BusinessLayerUnitTests.Services
             emailModel.MessageStream = messageStream;
             emailModel.Tag = tag;
 
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             //Act
             var actualResult = await emailService.SendEmail(emailModel);
             //Asset
@@ -63,10 +77,23 @@ namespace BusinessLayerUnitTests.Services
             emailModel.MessageStream = messageStream;
             emailModel.Tag = tag;
 
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             //Act
             var actualResult = await emailService.SendEmail(emailModel);
             //Asset
@@ -94,10 +121,23 @@ namespace BusinessLayerUnitTests.Services
             emailModel.MessageStream = messageStream;
             emailModel.Tag = tag;
 
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             //Act
             var timer = Stopwatch.StartNew();
             await emailService.SendEmail(emailModel);

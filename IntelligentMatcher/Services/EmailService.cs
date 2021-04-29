@@ -28,7 +28,7 @@ namespace Registration.Services
 
 		
 
-		public EmailService(IUserAccountRepository userAccountRepository, IAccountVerificationRepo accountVerificationRepo, IUserAccountService userAccountService, IConfiguration onfiguration)
+		public EmailService(IUserAccountRepository userAccountRepository, IAccountVerificationRepo accountVerificationRepo, IUserAccountService userAccountService, IConfiguration configuration)
         {
 			_userAccountRepository = userAccountRepository;
 			_accountVerificationRepo = accountVerificationRepo;
@@ -69,13 +69,13 @@ namespace Registration.Services
 
 			EmailOptionsModel emailOptions = new EmailOptionsModel();
 
-			emailOptions.Sender = _configuration.GetSection("Email:Sender").Value;
-			emailOptions.MessageStream = _configuration.GetSection("Email:MessageStream").Value;
-			emailOptions.Subject = _configuration.GetSection("Email:Subject").Value;
-			emailOptions.TextBody = _configuration.GetSection("Email:TextBody").Value;
-			emailOptions.Tag = _configuration.GetSection("Email:Tag").Value;
-			emailOptions.TrackOpens = bool.Parse(_configuration.GetSection("Email:TrackOpens").Value);
-			emailOptions.HtmlBody = _configuration.GetSection("Email:HtmlBody").Value;
+			emailOptions.Sender = _configuration.GetSection("Sender").Value;
+			emailOptions.MessageStream = _configuration.GetSection("MessageStream").Value;
+			emailOptions.Subject = _configuration.GetSection("Subject").Value;
+			emailOptions.TextBody = _configuration.GetSection("TextBody").Value;
+			emailOptions.Tag = _configuration.GetSection("Tag").Value;
+			emailOptions.TrackOpens = bool.Parse(_configuration.GetSection("TrackOpens").Value);
+			emailOptions.HtmlBody = _configuration.GetSection("HtmlBody").Value;
 
 
 			return emailOptions;
