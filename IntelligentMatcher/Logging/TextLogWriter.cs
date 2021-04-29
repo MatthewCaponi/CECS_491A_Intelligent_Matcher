@@ -6,19 +6,21 @@ using System.Text;
 
 namespace Logging
 {
-    public class TextLogTarget : ILogTarget
+    public class TextLogWriter : ILogWriter
     {
-        public TextLogTarget()
-        {
-
-        }
-        public void LogToTarget(string message, EventName eventName)
+        public void Write(IDictionary<string, string> message)
         {
             // Read the file as one string. 
-            string fileName = $"{eventName}{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
-            string directory = $"C:\\Users\\{ Environment.UserName}\\logs\\{ eventName.ToString()}";
+            string fileName = $"Text-{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
+            string directory = $"C:\\Users\\{ Environment.UserName}\\logs\\Text";
             string logPath = Path.Combine(directory, fileName);
 
+            string builtMessage = "";
+
+            foreach(var value in message)
+            {
+                builtMessage += value + " ";
+            }
             //create the log directory under the user profile if it does not exist
             if (!Directory.Exists(directory))
             {
@@ -31,7 +33,7 @@ namespace Logging
             {
                 using (StreamWriter writer = File.CreateText(logPath))
                 {
-                    writer.WriteLine(message);
+                    writer.WriteLine(builtMessage);
                 }
             }
             //if file exists just write to the log file
@@ -39,7 +41,7 @@ namespace Logging
             {
                 using (StreamWriter writer = File.AppendText(logPath))
                 {
-                    writer.WriteLine(message);
+                    writer.WriteLine(builtMessage);
                 }
             }
         }

@@ -32,10 +32,7 @@ namespace Registration
             _userProfileService = userProfileService;
             _validationService = validationService;
             _cryptographyService = cryptographyService;
-            ILogServiceFactory factory = new LogSeviceFactory();
-            factory.AddTarget(TargetType.Text);
 
-            _logger = factory.CreateLogService<RegistrationManager>();
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -43,16 +40,13 @@ namespace Registration
         {
             // Create Result to determine the result and message the UI will present
             var resultModel = new Result<int>();
-            // Clarify the logging event
-            ILoggingEvent _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
-                    accountModel.Id, AccountType.User.ToString());
 
             var usernameAlreadyExists = await _validationService.UsernameExists(accountModel.Username);
 
             if (usernameAlreadyExists)
             {
                 // Log and return Username existing result
-                _logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
+                //_logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
                 resultModel.Success = false;
                 resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 
@@ -64,7 +58,7 @@ namespace Registration
             if (emailAlreadyExists)
             {
                 // Log and return Email existing result
-                _logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
+                //_logger.LogInfo(_loggingEvent, ErrorMessage.EmailExists.ToString());
                 resultModel.Success = false;
                 resultModel.ErrorMessage = ErrorMessage.EmailExists;
 
@@ -84,11 +78,9 @@ namespace Registration
             await _userProfileService.CreateUserProfile(userModel);
 
             // Re-Clarify the logging event
-            _loggingEvent = new UserLoggingEvent(EventName.UserEvent, ipAddress,
-                    accountID, AccountType.User.ToString());
 
             //Log and Return result
-            _logger.LogInfo(_loggingEvent, "User Registered");
+            //_logger.LogInfo(_loggingEvent, "User Registered");
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
 
@@ -97,11 +89,11 @@ namespace Registration
             //Log Email Result
             if(emailResult == true)
             {
-                _logger.LogInfo(_loggingEvent, "Email Sent");
+                //_logger.LogInfo(_loggingEvent, "Email Sent");
             }
             else
             {
-                _logger.LogInfo(_loggingEvent, "Email Not Sent");
+                //_logger.LogInfo(_loggingEvent, "Email Not Sent");
             }
 
             // First items of these tuples are immutable

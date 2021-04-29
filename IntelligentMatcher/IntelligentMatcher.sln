@@ -34,6 +34,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessUnitTestes", "DataAccessUnitTestes\DataAccessUnitTestes.csproj", "{B07072F3-D66B-42C5-9883-9EB1C90D4FF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayerUnitTests", "BusinessLayerUnitTests\BusinessLayerUnitTests.csproj", "{A0DAAA98-0246-4763-9236-115307F5642C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DE0652BC-24CC-4C6C-9714-0C5A98853C91} = {DE0652BC-24CC-4C6C-9714-0C5A98853C91}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{E9EDCAD2-EA48-412C-83E5-587CE431B806}"
 EndProject
@@ -89,7 +92,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAccessControl", "UserAc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationResolutionSystem", "AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj", "{102B2F75-66E3-4FF0-8549-1F5B8E26854B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exceptions", "Exceptions\Exceptions.csproj", "{1FA40F8A-0D62-4A39-B4F6-09BB0D990663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exceptions", "Exceptions\Exceptions.csproj", "{1FA40F8A-0D62-4A39-B4F6-09BB0D990663}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
