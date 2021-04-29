@@ -18,7 +18,7 @@ import UserAccountSettings from "./Features/CoreFeatures/UserAccountSettings/Pag
 import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 import UserProfile from "./Features/CoreFeatures/UserProfile/Pages/UserProfile";
 import StatusToggle from "./Features/CoreFeatures/UserProfile/Pages/StatusToggle";
-import Confirm from "./Features/CoreFeatures/Registration/Pages/Confirm";
+import ConfirmAccount from "./Features/CoreFeatures/Registration/Pages/ConfirmAccount";
 
 import { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -82,8 +82,8 @@ function App() {
             <UserProfile />
           </Route>
 
-          <Route path="/confirm">
-            <Confirm />
+          <Route path="/ConfirmAccount">
+            <ConfirmAccount />
           </Route>
           <Route path="/">
             <Home />

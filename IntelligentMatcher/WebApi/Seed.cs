@@ -65,7 +65,16 @@ namespace WebApi
                 await channelsRepo.DeleteChannelbyIdAsync(channel.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
+
+            IAccountVerificationRepo accountVerification = new AccountVerificationRepo(dataGateway, connectionString);
+            var verfications = await accountVerification.GetAllAccountVerifications();
+
+            foreach (var verfication in verfications)
+            {
+                await accountVerification.DeleteAccountVerificationById(verfication.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("AccountVerification", 0, connectionString, dataGateway);
 
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
             var publicProfiles = await publicUserProfileRepo.GetAllPublicProfiles();
@@ -93,10 +102,23 @@ namespace WebApi
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
+
+
+
+
+
+
+
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
                  (new SQLServerGateway(), new ConnectionStringData())));
+
+
+
+
+
+
             for (int i = 1; i < seedAmount; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();

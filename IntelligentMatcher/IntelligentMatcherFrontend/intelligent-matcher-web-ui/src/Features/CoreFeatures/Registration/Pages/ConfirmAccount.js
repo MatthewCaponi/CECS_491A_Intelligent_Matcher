@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import '../.././../../App'
+import '../../../../App'
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { Redirect } from 'react-router'
 
 import './Registration.css';
 
-export class Confirm extends Component {
-    static displayName = Confirm.name;
+export class ConfirmAccount extends Component {
+    static displayName = ConfirmAccount.name;
   
     constructor(props) {
   
@@ -82,4 +82,4 @@ export class Confirm extends Component {
   );
   }
 }
-export default Confirm;
+export default ConfirmAccount;
