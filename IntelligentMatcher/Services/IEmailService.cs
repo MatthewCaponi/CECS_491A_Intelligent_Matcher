@@ -11,11 +11,10 @@ namespace Services
     {
         Task<bool> SendEmail(EmailModel emailModel);
 
-        EmailOptionsModel GetEmailOptions();
+        EmailModel GetEmailOptions();
 
         Task<string> GetStatusToken(int userId);
 
-        Task DeleteIfNotActive(int userId);
 
         Task<bool> CreateVerificationToken(int userId);
 

@@ -145,23 +145,17 @@ namespace Registration
 
 
 
-            EmailOptionsModel emailOptionsModel =  _emailService.GetEmailOptions();
+            EmailModel emailModel =  _emailService.GetEmailOptions();
 
             // Create New Email Model
-            var emailModel = new EmailModel();
 
 
-            if(emailOptionsModel != null)
+            if (emailModel != null)
             {
                 // Set the Email Model Attributes
                 emailModel.Recipient = account.EmailAddress;
-                emailModel.Sender = emailOptionsModel.Sender;
-                emailModel.TrackOpens = emailOptionsModel.TrackOpens;
-                emailModel.Subject = emailOptionsModel.Subject;
-                emailModel.TextBody = emailOptionsModel.TextBody;
-                emailModel.HtmlBody = string.Format(emailOptionsModel.HtmlBody, confirmUrl);
-                emailModel.MessageStream = emailOptionsModel.MessageStream;
-                emailModel.Tag = emailOptionsModel.Tag;
+                emailModel.HtmlBody = string.Format(emailModel.HtmlBody, confirmUrl);
+
 
 
 
@@ -183,7 +177,7 @@ namespace Registration
                 {
                     Thread.CurrentThread.IsBackground = true;
                     _timer = new System.Timers.Timer(10800000);
-                    _timer.Elapsed += async (sender, e) => await _emailService.DeleteIfNotActive(accountId);
+                    _timer.Elapsed += async (sender, e) => await DeleteIfNotActive(accountId);
 
                 }).Start();
                 return result;
@@ -194,14 +188,19 @@ namespace Registration
                 return false;
             }
 
-
-
-
-
-
-
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
+
+        }
+
+        public async Task DeleteIfNotActive(int userId)
+        {
+            WebUserAccountModel model = await _userAccountService.GetUserAccount(userId);
+
+            if (model.AccountStatus != "Active")
+            {
+                await _userAccountService.DeleteAccount(userId);
+            }
 
         }
     }

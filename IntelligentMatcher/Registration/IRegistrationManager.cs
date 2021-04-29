@@ -13,5 +13,7 @@ namespace Registration
             WebUserProfileModel usermodel, string password, string ipAddress);
         Task<bool> SendVerificationEmail(int accountId);
 
+        Task DeleteIfNotActive(int userId);
+
     }
 }

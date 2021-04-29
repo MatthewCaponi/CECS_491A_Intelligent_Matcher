@@ -63,11 +63,11 @@ namespace Registration.Services
 		}
 
 
-		public EmailOptionsModel GetEmailOptions()
+		public EmailModel GetEmailOptions()
 		{
 
 
-			EmailOptionsModel emailOptions = new EmailOptionsModel();
+			EmailModel emailOptions = new EmailModel();
 
 			emailOptions.Sender = _configuration.GetSection("Sender").Value;
 			emailOptions.MessageStream = _configuration.GetSection("MessageStream").Value;
@@ -102,16 +102,7 @@ namespace Registration.Services
 			return await _accountVerificationRepo.GetStatusTokenByUserId(userId);
 		}
 
-		public async Task DeleteIfNotActive(int userId)
-		{
-			string status = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
 
-			if (status != "Active")
-			{
-				await _userAccountService.DeleteAccount(userId);
-			}
-
-		}
 
 		public async Task<bool> ValidateStatusToken(int userId, string token)
 		{
