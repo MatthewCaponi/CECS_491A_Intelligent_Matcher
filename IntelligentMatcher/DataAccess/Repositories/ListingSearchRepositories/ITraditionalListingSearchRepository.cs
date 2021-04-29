@@ -12,14 +12,10 @@ namespace DataAccess.Repositories
         Task<IEnumerable<DALCollaborationModel>> GetAllCollaborationListings();
         Task<IEnumerable<DALRelationshipModel>> GetAllRelationshipListings();
         Task<IEnumerable<DALRelationshipModel>> GetAllTeamListings();
+        Task<IEnumerable<DALDatingModel>> GetAllDatingListings();
 
 
 
-
-        // gold plating??? not in the brd stuff 
-
-        Task<IEnumerable<DALListingModel>> SortListingbyCity();
-        Task<IEnumerable<DALListingModel>> SortListingbyState();
         
 
     }

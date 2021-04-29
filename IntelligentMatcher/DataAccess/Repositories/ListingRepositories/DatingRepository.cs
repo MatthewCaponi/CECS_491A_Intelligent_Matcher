@@ -48,7 +48,8 @@ namespace DataAccess.Repositories.ListingRepositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             DalDatingModel = dalDatingModel
+                                             DalDatingModel_SexualOrientationPreference = dalDatingModel.SexualOrientationPreference,
+                                             DalDatingModel_LookingFor = dalDatingModel.LookingFor
                                          },
                                          _connectionString.SqlConnectionString) ;
         }

@@ -54,24 +54,12 @@ namespace DataAccess.Repositories
                                                                               _connectionString.SqlConnectionString);
         }
 
-
-        // Gold plating... sorting thats not in the brd....... //Comment out or delete if you run out of time.
-        public async Task<IEnumerable<DALListingModel>> SortListingbyCity()
+        public async Task<IEnumerable<DALDatingModel>> GetAllDatingListings()
         {
-            var query = "Select * from Listing ORDER BY [City] ASC";
-            return await _dataGateway.LoadData<DALListingModel, dynamic>(query,
-                                                                         new { },
-                                                                         _connectionString.SqlConnectionString);
+            string storedProcedure = "dbo.ListingSearch_GetAllTeamListing";
+            return await _dataGateway.LoadData<DALDatingModel, dynamic>(storedProcedure,
+                                                                              new { },
+                                                                              _connectionString.SqlConnectionString);
         }
-
-        public async Task<IEnumerable<DALListingModel>> SortListingbyState()
-        {
-            var query = "Select * from Listing ORDER BY [State] ASC";
-            return await _dataGateway.LoadData<DALListingModel, dynamic>(query,
-                                                                         new { },
-                                                                         _connectionString.SqlConnectionString);
-        }
-
-       
     }
 }

@@ -14,5 +14,7 @@ namespace TraditionalListings.Services
         Task<int> UpdateRelationshipListing(BusinessRelationshipModel businessrelationshipModel);
         Task<int> UpdateTeamListing(BusinessTeamModel businessTeamModel);
 
+        Task<int> UpdateDatingListing(BusinessDatingModel businessDatingModel);
+
     }
 }

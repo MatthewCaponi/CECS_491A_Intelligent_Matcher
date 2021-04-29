@@ -12,6 +12,7 @@ namespace TraditionalListings.Services
         Task<List<BusinessCollaborationModel>> GetAllCollaborationListing();
         Task<List<BusinessRelationshipModel>> GetAllRelationshipListing();
         Task<List<BusinessTeamModel>> GetAllTeamModelListing();
+        Task<List<BusinessDatingModel>> GetAllDatingListing();
 
     }
 }

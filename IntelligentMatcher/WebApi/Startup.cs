@@ -66,7 +66,7 @@ namespace WebApi
             services.AddTransient<IListingDeletionService, ListingDeletionService>();
             services.AddTransient<IListingUpdationService, ListingUpdationService>();
 
-            services.AddScoped<IListingsManager, ListingsManager>();
+           
 
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
@@ -94,6 +94,8 @@ namespace WebApi
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
+
+            services.AddScoped<IListingsManager, ListingsManager>();
 
 
         }

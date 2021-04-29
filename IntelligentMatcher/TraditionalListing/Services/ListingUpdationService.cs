@@ -57,6 +57,10 @@ namespace TraditionalListings.Services
 
         }
 
-
+        public async Task<int> UpdateDatingListing(BusinessDatingModel businessDatingModel)
+        {
+            var dalDatingModel = ModelConverterService.ConvertTo(businessDatingModel, new DALDatingModel());
+            return await _datingRepository.UpdateListing(dalDatingModel); 
+        }
     }
 }

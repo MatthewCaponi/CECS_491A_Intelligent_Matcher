@@ -78,9 +78,9 @@ namespace TraditionalListings.Services
             return businessListings;
         }
 
-
-
-
-
+        public Task<List<BusinessDatingModel>> GetAllDatingListing()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
