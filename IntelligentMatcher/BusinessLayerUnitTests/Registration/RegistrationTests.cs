@@ -18,6 +18,7 @@ using BusinessModels;
 using Security;
 using System.Diagnostics;
 using TestHelper;
+using Microsoft.Extensions.Configuration;
 using Logging;
 
 namespace BusinessLayerUnitTests.Registration
@@ -37,7 +38,25 @@ namespace BusinessLayerUnitTests.Registration
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(dataGateway, connectionString);
 
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             for (int i = 1; i <= numTestRows; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();
@@ -51,6 +70,8 @@ namespace BusinessLayerUnitTests.Registration
                 userAccountModel.CreationDate = DateTimeOffset.UtcNow;
                 userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
                 await userAccountRepository.CreateAccount(userAccountModel);
+
+                await emailService.CreateVerificationToken(i);
 
                 UserProfileModel userProfileModel = new UserProfileModel();
                 userProfileModel.Id = i;
@@ -76,8 +97,18 @@ namespace BusinessLayerUnitTests.Registration
             {
                 await userAccountRepository.DeleteAccountById(account.Id);
             }
+
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(dataGateway, connectionString);
+            IEnumerable< VerficationTokenModel>  verficationTokens = await accountVerificationRepo.GetAllAccountVerifications();
+
+            foreach (VerficationTokenModel token in verficationTokens)
+            {
+                await accountVerificationRepo.DeleteAccountVerificationById(token.Id);
+            }
             await DataAccessTestHelper.ReseedAsync("UserAccount", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("UserProfile", 0, connectionString, dataGateway);
+            await DataAccessTestHelper.ReseedAsync("AccountVerification", 0, connectionString, dataGateway);
+
         }
         #endregion
 
@@ -113,13 +144,14 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             mockValidationService.Setup(x => x.UsernameExists(username)).Returns(Task.FromResult(true));
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
-
-            IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
+            IRegistrationManager registrationManager = new  RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object, mockLogService.Object);
 
@@ -169,6 +201,8 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
 
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object, mockLogService.Object);
@@ -221,6 +255,8 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = true;
             expectedResult.SuccessValue = expectedId;
 
+            Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
+            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object, mockLogService.Object);
@@ -269,6 +305,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<ILogService> mockLogService = new Mock<ILogService>();
             var expectedResult = false;
 
+
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
                 mockCryptographyService.Object, mockLogService.Object);
@@ -291,7 +328,23 @@ namespace BusinessLayerUnitTests.Registration
             string firstName, string lastName, string ipAddress, ErrorMessage error)
         {
             //Arrange
-            EmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -321,6 +374,8 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.ErrorMessage = error;
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
 
@@ -342,11 +397,32 @@ namespace BusinessLayerUnitTests.Registration
             string firstName, string lastName, string ipAddress, ErrorMessage error)
         {
             //Arrange
-            EmailService emailService = new EmailService();
-            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new SQLServerGateway(), new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
+
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+      (new SQLServerGateway(), new ConnectionStringData()));
+
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+
+
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
 
@@ -377,6 +453,10 @@ namespace BusinessLayerUnitTests.Registration
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
                 password, ipAddress);
 
+
+            expectedResult.ErrorMessage = error;
+
+
             //Assert
             Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
                 (actualResult.ErrorMessage == expectedResult.ErrorMessage));
@@ -390,10 +470,28 @@ namespace BusinessLayerUnitTests.Registration
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate,
             string firstName, string lastName, string ipAddress)
         {
-            //Arrange
-            EmailService emailService = new EmailService();
+
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new SQLServerGateway(), new ConnectionStringData()));
+            (new SQLServerGateway(), new ConnectionStringData()));
+            //Arrange
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
@@ -419,6 +517,9 @@ namespace BusinessLayerUnitTests.Registration
             expectedResult.Success = true;
             expectedResult.SuccessValue = expectedId;
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
@@ -440,11 +541,28 @@ namespace BusinessLayerUnitTests.Registration
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate)
         {
             //Arrange
-            EmailService emailService = new EmailService();
-            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
-                (new SQLServerGateway(), new ConnectionStringData()));
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
+            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+(new SQLServerGateway(), new ConnectionStringData()));
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
 
@@ -462,7 +580,11 @@ namespace BusinessLayerUnitTests.Registration
             var expectedResult = true;
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
+
                 userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
 
             //Act
@@ -479,7 +601,23 @@ namespace BusinessLayerUnitTests.Registration
             string emailAddress, string accountType, string accountStatus, string creationDate, string updationDate)
         {
             //Arrange
-            EmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -513,6 +651,80 @@ namespace BusinessLayerUnitTests.Registration
         }
         #endregion
 
+
+
+
+
+
+        #region Integration Tests DeleteIfNotActive
+        [DataTestMethod]
+        [DataRow(1)]
+        public async Task ValidateToken_TokenValidataetd_TokenSuccess(int userId)
+        {
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+            UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
+                (new SQLServerGateway(), new ConnectionStringData()));
+            ValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
+
+
+
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+            RegistrationManager registrationManager = new RegistrationManager(emailService,
+                userAccountService, userProfileService, validationService, cryptographyService);
+
+            try
+            {
+
+                string token = await emailService.GetStatusToken(userId);
+                bool result = await emailService.ValidateStatusToken(userId, token);
+                if(result == true)
+                {
+                    string status = await userAccountRepository.GetStatusById(userId);
+                    if(status == "Active")
+                    {
+                        Assert.IsTrue(true);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(false);
+
+                    }
+                }
+                else
+                {
+                    Assert.IsTrue(false);
+                }
+
+            }
+            catch
+            {
+                Assert.IsTrue(true);
+
+            }
+        }
+        #endregion
+
         #region Non-Functional Tests
         [DataTestMethod]
         [DataRow(11, "TestUser11", "TestPassword11", "matt@infinimuse.com", "TestAccountType11",
@@ -523,7 +735,23 @@ namespace BusinessLayerUnitTests.Registration
             string firstName, string lastName, string ipAddress, int expectedTime)
         {
             //Arrange
-            EmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             UserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             UserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -548,9 +776,12 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
-
+          
             //Act
             var timer = Stopwatch.StartNew();
             await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel, password, ipAddress);

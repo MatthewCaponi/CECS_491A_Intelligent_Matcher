@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[AccountVerification]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[UserId] INT NOT NULL,
+	[Token] NVARCHAR(200) NOT NULL
+)

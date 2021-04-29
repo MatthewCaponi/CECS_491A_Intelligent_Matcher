@@ -14,6 +14,8 @@ using Security;
 using FriendList;
 using PublicUserProfile;
 using TestHelper;
+using Registration.Services;
+using IntelligentMatcher.Services;
 
 namespace WebApi
 {
@@ -21,6 +23,10 @@ namespace WebApi
     {
         public async Task SeedUsers(int seedAmount)
         {
+
+
+
+
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
@@ -59,7 +65,16 @@ namespace WebApi
                 await channelsRepo.DeleteChannelbyIdAsync(channel.Id);
             }
 
-            await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
+
+            IAccountVerificationRepo accountVerification = new AccountVerificationRepo(dataGateway, connectionString);
+            var verfications = await accountVerification.GetAllAccountVerifications();
+
+            foreach (var verfication in verfications)
+            {
+                await accountVerification.DeleteAccountVerificationById(verfication.Id);
+            }
+
+            await DataAccessTestHelper.ReseedAsync("AccountVerification", 0, connectionString, dataGateway);
 
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
             var publicProfiles = await publicUserProfileRepo.GetAllPublicProfiles();
@@ -85,6 +100,37 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+
+
+
+
+
+
+
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
+
+
+
+
 
             for (int i = 1; i < seedAmount; ++i)
             {
@@ -130,7 +176,7 @@ namespace WebApi
                 publicUserProfileModel.Height = "This is how tall I am";
                 await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
 
-
+                await emailService.CreateVerificationToken(publicUserProfileModel.UserId);
 
 
             }

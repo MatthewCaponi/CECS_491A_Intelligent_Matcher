@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../.././../../App'
 
 export class ChangeFontSize extends Component {
   static displayName = ChangeFontSize.name;
@@ -7,7 +8,7 @@ export class ChangeFontSize extends Component {
     super(props);
     this.state = { fontsize: 0 };
     this.changeFontSize = this.changeFontSize.bind(this);
-    fetch('http://localhost:5000/useraccountsettings/getFontSize',
+    fetch(global.url + 'useraccountsettings/getFontSize',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},

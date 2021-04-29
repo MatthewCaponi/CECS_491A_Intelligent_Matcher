@@ -1,10 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import './Login.css';
+import { useHistory } from 'react-router-dom';
 
 function ResetPassword(props) {
     const [accountState, setAccountState] = useState(1);
     const [passwordState, setPasswordState] = useState("");
+
+    const history = useHistory();
+    //history.location.state.accountId
+
+
     function submitHandler(e){
         var ResetPasswordModel = e;
         // e.preventDefault();
@@ -17,6 +23,8 @@ function ResetPassword(props) {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("Password Changed Successfully! Return to Login Page!");
+                history.push("/Login");
+
             }
             else{
                 alert(res.errorMessage);

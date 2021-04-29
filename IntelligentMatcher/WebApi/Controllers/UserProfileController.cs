@@ -172,26 +172,32 @@ namespace IntelligentMatcherUI.Controllers
                     var fileName = ContentDispositionHeaderValue.Parse(postedFile.ContentDisposition)
                         .FileName.Trim('"');
                     string[] filetype = fileName.Split(".");
-                    string newFileName = userId.ToString() + "profileImage." + filetype[1];
-                    var finalPath = Path.Combine(uploadFolder, newFileName);
-                    using (var fileStream = new FileStream(finalPath, FileMode.Create))
-                    {
-                        postedFile.CopyTo(fileStream);
-                    }
-                    PublicUserProfileModel model = new PublicUserProfileModel();
-                    model.UserId = userId;
-                    model.Photo = newFileName;
-                    await _publicUserProfileManager.editUserProfilePicture(model);
-                    return true;
+                    if(filetype[filetype.Length - 1].ToLower() == "png" || filetype[filetype.Length - 1].ToLower() == "jpg" || filetype[filetype.Length - 1].ToLower() == "jpeg")
+                        {
+                            string newFileName = userId.ToString() + "profileImage." + filetype[filetype.Length - 1];
+                            var finalPath = Path.Combine(uploadFolder, newFileName);
+                            using (var fileStream = new FileStream(finalPath, FileMode.Create))
+                            {
+                                postedFile.CopyTo(fileStream);
+                            }
+                            PublicUserProfileModel model = new PublicUserProfileModel();
+                            model.UserId = userId;
+                            model.Photo = newFileName;
+                            await _publicUserProfileManager.editUserProfilePicture(model);
+                            return true;
+                        }
+                        else
+                        {
+                             return false;
+                        }
+             
                 }
                 else
                 {
 
                     return false;
                 }
-
-
-            
+         
 
 
         }

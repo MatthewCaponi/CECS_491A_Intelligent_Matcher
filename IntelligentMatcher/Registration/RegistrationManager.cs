@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 using UserManagement.Services;
 using Registration.Services;
 using Security;
+using System.Timers;
+using System.Threading;
+using Microsoft.Extensions.Configuration;
+using WebApi.Models;
+using System.IO;
 
 namespace Registration
 {
@@ -24,6 +29,11 @@ namespace Registration
         private readonly IValidationService _validationService;
         private readonly ICryptographyService _cryptographyService;
 
+        private static System.Timers.Timer _timer;
+
+
+
+
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
             IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger)
         {
@@ -34,6 +44,13 @@ namespace Registration
             _cryptographyService = cryptographyService;
             _logger = logger;
         }
+
+
+
+
+
+
+
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
             WebUserProfileModel userModel, string password, string ipAddress)
@@ -79,10 +96,17 @@ namespace Registration
 
             // Re-Clarify the logging event
 
+
             //Log and Return result
             _logger.Log("User: " +  accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
+
+
+
+
+            await _emailService.CreateVerificationToken(accountID);
+
 
             var emailResult = await SendVerificationEmail(accountID);
             
@@ -98,6 +122,9 @@ namespace Registration
 
             // First items of these tuples are immutable
             // A new one must be returned for the success conditional
+
+
+
             return resultModel;
         }
 
@@ -105,25 +132,56 @@ namespace Registration
         {
             var account = await _userAccountService.GetUserAccount(accountId);
 
+            string token = await _emailService.GetStatusToken(accountId);
+            string confirmUrl = "http://localhost:3000/ConfirmAccount?id=" + accountId.ToString() + "?key=" + token;
+
+
+
+            EmailModel emailModel =  _emailService.GetEmailOptions();
+
             // Create New Email Model
-            var emailModel = new EmailModel();
 
-            // Set the Email Model Attributes
-            emailModel.Recipient = account.EmailAddress;
-            emailModel.Sender = "support@infinimuse.com";
-            emailModel.TrackOpens = true;
-            emailModel.Subject = "Welcome!";
-            emailModel.TextBody = "Welcome to InfiniMuse!";
-            emailModel.HtmlBody = "Thank you for registering! " +
-                "Please <a href='http://localhost:3000'>Enter the Site!</a> " +
-                "<strong>You now have access to the features.</strong>";
-            emailModel.MessageStream = "outbound";
-            emailModel.Tag = "Welcome";
 
-            //Send Verification Email
-            var result = await _emailService.SendEmail(emailModel);
+            if (emailModel != null)
+            {
+                // Set the Email Model Attributes
+                emailModel.Recipient = account.EmailAddress;
+                emailModel.HtmlBody = string.Format(emailModel.HtmlBody, confirmUrl);
 
-            return result;
+                //Send Verification Email
+                var result = await _emailService.SendEmail(emailModel);
+                //create auto expiration service 
+                //run function below 
+
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    _timer = new System.Timers.Timer(10800000);
+                    _timer.Elapsed += async (sender, e) => await DeleteIfNotActive(accountId);
+
+                }).Start();
+                return result;
+
+            }
+            else
+            {
+                return false;
+            }
+
+            // First items of these tuples are immutable
+            // A new one must be returned for the success conditional
+
+        }
+
+        public async Task DeleteIfNotActive(int userId)
+        {
+            WebUserAccountModel model = await _userAccountService.GetUserAccount(userId);
+
+            if (model.AccountStatus != "Active")
+            {
+                await _userAccountService.DeleteAccount(userId);
+            }
+
         }
     }
 }

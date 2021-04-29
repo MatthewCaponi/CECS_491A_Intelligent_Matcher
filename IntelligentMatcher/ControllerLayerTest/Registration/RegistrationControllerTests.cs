@@ -5,6 +5,7 @@ using DataAccess;
 using DataAccess.Repositories;
 using DataAccessUnitTestes;
 using IntelligentMatcher.Services;
+using Microsoft.Extensions.Configuration;
 using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
@@ -62,7 +63,6 @@ namespace ControllerLayerTest.Registration
                 userProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
                 userProfileModel.UserAccountId = userAccountModel.Id;
                 await userProfileRepository.CreateUserProfile(userProfileModel);
-
             }
         }
 
@@ -92,7 +92,24 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -100,6 +117,9 @@ namespace ControllerLayerTest.Registration
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
@@ -118,7 +138,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -135,7 +155,23 @@ namespace ControllerLayerTest.Registration
             string username, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -143,6 +179,9 @@ namespace ControllerLayerTest.Registration
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
@@ -161,7 +200,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -178,7 +217,26 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
+
+
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -187,9 +245,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
-
+          
             var registrationModel = new RegistrationModel();
 
             registrationModel.firstName = firstName;
@@ -204,7 +265,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -221,7 +282,27 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
+
+
+
+
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -229,6 +310,9 @@ namespace ControllerLayerTest.Registration
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
@@ -247,7 +331,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -264,7 +348,23 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -273,6 +373,10 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+          
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
 
@@ -290,7 +394,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -307,7 +411,23 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -316,9 +436,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
-
+          
             var registrationModel = new RegistrationModel();
 
             registrationModel.firstName = firstName;
@@ -333,7 +456,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -350,7 +473,23 @@ namespace ControllerLayerTest.Registration
             string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int expectedId)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -358,6 +497,9 @@ namespace ControllerLayerTest.Registration
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
@@ -376,7 +518,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = true;
             expectedResult.AccountId = expectedId;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -391,7 +533,23 @@ namespace ControllerLayerTest.Registration
         public async Task ResendEmail_BadEmail_ReturnFalse(int accountId)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -400,12 +558,15 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
 
             var expectedResult = false;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.ResendEmail(accountId);
@@ -421,7 +582,23 @@ namespace ControllerLayerTest.Registration
             string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int accountId)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -430,9 +607,12 @@ namespace ControllerLayerTest.Registration
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
 
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+          
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
-
+          
             var registrationModel = new RegistrationModel();
 
             registrationModel.firstName = firstName;
@@ -443,7 +623,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
             await registrationController.RegisterUser(registrationModel);
 
             var expectedResult = true;
@@ -464,7 +644,23 @@ namespace ControllerLayerTest.Registration
             string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int expectedTime)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -472,11 +668,16 @@ namespace ControllerLayerTest.Registration
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
+
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
 
-            var registrationModel = new RegistrationModel();
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+          
 
+            var registrationModel = new RegistrationModel();
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
             registrationModel.firstName = firstName;
             registrationModel.surname = surname;
             registrationModel.username = username;
@@ -484,8 +685,6 @@ namespace ControllerLayerTest.Registration
             registrationModel.emailAddress = emailAddress;
             registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
-
-            RegistrationController registrationController = new RegistrationController(registrationManager);
 
             // Act
             var timer = Stopwatch.StartNew();
@@ -504,7 +703,23 @@ namespace ControllerLayerTest.Registration
         public async Task ResendEmail_ExecuteLessThan5Seconds(int accountId, int expectedTime)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
+
+            _testConfigKeys.Add("Sender", "support@infinimuse.com");
+            _testConfigKeys.Add("TrackOpens", "true");
+            _testConfigKeys.Add("Subject", "Welcome!");
+            _testConfigKeys.Add("TextBody", "Welcome to InfiniMuse!");
+            _testConfigKeys.Add("MessageStream", "outbound");
+            _testConfigKeys.Add("Tag", "Welcome");
+            _testConfigKeys.Add("HtmlBody", "Thank you for registering! Please confirm your account with the link: <a href='{0}'>Confirm Your Account!</a><strong>Once confirmed you will have access to the features.</strong>");
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(_testConfigKeys)
+                            .Build();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())), configuration);
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -516,7 +731,10 @@ namespace ControllerLayerTest.Registration
             IRegistrationManager registrationManager = new RegistrationManager(emailService, userAccountService,
                 userProfileService, validationService, cryptographyService, new LogService());
 
-            RegistrationController registrationController = new RegistrationController(registrationManager);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
+            IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
+
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var timer = Stopwatch.StartNew();
