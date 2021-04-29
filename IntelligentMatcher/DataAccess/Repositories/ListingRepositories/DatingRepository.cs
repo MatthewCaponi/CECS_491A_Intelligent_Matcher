@@ -13,6 +13,16 @@ namespace DataAccess.Repositories.ListingRepositories
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
+
+
+        public DatingRepository(IDataGateway dataGateway, IConnectionStringData connectionString)
+        {
+            _dataGateway = dataGateway;
+            _connectionString = connectionString;
+        }
+
+
+
         public async Task<int> CreateListing(DALDatingModel dalDatingModel)
         {
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Exceptions;
 using Models.User_Access_Control;
 using System;
 using System.Collections.Generic;
@@ -45,16 +46,23 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
 
         public async Task<int> CreateResource(ResourceModel model)
         {
-            var storedProcedure = "dbo.Resource_Create";
+            try
+            {
+                var storedProcedure = "dbo.Resource_Create";
 
-            DynamicParameters p = new DynamicParameters();
+                DynamicParameters p = new DynamicParameters();
 
-            p.Add("name", model.Name);
-            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                p.Add("name", model.Name);
+                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
-            return p.Get<int>("Id");
+                return p.Get<int>("Id");
+            }
+            catch(SqlCustomException e)
+            {
+                throw new SqlCustomException("Resource could not be created.", e.InnerException);
+            }
         }
 
         public async Task<int> UpdateResource(ResourceModel model)
