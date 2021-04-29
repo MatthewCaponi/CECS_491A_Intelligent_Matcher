@@ -15,7 +15,7 @@ namespace Logging
             // Read the file as one string. 
             string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.json";
             string currentDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
+            string projectDirectory = Directory.GetParent(currentDirectory).FullName;
             string jsonDirectory = $"{projectDirectory}\\logs\\{folder}\\json";
             string logPath = Path.Combine(jsonDirectory, fileName);
 

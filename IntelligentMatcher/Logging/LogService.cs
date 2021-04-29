@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 namespace Logging
@@ -34,8 +35,28 @@ namespace Logging
 
         private void WriteToTarget(IDictionary<string, string> finalMessage, LogTarget logTarget, string folder)
         {
-            ILogWriter logger = (ILogWriter)Activator.CreateInstance(Type.GetType($"{Type.GetType(this.ToString()).Namespace}.{logTarget}LogWriter"));
-            logger.Write(finalMessage, folder);
+            if (logTarget == LogTarget.All)
+            {
+                
+                var type = typeof(ILogWriter);
+                foreach (var writer in GetLogWriterTypes(type))
+                {
+                    ILogWriter logWriter = (ILogWriter)Activator.CreateInstance(writer);
+                    logWriter.Write(finalMessage, folder);
+                }
+            }
+            else
+            {
+                ILogWriter logger = (ILogWriter)Activator.CreateInstance(Type.GetType($"{Type.GetType(this.ToString()).Namespace}.{logTarget}LogWriter"));
+                logger.Write(finalMessage, folder);
+            }
+        }
+
+        private IEnumerable<Type> GetLogWriterTypes(Type type)
+        {
+            return Assembly.GetExecutingAssembly().GetTypes()
+                   .Where(type.IsAssignableFrom)
+                   .Where(x => type != x);
         }
     }
 }

@@ -3,6 +3,7 @@
     public enum LogTarget
     {
         Text,
-        Json
+        Json,
+        All
     }
 }

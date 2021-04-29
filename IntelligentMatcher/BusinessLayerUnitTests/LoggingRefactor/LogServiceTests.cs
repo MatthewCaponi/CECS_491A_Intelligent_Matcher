@@ -21,7 +21,7 @@ namespace BusinessLayerUnitTests.LoggingRefactor
             //Act
             try
             {
-                logService.Log(message, logTarget, logLevel, this.ToString());
+                logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
                 Assert.IsTrue(true);
             }
             catch (Exception e)
@@ -54,7 +54,7 @@ namespace BusinessLayerUnitTests.LoggingRefactor
             catch (Exception e)
             {
 
-                    logService.Log(message, logTarget, logLevel, e, this.ToString());
+                    logService.Log(message, logTarget, logLevel, e, this.ToString(), "Test_Logs");
                     Assert.IsTrue(true);
             }
         }

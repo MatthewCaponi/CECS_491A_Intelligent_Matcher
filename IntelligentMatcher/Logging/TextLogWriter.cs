@@ -12,7 +12,7 @@ namespace Logging
         {
             string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
             string currentDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
+            string projectDirectory = Directory.GetParent(currentDirectory).FullName;
             string textDirectory = $"{projectDirectory}\\logs\\{folder}\\text";
             string logPath = Path.Combine(textDirectory, fileName);
 
