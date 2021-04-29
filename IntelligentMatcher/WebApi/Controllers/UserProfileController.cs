@@ -74,7 +74,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<PublicUserProfileModel> GetUserProfile([FromBody] int userId)
         {
 
-            return await _publicUserProfileManager.GetUserProfile(userId);
+            return await _publicUserProfileManager.GetUserProfileAsync(userId);
 
         }
 
@@ -82,7 +82,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<bool> SaveUserProfile([FromBody] PublicUserProfileModel model)
         {
 
-            await _publicUserProfileManager.editPublicUserProfileAsync(model);
+            await _publicUserProfileManager.EditPublicUserProfileAsync(model);
             return true;
 
         }
@@ -93,7 +93,7 @@ namespace IntelligentMatcherUI.Controllers
         {
 
             string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
-            var profileModel = await _publicUserProfileManager.GetUserProfile(model.FriendId);
+            var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
             if(status == "Friends" && profileModel.Visibility == "Friends")
             {
                 return true;
@@ -124,7 +124,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<bool> SetOnline([FromBody] int userId)
         {
 
-            await _publicUserProfileManager.setUserOnline(userId);
+            await _publicUserProfileManager.SetUserOnlineAsync(userId);
 
             return true;
 
@@ -134,7 +134,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<bool> SetOffline([FromBody] int userId)
         {
 
-            await _publicUserProfileManager.setUserOffline(userId);
+            await _publicUserProfileManager.SetUserOfflineAsync(userId);
 
             return true;
 
@@ -183,7 +183,7 @@ namespace IntelligentMatcherUI.Controllers
                             PublicUserProfileModel model = new PublicUserProfileModel();
                             model.UserId = userId;
                             model.Photo = newFileName;
-                            await _publicUserProfileManager.editUserProfilePicture(model);
+                            await _publicUserProfileManager.EditUserProfilePictureAsync(model);
                             return true;
                         }
                         else

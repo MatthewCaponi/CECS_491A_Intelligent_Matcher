@@ -25,8 +25,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         public async Task createPublicUserProfileAsync_UserProfileCreated_SuccessfulCreation(int userId)
         {
 
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfilervice = new Mock<IPublicUserProfileService>();
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfilervice.Object);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -34,7 +34,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             try
             {
-                await publicUserProfileManager.createPublicUserProfileAsync(model);
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
                 Assert.IsTrue(true);
             }
             catch
@@ -52,14 +52,13 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         public async Task editPublicUserProfileAsync_EditProfile_ProfileSuccessfullyEdited(int userId, string description, string job, string goals, int age, string gender, string ethnicity, string sexualOrientation, string height, string visibility, string status, string photo, string intrests, string hobbies)
         {
 
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo.Object);
-
+            Mock<IPublicUserProfileService> publicUserProfilervice = new Mock<IPublicUserProfileService>();
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfilervice.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
             model.Description = description;
             model.Jobs = job;
@@ -77,7 +76,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             try
             {
-                await publicUserProfileManager.editPublicUserProfileAsync(model);
+                await publicUserProfileManager.EditPublicUserProfileAsync(model);
                 Assert.IsTrue(true);
             }
             catch
@@ -94,8 +93,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         public async Task editUserProfilePicture_EditPhoto_PhotoSuccessfullyEdited(int userId, string photo)
         {
 
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfilervice = new Mock<IPublicUserProfileService>();
+            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfilervice.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
 
 
@@ -103,13 +102,13 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             {
                 model.UserId = userId;
 
-                await publicUserProfileManager.createPublicUserProfileAsync(model);
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
 
                 model.Photo = photo;
 
 
-                await publicUserProfileManager.editUserProfilePicture(model);
+                await publicUserProfileManager.EditUserProfilePictureAsync(model);
 
                 Assert.IsTrue(true);
             }
@@ -132,19 +131,19 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
 
-            await publicUserProfileManager.setUserOnline(userId);
+            await publicUserProfileManager.SetUserOnlineAsync(userId);
 
 
-            await publicUserProfileManager.setUserOffline(userId);
+            await publicUserProfileManager.SetUserOfflineAsync(userId);
 
 
             IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
@@ -181,16 +180,16 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
 
-            await publicUserProfileManager.setUserOnline(userId);
+            await publicUserProfileManager.SetUserOnlineAsync(userId);
 
 
 
@@ -227,13 +226,13 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
             model.Description = description;
             model.Jobs = job;
@@ -248,10 +247,10 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             model.Intrests = intrests;
             model.Hobbies = hobbies;
 
-            await publicUserProfileManager.editPublicUserProfileAsync(model);
+            await publicUserProfileManager.EditPublicUserProfileAsync(model);
 
 
-            PublicUserProfileModel profile = await publicUserProfileManager.GetUserProfile(userId);
+            PublicUserProfileModel profile = await publicUserProfileManager.GetUserProfileAsync(userId);
 
        
             if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility &&  profile.Intrests == intrests)

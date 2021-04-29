@@ -140,13 +140,13 @@ namespace BusinessLayerUnitTests.FriendList
 
             await cryptographyService.newPasswordEncryptAsync("Password", 1);
 
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
 
             PublicUserProfileModel publicUserProfileModel = new PublicUserProfileModel();
 
             publicUserProfileModel.UserId = i;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
 
             UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -177,7 +177,7 @@ namespace BusinessLayerUnitTests.FriendList
 
             publicUserProfileModel = new PublicUserProfileModel();
             publicUserProfileModel.UserId = i;
-            await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
 
             i = 3;
             userAccountModel.Id = i;
@@ -194,7 +194,7 @@ namespace BusinessLayerUnitTests.FriendList
             await cryptographyService.newPasswordEncryptAsync("Password", 1);
             publicUserProfileModel = new PublicUserProfileModel();
             publicUserProfileModel.UserId = i;
-            await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+            await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
             userAccountSettingsModel.Id = 1;
             userAccountSettingsModel.UserId = 2;
             userAccountSettingsModel.FontSize = 12;

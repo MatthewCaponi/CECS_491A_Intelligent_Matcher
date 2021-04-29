@@ -99,7 +99,7 @@ namespace WebApi
             await TestCleaner.CleanDatabase();
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
 
@@ -174,7 +174,7 @@ namespace WebApi
                 publicUserProfileModel.Hobbies = "These are my hobbies";
                 publicUserProfileModel.Intrests = "These are my intrests";
                 publicUserProfileModel.Height = "This is how tall I am";
-                await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+                await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
 
                 await emailService.CreateVerificationToken(publicUserProfileModel.UserId);
 
