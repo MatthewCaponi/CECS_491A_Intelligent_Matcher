@@ -1,9 +1,11 @@
-﻿using Models.DALListingModels;
+﻿using Dapper;
+using Models.DALListingModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
-using TraditionalListings.Services;
+
 
 namespace DataAccess.Repositories.ListingRepositories
 {
@@ -11,15 +13,23 @@ namespace DataAccess.Repositories.ListingRepositories
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
-        public Task<int> CreateListing(DALDatingModel dalDatingModel)
+        public async Task<int> CreateListing(DALDatingModel dalDatingModel)
         {
-            throw new NotImplementedException();
+
+            string storedProcedure = "dbo.CreateDatingListing";
+
+            DynamicParameters p = new DynamicParameters();
+            p.Add("SexualOrientationPreference", dalDatingModel.SexualOrientationPreference);
+            p.Add("LookingFor", dalDatingModel.LookingFor);
+            p.Add("ListingId", dalDatingModel.ListingId);
+            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+
+            return p.Get<int>("Id");
         }
 
-        public Task<DALDatingModel> GetListing(int id)
-        {
-            throw new NotImplementedException();
-        }
+   
 
         public async Task<int> UpdateListing(DALDatingModel dalDatingModel)
         {

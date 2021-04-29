@@ -23,6 +23,9 @@ using Registration;
 using Registration.Services;
 using FriendList;
 using PublicUserProfile;
+using DataAccess.Repositories.ListingRepositories;
+using TraditionalListings.Services;
+using TraditionalListings.Managers;
 
 namespace WebApi
 {
@@ -52,6 +55,19 @@ namespace WebApi
             services.AddTransient<IFriendListRepo, FriendListRepo>();
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
+
+            services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<ICollaborationRepository, CollaborationRepository>();
+            services.AddTransient<IRelationshipRepository, RelationshipRepository>();
+            services.AddTransient<IDatingRepository, DatingRepository>();
+            services.AddTransient<ITeamModelRepository, TeamModelRepository>();
+
+            services.AddTransient<IListingCreationService, ListingCreationService>();
+            services.AddTransient<IListingDeletionService, ListingDeletionService>();
+            services.AddTransient<IListingUpdationService, ListingUpdationService>();
+
+            services.AddScoped<IListingsManager, ListingsManager>();
+
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();

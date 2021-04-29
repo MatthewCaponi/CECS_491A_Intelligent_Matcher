@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Models.DALListingModels;
 using BusinessModels.ListingModels;
 using Services;
+using DataAccess.Repositories.ListingRepositories;
 
 namespace TraditionalListings.Services
 {

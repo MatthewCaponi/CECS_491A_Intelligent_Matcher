@@ -264,6 +264,9 @@
     <Build Include="StoredProcedures\EditParentAttributes.sql" />
     <Build Include="StoredProcedures\EditRelationshipAttributes.sql" />
     <Build Include="StoredProcedures\EditTeamAttributes.sql" />
+    <Build Include="Dating.sql" />
+    <Build Include="StoredProcedures\CreateDatingListing.sql" />
+    <Build Include="StoredProcedures\DeleteListing.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

@@ -1,6 +1,14 @@
 ﻿CREATE PROCEDURE [dbo].[EditDatingAttributes]
-	@param1 int = 0,
-	@param2 int
+	@Id int,
+	@SexualOrientationPreference nvarchar(50),
+	@LookingFor nvarchar(50),
+	@ListingId int
 AS
-	SELECT @param1, @param2
-RETURN 0
+begin
+	set nocount on;
+
+	update dbo.[Dating]
+	set SexualOrientationPreference=@SexualOrientationPreference,
+	LookingFor= @LookingFor
+	where Id=@Id;
+end

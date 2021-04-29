@@ -3,15 +3,12 @@ using DataAccess.Repositories;
 using DataAccess.Repositories.ListingRepositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models.DALListingModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BusinessLayerUnitTests.TraditionalListing
 {
     [TestClass]
-    public class ListingDeletionServiceUnitTest
+    public class ListingUpdationServiceUnitTest
     {
         [TestInitialize()]
         public async Task Init()
@@ -21,19 +18,19 @@ namespace BusinessLayerUnitTests.TraditionalListing
             IConnectionStringData connectionString = new ConnectionStringData();
             IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
 
-            for (int i=1;i<numTestRows; i++)
+            for (int i = 1; i < numTestRows; i++)
             {
                 DALListingModel dALListingModel = new DALListingModel();
-                dALListingModel.Id = 1;
+                dALListingModel.Id = i;
                 dALListingModel.Title = "Test Title";
                 dALListingModel.Details = "Test Details";
                 dALListingModel.City = "Test city";
                 dALListingModel.State = " Test state";
                 dALListingModel.NumberOfParticipants = 5;
                 dALListingModel.InPersonOrRemote = " Inperson ";
-                dALListingModel.UserAccountId = 23;
+                dALListingModel.UserAccountId = i;
 
-            await listingRepository.CreateListing(dALListingModel);
+                await listingRepository.CreateListing(dALListingModel);
             }
         }
 

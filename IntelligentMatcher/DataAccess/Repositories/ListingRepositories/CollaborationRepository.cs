@@ -6,7 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TraditionalListings.Services;
+
 
 namespace DataAccess.Repositories.ListingRepositories
 {
@@ -43,19 +43,6 @@ namespace DataAccess.Repositories.ListingRepositories
 
         }
 
-        public async Task<DALCollaborationModel> GetListing(int id)
-        {
-            var query = "Select * from Collaboration where Id = @Id";
-
-            var row = await _dataGateway.LoadData<DALCollaborationModel, dynamic>(query,
-                new
-                {
-                    ID = id
-                },
-                _connectionString.SqlConnectionString);
-
-            return row.FirstOrDefault();
-        }
 
         public async Task<int> UpdateListing(DALCollaborationModel dALCollaborationModel)
         {

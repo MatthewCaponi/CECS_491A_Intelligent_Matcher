@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using BusinessModels;
-using DataAccess.Repositories;
 using TraditionalListings.Services;
-using Models;
 using UserManagement.Models;
-
-using Services;
 using BusinessModels.ListingModels;
-using Models.DALListingModels;
+
 
 namespace TraditionalListings.Managers
 {
