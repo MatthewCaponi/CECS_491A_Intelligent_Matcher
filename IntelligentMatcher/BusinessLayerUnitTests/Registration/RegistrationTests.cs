@@ -19,6 +19,7 @@ using Security;
 using System.Diagnostics;
 using TestHelper;
 using Microsoft.Extensions.Configuration;
+using Logging;
 
 namespace BusinessLayerUnitTests.Registration
 {
@@ -145,14 +146,14 @@ namespace BusinessLayerUnitTests.Registration
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
-
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
             IRegistrationManager registrationManager = new  RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockLogService.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -194,6 +195,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             mockValidationService.Setup(x => x.EmailExists(emailAddress)).Returns(Task.FromResult(true));
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = false;
@@ -203,7 +205,8 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockLogService.Object);
+
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
                 password, ipAddress);
@@ -246,6 +249,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = true;
@@ -255,7 +259,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockLogService.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -298,13 +302,13 @@ namespace BusinessLayerUnitTests.Registration
             Mock<IUserProfileService> mockUserProfileService = new Mock<IUserProfileService>();
             Mock<IValidationService> mockValidationService = new Mock<IValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
-
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
             var expectedResult = false;
 
 
             IRegistrationManager registrationManager = new RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
-                mockCryptographyService.Object);
+                mockCryptographyService.Object, mockLogService.Object);
 
             //Act
             var actualResult = await registrationManager.SendVerificationEmail(expectedId);
@@ -368,11 +372,12 @@ namespace BusinessLayerUnitTests.Registration
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -440,10 +445,9 @@ namespace BusinessLayerUnitTests.Registration
             Result<int> expectedResult = new Result<int>();
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error;
-
-
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
 
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
@@ -516,8 +520,11 @@ namespace BusinessLayerUnitTests.Registration
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-               userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
+
             //Act
             var actualResult = await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel,
                 password, ipAddress);
@@ -571,12 +578,15 @@ namespace BusinessLayerUnitTests.Registration
             await userAccountService.CreateAccount(webUserAccountModel);
 
             var expectedResult = true;
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+
+                userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
+
             //Act
             var actualResult = await registrationManager.SendVerificationEmail(expectedId);
 
@@ -628,8 +638,11 @@ namespace BusinessLayerUnitTests.Registration
 
             var expectedResult = false;
 
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
+
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
+
             //Act
             var actualResult = await registrationManager.SendVerificationEmail(expectedId);
 
@@ -680,7 +693,6 @@ namespace BusinessLayerUnitTests.Registration
             RegistrationManager registrationManager = new RegistrationManager(emailService,
                 userAccountService, userProfileService, validationService, cryptographyService);
 
-
             try
             {
 
@@ -712,10 +724,6 @@ namespace BusinessLayerUnitTests.Registration
             }
         }
         #endregion
-
-
-
-
 
         #region Non-Functional Tests
         [DataTestMethod]
@@ -766,12 +774,14 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.Surname = lastName;
             webUserProfileModel.DateOfBirth = DateTimeOffset.UtcNow;
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
+            Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService);
+                userAccountService, userProfileService, validationService, cryptographyService, mockLogService.Object);
+          
             //Act
             var timer = Stopwatch.StartNew();
             await registrationManager.RegisterAccount(webUserAccountModel, webUserProfileModel, password, ipAddress);

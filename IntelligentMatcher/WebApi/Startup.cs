@@ -23,6 +23,7 @@ using Registration;
 using Registration.Services;
 using FriendList;
 using PublicUserProfile;
+using Logging;
 
 namespace WebApi
 {
@@ -43,6 +44,8 @@ namespace WebApi
 
             services.AddControllers();
             services.AddSingleton(Configuration);
+
+            services.AddTransient<ILogService, LogService>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
