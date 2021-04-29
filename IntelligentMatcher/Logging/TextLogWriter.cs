@@ -10,7 +10,7 @@ namespace Logging
     {
         public void Write(IDictionary<string, string> message, string folder)
         {
-            string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
+            string fileName = $"{folder}_{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
             string currentDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(currentDirectory).FullName;
             string textDirectory = $"{projectDirectory}\\logs\\{folder}\\text";
