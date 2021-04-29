@@ -26,6 +26,7 @@ using PublicUserProfile;
 using DataAccess.Repositories.ListingRepositories;
 using TraditionalListings.Services;
 using TraditionalListings.Managers;
+using Models.DALListingModels;
 
 namespace WebApi
 {

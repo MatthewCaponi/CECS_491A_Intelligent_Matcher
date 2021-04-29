@@ -12,16 +12,14 @@ namespace TraditionalListings.Services
         private IListingRepository _listingRepository;
         private ICollaborationRepository _collaborationRepository;
         private IRelationshipRepository _relationshipRepository;
-        private IDatingRepository _datingRepository;
         private ITeamModelRepository _teamModelRepository;
 
         public ListingCreationService(IListingRepository listingRepository, ICollaborationRepository collaborationRepository, IRelationshipRepository relationshipRepository,
-           ITeamModelRepository teamModelRepository, IDatingRepository datingRepository)
+           ITeamModelRepository teamModelRepository)
         {
             _listingRepository = listingRepository;
             _collaborationRepository = collaborationRepository;
             _relationshipRepository = relationshipRepository;
-            _datingRepository = datingRepository;
             _teamModelRepository = teamModelRepository;
         }
 

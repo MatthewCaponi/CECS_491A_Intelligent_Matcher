@@ -15,8 +15,8 @@ namespace TraditionalListings.Managers
         private IListingUpdationService _listUpdationService;
 
 
-        public ListingsManager(ListingCreationService listingCreationService, ListingDeletionService listingDeletionService,
-           ListingUpdationService listingUpdationService)
+        public ListingsManager(IListingCreationService listingCreationService, IListingDeletionService listingDeletionService,
+           IListingUpdationService listingUpdationService)
         {
             _listingCreationService = listingCreationService;
             _listingDeletionService = listingDeletionService;
