@@ -43,7 +43,6 @@ namespace DataAccess.Repositories.ListingRepositories
 
         }
 
-
         public async Task<int> UpdateListing(DALCollaborationModel dALCollaborationModel)
         {
             var storedProcedure = "dbo.EditCollaborationAttributes";

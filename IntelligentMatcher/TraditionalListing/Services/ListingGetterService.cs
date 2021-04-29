@@ -78,9 +78,18 @@ namespace TraditionalListings.Services
             return businessListings;
         }
 
-        public Task<List<BusinessDatingModel>> GetAllDatingListing()
+        public async Task<List<BusinessDatingModel>> GetAllDatingListing()
         {
-            throw new NotImplementedException();
+            var dalListing = await _traditionalListingSearchRepository.GetAllDatingListings();
+            List<BusinessDatingModel> businessListings = new List<BusinessDatingModel>();
+            foreach (var dalListingModel in dalListing)
+            {
+                var businessListing = ModelConverterService.ConvertTo(dalListingModel, new BusinessDatingModel());
+                businessListings.Add(businessListing);
+            }
+
+            return businessListings;
+
         }
     }
 }
