@@ -156,20 +156,8 @@ namespace Registration
                 emailModel.Recipient = account.EmailAddress;
                 emailModel.HtmlBody = string.Format(emailModel.HtmlBody, confirmUrl);
 
-
-
-
-
-
-
-
                 //Send Verification Email
                 var result = await _emailService.SendEmail(emailModel);
-
-
-
-
-
                 //create auto expiration service 
                 //run function below 
 
