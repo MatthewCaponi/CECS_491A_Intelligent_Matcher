@@ -30,8 +30,7 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                throw new SqlCustomException("SqlException thrown by '" + nameof(LoadData) +"' in SQLServerGateway.\n" +
-                                             "Please see the inner exception for more information.", e.InnerException);
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -48,8 +47,7 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                throw new SqlCustomException("SqlException thrown by '" + nameof(Execute) + "' in SQLServerGateway.\n" +
-                                             "Please see the inner exception for more information.", e.InnerException);           
+                throw new SqlCustomException(e.Message, e.InnerException);           
             }                 
         }
     }

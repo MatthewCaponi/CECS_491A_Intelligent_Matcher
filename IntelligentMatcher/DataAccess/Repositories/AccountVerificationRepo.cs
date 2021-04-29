@@ -22,16 +22,17 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
+
+
         public async Task<int> CreateAccountVerification(int userId, string token)
         {
             var storedProcedure = "dbo.AccountVerification_Create";
 
             DynamicParameters p = new DynamicParameters();
 
-            p.Add("Token", token);
             p.Add("UserId", userId);
+            p.Add("Token", token);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
-
 
             await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 

@@ -268,11 +268,11 @@
     <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Delete_ById.sql" />
     <Build Include="StoredProcedures\TestCleaner_Delete_All.sql" />
     <Build Include="AccountVerification.sql" />
-    <Build Include="StoredProcedures\AccountVerification\AccountVerification_Create.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Update_AccountStatusToken.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_GetStatusToken_ByUserId.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Get_All.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Delete_ById.sql" />
+    <Build Include="StoredProcedures\AccountVerification\AccountVerification_Create.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

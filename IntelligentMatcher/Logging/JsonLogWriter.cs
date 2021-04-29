@@ -13,7 +13,7 @@ namespace Logging
         public void Write(IDictionary<string, string> message, string folder)
         {
             // Read the file as one string. 
-            string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.json";
+            string fileName = $"{folder}_{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.json";
             string currentDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(currentDirectory).FullName;
             string jsonDirectory = $"{projectDirectory}\\logs\\{folder}\\json";
