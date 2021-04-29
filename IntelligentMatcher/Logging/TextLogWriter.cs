@@ -10,25 +10,26 @@ namespace Logging
     {
         public void Write(IDictionary<string, string> message)
         {
-            // Read the file as one string. 
-            string fileName = $"Text-{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
-            string directory = $"C:\\Users\\{ Environment.UserName}\\logs\\Text";
-            string logPath = Path.Combine(directory, fileName);
+            string fileName = $"{(DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.txt";
+            string currentDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(currentDirectory).Parent.Parent.FullName;
+            string textDirectory = $"{projectDirectory}\\logs\\text";
+            string logPath = Path.Combine(textDirectory, fileName);
 
             string builtMessage = "";
 
-            foreach(var value in message)
+            foreach(var key in message)
             {
-                builtMessage += value + " ";
+                builtMessage += key.Value + " ";
             }
             //create the log directory under the user profile if it does not exist
-            if (!Directory.Exists(directory))
+            if (!Directory.Exists(textDirectory))
             {
-                DirectoryInfo di = Directory.CreateDirectory(directory);
+                DirectoryInfo di = Directory.CreateDirectory(textDirectory);
             }
 
             //create the file first then write
-            Console.WriteLine(logPath);
+            Console.WriteLine("Text Log Created At: " + textDirectory);
             if (!File.Exists(logPath))
             {
                 using (StreamWriter writer = File.CreateText(logPath))

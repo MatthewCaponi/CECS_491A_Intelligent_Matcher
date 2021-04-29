@@ -6,10 +6,10 @@ namespace Logging
 {
     public interface ILogService
     {
-        void Log(string message, LogTarget logTarget);
-        void Log(string message, LogTarget logTarget, LogLevel logLevel);
-        void Log(string message, LogTarget logTarget, Exception exception);
-        void Log(string message, LogTarget logTarget, LogLevel logLevel, Exception exception);
+        void Log(string message, LogTarget logTarget, string caller);
+        void Log(string message, LogTarget logTarget, LogLevel logLevel, string caller);
+        void Log(string message, LogTarget logTarget, Exception exception, string caller);
+        void Log(string message, LogTarget logTarget, LogLevel logLevel, Exception exception, string caller);
 
     }
 }

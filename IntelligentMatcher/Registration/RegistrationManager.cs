@@ -17,7 +17,7 @@ namespace Registration
     public class RegistrationManager : IRegistrationManager
     {
 
-        ILogService _logger;
+        private readonly ILogService _logger;
         private IEmailService _emailService;
         private IUserAccountService _userAccountService;
         private IUserProfileService _userProfileService;
@@ -25,14 +25,14 @@ namespace Registration
         private readonly ICryptographyService _cryptographyService;
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
-            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService)
+            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _validationService = validationService;
             _cryptographyService = cryptographyService;
-
+            _logger = logger;
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -47,6 +47,8 @@ namespace Registration
             {
                 // Log and return Username existing result
                 //_logger.LogInfo(_loggingEvent, ErrorMessage.UsernameExists.ToString());
+                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.Text, this.ToString());
+                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.Json, this.ToString());
                 resultModel.Success = false;
                 resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 
