@@ -19,12 +19,25 @@ namespace Registration.Services
     {
 		//private const string API_KEY = "7e3947d6-ad88-41aa-91ae-8166ae128b21";
 		private const string API_KEY = "POSTMARK_API_TEST";
-		private IConfigurationRoot Configuration { get; set; }
+		private readonly IConfiguration _configuration;
 		private const int TOKEN_LENGTH = 200;
 
 		private readonly IUserAccountRepository _userAccountRepository;
 		private readonly IAccountVerificationRepo _accountVerificationRepo;
 		private readonly IUserAccountService _userAccountService;
+
+		
+
+		public EmailService(IUserAccountRepository userAccountRepository, IAccountVerificationRepo accountVerificationRepo, IUserAccountService userAccountService, IConfiguration onfiguration)
+        {
+			_userAccountRepository = userAccountRepository;
+			_accountVerificationRepo = accountVerificationRepo;
+			_userAccountService = userAccountService;
+			_configuration = configuration;
+
+		}
+
+
 		private string GenerateToken()
 		{
 
@@ -49,35 +62,20 @@ namespace Registration.Services
 
 		}
 
-		public EmailService(IUserAccountRepository userAccountRepository, IAccountVerificationRepo accountVerificationRepo, IUserAccountService userAccountService)
-        {
-			_userAccountRepository = userAccountRepository;
-			_accountVerificationRepo = accountVerificationRepo;
-			_userAccountService = userAccountService;
-
-		}
-
-
 
 		public EmailOptionsModel GetEmailOptions()
 		{
 
-			IConfigurationBuilder builder = new ConfigurationBuilder();
-			string path = Directory.GetCurrentDirectory();
-			string newPath = Path.GetFullPath(Path.Combine(path, @"..\..\..\..\"));
-
-			builder.AddJsonFile(Path.Combine(newPath, @"WebApi\appsettings.json"));
-			Configuration = builder.Build();
 
 			EmailOptionsModel emailOptions = new EmailOptionsModel();
 
-			emailOptions.Sender = Configuration.GetSection("Email:Sender").Value;
-			emailOptions.MessageStream = Configuration.GetSection("Email:MessageStream").Value;
-			emailOptions.Subject = Configuration.GetSection("Email:Subject").Value;
-			emailOptions.TextBody = Configuration.GetSection("Email:TextBody").Value;
-			emailOptions.Tag = Configuration.GetSection("Email:Tag").Value;
-			emailOptions.TrackOpens = bool.Parse(Configuration.GetSection("Email:TrackOpens").Value);
-			emailOptions.HtmlBody = Configuration.GetSection("Email:HtmlBody").Value;
+			emailOptions.Sender = _configuration.GetSection("Email:Sender").Value;
+			emailOptions.MessageStream = _configuration.GetSection("Email:MessageStream").Value;
+			emailOptions.Subject = _configuration.GetSection("Email:Subject").Value;
+			emailOptions.TextBody = _configuration.GetSection("Email:TextBody").Value;
+			emailOptions.Tag = _configuration.GetSection("Email:Tag").Value;
+			emailOptions.TrackOpens = bool.Parse(_configuration.GetSection("Email:TrackOpens").Value);
+			emailOptions.HtmlBody = _configuration.GetSection("Email:HtmlBody").Value;
 
 
 			return emailOptions;

@@ -141,14 +141,11 @@ namespace Registration
             var account = await _userAccountService.GetUserAccount(accountId);
 
             string token = await _emailService.GetStatusToken(accountId);
-            string confirmUrl = "https://localhost:3000/confirm?id=" + accountId.ToString() + "?key=" + token;
+            string confirmUrl = "https://localhost:3000/ConfirmAccount?id=" + accountId.ToString() + "?key=" + token;
 
-            EmailService emailService = new EmailService(new UserAccountRepository
-             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
-             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
-                 (new SQLServerGateway(), new ConnectionStringData())));
 
-            EmailOptionsModel emailOptionsModel = emailService.GetEmailOptions();
+
+            EmailOptionsModel emailOptionsModel =  _emailService.GetEmailOptions();
 
             // Create New Email Model
             var emailModel = new EmailModel();

@@ -42,7 +42,7 @@ namespace WebApi
             services.AddCors();
 
             services.AddControllers();
-            
+
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
@@ -66,7 +66,7 @@ namespace WebApi
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
-
+            services.AddSingleton(Configuration);
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
@@ -78,7 +78,6 @@ namespace WebApi
             services.AddTransient<IUserAccessService, UserAccessService>();
 
             services.AddTransient<IUserInteractionService, UserInteractionService>();
-
 
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
