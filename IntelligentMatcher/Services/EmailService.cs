@@ -7,10 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using UserManagement.Models;
-using WebApi.Models;
 using DataAccess.Repositories;
-using Services;
 using IntelligentMatcher.Services;
 
 namespace Registration.Services

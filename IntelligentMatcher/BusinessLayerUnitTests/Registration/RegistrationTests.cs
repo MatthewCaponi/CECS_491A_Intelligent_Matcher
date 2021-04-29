@@ -686,9 +686,7 @@ namespace BusinessLayerUnitTests.Registration
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
 
-
-
-
+            ILogService logService = new LogService();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
             RegistrationManager registrationManager = new RegistrationManager(emailService,
