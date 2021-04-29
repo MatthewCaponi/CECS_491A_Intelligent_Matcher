@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -67,13 +68,15 @@ namespace IdentityServices
             return token;
         }
 
-        public bool ValidateToken(string token)
+        public JwtSecurityToken ValidateToken(string token)
         {
             var tokenhandler = new JwtSecurityTokenHandler();
-            var publicKey = Encoding.ASCII.GetBytes(_configuration["PublicKey"]);
+            var publicKeyEncrypted = _configuration["PublicKey"];
+            var publicKey = Convert.FromBase64String(publicKeyEncrypted);
             var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
+
             using RSA rsa = RSA.Create(keySize);
-            rsa.ImportRSAPublicKey(publicKey, out _);
+            rsa.ImportSubjectPublicKeyInfo(publicKey, out _);
 
             try
             {
@@ -83,17 +86,20 @@ namespace IdentityServices
                     IssuerSigningKey = new RsaSecurityKey(rsa),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                    ValidateLifetime = true,
+                    CryptoProviderFactory = new CryptoProviderFactory()
+                    {
+                        CacheSignatureProviders = false
+                    },
+                    ClockSkew = TimeSpan.FromSeconds(5)
+                }, out var validatedToken);
 
-                //var jwtToken = (JwtSecurityToken)validatedToken;
-                //var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-
-                return true;
+                return (JwtSecurityToken)validatedToken;
             }
-            catch
+            catch(Exception e)
             {
-                return false;
+                Debug.WriteLine(e.Message);
+                return null;
             }
         }
     }

@@ -6,6 +6,6 @@ namespace IdentityServices
     public interface ITokenService
     {
         string CreateToken(List<UserClaimModel> userClaims);
-        public bool ValidateToken(string token);
+        public bool JwtSecurityToken(string token);
     }
 }

@@ -13,7 +13,6 @@ namespace BusinessModels.UserAccessControl
         public UserClaimModel ExpirationTime { get; set; }
         public UserClaimModel NotBefore { get; set; }
         public UserClaimModel IssuedAt { get; set; }
-        public UserClaimModel JwtId { get; set; }
 
         public JwtPayloadModel()
         {

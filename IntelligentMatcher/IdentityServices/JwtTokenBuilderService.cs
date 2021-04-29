@@ -20,7 +20,9 @@ namespace IdentityServices
         }
         public string CreateToken(JwtPayloadModel jwtPayloadModel)
         {
-            var privateKey = Encoding.ASCII.GetBytes(_configuration["PrivateKey"]);
+            var privateKeyEncrypted = _configuration["PrivateKey"];
+            var privateKey = Convert.FromBase64String(privateKeyEncrypted);
+
             var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
 
             using RSA rsa = RSA.Create(keySize);
@@ -37,17 +39,16 @@ namespace IdentityServices
             }
 
             var tokenHandler = new JsonWebTokenHandler();
-            var now = DateTime.UtcNow;
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = jwtPayloadModel.Issuer.Value,
                 Audience = jwtPayloadModel.Audience.Value,
-                IssuedAt = DateTime.Parse(jwtPayloadModel.IssuedAt.Value),
-                NotBefore = DateTime.Parse(jwtPayloadModel.NotBefore.Value),
-                Expires = now.AddMinutes(Double.Parse(jwtPayloadModel.ExpirationTime.Value)),
+                IssuedAt = DateTime.Parse(jwtPayloadModel.IssuedAt.Value).ToUniversalTime(),
+                NotBefore = DateTime.Parse(jwtPayloadModel.NotBefore.Value).ToUniversalTime(),
+                Expires = DateTime.UtcNow.AddMinutes(Double.Parse(jwtPayloadModel.ExpirationTime.Value)).ToUniversalTime(),
                 Subject = new ClaimsIdentity(claims),
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials,
             };
 
             string finalToken = tokenHandler.CreateToken(tokenDescriptor);
