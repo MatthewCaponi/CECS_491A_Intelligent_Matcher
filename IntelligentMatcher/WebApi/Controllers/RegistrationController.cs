@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement;
 using IntelligentMatcher.Services;
+using Services;
 
 namespace WebApi.Controllers
 {
@@ -19,6 +20,7 @@ namespace WebApi.Controllers
     {
         private readonly IRegistrationManager _registrationManager;
         private readonly IUserAccountService _userAccountService;
+        private readonly IEmailService _emailService;
 
         public class TokenIdModel
         {
@@ -26,17 +28,18 @@ namespace WebApi.Controllers
             public string Token { get; set; }
         }
 
-        public RegistrationController(IRegistrationManager registrationManager, IUserAccountService userAccountService)
+        public RegistrationController(IRegistrationManager registrationManager, IUserAccountService userAccountService, IEmailService emailService)
         {
             _registrationManager = registrationManager;
             _userAccountService = userAccountService;
+            _emailService = emailService;
         }
 
 
         [HttpPost]
         public async Task<bool> ConfirmUser([FromBody] TokenIdModel tokenIds)
         {
-            return await _registrationManager.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
+            return await _emailService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
         }
 
         [HttpPost]

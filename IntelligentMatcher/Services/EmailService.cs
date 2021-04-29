@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Models;
 using WebApi.Models;
+using DataAccess.Repositories;
+using Services;
+using IntelligentMatcher.Services;
 
 namespace Registration.Services
 {
@@ -17,6 +20,19 @@ namespace Registration.Services
 		//private const string API_KEY = "7e3947d6-ad88-41aa-91ae-8166ae128b21";
 		private const string API_KEY = "POSTMARK_API_TEST";
 		private IConfigurationRoot Configuration { get; set; }
+
+		private readonly IUserAccountRepository _userAccountRepository;
+		private readonly IAccountVerificationRepo _accountVerificationRepo;
+		private readonly IUserAccountService _userAccountService;
+
+
+		public EmailService(IUserAccountRepository userAccountRepository, IAccountVerificationRepo accountVerificationRepo, IUserAccountService userAccountService)
+        {
+			_userAccountRepository = userAccountRepository;
+			_accountVerificationRepo = accountVerificationRepo;
+			_userAccountService = userAccountService;
+
+		}
 
 
 
@@ -44,6 +60,57 @@ namespace Registration.Services
 
 		}
 
+
+		public async Task<bool> CreateVerificationToken(int userId)
+        {
+            try
+            {
+				await _accountVerificationRepo.CreateAccountVerification(userId);
+				return true;
+            }
+            catch
+            {
+				return false;
+            }
+
+		}
+
+		public async Task<string> GetStatusToken(int userId)
+		{
+			return await _accountVerificationRepo.GetStatusTokenByUserId(userId);
+		}
+
+		public async Task DeleteIfNotActive(int userId)
+		{
+			string status = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
+
+			if (status != "Active")
+			{
+				await _userAccountService.DeleteAccount(userId);
+			}
+
+		}
+
+		public async Task<bool> ValidateStatusToken(int userId, string token)
+		{
+			Console.WriteLine("Validating");
+			string existingStatusToken = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
+			Console.WriteLine(token);
+			Console.WriteLine(existingStatusToken);
+			if (existingStatusToken == token)
+			{
+
+
+				await _userAccountRepository.UpdateAccountStatus(userId, "Active");
+				await _accountVerificationRepo.UpdateAccountStatusToken(userId);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		}
 
 
 		public async Task<bool> SendEmail(EmailModel emailModel)

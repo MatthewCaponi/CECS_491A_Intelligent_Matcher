@@ -13,9 +13,5 @@ namespace Registration
             WebUserProfileModel usermodel, string password, string ipAddress);
         Task<bool> SendVerificationEmail(int accountId);
 
-        Task<bool> ValidateStatusToken(int userId, string token);
-        Task DeleteIfNotActive(int userId);
-
-        Task<string> GetStatusToken(int userId);
     }
 }

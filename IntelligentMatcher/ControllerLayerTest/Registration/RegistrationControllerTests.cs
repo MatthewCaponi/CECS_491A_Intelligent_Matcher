@@ -91,8 +91,10 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
-            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData()))); IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
@@ -105,7 +107,7 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -121,7 +123,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -138,7 +140,10 @@ namespace ControllerLayerTest.Registration
             string username, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -150,9 +155,8 @@ namespace ControllerLayerTest.Registration
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
-
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -168,7 +172,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -185,8 +189,10 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
-            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData()))); IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
@@ -199,7 +205,7 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -215,7 +221,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -232,8 +238,10 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
-            IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData()))); IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
@@ -246,7 +254,7 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -262,7 +270,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -279,7 +287,10 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -290,9 +301,8 @@ namespace ControllerLayerTest.Registration
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
-
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -308,7 +318,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -325,7 +335,10 @@ namespace ControllerLayerTest.Registration
             string password, string emailAddress, string dateOfBirth, string ipAddress, ErrorMessage error)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -339,7 +352,7 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -355,7 +368,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = false;
             expectedResult.ErrorMessage = error.ToString();
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -372,7 +385,10 @@ namespace ControllerLayerTest.Registration
             string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int expectedId)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -386,7 +402,7 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -402,7 +418,7 @@ namespace ControllerLayerTest.Registration
             expectedResult.Success = true;
             expectedResult.AccountId = expectedId;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.RegisterUser(registrationModel);
@@ -417,7 +433,10 @@ namespace ControllerLayerTest.Registration
         public async Task ResendEmail_BadEmail_ReturnFalse(int accountId)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -431,11 +450,11 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var expectedResult = false;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var actualResult = await registrationController.ResendEmail(accountId);
@@ -451,7 +470,10 @@ namespace ControllerLayerTest.Registration
             string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int accountId)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -465,7 +487,7 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
 
@@ -477,7 +499,7 @@ namespace ControllerLayerTest.Registration
             registrationModel.dateOfBirth = dateOfBirth;
             registrationModel.ipAddress = ipAddress;
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
             await registrationController.RegisterUser(registrationModel);
 
             var expectedResult = true;
@@ -498,7 +520,10 @@ namespace ControllerLayerTest.Registration
             string username, string password, string emailAddress, string dateOfBirth, string ipAddress, int expectedTime)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -511,10 +536,10 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
             var registrationModel = new RegistrationModel();
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
             registrationModel.firstName = firstName;
             registrationModel.surname = surname;
             registrationModel.username = username;
@@ -541,7 +566,10 @@ namespace ControllerLayerTest.Registration
         public async Task ResendEmail_ExecuteLessThan5Seconds(int accountId, int expectedTime)
         {
             // Arrange
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserProfileService userProfileService = new UserProfileService(new UserProfileRepository
@@ -555,9 +583,9 @@ namespace ControllerLayerTest.Registration
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
             RegistrationManager registrationManager = new RegistrationManager(emailService,
-                userAccountService, userProfileService, validationService, cryptographyService, accountVerificationRepo, userAccountRepository);
+                userAccountService, userProfileService, validationService, cryptographyService);
 
-            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService);
+            RegistrationController registrationController = new RegistrationController(registrationManager, userAccountService, emailService);
 
             // Act
             var timer = Stopwatch.StartNew();

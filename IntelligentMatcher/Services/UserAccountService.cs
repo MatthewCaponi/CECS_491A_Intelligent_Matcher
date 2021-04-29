@@ -21,10 +21,7 @@ namespace IntelligentMatcher.Services
             _userAccountRepository = userAccountRepository;
         }
 
-
-
-
-
+ 
         public async Task<List<WebUserAccountModel>> GetAllUserAccounts()
         {
             var userAccounts = await _userAccountRepository.GetAllAccounts();

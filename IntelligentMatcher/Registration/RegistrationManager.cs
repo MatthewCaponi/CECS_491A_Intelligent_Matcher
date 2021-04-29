@@ -28,8 +28,6 @@ namespace Registration
         private IUserProfileService _userProfileService;
         private readonly IValidationService _validationService;
         private readonly ICryptographyService _cryptographyService;
-        private readonly IAccountVerificationRepo _accountVerificationRepo;
-        private readonly IUserAccountRepository _userAccountRepository;
 
         private static System.Timers.Timer _timer;
 
@@ -37,15 +35,13 @@ namespace Registration
 
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
-            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, IAccountVerificationRepo accountVerificationRepo, IUserAccountRepository userAccountRepository)
+            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _validationService = validationService;
             _cryptographyService = cryptographyService;
-            _accountVerificationRepo = accountVerificationRepo;
-            _userAccountRepository = userAccountRepository;
             ILogServiceFactory factory = new LogSeviceFactory();
             factory.AddTarget(TargetType.Text);
 
@@ -54,45 +50,6 @@ namespace Registration
 
 
 
-
-    
-
-        public async Task<string> GetStatusToken(int userId)
-        {
-            return await _accountVerificationRepo.GetStatusTokenByUserId(userId);
-        }
-
-        public async Task DeleteIfNotActive(int userId)
-        {
-            string status = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
-
-            if (status != "Active")
-            {
-                await _userAccountService.DeleteAccount(userId);
-            }
-
-        }
-
-        public async Task<bool> ValidateStatusToken(int userId, string token)
-        {
-            Console.WriteLine("Validating");
-            string existingStatusToken = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
-            Console.WriteLine(token);
-            Console.WriteLine(existingStatusToken);
-            if (existingStatusToken == token)
-            {
-
-
-                await _userAccountRepository.UpdateAccountStatus(userId, "Active");
-                await _accountVerificationRepo.UpdateAccountStatusToken(userId);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
-        }
 
 
 
@@ -153,7 +110,10 @@ namespace Registration
             resultModel.Success = true;
             resultModel.SuccessValue = accountID;
 
-            await _accountVerificationRepo.CreateAccountVerification(accountID);
+
+
+
+            await _emailService.CreateVerificationToken(accountID);
 
 
             var emailResult = await SendVerificationEmail(accountID);
@@ -180,10 +140,13 @@ namespace Registration
         {
             var account = await _userAccountService.GetUserAccount(accountId);
 
-            string token = await _accountVerificationRepo.GetStatusTokenByUserId(accountId);
+            string token = await _emailService.GetStatusToken(accountId);
             string confirmUrl = "https://localhost:3000/confirm?id=" + accountId.ToString() + "?key=" + token;
 
-            EmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
 
             EmailOptionsModel emailOptionsModel = emailService.GetEmailOptions();
 
@@ -224,7 +187,7 @@ namespace Registration
             {
                 Thread.CurrentThread.IsBackground = true;
                 _timer = new System.Timers.Timer(10800000);
-                _timer.Elapsed += async (sender, e) => await DeleteIfNotActive(accountId);
+                _timer.Elapsed += async (sender, e) => await _emailService.DeleteIfNotActive(accountId);
 
             }).Start();
 

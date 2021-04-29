@@ -1,4 +1,7 @@
 ﻿using BusinessModels;
+using DataAccess;
+using DataAccess.Repositories;
+using IntelligentMatcher.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Registration.Services;
 using System;
@@ -31,7 +34,10 @@ namespace BusinessLayerUnitTests.Services
             emailModel.MessageStream = messageStream;
             emailModel.Tag = tag;
 
-            EmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             //Act
             var actualResult = await emailService.SendEmail(emailModel);
             //Asset
@@ -44,6 +50,7 @@ namespace BusinessLayerUnitTests.Services
         public async Task SendEmail_EmailSent_EmailNotSent(string recipient, string sender, bool trackOpens,
             string subject, string textBody, string htmlBody, string messageStream, string tag, bool expectedResult)
         {
+
             //Arrange
             EmailModel emailModel = new EmailModel();
 
@@ -56,7 +63,10 @@ namespace BusinessLayerUnitTests.Services
             emailModel.MessageStream = messageStream;
             emailModel.Tag = tag;
 
-            EmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             //Act
             var actualResult = await emailService.SendEmail(emailModel);
             //Asset
@@ -84,7 +94,10 @@ namespace BusinessLayerUnitTests.Services
             emailModel.MessageStream = messageStream;
             emailModel.Tag = tag;
 
-            EmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             //Act
             var timer = Stopwatch.StartNew();
             await emailService.SendEmail(emailModel);

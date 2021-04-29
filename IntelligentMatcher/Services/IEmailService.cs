@@ -12,5 +12,15 @@ namespace Services
         Task<bool> SendEmail(EmailModel emailModel);
 
         EmailOptionsModel GetEmailOptions();
+
+        Task<string> GetStatusToken(int userId);
+
+        Task DeleteIfNotActive(int userId);
+
+        Task<bool> CreateVerificationToken(int userId);
+
+
+        Task<bool>  ValidateStatusToken(int userId, string token);
+
     }
 }

@@ -123,7 +123,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -160,8 +163,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
-            ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
+            EmailService emailService = new EmailService(new UserAccountRepository
+            (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+            (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()))); ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
@@ -201,7 +206,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+            (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+            (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -243,7 +251,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -282,7 +293,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -321,7 +335,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -362,7 +379,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -404,7 +424,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -443,7 +466,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -482,7 +508,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -524,7 +553,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), 
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -561,7 +593,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -600,7 +635,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -649,7 +687,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+            (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+            (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                (new SQLServerGateway(), new ConnectionStringData()))); 
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -687,7 +728,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -725,7 +769,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -765,7 +812,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -814,7 +864,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -853,7 +906,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -892,7 +948,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -934,7 +993,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
@@ -988,7 +1050,10 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
-            IEmailService emailService = new EmailService();
+            EmailService emailService = new EmailService(new UserAccountRepository
+             (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
+             (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
+                 (new SQLServerGateway(), new ConnectionStringData())));
             ILoginAttemptsService loginAttemptsService = new LoginAttemptsService(new LoginAttemptsRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             IUserAccountService userAccountService = new UserAccountService(new UserAccountRepository
