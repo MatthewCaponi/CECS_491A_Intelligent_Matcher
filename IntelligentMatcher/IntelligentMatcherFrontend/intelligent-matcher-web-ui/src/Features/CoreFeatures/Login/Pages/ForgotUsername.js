@@ -12,24 +12,29 @@ function ForgotUsername() {
     function submitHandler(e){
         var ForgotInformationModel = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Login/ForgotUsername',
-        {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(ForgotInformationModel)
-        }).
-        then(r => r.json()).then(res=>{
-            if(res.success){
-                alert("Here is your username: " + res.username);
-                history.push("/Login");
-
+        if(e.emailAddress != "" && e.dateOfBirth != ""){
+            fetch('http://localhost:5000/Login/ForgotUsername',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ForgotInformationModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Here is your username: " + res.username);
+                    history.push("/Login");
+                }
+                else{
+                    alert(res.errorMessage);
+                }
             }
-            else{
-                alert(res.errorMessage);
-            }
+            );
         }
-        );
+        else{
+            alert("Input is Empty");
+        }
     }
+
     return (
         <Grid container>
         <Grid.Row>

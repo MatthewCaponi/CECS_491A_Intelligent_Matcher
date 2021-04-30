@@ -16,6 +16,7 @@ using System.Threading;
 using Microsoft.Extensions.Configuration;
 using WebApi.Models;
 using System.IO;
+using System.Linq;
 
 namespace Registration
 {
@@ -45,87 +46,85 @@ namespace Registration
             _logger = logger;
         }
 
-
-
-
-
-
-
-
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
             WebUserProfileModel userModel, string password, string ipAddress)
         {
             // Create Result to determine the result and message the UI will present
             var resultModel = new Result<int>();
-
-            var usernameAlreadyExists = await _validationService.UsernameExists(accountModel.Username);
-
-            if (usernameAlreadyExists)
+            if(accountModel.Username == null || accountModel.EmailAddress == null || userModel.FirstName == null ||
+                userModel.Surname == null || userModel.DateOfBirth == null || password == null)
             {
-                // Log and return Username existing result
-                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
                 resultModel.Success = false;
-                resultModel.ErrorMessage = ErrorMessage.UsernameExists;
+                resultModel.ErrorMessage = ErrorMessage.Null;
+
+                return resultModel;
+            }
+            else if(password.Length >= 8 && password.Any(char.IsDigit)
+                    && password.Any(char.IsUpper) && password.Any(char.IsLower))
+            {
+                var usernameAlreadyExists = await _validationService.UsernameExists(accountModel.Username);
+
+                if (usernameAlreadyExists)
+                {
+                    // Log and return Username existing result
+                    _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
+                    resultModel.Success = false;
+                    resultModel.ErrorMessage = ErrorMessage.UsernameExists;
+
+                    return resultModel;
+                }
+
+                var emailAlreadyExists = await _validationService.EmailExists(accountModel.EmailAddress);
+
+                if (emailAlreadyExists)
+                {
+                    // Log and return Email existing result
+                    _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
+                    resultModel.Success = false;
+                    resultModel.ErrorMessage = ErrorMessage.EmailExists;
+
+                    return resultModel;
+                }
+
+                // Creates User Account and gets Account ID to pass along
+                var accountID = await _userAccountService.CreateAccount(accountModel);
+
+                // Sets the password for the new Account
+                await _cryptographyService.newPasswordEncryptAsync(password, accountID);
+
+                // Passes on the Account ID to the User Profile Model
+                userModel.UserAccountId = accountID;
+
+                // Create User Profile with the Passed on Account ID
+                var userProfileId = await _userProfileService.CreateUserProfile(userModel);
+
+                //Log and Return result
+                _logger.Log("User: " + accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
+                resultModel.Success = true;
+                resultModel.SuccessValue = accountID;
+
+                await _emailService.CreateVerificationToken(accountID);
+
+                var emailResult = await SendVerificationEmail(accountID);
+
+                //Log Email Result
+                if (emailResult == true)
+                {
+                    _logger.Log("Verification email sent to " + accountModel.Username, LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
+                }
+                else
+                {
+                    _logger.Log("Verification email failed to send to " + accountModel.Username, LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
+                }
 
                 return resultModel;
             }
 
-            var emailAlreadyExists = await _validationService.EmailExists(accountModel.EmailAddress);
-
-            if (emailAlreadyExists)
-            {
-                // Log and return Email existing result
-                _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                resultModel.Success = false;
-                resultModel.ErrorMessage = ErrorMessage.EmailExists;
-
-                return resultModel;
-            }
-
-            // Creates User Account and gets Account ID to pass along
-            var accountID = await _userAccountService.CreateAccount(accountModel);
-
-            // Sets the password for the new Account
-            await _cryptographyService.newPasswordEncryptAsync(password, accountID);
-
-            // Passes on the Account ID to the User Profile Model
-            userModel.UserAccountId = accountID;
-
-            // Create User Profile with the Passed on Account ID
-            var userProfileId = await _userProfileService.CreateUserProfile(userModel);
-
-            // Re-Clarify the logging event
-
-
-            //Log and Return result
-            _logger.Log("User: " +  accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
-            resultModel.Success = true;
-            resultModel.SuccessValue = accountID;
-
-
-
-
-            await _emailService.CreateVerificationToken(accountID);
-
-
-            var emailResult = await SendVerificationEmail(accountID);
-            
-            //Log Email Result
-            if(emailResult == true)
-            {
-                _logger.Log("Verification email sent to " + accountModel.Username, LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
-            }
-            else
-            {
-                _logger.Log("Verification email failed to send to " + accountModel.Username, LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-            }
-
-            // First items of these tuples are immutable
-            // A new one must be returned for the success conditional
-
-
+            resultModel.Success = false;
+            resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
 
             return resultModel;
+
         }
 
         public async Task<bool> SendVerificationEmail(int accountId)
@@ -135,12 +134,8 @@ namespace Registration
             string token = await _emailService.GetStatusToken(accountId);
             string confirmUrl = "http://localhost:3000/ConfirmAccount?id=" + accountId.ToString() + "?key=" + token;
 
-
-
-            EmailModel emailModel =  _emailService.GetEmailOptions();
-
             // Create New Email Model
-
+            EmailModel emailModel =  _emailService.GetEmailOptions();
 
             if (emailModel != null)
             {
@@ -167,9 +162,6 @@ namespace Registration
             {
                 return false;
             }
-
-            // First items of these tuples are immutable
-            // A new one must be returned for the success conditional
 
         }
 

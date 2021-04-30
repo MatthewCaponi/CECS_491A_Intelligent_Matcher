@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         {
             var loginResultModel = new LoginResultModel();
 
-            if (loginModel.username == "" || loginModel.password == "")
+            if (loginModel.username == null || loginModel.password == null)
             {
                 loginResultModel.Success = false;
                 loginResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -58,7 +58,7 @@ namespace WebApi.Controllers
         {
             var forgotUsernameResultModel = new ForgotUsernameResultModel();
 
-            if(forgotInformationModel.emailAddress == "" || forgotInformationModel.dateOfBirth == "")
+            if(forgotInformationModel.emailAddress == null || forgotInformationModel.dateOfBirth == null)
             {
                 forgotUsernameResultModel.Success = false;
                 forgotUsernameResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -88,8 +88,8 @@ namespace WebApi.Controllers
         {
             var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
-            if (forgotInformationModel.emailAddress == "" || forgotInformationModel.username == "" ||
-                forgotInformationModel.dateOfBirth == "")
+            if (forgotInformationModel.emailAddress == null || forgotInformationModel.username == null ||
+                forgotInformationModel.dateOfBirth == null)
             {
                 forgotPasswordResultModel.Success = false;
                 forgotPasswordResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -121,7 +121,7 @@ namespace WebApi.Controllers
         {
             var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
-            if (forgotPasswordCodeInputModel.code == "")
+            if (forgotPasswordCodeInputModel.code == null)
             {
                 forgotPasswordResultModel.Success = false;
                 forgotPasswordResultModel.ErrorMessage = ErrorMessage.Null.ToString();
@@ -152,35 +152,26 @@ namespace WebApi.Controllers
         {
             var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
-            if (resetPasswordModel.password == "")
+            if (resetPasswordModel.password == null)
             {
                 forgotPasswordResultModel.Success = false;
                 forgotPasswordResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
                 return forgotPasswordResultModel;
             }
-            else if (resetPasswordModel.password.Length >= 8 && resetPasswordModel.password.Any(char.IsDigit)
-                && resetPasswordModel.password.Any(char.IsUpper) && resetPasswordModel.password.Any(char.IsLower))
-            {
-                var resetPasswordResult = await _loginManager.ResetPassword(resetPasswordModel.password,
+            var resetPasswordResult = await _loginManager.ResetPassword(resetPasswordModel.password, 
                 resetPasswordModel.accountId);
 
-                forgotPasswordResultModel.Success = resetPasswordResult.Success;
+            forgotPasswordResultModel.Success = resetPasswordResult.Success;
 
-                if (forgotPasswordResultModel.Success)
-                {
-                    forgotPasswordResultModel.AccountId = resetPasswordResult.SuccessValue.Id;
-                }
-                else
-                {
-                    forgotPasswordResultModel.ErrorMessage = resetPasswordResult.ErrorMessage.ToString();
-                }
-
-                return forgotPasswordResultModel;
+            if (forgotPasswordResultModel.Success)
+            {
+                forgotPasswordResultModel.AccountId = resetPasswordResult.SuccessValue.Id;
             }
-
-            forgotPasswordResultModel.Success = false;
-            forgotPasswordResultModel.ErrorMessage = ErrorMessage.InvalidPassword.ToString();
+            else
+            {
+                forgotPasswordResultModel.ErrorMessage = resetPasswordResult.ErrorMessage.ToString();
+            }
 
             return forgotPasswordResultModel;
         }

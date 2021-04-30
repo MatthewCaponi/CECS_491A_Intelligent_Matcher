@@ -3,35 +3,44 @@ import { Grid, Header, Divider, Label, Search, Container, Button } from 'semanti
 import './Login.css';
 import { useHistory } from 'react-router-dom';
 
-function ResetPassword(props) {
-    const [accountState, setAccountState] = useState(1);
-    const [passwordState, setPasswordState] = useState("");
-
+function ResetPassword() {
     const history = useHistory();
+    const [accountState, setAccountState] = useState(history.location.state.accountId);
+    const [passwordState, setPasswordState] = useState("");
     //history.location.state.accountId
 
 
     function submitHandler(e){
         var ResetPasswordModel = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Login/ResetPassword',
-        {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(ResetPasswordModel)
-        }).
-        then(r => r.json()).then(res=>{
-            if(res.success){
-                alert("Password Changed Successfully! Return to Login Page!");
-                history.push("/Login");
+        if(e.password != "" && e.password.length >= 8 && /\d/.test(e.password) &&
+        /[A-Z]/.test(e.password) && /[a-z]/.test(e.password)){
+            fetch('http://localhost:5000/Login/ResetPassword',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ResetPasswordModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Password Changed Successfully! Return to Login Page!");
+                    history.push("/Login");
 
+                }
+                else{
+                    alert(res.errorMessage);
+                }
             }
-            else{
-                alert(res.errorMessage);
-            }
+            );
         }
-        );
+        else if (e.password == ""){
+            alert("Input is Empty");
+        }
+        else{
+            alert("The password is invalid");
+        }
     }
+
     return (
         <Grid container>
         <Grid.Row>
