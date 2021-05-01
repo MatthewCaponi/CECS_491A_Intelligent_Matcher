@@ -25,15 +25,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccountCode_Create";
-                DynamicParameters p = new DynamicParameters();
+                if (model.Code.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccountCode_Create";
+                    DynamicParameters p = new DynamicParameters();
 
-                p.Add("Code", model.Code);
-                p.Add("ExpirationTime", model.ExpirationTime);
-                p.Add("UserAccountId", model.UserAccountId);
-                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                    p.Add("Code", model.Code);
+                    p.Add("ExpirationTime", model.ExpirationTime);
+                    p.Add("UserAccountId", model.UserAccountId);
+                    p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {

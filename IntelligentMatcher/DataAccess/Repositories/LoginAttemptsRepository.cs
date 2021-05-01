@@ -25,15 +25,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.LoginAttempts_Create";
-                DynamicParameters p = new DynamicParameters();
+                if (model.IpAddress.Length <= 50)
+                {
+                    var storedProcedure = "dbo.LoginAttempts_Create";
+                    DynamicParameters p = new DynamicParameters();
 
-                p.Add("IpAddress", model.IpAddress);
-                p.Add("LoginCounter", model.LoginCounter);
-                p.Add("SuspensionEndTime", model.SuspensionEndTime);
-                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                    p.Add("IpAddress", model.IpAddress);
+                    p.Add("LoginCounter", model.LoginCounter);
+                    p.Add("SuspensionEndTime", model.SuspensionEndTime);
+                    p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
