@@ -9,6 +9,7 @@ using UserManagement.Models;
 using UserManagement.Services;
 using Services;
 using System.Linq;
+using Exceptions;
 
 namespace Login
 {
@@ -113,15 +114,14 @@ namespace Login
 
                 return loginResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var loginResult = new Result<WebUserAccountModel>();
-                loginResult.Success = false;
-                loginResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return loginResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
-
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
+            }
         }
 
         public async Task<Result<string>> ForgotUsername(string emailAddress, DateTimeOffset dateOfBirth)
@@ -164,13 +164,13 @@ namespace Login
 
                 return forgotUsernameResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var forgotUsernameResult = new Result<string>();
-                forgotUsernameResult.Success = false;
-                forgotUsernameResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return forgotUsernameResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
 
@@ -262,13 +262,13 @@ namespace Login
 
                 return forgotPasswordResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var forgotPasswordResult = new Result<WebUserAccountModel>();
-                forgotPasswordResult.Success = false;
-                forgotPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return forgotPasswordResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
 
@@ -324,13 +324,13 @@ namespace Login
                     return forgotPasswordCodeResult;
                 }
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var forgotPasswordCodeResult = new Result<WebUserAccountModel>();
-                forgotPasswordCodeResult.Success = false;
-                forgotPasswordCodeResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return forgotPasswordCodeResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
 
@@ -364,13 +364,13 @@ namespace Login
 
                 return resetPasswordResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var resetPasswordResult = new Result<WebUserAccountModel>();
-                resetPasswordResult.Success = false;
-                resetPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return resetPasswordResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
     }

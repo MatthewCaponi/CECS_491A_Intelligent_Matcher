@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Exceptions;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,9 @@ namespace DataAccess.Repositories
 
                 return await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -53,9 +54,9 @@ namespace DataAccess.Repositories
                                              },
                                              _connectionString.SqlConnectionString);
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -72,9 +73,9 @@ namespace DataAccess.Repositories
                                              },
                                              _connectionString.SqlConnectionString);
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -88,9 +89,9 @@ namespace DataAccess.Repositories
                                                                               new { },
                                                                               _connectionString.SqlConnectionString);
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -109,9 +110,9 @@ namespace DataAccess.Repositories
 
                 return row.FirstOrDefault();
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -130,9 +131,9 @@ namespace DataAccess.Repositories
 
                 return row.FirstOrDefault();
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -151,9 +152,9 @@ namespace DataAccess.Repositories
                                              },
                                              _connectionString.SqlConnectionString);
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -172,9 +173,9 @@ namespace DataAccess.Repositories
                                              },
                                              _connectionString.SqlConnectionString);
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return default;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
     }
