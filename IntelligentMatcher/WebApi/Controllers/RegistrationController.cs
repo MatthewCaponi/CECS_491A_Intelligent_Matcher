@@ -101,21 +101,21 @@ namespace WebApi.Controllers
                     return registrationResultModel;
                 }
             }
-            catch (SqlCustomException e)
+            catch (SqlCustomException)
             {
                 var registrationResultModel = new RegistrationResultModel();
 
                 registrationResultModel.Success = false;
-                registrationResultModel.ErrorMessage = e.Message;
+                registrationResultModel.ErrorMessage = "You could not be registered. Try again.";
 
                 return registrationResultModel;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 var registrationResultModel = new RegistrationResultModel();
 
                 registrationResultModel.Success = false;
-                registrationResultModel.ErrorMessage = e.Message;
+                registrationResultModel.ErrorMessage = "A null was returned when registering";
 
                 return registrationResultModel;
             }

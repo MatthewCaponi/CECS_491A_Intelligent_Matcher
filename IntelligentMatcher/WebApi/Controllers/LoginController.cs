@@ -55,21 +55,21 @@ namespace WebApi.Controllers
 
                 return loginResultModel;
             }
-            catch (SqlCustomException e)
+            catch (SqlCustomException)
             {
                 var loginResultModel = new LoginResultModel();
 
                 loginResultModel.Success = false;
-                loginResultModel.ErrorMessage = e.Message;
+                loginResultModel.ErrorMessage = "Could not verify the information given. Try again.";
 
                 return loginResultModel;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 var loginResultModel = new LoginResultModel();
 
                 loginResultModel.Success = false;
-                loginResultModel.ErrorMessage = e.Message;
+                loginResultModel.ErrorMessage = "A null was returned when checking the inputs.";
 
                 return loginResultModel;
             }
@@ -105,21 +105,21 @@ namespace WebApi.Controllers
 
                 return forgotUsernameResultModel;
             }
-            catch (SqlCustomException e)
+            catch (SqlCustomException)
             {
                 var forgotUsernameResultModel = new ForgotUsernameResultModel();
 
                 forgotUsernameResultModel.Success = false;
-                forgotUsernameResultModel.ErrorMessage = e.Message;
+                forgotUsernameResultModel.ErrorMessage = "Could not verify the information given. Try again.";
 
                 return forgotUsernameResultModel;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 var forgotUsernameResultModel = new ForgotUsernameResultModel();
 
                 forgotUsernameResultModel.Success = false;
-                forgotUsernameResultModel.ErrorMessage = e.Message;
+                forgotUsernameResultModel.ErrorMessage = "A null was returned when checking the inputs.";
 
                 return forgotUsernameResultModel;
             }
@@ -159,21 +159,21 @@ namespace WebApi.Controllers
 
                 return forgotPasswordResultModel;
             }
-            catch (SqlCustomException e)
+            catch (SqlCustomException)
             {
                 var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
                 forgotPasswordResultModel.Success = false;
-                forgotPasswordResultModel.ErrorMessage = e.Message;
+                forgotPasswordResultModel.ErrorMessage = "Could not verify the information given. Try again.";
 
                 return forgotPasswordResultModel;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
                 forgotPasswordResultModel.Success = false;
-                forgotPasswordResultModel.ErrorMessage = e.Message;
+                forgotPasswordResultModel.ErrorMessage = "A null was returned when checking the inputs.";
 
                 return forgotPasswordResultModel;
             }
@@ -211,21 +211,21 @@ namespace WebApi.Controllers
 
                 return forgotPasswordResultModel;
             }
-            catch (SqlCustomException e)
+            catch (SqlCustomException)
             {
                 var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
                 forgotPasswordResultModel.Success = false;
-                forgotPasswordResultModel.ErrorMessage = e.Message;
+                forgotPasswordResultModel.ErrorMessage = "Failure to verify the code. Try again.";
 
                 return forgotPasswordResultModel;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
                 forgotPasswordResultModel.Success = false;
-                forgotPasswordResultModel.ErrorMessage = e.Message;
+                forgotPasswordResultModel.ErrorMessage = "A null was returned when checking the code.";
 
                 return forgotPasswordResultModel;
             }
@@ -262,21 +262,21 @@ namespace WebApi.Controllers
 
                 return forgotPasswordResultModel;
             }
-            catch (SqlCustomException e)
+            catch (SqlCustomException)
             {
                 var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
                 forgotPasswordResultModel.Success = false;
-                forgotPasswordResultModel.ErrorMessage = e.Message;
+                forgotPasswordResultModel.ErrorMessage = "The password could not be changed. Try Again.";
 
                 return forgotPasswordResultModel;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 var forgotPasswordResultModel = new ForgotPasswordResultModel();
 
                 forgotPasswordResultModel.Success = false;
-                forgotPasswordResultModel.ErrorMessage = e.Message;
+                forgotPasswordResultModel.ErrorMessage = "No account has been found.";
 
                 return forgotPasswordResultModel;
             }
