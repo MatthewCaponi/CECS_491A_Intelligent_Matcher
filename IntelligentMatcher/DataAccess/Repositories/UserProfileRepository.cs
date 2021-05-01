@@ -81,18 +81,25 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserProfile_Create";
+                if(model.FirstName.Length <= 50 && model.Surname.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserProfile_Create";
 
-                DynamicParameters p = new DynamicParameters();
+                    DynamicParameters p = new DynamicParameters();
 
-                p.Add("FirstName", model.FirstName);
-                p.Add("Surname", model.Surname);
-                p.Add("DateOfBirth", model.DateOfBirth);
-                p.Add("UserAccountId", model.UserAccountId);
-                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                    p.Add("FirstName", model.FirstName);
+                    p.Add("Surname", model.Surname);
+                    p.Add("DateOfBirth", model.DateOfBirth);
+                    p.Add("UserAccountId", model.UserAccountId);
+                    p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
-                return p.Get<int>("Id");
+                    await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                    return p.Get<int>("Id");
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {

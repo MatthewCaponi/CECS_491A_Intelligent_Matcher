@@ -13,7 +13,7 @@ function ResetPassword() {
     function submitHandler(e){
         var ResetPasswordModel = e;
         // e.preventDefault();
-        if(e.password != "" && e.password.length >= 8 && /\d/.test(e.password) &&
+        if(e.password != "" && e.password.length <= 50 && e.password.length >= 8 && /\d/.test(e.password) &&
         /[A-Z]/.test(e.password) && /[a-z]/.test(e.password)){
             fetch('http://localhost:5000/Login/ResetPassword',
             {
@@ -34,10 +34,13 @@ function ResetPassword() {
             );
         }
         else if (e.password == ""){
-            alert("Input is Empty");
+            alert("Input is empty!");
+        }
+        else if (e.password.length > 50){
+            alert("Input is too long!")
         }
         else{
-            alert("The password is invalid");
+            alert("The password is invalid!");
         }
     }
 

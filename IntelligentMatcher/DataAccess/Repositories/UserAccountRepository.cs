@@ -169,24 +169,31 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Create";
+                if(model.Username.Length <= 50 && model.EmailAddress.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccount_Create";
 
-                DynamicParameters p = new DynamicParameters();
+                    DynamicParameters p = new DynamicParameters();
 
-                p.Add("Username", model.Username);
-                p.Add("Password", model.Password);
-                p.Add("Salt", model.Salt);
-                p.Add("EmailAddress", model.EmailAddress);
-                p.Add("AccountType", model.AccountType);
-                p.Add("AccountStatus", model.AccountStatus);
-                p.Add("CreationDate", model.CreationDate);
-                p.Add("UpdationDate", model.UpdationDate);
+                    p.Add("Username", model.Username);
+                    p.Add("Password", model.Password);
+                    p.Add("Salt", model.Salt);
+                    p.Add("EmailAddress", model.EmailAddress);
+                    p.Add("AccountType", model.AccountType);
+                    p.Add("AccountStatus", model.AccountStatus);
+                    p.Add("CreationDate", model.CreationDate);
+                    p.Add("UpdationDate", model.UpdationDate);
 
-                p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+                    p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                    await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
-                return p.Get<int>("Id");
+                    return p.Get<int>("Id");
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
@@ -217,15 +224,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Update_Username";
+                if(username.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccount_Update_Username";
 
-                return await _dataGateway.Execute(storedProcedure,
-                                             new
-                                             {
-                                                 Id = id,
-                                                 Username = username
-                                             },
-                                             _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure,
+                                                 new
+                                                 {
+                                                     Id = id,
+                                                     Username = username
+                                                 },
+                                                 _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
@@ -237,15 +251,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Update_Email";
+                if (email.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccount_Update_Email";
 
-                return await _dataGateway.Execute(storedProcedure,
-                                             new
-                                             {
-                                                 Id = id,
-                                                 EmailAddress = email
-                                             },
-                                             _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure,
+                                                 new
+                                                 {
+                                                     Id = id,
+                                                     EmailAddress = email
+                                                 },
+                                                 _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
@@ -257,15 +278,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Update_Password";
+                if (password.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccount_Update_Password";
 
-                return await _dataGateway.Execute(storedProcedure,
-                                             new
-                                             {
-                                                 Id = id,
-                                                 Password = password
-                                             },
-                                             _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure,
+                                                 new
+                                                 {
+                                                     Id = id,
+                                                     Password = password
+                                                 },
+                                                 _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
@@ -277,15 +305,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Update_Salt";
+                if (salt.Length <= 100)
+                {
+                    var storedProcedure = "dbo.UserAccount_Update_Salt";
 
-                return await _dataGateway.Execute(storedProcedure,
-                                             new
-                                             {
-                                                 Id = id,
-                                                 Salt = salt
-                                             },
-                                             _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure,
+                                                 new
+                                                 {
+                                                     Id = id,
+                                                     Salt = salt
+                                                 },
+                                                 _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
@@ -298,15 +333,22 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
+                if (accountStatus.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
 
-                return await _dataGateway.Execute(storedProcedure,
-                                             new
-                                             {
-                                                 AccountStatus = accountStatus,
-                                                 Id = id
-                                             },
-                                             _connectionString.SqlConnectionString);
+                    return await _dataGateway.Execute(storedProcedure,
+                                                 new
+                                                 {
+                                                     AccountStatus = accountStatus,
+                                                     Id = id
+                                                 },
+                                                 _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {
@@ -318,16 +360,23 @@ namespace DataAccess.Repositories
         {
             try
             {
-                var storedProcedure = "dbo.UserAccount_Update_AccountType";
+                if (accountType.Length <= 50)
+                {
+                    var storedProcedure = "dbo.UserAccount_Update_AccountType";
 
-                return await _dataGateway.Execute(storedProcedure,
-                                             new
-                                             {
-                                                 AccountType = accountType,
-                                                 Id = id
+                    return await _dataGateway.Execute(storedProcedure,
+                                                 new
+                                                 {
+                                                     AccountType = accountType,
+                                                     Id = id
 
-                                             },
-                                             _connectionString.SqlConnectionString);
+                                                 },
+                                                 _connectionString.SqlConnectionString);
+                }
+                else
+                {
+                    return 0;
+                }
             }
             catch (SqlCustomException e)
             {

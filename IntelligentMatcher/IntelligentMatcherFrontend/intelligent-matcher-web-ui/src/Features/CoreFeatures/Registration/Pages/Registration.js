@@ -17,7 +17,8 @@ function Registration() {
         var RegistrationModel = e;
         // e.preventDefault();
         if(e.firstName != "" && e.surname != "" && e.username != "" && e.password != "" && e.emailAddress != "" &&
-        e.dateOfBirth != "" && e.password.length >= 8 && /\d/.test(e.password) &&
+        e.dateOfBirth != "" && e.firstName.length <= 50 && e.surname.length <= 50 && e.username.length <= 50 &&
+        e.emailAddress <= 50 && e.password.length <= 50 && e.password.length >= 8 && /\d/.test(e.password) &&
         /[A-Z]/.test(e.password) && /[a-z]/.test(e.password)){
             fetch('http://localhost:5000/Registration/RegisterUser',
             {
@@ -38,10 +39,14 @@ function Registration() {
         }
         else if(e.firstName == "" || e.surname == "" || e.username == "" || e.password == "" || e.emailAddress == "" ||
         e.dateOfBirth == ""){
-            alert("Input is Empty");
+            alert("One of the inputs is empty!");
+        }
+        else if(e.firstName.length > 50 || e.surname.length > 50 || e.username.length > 50 ||
+        e.password.length > 50 || e.emailAddress.length > 50){
+            alert("One of the inputs is too long!")
         }
         else{
-            alert("The password is invalid");
+            alert("The password is invalid!");
         }
     }
     return (
