@@ -16,6 +16,7 @@ using PublicUserProfile;
 using TestHelper;
 using Registration.Services;
 using IntelligentMatcher.Services;
+using Services;
 
 namespace WebApi
 {
@@ -238,7 +239,10 @@ namespace WebApi
 
 
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository, publicUserProfileService, userInteractionService);
 
             for (int i = 10; i < 15; i++)
             {

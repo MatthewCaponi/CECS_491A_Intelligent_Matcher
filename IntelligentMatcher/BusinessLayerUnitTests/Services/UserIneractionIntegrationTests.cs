@@ -419,6 +419,78 @@ namespace BusinessLayerUnitTests.Services
             }
         }
 
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetAllUserFriendRequests_CreatRequest_RequestCreated(int userId1, int userId2)
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
+
+
+            await userInteractionService.CreateFriendRequestAsync(userId1, userId2);
+
+            IEnumerable<FriendsListJunctionModel> friendsListJunctionModels = await userInteractionService.GetAllUserFriendRequests(userId1);
+
+            if (friendsListJunctionModels == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (friendsListJunctionModels.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var friendsListJunctionModel in friendsListJunctionModels)
+            {
+                if (friendsListJunctionModel.User1Id == userId1 && friendsListJunctionModel.User2Id == userId2)
+                {
+                    Assert.IsTrue(true);
+
+                }
+            }
+        }
+
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetAllUserFriendRequestsOutgoing_CreatRequest_RequestCreated(int userId1, int userId2)
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
+
+
+            await userInteractionService.CreateFriendRequestAsync(userId1, userId2);
+
+            IEnumerable<FriendsListJunctionModel> friendsListJunctionModels = await userInteractionService.GetAllUserFriendRequestsOutgoing(userId1);
+
+            if (friendsListJunctionModels == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (friendsListJunctionModels.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var friendsListJunctionModel in friendsListJunctionModels)
+            {
+                if (friendsListJunctionModel.User1Id == userId1 && friendsListJunctionModel.User2Id == userId2)
+                {
+                    Assert.IsTrue(true);
+
+                }
+            }
+        }
+
         [DataTestMethod]
         [DataRow(1, 2)]
         public async Task CreateFriendRequestAsync_CreatRequest_RequestCreated(int userId1, int userId2)
@@ -457,6 +529,41 @@ namespace BusinessLayerUnitTests.Services
 
         [DataTestMethod]
         [DataRow(1, 2)]
+        public async Task GetAllUserFriends_CreatRequest_RequestCreated(int userId1, int userId2)
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
+
+
+            await userInteractionService.CreateFriendshipAsync(userId1, userId2);
+
+            IEnumerable<FriendsListJunctionModel> friendsListJunctionModels = await userInteractionService.GetAllUserFriends(userId2);
+
+            if (friendsListJunctionModels == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (friendsListJunctionModels.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var friendsListJunctionModel in friendsListJunctionModels)
+            {
+                if (friendsListJunctionModel.User1Id == userId1 && friendsListJunctionModel.User2Id == userId2)
+                {
+                    Assert.IsTrue(true);
+
+                }
+            }
+        }
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
         public async Task CreateBlockAsync_CreatBlock_BlockCreated(int userId1, int userId2)
         {
             IDataGateway dataGateway = new SQLServerGateway();
@@ -491,7 +598,76 @@ namespace BusinessLayerUnitTests.Services
         }
 
 
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetAllUserFriendBlocks_CreatBlock_BlockCreated(int userId1, int userId2)
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
 
+
+            await userInteractionService.CreateBlockAsync(userId1, userId2);
+
+            IEnumerable<FriendsListJunctionModel> friendsListJunctionModels = await userInteractionService.GetAllUserFriendBlocks(userId1);
+
+            if (friendsListJunctionModels == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (friendsListJunctionModels.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var friendsListJunctionModel in friendsListJunctionModels)
+            {
+                if (friendsListJunctionModel.User1Id == userId1 && friendsListJunctionModel.User2Id == userId2)
+                {
+                    Assert.IsTrue(true);
+
+                }
+            }
+        }
+
+
+        [DataTestMethod]
+        [DataRow(1, 2)]
+        public async Task GetAllBlockingUsers_CreatBlock_BlockCreated(int userId1, int userId2)
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
+
+
+            await userInteractionService.CreateBlockAsync(userId1, userId2);
+
+            IEnumerable<FriendsListJunctionModel> friendsListJunctionModels = await userInteractionService.GetAllBlockingUsers(userId1);
+
+            if (friendsListJunctionModels == null)
+            {
+                Assert.IsTrue(false);
+            }
+            if (friendsListJunctionModels.Count() == 0)
+            {
+                Assert.IsTrue(false);
+            }
+            foreach (var friendsListJunctionModel in friendsListJunctionModels)
+            {
+                if (friendsListJunctionModel.User1Id == userId1 && friendsListJunctionModel.User2Id == userId2)
+                {
+                    Assert.IsTrue(true);
+
+                }
+            }
+        }
 
 
 

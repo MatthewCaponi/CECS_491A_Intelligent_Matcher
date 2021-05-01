@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PublicUserProfile
+namespace Services
 {
     public class PublicUserProfileService : IPublicUserProfileService
     {
@@ -172,7 +172,7 @@ namespace PublicUserProfile
         {
             try
             {
-                await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Intrests);
+                await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Height);
                 return true;
             }
             catch

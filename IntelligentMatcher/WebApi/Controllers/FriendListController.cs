@@ -137,10 +137,18 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<bool> CreateFriendRequest([FromBody] idUsernameModel ids)
         {
-            UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
-            int friendId = model.Id;
-            await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
-            return true;
+            try
+            {
+                UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
+                int friendId = model.Id;
+                await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
 

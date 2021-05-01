@@ -5,13 +5,16 @@ import ProfileData from "../Components/ProfileData";
 import { Image } from 'semantic-ui-react'
 import ImageUpload from "../Components/ImageUpload";
 import '../.././../../App'
+import { Redirect } from 'react-router'
 
 import _ from 'lodash'
+import Messaging from '../../Messaging/Pages/Messaging';
 
 export class TopBar extends Component {
   static displayName = TopBar.name;
 
   constructor(props) {
+
 
     super(props);
 
@@ -21,8 +24,11 @@ export class TopBar extends Component {
         friendStatus: "",
         accountProfileData: [],
         otherData: [],
-        file: ''   
-
+        file: ''   ,
+        reportmessage: "",
+        descriptionmessage: "",
+        edit: "",
+        navigate: ""
         };
         let url = window.location.href;
         url = url.split("id=")
@@ -32,14 +38,55 @@ export class TopBar extends Component {
         this.removeFriend = this.removeFriend.bind(this);
         this.cancelFriendRequest = this.cancelFriendRequest.bind(this);
         this.createFriendRequest = this.createFriendRequest.bind(this);
-        this.setFile = this.setFile.bind(this);
+        this.setFile = this.setFile.bind(this);        
+        this.reportUser = this.reportUser.bind(this);
+
         this.getAccountData = this.getAccountData.bind(this);
         this.getFriendStatus();
         this.getAccountData();
+
+        this.routeChange = this.routeChange.bind(this);
+
   }
 
 
+  routeChange() {
+    this.setState({ navigate: true });
 
+  }
+
+
+async reportUser(){
+    if(this.reporttext.value.length > 0){
+    this.render();
+
+    var IdsModel = {ReportingId: this.state.userId, ReportedId: this.state.viewingId, Report: this.reporttext.value};
+  
+    await fetch(global.url + 'UserProfile/ReportUser',
+    {
+    method: "POST",
+    headers: {'Content-type':'application/json'},
+    body: JSON.stringify(IdsModel)
+    }).
+    then(r => r.json()).then(res=>{
+  
+    }
+    );
+
+    this.reporttext.value = "";
+    this.state.reportmessage = "User Reported";
+      this.getAccountData();
+      this.getFriendStatus();
+  
+      this.render();
+
+    }else{
+
+        this.state.reportmessage = "Please enter some data";
+  
+        this.render();
+    }
+}
 
 
   async cancelFriendRequest(){
@@ -124,11 +171,14 @@ export class TopBar extends Component {
     body: JSON.stringify(userProfileModel)
     }).
     then(r => r.json()).then(res=>{
-  
+        this.setState({descriptionmessage: "Account Information Updated"});
+
     }
-    );
+    );    
     this.getAccountData();
     this.render();
+
+
 }
 
   async getFriendStatus(){
@@ -174,6 +224,15 @@ setFile(e) {
             } 
   render () {
 
+    
+    if (this.state.navigate) {
+
+
+
+
+        return <Redirect to={{ pathname:"/Messaging"}}      push={true} />
+      }
+
     var filePath = "\\uploaded\\";
     return (
         <Grid centered  divided='vertically'>
@@ -203,19 +262,20 @@ setFile(e) {
 
             {
                 (this.state.friendStatus.status == "Friends" && this.state.userId != this.state.viewingId) ?(
-                    <div><button class="ui button" onClick={this.removeFriend}>Remove Friend</button>   <button class="ui button" onClick={this.saveData}>Message</button></div>
+                    <div><button class="ui button" onClick={this.removeFriend}>Remove Friend</button>   <button class="ui button" onClick={this.routeChange} >Message</button><br />  <textarea type="text" placeholder="report" name="reporttext"  ref={(input) => this.reporttext = input} maxlength="1000"></textarea><br /><button class="ui button"  onClick={this.reportUser}>Report</button><br />{this.state.reportmessage}
+                      </div>
 
 
                  ) : ("")
             }
             {
                 (this.state.friendStatus.status == "None" && this.state.userId != this.state.viewingId) ?(
-                    <button class="ui button" onClick={this.createFriendRequest}>Add Friend</button>
+                    <div><button class="ui button" onClick={this.createFriendRequest}>Add Friend</button><br />  <textarea type="text" name="reporttext" placeholder="report" ref={(input) => this.reporttext = input} maxlength="1000"></textarea><br /><button class="ui button"   onClick={this.reportUser}>Report</button><br />{this.state.reportmessage}</div>
                  ) : ("")
             }       
             {
                 (this.state.friendStatus.status == "Requested" && this.state.userId != this.state.viewingId)  ?(
-                    <button class="ui button" onClick={this.cancelFriendRequest}>Cancel Request</button>
+                    <div><button class="ui button" onClick={this.cancelFriendRequest}>Cancel Request</button> <br /> <textarea type="text" name="reporttext" placeholder="report" ref={(input) => this.reporttext = input} maxlength="1000"></textarea><br /><button   class="ui button"  onClick={this.reportUser}>Report</button><br />{this.state.reportmessage}</div>
                  ) : ("")
             }         
                 
@@ -237,10 +297,11 @@ setFile(e) {
                 <Grid.Row >
                 Joined: {this.state.otherData.joinDate}
                 </Grid.Row>
+ 
                 <Grid.Row >
 
             {
-                (this.state.userId == this.state.viewingId
+                (this.state.userId == this.state.viewingId && this.state.edit == "edit"
                     ) ?(       
                         <div>               
                         <form class="ui form">
@@ -248,10 +309,31 @@ setFile(e) {
                         <textarea type="text" name="description" defaultValue={this.state.accountProfileData.description} ref={(input) => this.Description = input} maxlength="1000"></textarea>
 
                         </form>
-                                                <button class="ui button" onClick={this.saveData}>Save Data</button></div>   
+                                                <button class="ui button" onClick={this.saveData}>Save Description</button> <button class="ui button" onClick={() => {        this.setState({edit: "no"})}}>Cancel</button>
+                                                
+                                                
+                                                <br /> {this.state.descriptionmessage}</div>   
+
 
                  ) : (<div> <br /> {this.state.accountProfileData.description}</div>)
+
+
+
+
+
+                 
             }
+{
+(this.state.userId == this.state.viewingId && this.state.edit != "edit"
+                    ) ?(   <div>  <br />           <button class="ui button" onClick={() => {        this.setState({edit: "edit"})}}>Edit</button></div>
+
+                    ) : (      ""
+                    )
+
+
+
+  }
+
                 </Grid.Row>
 
             </Grid.Column>

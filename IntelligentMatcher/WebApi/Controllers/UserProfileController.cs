@@ -14,8 +14,8 @@ using System.Net.Http.Headers;
 using System.Linq;    
 
 
-using System.Net.Http;    
-
+using System.Net.Http;
+using Services;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -36,7 +36,6 @@ namespace IntelligentMatcherUI.Controllers
             public int UserId { get; set; }
             public int FriendId { get; set; }
         }
-
 
 
 
@@ -61,12 +60,13 @@ namespace IntelligentMatcherUI.Controllers
         private readonly IPublicUserProfileManager _publicUserProfileManager;
         private readonly IFriendListManager _friendListManager;
         private readonly IUserAccountRepository _userAccountRepository;
-
-        public UserProfileController(IPublicUserProfileManager publicUserProfileManager, IFriendListManager friendListManager, IUserAccountRepository userAccountRepository)
+        private readonly IUserInteractionService _userInteractionService;
+        public UserProfileController(IPublicUserProfileManager publicUserProfileManager, IFriendListManager friendListManager, IUserAccountRepository userAccountRepository, IUserInteractionService userInteractionService)
         {
             _publicUserProfileManager = publicUserProfileManager;
             _friendListManager = friendListManager;
             _userAccountRepository = userAccountRepository;
+            _userInteractionService = userInteractionService;
         }
 
 
@@ -83,6 +83,15 @@ namespace IntelligentMatcherUI.Controllers
         {
 
             await _publicUserProfileManager.EditPublicUserProfileAsync(model);
+            return true;
+
+        }
+
+        [HttpPost]
+        public async Task<bool> ReportUser([FromBody] UserReportsModel model)
+        {
+
+            await _userInteractionService.CreateReportAsync(model);
             return true;
 
         }

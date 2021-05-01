@@ -12,6 +12,14 @@ namespace Services
 
         Task<bool> CreateFriendshipAsync(int userId1, int userId2);
 
+        Task<IEnumerable<FriendsListJunctionModel>> GetAllBlockingUsers(int userId);
+
+        Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendRequests(int userId);
+
+        Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendRequestsOutgoing(int userId);
+
+        Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendBlocks(int userId);
+
         Task<bool> CreateFriendRequestAsync(int userId1, int userId2);
 
         Task<bool> CreateBlockAsync(int userId, int blockedUserId);
@@ -23,5 +31,7 @@ namespace Services
         Task<bool> RemoveFriendBlockAsync(int userId, int blockedUserId);
 
         Task<bool> RemoveReportAsync(int reportId);
+
+        Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriends(int userId);
     }
 }

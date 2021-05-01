@@ -18,7 +18,8 @@ export class ProfileData extends Component {
         userId: 1,
         mutualFriends: [],
         friendStatus: "",
-
+        edit: "no",
+        saveMessage: ""
         };
 
 
@@ -28,7 +29,7 @@ export class ProfileData extends Component {
     this.saveData = this.saveData.bind(this);
 
     this.getAccountData = this.getAccountData.bind(this);
-
+    
     this.getAccountData();
 
 }
@@ -45,7 +46,9 @@ async saveData(){
     body: JSON.stringify(userProfileModel)
     }).
     then(r => r.json()).then(res=>{
-  
+        this.setState({edit: "no"});
+        this.setState({saveMessage: "Account Information Updated"});
+
     }
     );
     this.getAccountData();
@@ -143,7 +146,7 @@ async getAccountData(){
 
     const renderTable = () => {
 
-        if(this.state.userId == this.state.viewingId){
+        if(this.state.userId == this.state.viewingId && this.state.edit == "edit"){
             return (
     
                 <div>
@@ -262,16 +265,20 @@ async getAccountData(){
                          <Table.Row>        
                             <Table.Cell>           
                             <button class="ui button" onClick={this.saveData}>Save Data</button>
+                            <button class="ui button" onClick={() => {        this.setState({edit: "no"})}}>Cancel</button>
+
                             </Table.Cell>
                          </Table.Row>
                      </Table.Body>
                 
                 </Table>
+
+
                   </div>
             );
         }
 
-        if(this.state.userId != this.state.viewingId){
+        if(this.state.userId != this.state.viewingId || (this.state.userId == this.state.viewingId && this.state.edit != "edit")){
             return (
     
                 <div>
@@ -285,7 +292,7 @@ async getAccountData(){
                  
                    
                         {    
-                        (this.state.accountProfileData.jobs != null && this.state.accountProfileData.goals != "") ?(
+                        (this.state.accountProfileData.jobs != null && this.state.accountProfileData.jobs != "") ?(
                         <Table.Row>        
                              <Table.Cell>   
                                             
@@ -392,11 +399,11 @@ async getAccountData(){
                       
                     
                      </Table.Body>
-                
+                     <button class="ui button" onClick={() => {        this.setState({edit: "edit"})}}>Edit</button>
+
                 </Table>
 
-
-                
+                        {this.state.saveMessage}
                   </div>
             );
         }

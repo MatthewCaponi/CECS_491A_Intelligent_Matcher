@@ -5,6 +5,7 @@ using Models;
 using DataAccess;
 using DataAccess.Repositories;
 using System.Threading.Tasks;
+using Services;
 
 namespace PublicUserProfile
 {

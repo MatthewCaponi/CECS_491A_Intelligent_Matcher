@@ -12,7 +12,7 @@ namespace FriendList
         Task<string> GetFriendStatusUserIdAsync(int userId1, int userId2);
         Task<bool> RequestFriendAsync(int requestUserId, int requestedUserId);
 
-        Task<int> ConfirmFriendAsync(int requetUserId, int requestedUserId);
+        Task<bool> ConfirmFriendAsync(int requetUserId, int requestedUserId);
 
         Task<bool> RemoveFriendAsync(int userId, int removedUserId);
 

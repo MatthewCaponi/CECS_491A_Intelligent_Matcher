@@ -29,6 +29,32 @@ namespace Services
             return true;
         }
 
+
+        public async Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriends(int userId)
+        {
+            return await _friendListRepo.GetAllUserFriends(userId);
+        }
+
+        public async Task<IEnumerable<FriendsListJunctionModel>> GetAllBlockingUsers(int userId)
+        {
+            return await _friendBlockListRepo.GetAllBlockingUser(userId);
+        }
+
+        public async Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendRequestsOutgoing(int userId)
+        {
+            return await _friendRequestListRepo.GetAllUserFriendRequestsOutgoing(userId);
+        }
+
+        public async Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendBlocks(int userId)
+        {
+            return await _friendBlockListRepo.GetAllUserFriendBlocks(userId);
+        }
+
+        public async Task<IEnumerable<FriendsListJunctionModel>> GetAllUserFriendRequests(int userId)
+        {
+            return await _friendRequestListRepo.GetAllUserFriendRequests(userId);
+        }
+
         public async Task<bool> CreateFriendshipAsync(int userId1, int userId2)
         {
             FriendsListJunctionModel model = new FriendsListJunctionModel();

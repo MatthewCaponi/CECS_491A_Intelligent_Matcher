@@ -177,13 +177,22 @@ async createFriendRequest(){
     body: JSON.stringify(IdsModel)
     }).
     then(r => r.json()).then(res=>{
+        if(res == true){
+          this.setState({friendRequestMessage: ""})
 
+          this.getFriendData();
+          this.render();
+          this.friendusername.value = "";
+          this.setState({friendRequestMessage: "Friend Request Sent"})
+
+
+        }else{
+          this.setState({friendRequestMessage: "User Does Not Exist"})
+
+        }
     }
     );
-    this.setState({friendRequestMessage: ""})
 
-    this.getFriendData();
-    this.render();
   }else{
     this.setState({friendRequestMessage: this.friendusername.value + "has blocked you" })
   }
@@ -211,7 +220,6 @@ async createFriendRequest(){
 
 
 
-this.friendusername.value = "";
 }
 
 async blockFriend(friendId){

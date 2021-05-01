@@ -14,6 +14,8 @@ using UserAccountSettings;
 using System.Linq;
 using PublicUserProfile;
 using Moq;
+using Services;
+
 namespace BusinessLayerUnitTests.PublicUserProfile
 {
     [TestClass]
