@@ -13,7 +13,7 @@ namespace BusinessLayerUnitTests.Archiving
     {
         [DataTestMethod]
         [DataRow("TestLog1.txt", "TestLog2.txt", "TestLog3.txt")]
-        public void ArchiveService_ArchiveSuccess_ReturnTrue(string file1, string file2, string file3)
+        public void ArchiveLogFiles_ArchiveSuccess_ReturnTrue(string file1, string file2, string file3)
         {
             // Arrange
             string currentDirectory = Environment.CurrentDirectory;
@@ -83,6 +83,21 @@ namespace BusinessLayerUnitTests.Archiving
 
             // Assert
             Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ArchiveLogFiles_EmptyList_ReturnFalse()
+        {
+            // Arrange
+            List<string> files = new List<string>();
+
+            IArchiveService archiveService = new ArchiveService();
+
+            // Act
+            var result = archiveService.ArchiveLogFiles(files);
+
+            // Assert
+            Assert.IsFalse(result);
         }
     }
 }
