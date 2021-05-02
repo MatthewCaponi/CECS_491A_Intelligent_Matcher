@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using TestHelper;
+using Logging;
 
 namespace DataAccessUnitTestes
 {
@@ -15,17 +16,26 @@ namespace DataAccessUnitTestes
     public class UserAccountRepositoryTests
     {
         #region Test Setup
+        private static readonly ILogService _logService = new LogService();
+        private static IDataGateway dataGateway;
+        private static IConnectionStringData connectionString;
+        private static IUserAccountRepository userAccountRepository;
+
+        [ClassInitialize]
+        public static void ClassInit(TestContext testContext)
+        {
+            dataGateway = new SQLServerGateway(_logService);
+            connectionString = new ConnectionStringData();
+            userAccountRepository = new UserAccountRepository(dataGateway, connectionString, _logService);
+    }
+        
         // Insert test rows before every test case
         [TestInitialize()]
         public async Task Init()
         {
             await TestCleaner.CleanDatabase();
             var numTestRows = 20;
-
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-
+            
             for (int i = 1; i <= numTestRows; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();
@@ -47,9 +57,6 @@ namespace DataAccessUnitTestes
         [TestCleanup()]
         public async Task CleanUp()
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             var accounts = await userAccountRepository.GetAllAccounts();
 
             foreach (var account in accounts)
@@ -65,9 +72,6 @@ namespace DataAccessUnitTestes
         [TestMethod]
         public async Task GetAllAccounts_AtLeastTwoAccountsExist_ReturnsCorrectIds()
         {
-            // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
-
             // Act
             IEnumerable<UserAccountModel> userAccounts = await userAccountRepository.GetAllAccounts();
 
@@ -92,9 +96,6 @@ namespace DataAccessUnitTestes
         [DataRow(20)]
         public async Task GetAllAccounts_AtLeastTwoAccountsExist_ReturnsCorrectNumberOfAccounts(int numAccounts)
         {
-            // Arrange
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
-
             // Act
             IEnumerable<UserAccountModel> userAccounts = await userAccountRepository.GetAllAccounts();
 
@@ -140,8 +141,6 @@ namespace DataAccessUnitTestes
             userAccountModel.AccountStatus = accountStatus;
             userAccountModel.CreationDate = DateTimeOffset.Parse(creationDate);
             userAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
-
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
 
             //Act
             await userAccountRepository.CreateAccount(userAccountModel);

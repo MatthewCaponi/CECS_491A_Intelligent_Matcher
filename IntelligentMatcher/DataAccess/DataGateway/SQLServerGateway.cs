@@ -8,16 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logging;
-using static Models.UserProfileModel;
 using Exceptions;
 
 namespace DataAccess
 {
     public class SQLServerGateway : IDataGateway
     {
+        private readonly ILogService _logService;
+
+        public SQLServerGateway(ILogService logService)
+        {
+            _logService = logService;
+        }
         public async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionString)
         {
-    
             try
             {
                 using (IDbConnection connection = new SqlConnection(connectionString))
@@ -30,6 +34,7 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
+                _logService.Log("SqlException", LogTarget.All, LogLevel.error, this.ToString(), "Database_Logs");
                 throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
@@ -47,7 +52,8 @@ namespace DataAccess
             }
             catch (SqlException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);           
+                _logService.Log("SqlException", LogTarget.All, LogLevel.error, this.ToString(), "Database_Logs");
+                throw new SqlCustomException(e.Message, e.InnerException);
             }                 
         }
     }

@@ -6,6 +6,8 @@ using Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Dapper;
+using Exceptions;
+using Logging;
 
 namespace DataAccess.Repositories
 {
@@ -13,108 +15,164 @@ namespace DataAccess.Repositories
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
+        private readonly ILogService _logService;
 
-        public UserAccountRepository(IDataGateway dataGateway, IConnectionStringData connectionString)
+        public UserAccountRepository(IDataGateway dataGateway, IConnectionStringData connectionString, ILogService logService)
         {
             _dataGateway = dataGateway;
             _connectionString = connectionString;
+            _logService = logService;
         }
  
         public async Task<IEnumerable<UserAccountModel>> GetAllAccounts()
         {
             string storedProcedure = "dbo.UserAccount_Get_All";
 
-            return await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
+            try
+            {
+                return await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                                                                           new { },
                                                                           _connectionString.SqlConnectionString);
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
 
         public async Task<UserAccountModel> GetAccountById(int id)
         {
             string storedProcedure = "dbo.UserAccount_Get_ById";
 
-            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
+            try
+            {
+                var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
                 },
                 _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
 
         public async Task<UserAccountModel> GetAccountByUsername(string username)
         {
             var storedProcedure = "dbo.UserAccount_Get_ByUsername";
 
-            var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
+            try
+            {
+                var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                 new
                 {
                     Username = username
                 },
                 _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
 
         public async Task<UserAccountModel> GetAccountByEmail(string email)
         {
             var storedProcedure = "dbo.UserAccount_Get_ByEmail";
 
-            var row = await _dataGateway.LoadData < UserAccountModel, dynamic>(storedProcedure,
-                new
-                {
-                    EmailAddress = email
-                },
-                _connectionString.SqlConnectionString);
+            try
+            {
+                var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
+               new
+               {
+                   EmailAddress = email
+               },
+               _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
 
         public async Task<string> GetSaltById(int id)
         {
             var storedProcedure = "dbo.UserAccount_GetSalt_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
+            try
+            {
+                var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
                 },
                 _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
         public async Task<string> GetPasswordById(int id)
         {
             var storedProcedure = "dbo.UserAccount_GetPassword_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
+            try
+            {
+                var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
                 },
                 _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
-
-
 
         public async Task<string> GetStatusById(int id)
         {
             var storedProcedure = "dbo.UserAccount_GetStatus_ById";
 
-            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
+            try
+            {
+                var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                 new
                 {
                     Id = id
                 },
                 _connectionString.SqlConnectionString);
 
-            return row.FirstOrDefault();
+                return row.FirstOrDefault();
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
         }
 
-        public async Task<int> CreateAccount(UserAccountModel model)
+        public async Task<int?> CreateAccount(UserAccountModel model)
         {
             var storedProcedure = "dbo.UserAccount_Create";
 
@@ -131,103 +189,183 @@ namespace DataAccess.Repositories
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+            try
+            {
+                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
-            return p.Get<int>("Id");
+                return p.Get<int>("Id");
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return null;
+            }
+
         }
 
-        public async Task<int> DeleteAccountById(int id)
+        public async Task<bool> DeleteAccountById(int id)
         {
             var storedProcedure = "dbo.UserAccount_Delete_ById";
-
-            return await _dataGateway.Execute(storedProcedure,
+  
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id
                                          },
                                          _connectionString.SqlConnectionString);
+
+                return true;
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
+
         }
 
-        public async Task<int> UpdateAccountUsername(int id, string username)
+        public async Task<bool> UpdateAccountUsername(int id, string username)
         {
             var storedProcedure = "dbo.UserAccount_Update_Username";
 
-            return await _dataGateway.Execute(storedProcedure,
-                                         new
-                                         {
-                                             Id = id,
-                                             Username = username
-                                         },
-                                         _connectionString.SqlConnectionString);
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
+                                          new
+                                          {
+                                              Id = id,
+                                              Username = username
+                                          },
+                                          _connectionString.SqlConnectionString);
+
+                return true;
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
         }
 
-        public async Task<int> UpdateAccountEmail(int id, string email)
+        public async Task<bool> UpdateAccountEmail(int id, string email)
         {
             var storedProcedure = "dbo.UserAccount_Update_Email";
 
-            return await _dataGateway.Execute(storedProcedure,
-                                         new
-                                         {
-                                             Id = id,
-                                             EmailAddress = email
-                                         },
-                                         _connectionString.SqlConnectionString);
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
+                                        new
+                                        {
+                                            Id = id,
+                                            EmailAddress = email
+                                        },
+                                        _connectionString.SqlConnectionString);
+
+                return true;
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
         }
 
-        public async Task<int> UpdateAccountPassword(int id, string password)
+        public async Task<bool> UpdateAccountPassword(int id, string password)
         {
             var storedProcedure = "dbo.UserAccount_Update_Password";
 
-            return await _dataGateway.Execute(storedProcedure,
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id,
                                              Password = password
                                          },
                                          _connectionString.SqlConnectionString);
+
+                return true;
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
         }
 
-        public async Task<int> UpdateAccountSalt(int id, string salt)
+        public async Task<bool> UpdateAccountSalt(int id, string salt)
         {
             var storedProcedure = "dbo.UserAccount_Update_Salt";
 
-            return await _dataGateway.Execute(storedProcedure,
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
                                              Id = id,
                                              Salt = salt
                                          },
                                          _connectionString.SqlConnectionString);
+
+                return true;
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
         }
 
 
-        public async Task<int> UpdateAccountStatus(int id, string accountStatus)
+        public async Task<bool> UpdateAccountStatus(int id, string accountStatus)
         {
             var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
 
-            return await _dataGateway.Execute(storedProcedure,
-                                         new
-                                         {
-                                             AccountStatus = accountStatus,
-                                             Id = id
-                                         },
-                                         _connectionString.SqlConnectionString);
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
+                                 new
+                                 {
+                                     AccountStatus = accountStatus,
+                                     Id = id
+                                 },
+                                 _connectionString.SqlConnectionString);
+
+                return true;
+
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
         }
 
-
-
-        public async Task<int> UpdateAccountType(int id, string accountType)
+        public async Task<bool> UpdateAccountType(int id, string accountType)
         {
             var storedProcedure = "dbo.UserAccount_Update_AccountType";
 
-            return await _dataGateway.Execute(storedProcedure,
-                                         new
-                                         {
-                                             AccountType = accountType,
-                                             Id = id
+            try
+            {
+                await _dataGateway.Execute(storedProcedure,
+                                          new
+                                          {
+                                              AccountType = accountType,
+                                              Id = id
 
-                                         },
-                                         _connectionString.SqlConnectionString);
+                                          },
+                                          _connectionString.SqlConnectionString);
+
+                return true;
+
+            }
+            catch (SqlCustomException e)
+            {
+                _logService.Log("Caught SqlCustomExceptionException", LogTarget.All, LogLevel.error, e, this.ToString(), "Database_Logs");
+                return false;
+            }
         }
     }
 }
