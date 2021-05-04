@@ -16,8 +16,8 @@ namespace PublicUserProfile
          
         Task<bool> editUserProfilePicture(PublicUserProfileModel model);
 
-        Task<bool> setUserOffline(int UserId);
+        Task<bool> setUserOffline(int userId);
 
-        Task<bool> setUserOnline(int UserId);
+        Task<bool> setUserOnline(int userId);
      }
 }

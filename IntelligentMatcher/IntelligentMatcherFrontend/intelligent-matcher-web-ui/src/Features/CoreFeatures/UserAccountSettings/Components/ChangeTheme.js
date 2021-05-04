@@ -1,5 +1,6 @@
 
   import React, { Component } from 'react';
+  import '../.././../../App'
 
   export class ChangeTheme extends Component {
     static displayName = ChangeTheme.name;
@@ -8,7 +9,7 @@
       super(props);
       this.state = {};
       this.changeTheme = this.changeTheme.bind(this);
-      fetch('http://localhost:5000/useraccountsettings/getTheme',
+      fetch(global.url + 'useraccountsettings/getTheme',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -33,7 +34,7 @@
     changeTheme() {
       var ChangeThemeModel = {id: 1, theme: this.theme.value};
   
-      fetch('http://localhost:5000/useraccountsettings/changetheme',
+      fetch(global.url + 'useraccountsettings/changetheme',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},

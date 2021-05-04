@@ -27,6 +27,7 @@ using DataAccess.Repositories.ListingRepositories;
 using TraditionalListings.Services;
 using TraditionalListings.Managers;
 using Models.DALListingModels;
+using Logging;
 
 namespace WebApi
 {
@@ -46,7 +47,9 @@ namespace WebApi
             services.AddCors();
 
             services.AddControllers();
-            
+            services.AddSingleton(Configuration);
+
+            services.AddTransient<ILogService, LogService>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
@@ -76,6 +79,8 @@ namespace WebApi
 
 
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
+
+            services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();

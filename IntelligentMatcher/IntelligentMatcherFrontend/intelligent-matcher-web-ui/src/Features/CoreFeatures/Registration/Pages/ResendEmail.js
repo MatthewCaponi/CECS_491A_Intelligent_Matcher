@@ -1,8 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+
 import './Registration.css';
 
 function ResendEmail() {
+    const history = useHistory();
+    console.log(history);
     const [accountState, setAccountState] = useState(1);
     function submitHandler(e){
         var accountId = e;
@@ -26,7 +30,7 @@ function ResendEmail() {
     return (
         <Grid container>
         <Grid.Row>
-            <h1>Your account has been registered!</h1>
+            <h1>Your account has been registered!{history.location.state.accountId} </h1>
         </Grid.Row>
         <Grid.Row>
             This account is still inactive because the email was not verified!

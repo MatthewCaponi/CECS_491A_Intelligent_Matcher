@@ -19,7 +19,7 @@ namespace DataAccess.Repositories
             _dataGateway = dataGateway;
             _connectionString = connectionString;
         }
-
+ 
         public async Task<IEnumerable<UserAccountModel>> GetAllAccounts()
         {
             string storedProcedure = "dbo.UserAccount_Get_All";
@@ -98,6 +98,22 @@ namespace DataAccess.Repositories
             return row.FirstOrDefault();
         }
 
+
+
+        public async Task<string> GetStatusById(int id)
+        {
+            var storedProcedure = "dbo.UserAccount_GetStatus_ById";
+
+            var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
+                new
+                {
+                    Id = id
+                },
+                _connectionString.SqlConnectionString);
+
+            return row.FirstOrDefault();
+        }
+
         public async Task<int> CreateAccount(UserAccountModel model)
         {
             var storedProcedure = "dbo.UserAccount_Create";
@@ -112,6 +128,7 @@ namespace DataAccess.Repositories
             p.Add("AccountStatus", model.AccountStatus);
             p.Add("CreationDate", model.CreationDate);
             p.Add("UpdationDate", model.UpdationDate);
+
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
@@ -196,6 +213,8 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
+
+
 
         public async Task<int> UpdateAccountType(int id, string accountType)
         {

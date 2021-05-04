@@ -4,6 +4,7 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import { Image } from 'semantic-ui-react'
 import ImageUpload from "../Components/ImageUpload";
+import '../.././../../App'
 
 import _ from 'lodash'
 
@@ -46,7 +47,7 @@ export class TopBar extends Component {
   
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
   
-    await fetch('http://localhost:5000/FriendList/CancelFriendRequest',
+    await fetch(global.url + 'FriendList/CancelFriendRequest',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
@@ -69,7 +70,7 @@ export class TopBar extends Component {
   
       var IdsModel = {UserId: this.state.userId, FriendUsername: this.state.otherData.username};
   
-      await fetch('http://localhost:5000/FriendList/CreateFriendRequest',
+      await fetch(global.url + 'FriendList/CreateFriendRequest',
       {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -96,7 +97,7 @@ export class TopBar extends Component {
   
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
   
-    await fetch('http://localhost:5000/FriendList/RemoveFriend',
+    await fetch(global.url + 'FriendList/RemoveFriend',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
@@ -116,7 +117,7 @@ export class TopBar extends Component {
   async saveData(){
     var userProfileModel = {UserId: this.state.userId, Description: this.Description.value, Jobs: this.state.accountProfileData.jobs, Goals: this.state.accountProfileData.goals, Age: parseInt(this.state.accountProfileData.age), Gender: this.state.accountProfileData.gender, Ethnicity: this.state.accountProfileData.ethnicity, SexualOrientation: this.state.accountProfileData.sexualOrientation, Height: this.state.accountProfileData.height, Hobbies: this.state.accountProfileData.hobbies, Intrests: this.state.accountProfileData.intrests, Visibility: this.state.accountProfileData.visibility};
 
-    await fetch('http://localhost:5000/UserProfile/SaveUserProfile',
+    await fetch(global.url + 'UserProfile/SaveUserProfile',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
@@ -134,7 +135,7 @@ export class TopBar extends Component {
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -146,7 +147,7 @@ export class TopBar extends Component {
 }
 
 async getAccountData(){
-    await fetch('http://localhost:5000/UserProfile/GetUserProfile',
+    await fetch(global.url + 'UserProfile/GetUserProfile',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -156,7 +157,7 @@ async getAccountData(){
     }   
     ); 
 
-    await fetch('http://localhost:5000/UserProfile/GetOtherData',
+    await fetch(global.url + 'UserProfile/GetOtherData',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -244,7 +245,7 @@ setFile(e) {
                         <div>               
                         <form class="ui form">
                             Description:
-                        <textarea type="text" name="description" defaultValue={this.state.accountProfileData.description} ref={(input) => this.Description = input}></textarea>
+                        <textarea type="text" name="description" defaultValue={this.state.accountProfileData.description} ref={(input) => this.Description = input} maxlength="1000"></textarea>
 
                         </form>
                                                 <button class="ui button" onClick={this.saveData}>Save Data</button></div>   

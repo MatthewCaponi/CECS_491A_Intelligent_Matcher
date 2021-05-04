@@ -24,31 +24,64 @@ namespace PublicUserProfile
 
         }
 
-        public async Task<bool> setUserOnline(int UserId)
+        public async Task<bool> setUserOnline(int userId)
         {
-            await _publicUserProfileRepo.UpdateStatus(UserId, "Online");
+            await _publicUserProfileRepo.UpdateStatus(userId, "Online");
             return true;
         }
 
-        public async Task<bool> setUserOffline(int UserId)
+        public async Task<bool> setUserOffline(int userId)
         {
-            await _publicUserProfileRepo.UpdateStatus(UserId, "Offline");
+            await _publicUserProfileRepo.UpdateStatus(userId, "Offline");
             return true;
         }
 
         public async Task<bool> editPublicUserProfileAsync(PublicUserProfileModel model)
         {
-            await _publicUserProfileRepo.UpdateAge(model.UserId, model.Age);
-            await _publicUserProfileRepo.UpdateDescription(model.UserId, model.Description);
-            await _publicUserProfileRepo.UpdateEthnicity(model.UserId, model.Ethnicity);
-            await _publicUserProfileRepo.UpdateGender(model.UserId, model.Gender);
-            await _publicUserProfileRepo.UpdateGoals(model.UserId, model.Goals);
-            await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Height);
-            await _publicUserProfileRepo.UpdateHobbies(model.UserId, model.Hobbies);
-            await _publicUserProfileRepo.UpdateIntrests(model.UserId, model.Intrests);
-            await _publicUserProfileRepo.UpdateJobs(model.UserId, model.Jobs);
-            await _publicUserProfileRepo.UpdateSexualOrientation(model.UserId, model.SexualOrientation);
-            await _publicUserProfileRepo.UpdateVisibility(model.UserId, model.Visibility);
+            if(model.Age < 1000)
+            {
+                await _publicUserProfileRepo.UpdateAge(model.UserId, model.Age);
+            }
+            if(model.Description.Length <= 1000)
+            {
+                await _publicUserProfileRepo.UpdateDescription(model.UserId, model.Description);
+            }
+            if(model.Ethnicity.Length <= 100)
+            {
+                await _publicUserProfileRepo.UpdateEthnicity(model.UserId, model.Ethnicity);
+            }
+            if(model.Gender == "Male" || model.Gender == "Female")
+            {
+                await _publicUserProfileRepo.UpdateGender(model.UserId, model.Gender);
+            }
+            if(model.Goals.Length <= 1000)
+            {
+                await _publicUserProfileRepo.UpdateGoals(model.UserId, model.Goals);
+            }
+            if(model.Height.Length <= 1000)
+            {
+                await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Height);
+            }
+            if(model.Hobbies.Length <= 1000)
+            {
+                await _publicUserProfileRepo.UpdateHobbies(model.UserId, model.Hobbies);
+            }
+            if(model.Intrests.Length <= 1000)
+            {
+                await _publicUserProfileRepo.UpdateIntrests(model.UserId, model.Intrests);
+            }
+            if(model.Jobs.Length <= 1000)
+            {
+                await _publicUserProfileRepo.UpdateJobs(model.UserId, model.Jobs);
+            }
+            if(model.SexualOrientation.Length <= 100)
+            {
+                await _publicUserProfileRepo.UpdateSexualOrientation(model.UserId, model.SexualOrientation);
+            }
+            if(model.Visibility == "Public" || model.Visibility == "Private" || model.Visibility == "Friends")
+            {
+                await _publicUserProfileRepo.UpdateVisibility(model.UserId, model.Visibility);
+            }
 
             return true;
         }

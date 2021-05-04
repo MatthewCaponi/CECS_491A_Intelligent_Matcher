@@ -1,11 +1,30 @@
 import React, {useState, useEffect} from 'react';
-import { BrowserRouter as Redirect } from 'react-router-dom'
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 import './Login.css';
 
 function Login() {
+    const history = useHistory();
+
+    let location = useLocation()
+    let confMessage = "";
+
+    try{
+        if(location.state.message == "UserConfirmed"){
+            confMessage = "Account Confirmed, please login";
+        }
+    }
+    catch{
+        
+    }
+
+
+
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
+
     function submitHandler(e){
         var LoginModel = e;
         // e.preventDefault();
@@ -18,6 +37,8 @@ function Login() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("Successful Login for " + res.username);
+                history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
+
             }
             else{
                 alert(res.errorMessage);
@@ -29,8 +50,12 @@ function Login() {
     return (
         <div>
             <Grid container>
+
             <Grid.Row>
                 <h1>Login</h1>
+            </Grid.Row>
+            <Grid.Row>
+                {confMessage}
             </Grid.Row>
             <Grid.Row>
                 <label htmlFor="username">

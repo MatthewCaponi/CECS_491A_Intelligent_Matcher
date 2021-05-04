@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+
 import './Login.css';
 
 function ForgotPasswordValidation() {
     const [usernameState, setUsernameState] = useState("");
     const [emailState, setEmailState] = useState("");
     const [dateOfBirthState, setDateOfBirthState] = useState("");
+    const history = useHistory();
+
     function submitHandler(e){
         var ForgotInformationModel = e;
         // e.preventDefault();
@@ -18,6 +22,8 @@ function ForgotPasswordValidation() {
         then(r => r.json()).then(res=>{
             if(res.success){
                 alert("A Code Has Been Emailed to You.");
+                history.push("/ForgotPasswordCodeInput", { accountId: res.accountId });
+
             }
             else{
                 alert(res.errorMessage);

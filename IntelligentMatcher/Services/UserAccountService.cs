@@ -1,14 +1,19 @@
 ﻿using DataAccess.Repositories;
 using Models;
 using Services;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using UserManagement.Models;
 
 namespace IntelligentMatcher.Services
 {
     public class UserAccountService : IUserAccountService
     {
+
+
         private IUserAccountRepository _userAccountRepository;
 
         public UserAccountService(IUserAccountRepository userAccountRepository)
@@ -16,6 +21,7 @@ namespace IntelligentMatcher.Services
             _userAccountRepository = userAccountRepository;
         }
 
+ 
         public async Task<List<WebUserAccountModel>> GetAllUserAccounts()
         {
             var userAccounts = await _userAccountRepository.GetAllAccounts();
@@ -78,6 +84,7 @@ namespace IntelligentMatcher.Services
                 return null;
             }
         }
+
 
         public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
         {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../.././../../App'
 
 export class DeleteAccount extends Component {
   static displayName = DeleteAccount.name;
@@ -14,7 +15,7 @@ export class DeleteAccount extends Component {
   deleteAccount() {
     var DeleteModel = {id: 1, password: this.textInput.value};
 
-    fetch('http://localhost:5000/useraccountsettings/delete',
+    fetch(global.url + 'useraccountsettings/delete',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
