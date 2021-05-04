@@ -62,12 +62,13 @@ namespace DataAccess.Repositories.ListingRepositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             DalistingModel_Title = dalListingModel.Title,
-                                             DalistingModel_Details = dalListingModel.Details,
-                                             DalistingModel_City = dalListingModel.City,
-                                             DalistingModel_State = dalListingModel.State,
-                                             DalistingModel_NumberofParticipants = dalListingModel.NumberOfParticipants,
-                                             DalistingModel_InpersonOrRemote = dalListingModel.InPersonOrRemote
+                                             Id= dalListingModel.Id,
+                                             Title = dalListingModel.Title,
+                                             Details = dalListingModel.Details,
+                                             City = dalListingModel.City,
+                                             State = dalListingModel.State,
+                                             NumberofParticipants = dalListingModel.NumberOfParticipants,
+                                             InpersonOrRemote = dalListingModel.InPersonOrRemote
 
                                          },
                                          _connectionString.SqlConnectionString);

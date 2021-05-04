@@ -1,6 +1,9 @@
 ﻿CREATE PROCEDURE [dbo].[ListingSearch_GetAllDatingListing]
-	@param1 int = 0,
-	@param2 int
+
 AS
-	SELECT @param1, @param2
-RETURN 0
+begin
+	set nocount on;
+	Select [Id],[SexualOrientationPreference],[LookingFor],[ListingId]
+	from dbo.Dating;
+end
+

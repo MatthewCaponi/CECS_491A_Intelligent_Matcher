@@ -9,6 +9,7 @@ namespace TraditionalListings.Services
     public interface IListingGetterService
     {
         Task<List<BusinessListingModel>> GetAllListing();
+        Task<List<BusinessListingModel>> GetAllListingById();
         Task<List<BusinessCollaborationModel>> GetAllCollaborationListing();
         Task<List<BusinessRelationshipModel>> GetAllRelationshipListing();
         Task<List<BusinessTeamModel>> GetAllTeamModelListing();

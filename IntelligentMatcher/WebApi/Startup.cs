@@ -62,10 +62,15 @@ namespace WebApi
             services.AddTransient<IRelationshipRepository, RelationshipRepository>();
             services.AddTransient<IDatingRepository, DatingRepository>();
             services.AddTransient<ITeamModelRepository, TeamModelRepository>();
+            services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
+
 
             services.AddTransient<IListingCreationService, ListingCreationService>();
             services.AddTransient<IListingDeletionService, ListingDeletionService>();
             services.AddTransient<IListingUpdationService, ListingUpdationService>();
+            services.AddTransient<IListingGetterService, ListingGetterService>();
+
+           
 
            
 

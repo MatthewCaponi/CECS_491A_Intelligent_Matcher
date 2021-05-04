@@ -22,9 +22,7 @@ namespace DataAccess.Repositories.ListingRepositories
 
         public async Task<int> CreateListing(DALTeamModel dalTeamModel)
         {
-
-            var query = "insert into [TeamModel]([TeamType],[GameType],[Platform],[Experience],[ListingId])" +
-                "values (@TeamType, @GameType,@Platform,@Experience,@ListingId); set @Id = SCOPE_IDENTITY();";
+            string storedProcedure = "dbo.CreateTeamModelListing";
 
             DynamicParameters p = new DynamicParameters();
             p.Add("TeamType", dalTeamModel.TeamType);
@@ -34,18 +32,15 @@ namespace DataAccess.Repositories.ListingRepositories
 
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
-            await _dataGateway.Execute(query, p, _connectionString.SqlConnectionString);
+            await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
             return p.Get<int>("Id");
 
 
 
         }
-
-        public Task<int> DeleteListing(int id)
-        {
-            throw new NotImplementedException();
-        }
+        
+       
 
         public async Task<int> UpdateListing(DALTeamModel dalTeamModel)
         {

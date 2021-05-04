@@ -91,5 +91,20 @@ namespace TraditionalListings.Services
             return businessListings;
 
         }
+
+        public async Task<BusinessListingModel> GetAllListingById(int id)
+        {
+            var dalListing = await _traditionalListingSearchRepository.GetAllListingsById(id);
+            var businessListing = ModelConverterService.ConvertTo(dalListing, new BusinessDatingModel());
+            return businessListing;
+
+            
+          
+        }
+
+        public Task<List<BusinessListingModel>> GetAllListingById()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

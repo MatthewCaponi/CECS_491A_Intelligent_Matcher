@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Services;
 
+
 namespace Services
 {
     public class ValidationService : IValidationService
     {
         private readonly IUserAccountService _userAccountService;
         private readonly IUserProfileService _userProfileService;
+     
         
 
         public ValidationService(IUserAccountService userAccountService, IUserProfileService userProfileService)
@@ -74,6 +76,7 @@ namespace Services
             return false;
         }
 
+       
        
     }
 }

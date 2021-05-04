@@ -1,6 +1,7 @@
 ﻿using Models.DALListingModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,11 +19,9 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
-
-        // doesnt like the star change it. 
         public async Task<IEnumerable<DALListingModel>> GetAllListings()
         {
-            string storedProcedure = "dbo.ListingSearch_GetAllListing";
+            string storedProcedure = "dbo.ListingSearch_GetAllListings";
             return await _dataGateway.LoadData<DALListingModel, dynamic>(storedProcedure,
                                                                          new { },
                                                                          _connectionString.SqlConnectionString);
@@ -44,9 +43,9 @@ namespace DataAccess.Repositories
                                                                               new { },
                                                                               _connectionString.SqlConnectionString);
         }
-        
-        
-         public async Task<IEnumerable<DALRelationshipModel>> GetAllTeamListings()
+
+
+        public async Task<IEnumerable<DALRelationshipModel>> GetAllTeamListings()
         {
             string storedProcedure = "dbo.ListingSearch_GetAllTeamListing";
             return await _dataGateway.LoadData<DALRelationshipModel, dynamic>(storedProcedure,
@@ -60,6 +59,17 @@ namespace DataAccess.Repositories
             return await _dataGateway.LoadData<DALDatingModel, dynamic>(storedProcedure,
                                                                               new { },
                                                                               _connectionString.SqlConnectionString);
+        }
+
+        public async Task<DALListingModel> GetAllListingsById(int id)
+        {
+            
+            string storedProcedure = "dbo.ListingSearch_GetListingById";
+
+            var row = await _dataGateway.LoadData<DALDatingModel, dynamic>(storedProcedure,
+                                                                             new { },
+                                                                             _connectionString.SqlConnectionString);
+            return row.FirstOrDefault();
         }
     }
 }

@@ -13,14 +13,16 @@ namespace TraditionalListings.Services
         private ICollaborationRepository _collaborationRepository;
         private IRelationshipRepository _relationshipRepository;
         private ITeamModelRepository _teamModelRepository;
+        private IDatingRepository _datingRepository;
 
         public ListingCreationService(IListingRepository listingRepository, ICollaborationRepository collaborationRepository, IRelationshipRepository relationshipRepository,
-           ITeamModelRepository teamModelRepository)
+           ITeamModelRepository teamModelRepository, IDatingRepository datingrepository)
         {
             _listingRepository = listingRepository;
             _collaborationRepository = collaborationRepository;
             _relationshipRepository = relationshipRepository;
             _teamModelRepository = teamModelRepository;
+            _datingRepository = datingrepository;
         }
 
         public async Task<int> CreateListing(BusinessListingModel businessListingmodel)

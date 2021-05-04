@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
+
+//ERROR HANDLING HERE NOT IN MANAGERS..... 
+
 namespace TraditionalListings.Services
 {
     public class ListingUpdationService : IListingUpdationService
@@ -34,7 +37,7 @@ namespace TraditionalListings.Services
             return await _listingRepository.UpdateListing(dallistingModel);
 
         }
-
+        
         public async Task<int> UpdateCollaborationListing(BusinessCollaborationModel businesscollaborationModel)
         {
             var dalCollaborationModel = ModelConverterService.ConvertTo(businesscollaborationModel, new DALCollaborationModel());

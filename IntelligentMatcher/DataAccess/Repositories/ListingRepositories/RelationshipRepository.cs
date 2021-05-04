@@ -40,10 +40,6 @@ namespace DataAccess.Repositories.ListingRepositories
 
         }
 
-        public Task<DALRelationshipModel> GetListing(int id)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<int> UpdateListing(DALRelationshipModel dalRelationshipModell)
         {
