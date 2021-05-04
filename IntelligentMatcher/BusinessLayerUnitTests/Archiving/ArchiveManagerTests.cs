@@ -25,8 +25,8 @@ namespace BusinessLayerUnitTests.Archiving
             IArchiveService archiveService = new ArchiveService();
             IArchiveManager archiveManager = new ArchiveManager(archiveService);
 
-            var startTime = DateTimeOffset.UtcNow.AddHours(-1);
-            var endTime = DateTimeOffset.UtcNow.AddHours(1);
+            var startTime = DateTimeOffset.UtcNow.AddDays(-1);
+            var endTime = DateTimeOffset.UtcNow.AddDays(1);
 
             // Act
             var result = archiveManager.ArchiveLogFiles(startTime, endTime);

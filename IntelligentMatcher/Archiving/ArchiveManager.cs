@@ -16,23 +16,30 @@ namespace Archiving
         }
         public bool ArchiveLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
-            string currentDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(currentDirectory).FullName;
-            string logDirectory = $"{projectDirectory}\\logs";
-
-            string[] allFiles = Directory.GetFiles(logDirectory, "*.*", SearchOption.AllDirectories);
-            List<string> validFiles = new List<string>();
-
-            foreach (var file in allFiles)
+            try
             {
-                DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
-                if (creationTime >= startTime && creationTime <= endTime)
-                {
-                    validFiles.Add(file);
-                }
-            }
+                string currentDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+                string logDirectory = $"{projectDirectory}\\logs";
 
-            return _archiveService.ArchiveLogFiles(validFiles);
+                string[] allFiles = Directory.GetFiles(logDirectory, "*.*", SearchOption.AllDirectories);
+                List<string> validFiles = new List<string>();
+
+                foreach (var file in allFiles)
+                {
+                    DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
+                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    {
+                        validFiles.Add(file);
+                    }
+                }
+
+                return _archiveService.ArchiveLogFiles(validFiles);
+            }
+            catch (IOException e)
+            {
+                throw new IOException(e.Message, e.InnerException);
+            }
         }
     }
 }
