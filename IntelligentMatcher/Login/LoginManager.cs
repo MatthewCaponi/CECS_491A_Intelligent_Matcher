@@ -53,7 +53,7 @@ namespace Login
                 {
                     if (DateTimeOffset.UtcNow < businessLoginAttemptsModel.SuspensionEndTime)
                     {
-                        loginResult.Success = false;
+                        loginResult.WasSuccessful = false;
                         loginResult.ErrorMessage = ErrorMessage.TooManyAttempts;
 
                         return loginResult;
@@ -74,7 +74,7 @@ namespace Login
                         await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
                     }
 
-                    loginResult.Success = false;
+                    loginResult.WasSuccessful = false;
                     loginResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return loginResult;
@@ -92,14 +92,14 @@ namespace Login
                         await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
                     }
 
-                    loginResult.Success = false;
+                    loginResult.WasSuccessful = false;
                     loginResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return loginResult;
                 }
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
 
-                loginResult.Success = true;
+                loginResult.WasSuccessful = true;
                 loginResult.SuccessValue = account;
 
                 return loginResult;
@@ -107,7 +107,7 @@ namespace Login
             catch
             {
                 var loginResult = new Result<WebUserAccountModel>();
-                loginResult.Success = false;
+                loginResult.WasSuccessful = false;
                 loginResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return loginResult;
@@ -125,7 +125,7 @@ namespace Login
                 // Account will be null if an account with the given email address can't be found
                 if (account == null)
                 {
-                    forgotUsernameResult.Success = false;
+                    forgotUsernameResult.WasSuccessful = false;
                     forgotUsernameResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotUsernameResult;
@@ -136,13 +136,13 @@ namespace Login
                 // Checks if the inputted Date of Birth does not match the one from the profile
                 if (dateOfBirth != profile.DateOfBirth)
                 {
-                    forgotUsernameResult.Success = false;
+                    forgotUsernameResult.WasSuccessful = false;
                     forgotUsernameResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotUsernameResult;
                 }
 
-                forgotUsernameResult.Success = true;
+                forgotUsernameResult.WasSuccessful = true;
                 forgotUsernameResult.SuccessValue = account.Username;
 
                 return forgotUsernameResult;
@@ -150,7 +150,7 @@ namespace Login
             catch
             {
                 var forgotUsernameResult = new Result<string>();
-                forgotUsernameResult.Success = false;
+                forgotUsernameResult.WasSuccessful = false;
                 forgotUsernameResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return forgotUsernameResult;
@@ -168,7 +168,7 @@ namespace Login
                 // Account will be null if an account with the given email address can't be found
                 if (account == null)
                 {
-                    forgotPasswordResult.Success = false;
+                    forgotPasswordResult.WasSuccessful = false;
                     forgotPasswordResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotPasswordResult;
@@ -177,7 +177,7 @@ namespace Login
                 // Checks if the inputted email address does not match the one from the account
                 if (emailAddress != account.EmailAddress)
                 {
-                    forgotPasswordResult.Success = false;
+                    forgotPasswordResult.WasSuccessful = false;
                     forgotPasswordResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotPasswordResult;
@@ -187,7 +187,7 @@ namespace Login
                 // Checks if the inputted Date of Birth does not match the one from the profile
                 if (dateOfBirth != profile.DateOfBirth)
                 {
-                    forgotPasswordResult.Success = false;
+                    forgotPasswordResult.WasSuccessful = false;
                     forgotPasswordResult.ErrorMessage = ErrorMessage.NoMatch;
 
                     return forgotPasswordResult;
@@ -232,7 +232,7 @@ namespace Login
 
                 accountCode = await _userAccountCodeService.GetUserAccountCodeByAccountId(account.Id);
 
-                forgotPasswordResult.Success = true;
+                forgotPasswordResult.WasSuccessful = true;
                 forgotPasswordResult.SuccessValue = account;
 
                 return forgotPasswordResult;
@@ -240,7 +240,7 @@ namespace Login
             catch
             {
                 var forgotPasswordResult = new Result<WebUserAccountModel>();
-                forgotPasswordResult.Success = false;
+                forgotPasswordResult.WasSuccessful = false;
                 forgotPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return forgotPasswordResult;
@@ -257,7 +257,7 @@ namespace Login
 
                 if(userAccountCode == null)
                 {
-                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.WasSuccessful = false;
                     forgotPasswordCodeResult.ErrorMessage = ErrorMessage.Null;
 
                     return forgotPasswordCodeResult;
@@ -269,7 +269,7 @@ namespace Login
                 {
                     await _userAccountCodeService.DeleteCodeByAccountId(accountId);
 
-                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.WasSuccessful = false;
                     forgotPasswordCodeResult.ErrorMessage = ErrorMessage.CodeExpired;
 
                     return forgotPasswordCodeResult;
@@ -279,14 +279,14 @@ namespace Login
                 {
                     await _userAccountCodeService.DeleteCodeByAccountId(accountId);
 
-                    forgotPasswordCodeResult.Success = true;
+                    forgotPasswordCodeResult.WasSuccessful = true;
                     forgotPasswordCodeResult.SuccessValue = await _userAccountService.GetUserAccount(accountId);
 
                     return forgotPasswordCodeResult;
                 }
                 else
                 {
-                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.WasSuccessful = false;
                     forgotPasswordCodeResult.ErrorMessage = ErrorMessage.NoMatch;
                     
                     return forgotPasswordCodeResult;
@@ -295,7 +295,7 @@ namespace Login
             catch
             {
                 var forgotPasswordCodeResult = new Result<WebUserAccountModel>();
-                forgotPasswordCodeResult.Success = false;
+                forgotPasswordCodeResult.WasSuccessful = false;
                 forgotPasswordCodeResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return forgotPasswordCodeResult;
@@ -311,7 +311,7 @@ namespace Login
                 // Updates a new password by overwriting it and generates a new salt
                 await _cryptographyService.newPasswordEncryptAsync(password, accountId);
 
-                resetPasswordResult.Success = true;
+                resetPasswordResult.WasSuccessful = true;
                 resetPasswordResult.SuccessValue = await _userAccountService.GetUserAccount(accountId);
 
                 return resetPasswordResult;
@@ -319,7 +319,7 @@ namespace Login
             catch
             {
                 var resetPasswordResult = new Result<WebUserAccountModel>();
-                resetPasswordResult.Success = false;
+                resetPasswordResult.WasSuccessful = false;
                 resetPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
 
                 return resetPasswordResult;

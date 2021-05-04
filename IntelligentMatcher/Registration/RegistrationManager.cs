@@ -31,9 +31,6 @@ namespace Registration
 
         private static System.Timers.Timer _timer;
 
-
-
-
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
             IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger)
         {
@@ -44,13 +41,6 @@ namespace Registration
             _cryptographyService = cryptographyService;
             _logger = logger;
         }
-
-
-
-
-
-
-
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
             WebUserProfileModel userModel, string password, string ipAddress)
@@ -64,10 +54,8 @@ namespace Registration
             {
                 // Log and return Username existing result
                 _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                resultModel.Success = false;
-                resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 
-                return resultModel;
+                return Result<int>.Failure(ErrorMessage.UsernameExists);
             }
 
             var emailAlreadyExists = await _validationService.EmailExists(accountModel.EmailAddress);
@@ -76,7 +64,7 @@ namespace Registration
             {
                 // Log and return Email existing result
                 _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                resultModel.Success = false;
+                resultModel.WasSuccessful = false;
                 resultModel.ErrorMessage = ErrorMessage.EmailExists;
 
                 return resultModel;
@@ -99,7 +87,7 @@ namespace Registration
 
             //Log and Return result
             _logger.Log("User: " +  accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
-            resultModel.Success = true;
+            resultModel.WasSuccessful = true;
             resultModel.SuccessValue = accountID;
 
 

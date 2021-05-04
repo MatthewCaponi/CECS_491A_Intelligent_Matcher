@@ -17,7 +17,6 @@ namespace DataAccess
     {
         public async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionString)
         {
-    
             try
             {
                 using (IDbConnection connection = new SqlConnection(connectionString))
