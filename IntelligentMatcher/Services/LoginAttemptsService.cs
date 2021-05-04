@@ -1,5 +1,6 @@
 ﻿using BusinessModels;
 using DataAccess.Repositories;
+using Exceptions;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -36,9 +37,9 @@ namespace Services
 
                 return true;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return false;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -60,11 +61,15 @@ namespace Services
                     return businessLoginAttemptsModel;
                 }
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return null;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
-            
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
+            }
+
         }
 
         public async Task<bool> IncrementLoginCounterByIpAddress(string ipAddress)
@@ -80,9 +85,9 @@ namespace Services
 
                 return true;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return false;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -99,9 +104,9 @@ namespace Services
 
                 return true;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return false;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
 
@@ -119,9 +124,9 @@ namespace Services
 
                 return true;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                return false;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
         }
     }

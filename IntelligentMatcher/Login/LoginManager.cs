@@ -8,6 +8,8 @@ using IntelligentMatcher.Services;
 using UserManagement.Models;
 using UserManagement.Services;
 using Services;
+using System.Linq;
+using Exceptions;
 
 namespace Login
 {
@@ -41,6 +43,14 @@ namespace Login
             try
             {
                 var loginResult = new Result<WebUserAccountModel>();
+                if (username == null || password == null)
+                {
+                    loginResult.Success = false;
+                    loginResult.ErrorMessage = ErrorMessage.Null;
+
+                    return loginResult;
+                }
+
                 var businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
 
                 if (businessLoginAttemptsModel == null)
@@ -104,15 +114,14 @@ namespace Login
 
                 return loginResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var loginResult = new Result<WebUserAccountModel>();
-                loginResult.Success = false;
-                loginResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return loginResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
             }
-
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
+            }
         }
 
         public async Task<Result<string>> ForgotUsername(string emailAddress, DateTimeOffset dateOfBirth)
@@ -120,6 +129,14 @@ namespace Login
             try
             {
                 var forgotUsernameResult = new Result<string>();
+                if (emailAddress == null || dateOfBirth == null)
+                {
+                    forgotUsernameResult.Success = false;
+                    forgotUsernameResult.ErrorMessage = ErrorMessage.Null;
+
+                    return forgotUsernameResult;
+                }
+
                 var account = await _userAccountService.GetUserAccountByEmail(emailAddress);
 
                 // Account will be null if an account with the given email address can't be found
@@ -147,13 +164,13 @@ namespace Login
 
                 return forgotUsernameResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var forgotUsernameResult = new Result<string>();
-                forgotUsernameResult.Success = false;
-                forgotUsernameResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return forgotUsernameResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
 
@@ -163,6 +180,14 @@ namespace Login
             try
             {
                 var forgotPasswordResult = new Result<WebUserAccountModel>();
+                if (username == null || emailAddress == null || dateOfBirth == null)
+                {
+                    forgotPasswordResult.Success = false;
+                    forgotPasswordResult.ErrorMessage = ErrorMessage.Null;
+
+                    return forgotPasswordResult;
+                }
+
                 var account = await _userAccountService.GetUserAccountByUsername(username);
 
                 // Account will be null if an account with the given email address can't be found
@@ -237,13 +262,13 @@ namespace Login
 
                 return forgotPasswordResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var forgotPasswordResult = new Result<WebUserAccountModel>();
-                forgotPasswordResult.Success = false;
-                forgotPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return forgotPasswordResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
 
@@ -252,6 +277,13 @@ namespace Login
             try
             {
                 var forgotPasswordCodeResult = new Result<WebUserAccountModel>();
+                if (code == null)
+                {
+                    forgotPasswordCodeResult.Success = false;
+                    forgotPasswordCodeResult.ErrorMessage = ErrorMessage.Null;
+
+                    return forgotPasswordCodeResult;
+                }
 
                 var userAccountCode = await _userAccountCodeService.GetUserAccountCodeByAccountId(accountId);
 
@@ -292,13 +324,13 @@ namespace Login
                     return forgotPasswordCodeResult;
                 }
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var forgotPasswordCodeResult = new Result<WebUserAccountModel>();
-                forgotPasswordCodeResult.Success = false;
-                forgotPasswordCodeResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return forgotPasswordCodeResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
 
@@ -307,22 +339,38 @@ namespace Login
             try
             {
                 var resetPasswordResult = new Result<WebUserAccountModel>();
+                if (password == null)
+                {
+                    resetPasswordResult.Success = false;
+                    resetPasswordResult.ErrorMessage = ErrorMessage.Null;
 
-                // Updates a new password by overwriting it and generates a new salt
-                await _cryptographyService.newPasswordEncryptAsync(password, accountId);
+                    return resetPasswordResult;
+                }
 
-                resetPasswordResult.Success = true;
-                resetPasswordResult.SuccessValue = await _userAccountService.GetUserAccount(accountId);
+                if (password.Length >= 8 && password.Any(char.IsDigit)
+                    && password.Any(char.IsUpper) && password.Any(char.IsLower))
+                {
+                    // Updates a new password by overwriting it and generates a new salt
+                    await _cryptographyService.newPasswordEncryptAsync(password, accountId);
+
+                    resetPasswordResult.Success = true;
+                    resetPasswordResult.SuccessValue = await _userAccountService.GetUserAccount(accountId);
+
+                    return resetPasswordResult;
+                }
+
+                resetPasswordResult.Success = false;
+                resetPasswordResult.ErrorMessage = ErrorMessage.InvalidPassword;
 
                 return resetPasswordResult;
             }
-            catch
+            catch (SqlCustomException e)
             {
-                var resetPasswordResult = new Result<WebUserAccountModel>();
-                resetPasswordResult.Success = false;
-                resetPasswordResult.ErrorMessage = ErrorMessage.AsyncError;
-
-                return resetPasswordResult;
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
+            catch (NullReferenceException e)
+            {
+                throw new NullReferenceException(e.Message, e.InnerException);
             }
         }
     }

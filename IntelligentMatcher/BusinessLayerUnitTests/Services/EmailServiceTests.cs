@@ -58,7 +58,7 @@ namespace BusinessLayerUnitTests.Services
             Assert.IsTrue(actualResult == expectedResult);
         }
 
-        //[DataTestMethod]
+        [DataTestMethod]
         [DataRow("BadEmail", "support@infinimuse.com", true, "Test", "This is a test.",
             "This is a test!", "outbound", "Test Email", false)]
         public async Task SendEmail_EmailSent_EmailNotSent(string recipient, string sender, bool trackOpens,
