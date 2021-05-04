@@ -12,11 +12,11 @@ namespace WebApi.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class ArchivingController : ControllerBase
+    public class ArchiveController : ControllerBase
     {
         private readonly IArchiveManager _archiveManager;
 
-        public ArchivingController(IArchiveManager archiveManager)
+        public ArchiveController(IArchiveManager archiveManager)
         {
             _archiveManager = archiveManager;
         }

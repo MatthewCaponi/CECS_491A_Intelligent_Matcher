@@ -1,6 +1,7 @@
 ﻿using Archiving;
 using Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Services.Archiving;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,20 @@ using System.Text;
 namespace BusinessLayerUnitTests.Archiving
 {
     [TestClass]
-    public class ArchiveManagerTests
+    public class ArchiveManagerIntegrationTests
     {
+        private static readonly IArchiveService archiveService = new ArchiveService();
+        private static readonly ILogService logService = new LogService();
+        private static readonly IArchiveManager archiveManager = new ArchiveManager(archiveService);
+
+        #region Integration Tests
         [DataTestMethod]
         [DataRow("User Logged In", LogLevel.info, LogTarget.Text)]
-        public void ArchiveLogFiles_ArchiveSuccess_ReturnTrue(string message, LogLevel logLevel,
+        public void ArchiveLogFiles_LogsArchived_ReturnTrue(string message, LogLevel logLevel,
             LogTarget logTarget)
         {
             // Arrange
-            ILogService logService = new LogService();
-
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
-
-            IArchiveService archiveService = new ArchiveService();
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
 
             var startTime = DateTimeOffset.UtcNow.AddDays(-1);
             var endTime = DateTimeOffset.UtcNow.AddDays(1);
@@ -41,12 +42,8 @@ namespace BusinessLayerUnitTests.Archiving
             LogTarget logTarget)
         {
             // Arrange
-            ILogService logService = new LogService();
-
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
-
-            IArchiveService archiveService = new ArchiveService();
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            logService.Log(message, logTarget, logLevel, this.ToString(), "User_Logging");
 
             // Act
             var result = archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime));
@@ -54,5 +51,6 @@ namespace BusinessLayerUnitTests.Archiving
             // Assert
             Assert.IsFalse(result);
         }
+        #endregion
     }
 }

@@ -11,9 +11,11 @@ namespace BusinessLayerUnitTests.Archiving
     [TestClass]
     public class ArchiveServiceTests
     {
+        private static readonly IArchiveService archiveService = new ArchiveService();
+
         [DataTestMethod]
         [DataRow("TestLog1.txt", "TestLog2.txt", "TestLog3.txt")]
-        public void ArchiveLogFiles_ArchiveSuccess_ReturnTrue(string file1, string file2, string file3)
+        public void ArchiveLogFiles_LogsArchived_ReturnTrue(string file1, string file2, string file3)
         {
             // Arrange
             string currentDirectory = Environment.CurrentDirectory;
@@ -76,8 +78,6 @@ namespace BusinessLayerUnitTests.Archiving
             files.Add(logPath2);
             files.Add(logPath3);
 
-            IArchiveService archiveService = new ArchiveService();
-
             // Act
             var result = archiveService.ArchiveLogFiles(files);
 
@@ -90,8 +90,6 @@ namespace BusinessLayerUnitTests.Archiving
         {
             // Arrange
             List<string> files = new List<string>();
-
-            IArchiveService archiveService = new ArchiveService();
 
             // Act
             var result = archiveService.ArchiveLogFiles(files);
