@@ -4,34 +4,37 @@ import './Login.css';
 import { useHistory } from 'react-router-dom';
 
 function ForgotPasswordCodeInput() {
-    const [accountState, setAccountState] = useState(1);
-    const [codeState, setCodeState] = useState("");
     const history = useHistory();
+    const [accountState, setAccountState] = useState(history.location.state.accountId);
+    const [codeState, setCodeState] = useState("");
     //history.location.state.accountId
-
-
 
     function submitHandler(e){
         var ForgotPasswordCodeInputModel = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Login/ForgotPasswordCodeInput',
-        {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(ForgotPasswordCodeInputModel)
-        }).
-        then(r => r.json()).then(res=>{
-            if(res.success){
-                alert("Code Entered Successfully! Moving to Next Page!");
-                history.push("/ResetPassword", { accountId: res.accountId });
-
+        if(e.code != ""){
+            fetch('http://localhost:5000/Login/ForgotPasswordCodeInput',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ForgotPasswordCodeInputModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Code Entered Successfully! Moving to Next Page!");
+                    history.push("/ResetPassword", { accountId: res.accountId });
+                }
+                else{
+                    alert(res.errorMessage);
+                }
             }
-            else{
-                alert(res.errorMessage);
-            }
+            );
         }
-        );
+        else{
+            alert("Input is Empty");
+        }
     }
+
     return (
         <Grid container>
         <Grid.Row>
@@ -60,9 +63,6 @@ function ForgotPasswordCodeInput() {
             </Button>
             <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
                 Go Back to Login
-            </Button>
-            <Button href="http://localhost:3000/ResetPassword" compact size="tiny" circular inverted color="blue">
-                To Reset Password
             </Button>
         </Grid.Row>
         </Grid>

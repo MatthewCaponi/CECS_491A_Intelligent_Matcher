@@ -674,6 +674,7 @@ namespace BusinessLayerUnitTests.Registration
             IConfiguration configuration = new ConfigurationBuilder()
                             .AddInMemoryCollection(_testConfigKeys)
                             .Build();
+            ILogService logService = new LogService();
             EmailService emailService = new EmailService(new UserAccountRepository
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
@@ -685,7 +686,6 @@ namespace BusinessLayerUnitTests.Registration
             ValidationService validationService = new ValidationService(userAccountService, userProfileService);
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData()));
 
-            ILogService logService = new LogService();
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
             RegistrationManager registrationManager = new RegistrationManager(emailService,

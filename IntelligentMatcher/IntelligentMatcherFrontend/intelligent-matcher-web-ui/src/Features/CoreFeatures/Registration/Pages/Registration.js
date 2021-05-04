@@ -16,23 +16,38 @@ function Registration() {
     function submitHandler(e){
         var RegistrationModel = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Registration/RegisterUser',
-        {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(RegistrationModel)
-        }).
-        then(r => r.json()).then(res=>{
-            if(res.success){
-                alert("Success for " + res.accountId);
-                history.push("/ResendEmail", { accountId: res.accountId });
-
+        if(e.firstName != "" && e.surname != "" && e.username != "" && e.password != "" && e.emailAddress != "" &&
+        e.dateOfBirth != "" && e.firstName.length <= 50 && e.surname.length <= 50 && e.username.length <= 50 &&
+        e.emailAddress.length <= 50 && e.password.length <= 50 && e.password.length >= 8 && /\d/.test(e.password) &&
+        /[A-Z]/.test(e.password) && /[a-z]/.test(e.password)){
+            fetch('http://localhost:5000/Registration/RegisterUser',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(RegistrationModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Registration Success");
+                    history.push("/ResendEmail", { accountId: res.accountId });
+                }
+                else{
+                    alert(res.errorMessage);
+                }
             }
-            else{
-                alert(res.errorMessage);
-            }
+            );
         }
-        );
+        else if(e.firstName == "" || e.surname == "" || e.username == "" || e.password == "" || e.emailAddress == "" ||
+        e.dateOfBirth == ""){
+            alert("One of the inputs is empty!");
+        }
+        else if(e.firstName.length > 50 || e.surname.length > 50 || e.username.length > 50 ||
+        e.password.length > 50 || e.emailAddress.length > 50){
+            alert("One of the inputs is too long!")
+        }
+        else{
+            alert("This password is invalid!")
+        }
     }
     return (
         <Grid container>
@@ -138,9 +153,6 @@ function Registration() {
             </Button>
             <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
                 Go Back to Login
-            </Button>
-            <Button href="http://localhost:3000/ResendEmail" compact size="tiny" circular inverted color="blue">
-                To Resend Email
             </Button>
         </Grid.Row>
         </Grid>

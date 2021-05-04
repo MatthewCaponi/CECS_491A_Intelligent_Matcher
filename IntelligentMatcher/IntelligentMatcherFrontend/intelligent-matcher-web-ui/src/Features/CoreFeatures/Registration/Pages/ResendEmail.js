@@ -6,8 +6,8 @@ import './Registration.css';
 
 function ResendEmail() {
     const history = useHistory();
-    console.log(history);
-    const [accountState, setAccountState] = useState(1);
+    // console.log(history);
+    const [accountState, setAccountState] = useState(history.location.state.accountId);
     function submitHandler(e){
         var accountId = e;
         // e.preventDefault();
@@ -30,7 +30,7 @@ function ResendEmail() {
     return (
         <Grid container>
         <Grid.Row>
-            <h1>Your account has been registered!{history.location.state.accountId} </h1>
+            <h1>Your account has been registered!</h1>
         </Grid.Row>
         <Grid.Row>
             This account is still inactive because the email was not verified!
