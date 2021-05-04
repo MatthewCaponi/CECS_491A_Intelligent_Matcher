@@ -366,8 +366,15 @@ async search(){
 
                                 {
 (friend.userProfileImage != null && friend.userProfileImage != "") ?
-                                    (                                           <Image avatar src= {filePath + friend.userProfileImage}  circular />
+                                    (                    
+                                      
+                         
+                                      
+                                      <Image style={{'font-size':42}}  src= {filePath + friend.userProfileImage}  circular />
 
+
+
+                                  
                                       ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
                                       )}
 

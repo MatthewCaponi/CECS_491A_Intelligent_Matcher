@@ -224,6 +224,18 @@ setFile(e) {
             } 
   render () {
 
+
+    const circleImageStyle = {
+            position: 'relative',
+            width: '20%',
+            height: '20%',
+            overflow: 'hidden',
+            borderRadius: '100vh',
+            width: '200px',
+            height: '200px'
+          
+    }
+
     
     if (this.state.navigate) {
 
@@ -243,7 +255,7 @@ setFile(e) {
 
             {
 (this.state.accountProfileData.photo != null && this.state.accountProfileData.photo != "") ?
-    (                                                         <Image avatar src= {filePath +this.state.accountProfileData.photo} size='small' circular />
+    (                                                         <Image style={circleImageStyle}  src= {filePath +this.state.accountProfileData.photo}   />
 
 
       ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='small' circular />

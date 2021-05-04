@@ -15,6 +15,8 @@ using System.Linq;
 using PublicUserProfile;
 using Moq;
 using Services;
+using UserManagement.Services;
+using IntelligentMatcher.Services;
 
 namespace BusinessLayerUnitTests.PublicUserProfile
 {
@@ -127,7 +129,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
 
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 
             await userAccountSettingsManager.CreateUserAccountSettingsAsync(userAccountSettingsModel);
@@ -253,7 +255,14 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -297,7 +306,19 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
+            
+            
+            
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
@@ -350,11 +371,19 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         [DataRow(1, "Photo")]
         public async Task editUserProfilePicture_EditPhoto_PhotoSuccessfullyEdited(int userId, string photo)
         {
-
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
             PublicUserProfileModel model = new PublicUserProfileModel();
 
 
@@ -406,7 +435,16 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -458,11 +496,19 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         [DataRow(1)]
         public async Task setUserOnline_SetOnline_UserSetOnline(int userId)
         {
-
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -517,7 +563,14 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 

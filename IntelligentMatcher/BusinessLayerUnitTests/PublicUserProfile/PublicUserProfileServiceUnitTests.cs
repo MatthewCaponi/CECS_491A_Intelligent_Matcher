@@ -15,6 +15,8 @@ using System.Linq;
 using PublicUserProfile;
 using Moq;
 using Services;
+using IntelligentMatcher.Services;
+using UserManagement.Services;
 
 namespace BusinessLayerUnitTests.PublicUserProfile
 {
@@ -31,7 +33,13 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -59,7 +67,12 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -88,7 +101,12 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
             PublicUserProfileModel model = new PublicUserProfileModel();
 
 
@@ -120,7 +138,12 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
@@ -157,7 +180,12 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
@@ -194,7 +222,12 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -221,7 +254,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
 
@@ -252,7 +286,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
 
@@ -280,7 +315,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -309,7 +345,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -338,7 +375,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -366,8 +404,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
-
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -395,7 +433,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -421,8 +460,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
-
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -449,7 +488,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try
@@ -477,7 +517,8 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object);
+            Mock<IValidationService> validationService = new Mock<IValidationService>();
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo.Object, validationService.Object);
             PublicUserProfileModel model = new PublicUserProfileModel();
             model.UserId = userId;
             try

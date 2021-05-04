@@ -17,6 +17,7 @@ using TestHelper;
 using Registration.Services;
 using IntelligentMatcher.Services;
 using Services;
+using UserManagement.Services;
 
 namespace WebApi
 {
@@ -100,7 +101,11 @@ namespace WebApi
             await TestCleaner.CleanDatabase();
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo));
+
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo, new ValidationService(userAccountService, userProfileService)));
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
 
@@ -240,8 +245,10 @@ namespace WebApi
 
 
             IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
-            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo);
-            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo, validationService);
             IFriendListManager friendListManager = new FriendListManager(userAccountRepository, publicUserProfileService, userInteractionService);
 
             for (int i = 10; i < 15; i++)
