@@ -64,10 +64,10 @@ namespace DataAccess.Repositories
         public async Task<DALListingModel> GetAllListingsById(int id)
         {
             
-            string storedProcedure = "dbo.ListingSearch_GetListingById";
+            string storedProcedure = "dbo.GetListingById";
 
             var row = await _dataGateway.LoadData<DALDatingModel, dynamic>(storedProcedure,
-                                                                             new { },
+                                                                             new  {Id=id },
                                                                              _connectionString.SqlConnectionString);
             return row.FirstOrDefault();
         }

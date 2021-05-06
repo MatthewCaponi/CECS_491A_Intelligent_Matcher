@@ -50,7 +50,7 @@ namespace BusinessLayerUnitTests.TraditionalListing
         }
 
         [DataTestMethod]
-        [DataRow(1, "Test title1", "TestDetails1", "TestCity1", "Teststate1", 10, "InpersonTest1")]
+        [DataRow(1, "Test title123", "TestDetails123", "TestCity1", "Teststate1", 10, "InpersonTest1")]
         public async Task UpdateListing_editParentListing_ParentListingEditSuccesful(int id, string title, string details, string city, string state, int numOfParticipants,
             string inperson)
         {
@@ -62,6 +62,7 @@ namespace BusinessLayerUnitTests.TraditionalListing
                 null, null, null, null);
 
             BusinessListingModel businessListingModel = new BusinessListingModel();
+            businessListingModel.Id = id;
             businessListingModel.Title = title;
             businessListingModel.Details = details;
             businessListingModel.City = city;

@@ -72,7 +72,7 @@ namespace DataAccess.Repositories.ListingRepositories
 
                                          },
                                          _connectionString.SqlConnectionString);
-            ; 
+             
 
         }
 
