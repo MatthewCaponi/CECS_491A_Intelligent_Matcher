@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
         Task<IEnumerable<DALRelationshipModel>> GetAllTeamListings();
 
 
-
+        Task<IEnumerable<DALListingModel>> GetAllListingsByUserId(int userId);
 
         // gold plating??? not in the brd stuff 
 

@@ -16,6 +16,8 @@ using System.Linq;
 
 using System.Net.Http;
 using Services;
+using Models.DALListingModels;
+using WebApi.Models;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -25,48 +27,19 @@ namespace IntelligentMatcherUI.Controllers
     public class UserProfileController : ControllerBase
     {
 
-        public class OtherData
-        {
-            public string Username { get; set; }
-            public string JoinDate { get; set; }
-        }
-
-        public class dualIdModel
-        {
-            public int UserId { get; set; }
-            public int FriendId { get; set; }
-        }
-
-
-
-        public class FriendStatus
-        {
-            public string Status { get; set; }
-        }
-
-        /*
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }*/
         private readonly IPublicUserProfileManager _publicUserProfileManager;
         private readonly IFriendListManager _friendListManager;
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IUserInteractionService _userInteractionService;
-        public UserProfileController(IPublicUserProfileManager publicUserProfileManager, IFriendListManager friendListManager, IUserAccountRepository userAccountRepository, IUserInteractionService userInteractionService)
+        private readonly ITraditionalListingSearchRepository _traditionalListingSearchRepository;
+
+        public UserProfileController(IPublicUserProfileManager publicUserProfileManager, IFriendListManager friendListManager, IUserAccountRepository userAccountRepository, IUserInteractionService userInteractionService, ITraditionalListingSearchRepository traditionalListingSearchRepository)
         {
             _publicUserProfileManager = publicUserProfileManager;
             _friendListManager = friendListManager;
             _userAccountRepository = userAccountRepository;
             _userInteractionService = userInteractionService;
+            _traditionalListingSearchRepository = traditionalListingSearchRepository;
         }
 
 
@@ -79,47 +52,76 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> SaveUserProfile([FromBody] PublicUserProfileModel model)
+        public async Task<IEnumerable<DALListingModel>> GetUserListings([FromBody] int userId)
         {
 
-            await _publicUserProfileManager.EditPublicUserProfileAsync(model);
-            return true;
+            return await _traditionalListingSearchRepository.GetAllListingsByUserId(userId);
+
+        }
+
+
+        [HttpPost]
+        public async Task<bool> SaveUserProfile([FromBody] PublicUserProfileModel model)
+        {
+            try
+            {
+                await _publicUserProfileManager.EditPublicUserProfileAsync(model);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
 
         }
 
         [HttpPost]
         public async Task<bool> ReportUser([FromBody] UserReportsModel model)
         {
-
-            await _userInteractionService.CreateReportAsync(model);
-            return true;
+            try
+            {
+                await _userInteractionService.CreateReportAsync(model);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
         }
 
 
         [HttpPost]
-        public async Task<bool> GetViewStatus([FromBody] dualIdModel model)
+        public async Task<bool> GetViewStatus([FromBody] DualIdModel model)
         {
-
-            string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
-            var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
-            if(status == "Friends" && profileModel.Visibility == "Friends")
+            try
             {
-                return true;
+                string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+                var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
+                if (status == "Friends" && profileModel.Visibility == "Friends")
+                {
+                    return true;
 
+                }
+                if (profileModel.Visibility == "Public")
+                {
+                    return true;
+
+                }
+                return false;
             }
-            if (profileModel.Visibility == "Public")
+            catch
             {
-                return true;
-
+                return false;
             }
-            return false;
+
 
         }
 
 
         [HttpPost]
-        public async Task<FriendStatus> GetFriendStatus([FromBody] dualIdModel model)
+        public async Task<FriendStatus> GetFriendStatus([FromBody] DualIdModel model)
         {
 
             string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
@@ -132,28 +134,40 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<bool> SetOnline([FromBody] int userId)
         {
+            try
+            {
+                await _publicUserProfileManager.SetUserOnlineAsync(userId);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
-            await _publicUserProfileManager.SetUserOnlineAsync(userId);
-
-            return true;
 
         }
 
         [HttpPost]
         public async Task<bool> SetOffline([FromBody] int userId)
         {
+            try
+            {
+                await _publicUserProfileManager.SetUserOfflineAsync(userId);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
-            await _publicUserProfileManager.SetUserOfflineAsync(userId);
-
-            return true;
 
         }
 
         [HttpPost]
-        public async Task<OtherData> GetOtherData([FromBody] int userId)
+        public async Task<NonUserProfileData> GetOtherData([FromBody] int userId)
         {
 
-            OtherData model = new OtherData();
+            NonUserProfileData model = new NonUserProfileData();
             UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
             model.Username = userAccountModel.Username;
             string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
@@ -165,12 +179,16 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<bool> UploadPhoto()
         {
+
+
+            try
+            {
                 int userId = 0;
                 foreach (string key in Request.Form.Keys)
                 {
                     if (key.StartsWith("userId"))
                     {
-                       userId = Convert.ToInt32(Request.Form[key]);
+                        userId = Convert.ToInt32(Request.Form[key]);
                     }
                 }
 
@@ -181,31 +199,37 @@ namespace IntelligentMatcherUI.Controllers
                     var fileName = ContentDispositionHeaderValue.Parse(postedFile.ContentDisposition)
                         .FileName.Trim('"');
                     string[] filetype = fileName.Split(".");
-                    if(filetype[filetype.Length - 1].ToLower() == "png" || filetype[filetype.Length - 1].ToLower() == "jpg" || filetype[filetype.Length - 1].ToLower() == "jpeg")
+                    if (filetype[filetype.Length - 1].ToLower() == "png" || filetype[filetype.Length - 1].ToLower() == "jpg" || filetype[filetype.Length - 1].ToLower() == "jpeg")
+                    {
+                        string newFileName = userId.ToString() + "profileImage." + filetype[filetype.Length - 1];
+                        var finalPath = Path.Combine(uploadFolder, newFileName);
+                        using (var fileStream = new FileStream(finalPath, FileMode.Create))
                         {
-                            string newFileName = userId.ToString() + "profileImage." + filetype[filetype.Length - 1];
-                            var finalPath = Path.Combine(uploadFolder, newFileName);
-                            using (var fileStream = new FileStream(finalPath, FileMode.Create))
-                            {
-                                postedFile.CopyTo(fileStream);
-                            }
-                            PublicUserProfileModel model = new PublicUserProfileModel();
-                            model.UserId = userId;
-                            model.Photo = newFileName;
-                            await _publicUserProfileManager.EditUserProfilePictureAsync(model);
-                            return true;
+                            postedFile.CopyTo(fileStream);
                         }
-                        else
-                        {
-                             return false;
-                        }
-             
+                        PublicUserProfileModel model = new PublicUserProfileModel();
+                        model.UserId = userId;
+                        model.Photo = newFileName;
+                        await _publicUserProfileManager.EditUserProfilePictureAsync(model);
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                 }
                 else
                 {
 
                     return false;
                 }
+            }
+            catch
+            {
+                return false;
+            }
+
          
 
 

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using FriendList;
 using DataAccess;
 using DataAccess.Repositories;
+using WebApi.Models;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -16,31 +17,6 @@ namespace IntelligentMatcherUI.Controllers
     public class FriendListController : ControllerBase
     {
 
-        public class dualIdModel
-        {
-            public int UserId { get; set; }
-            public int FriendId { get; set; }
-        }
-
-        public class idUsernameModel
-        {
-            public int UserId { get; set; }
-            public string FriendUsername { get; set; }
-        }
-
-        /*
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }*/
         private readonly IFriendListManager _friendListManager;
         private readonly IUserAccountRepository _userAccountRepository;
 
@@ -76,7 +52,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> RemoveFriend([FromBody] dualIdModel ids)
+        public async Task<bool> RemoveFriend([FromBody] DualIdModel ids)
         {
 
              await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
@@ -86,7 +62,7 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<bool> BlockFriend([FromBody] dualIdModel ids)
+        public async Task<bool> BlockFriend([FromBody] DualIdModel ids)
         {
 
             await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
@@ -95,7 +71,7 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<bool> ApproveFriend([FromBody] dualIdModel ids)
+        public async Task<bool> ApproveFriend([FromBody] DualIdModel ids)
         {
 
             await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
@@ -103,7 +79,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> CancelFriendRequest([FromBody] dualIdModel ids)
+        public async Task<bool> CancelFriendRequest([FromBody] DualIdModel ids)
         {
 
             await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
@@ -111,7 +87,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetMutualFriends([FromBody] dualIdModel ids)
+        public async Task<IEnumerable<FriendListModel>> GetMutualFriends([FromBody] DualIdModel ids)
         {
 
             return await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId);
@@ -135,7 +111,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> CreateFriendRequest([FromBody] idUsernameModel ids)
+        public async Task<bool> CreateFriendRequest([FromBody] IdUsernameModel ids)
         {
             try
             {

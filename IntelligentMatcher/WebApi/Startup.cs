@@ -71,6 +71,10 @@ namespace WebApi
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
+            services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
+
+
+            
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
