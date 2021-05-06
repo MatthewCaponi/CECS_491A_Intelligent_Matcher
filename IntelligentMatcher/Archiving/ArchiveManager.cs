@@ -41,5 +41,10 @@ namespace Archiving
                 throw new IOException(e.Message, e.InnerException);
             }
         }
+
+        public bool RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

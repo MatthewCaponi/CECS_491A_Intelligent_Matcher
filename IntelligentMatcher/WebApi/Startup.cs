@@ -24,6 +24,8 @@ using Registration.Services;
 using FriendList;
 using PublicUserProfile;
 using Logging;
+using Services.Archiving;
+using Archiving;
 
 namespace WebApi
 {
@@ -46,6 +48,7 @@ namespace WebApi
             services.AddSingleton(Configuration);
 
             services.AddTransient<ILogService, LogService>();
+            services.AddTransient<IArchiveService, ArchiveService>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
@@ -86,6 +89,7 @@ namespace WebApi
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
 
+            services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();

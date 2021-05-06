@@ -8,5 +8,6 @@ namespace Services.Archiving
     public interface IArchiveService
     {
         bool ArchiveLogFiles(List<String> files);
+        bool RecoverLogFiles(List<String> files);
     }
 }
