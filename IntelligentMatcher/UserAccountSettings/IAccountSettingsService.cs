@@ -6,7 +6,7 @@ using Security;
 using Models;
 namespace UserAccountSettings
 {
-    public interface IAccountSettingsManager
+    public interface IAccountSettingsService
     {
 
 

@@ -19,24 +19,22 @@ class ImageUpload extends React.Component {
             this.state.viewingId = parseInt(url[1]);  
         }    
 
-        async submit(e) {    
-
-                
-                try{
-
-                
-                e.preventDefault();    
-                const url = global.url + `UserProfile/UploadPhoto`;    
-                const formData = new FormData();    
-                formData.append('body', this.state.file);    
-                formData.append("userId", this.state.viewingId);
-                const config = {    
-                       headers: {    
-                               'content-type': 'multipart/form-data',    
-                        },    
-                };    
-                return post(url, formData, config); 
-                }catch{
+        async submit(e) {                   
+                try{           
+                        e.preventDefault();    
+                        const url = global.url + `UserProfile/UploadPhoto`;    
+                        const formData = new FormData();    
+                        formData.append('body', this.state.file);    
+                        formData.append("userId", this.state.viewingId);
+                        const config = {    
+                        headers: {    
+                                'content-type': 'multipart/form-data',    
+                                },    
+                        };    
+                        return post(url, formData, config); 
+                }
+                catch
+                {
                         this.state.error = "Could Not Upload Image"; 
                 }
 
@@ -44,30 +42,27 @@ class ImageUpload extends React.Component {
 
         async setFile(e) {    
                 const files = e.target.files[0].name.split(".");
-
                 if(files[files.length - 1].toLowerCase() == "png" || files[files.length - 1].toLowerCase() == "jpeg" || files[files.length - 1].toLowerCase() == "jpg"){
-
                         await this.setState({ file: e.target.files[0] });    
                         await this.submit(e);
-                }else{
-
-
-                        await this.setState({ error: e.target.files[0].name + " is not a compatible file type" });    
-
                 }
-
+                else
+                {
+                        await this.setState({ error: e.target.files[0].name + " is not a compatible file type" });    
+                }
         }    
-
         render() {    
                 return (    
                         <div>
-                        Upload A New Profile Picture(JPG, JPEG or PNG only)
-                        <br />
-                 <form class="ui input" onSubmit={e => this.submit(e)}>    
-                         <input class="ui input" type="file" onChange={e => this.setFile(e)} />   
-                
-                 </form>         <br /> 
-                         {this.state.error}  </div>  
+                                Upload A New Profile Picture(JPG, JPEG or PNG only)
+                                <br />
+                                <form class="ui input" onSubmit={e => this.submit(e)}>    
+                                        <input class="ui input" type="file" onChange={e => this.setFile(e)} />   
+                        
+                                </form>         
+                                <br /> 
+                                {this.state.error}  
+                        </div>  
              )    
         }    
 }    

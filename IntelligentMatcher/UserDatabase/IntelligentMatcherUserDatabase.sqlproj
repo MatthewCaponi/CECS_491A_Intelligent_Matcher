@@ -273,6 +273,7 @@
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Get_All.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Delete_ById.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Create.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllListingsByUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

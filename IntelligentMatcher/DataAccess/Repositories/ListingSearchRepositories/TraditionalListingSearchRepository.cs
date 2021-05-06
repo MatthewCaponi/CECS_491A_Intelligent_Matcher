@@ -28,6 +28,18 @@ namespace DataAccess.Repositories
                                                                          _connectionString.SqlConnectionString);
         }
 
+        public async Task<IEnumerable<DALListingModel>> GetAllListingsByUserId(int userId)
+        { 
+        
+            string storedProcedure = "dbo.ListingSearch_GetAllListingsByUserId";
+            return await _dataGateway.LoadData<DALListingModel, dynamic>(storedProcedure,
+                                                                         new 
+                                                                         { 
+                                                                            UserId = userId
+    },
+                                                                         _connectionString.SqlConnectionString);
+        }
+
         public async Task<IEnumerable<DALCollaborationModel>> GetAllCollaborationListings()
         {
             string storedProcedure = "dbo.ListingSearch_GetAllCollaborationListing";
