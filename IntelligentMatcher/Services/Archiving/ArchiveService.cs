@@ -11,11 +11,17 @@ namespace Services.Archiving
     {
         private const string textExtension = ".txt";
         private const string jsonExtension = ".json";
+        private const int oldArchive = 0;
 
         public bool ArchiveLogFiles(List<string> files)
         {
             try
             {
+                if (files == null)
+                {
+                    return false;
+                }
+
                 if (files.Count <= 0)
                 {
                     return false;
@@ -66,6 +72,54 @@ namespace Services.Archiving
             }
             catch (IOException e)
             {
+                try
+                {
+                    string currentDirectory = Environment.CurrentDirectory;
+                    string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+                    string archiveDirectory = $"{projectDirectory}\\archivedLogs";
+
+                    string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
+                    List<string> validFiles = new List<string>();
+
+                    validFiles.Add(allZipFiles[oldArchive]);
+
+                    DeleteArchivedFiles(validFiles);
+
+                    throw new IOException(e.Message, e.InnerException);
+                }
+                catch (IOException f)
+                {
+                    throw new IOException(f.Message, f.InnerException);
+                }
+            }
+        }
+
+        public bool DeleteArchivedFiles(List<string> zipFiles)
+        {
+            try
+            {
+                if (zipFiles == null)
+                {
+                    return false;
+                }
+
+                if (zipFiles.Count <= 0)
+                {
+                    return false;
+                }
+
+                foreach (string file in zipFiles)
+                {
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
+                }
+
+                return true;
+            }
+            catch (IOException e)
+            {
                 throw new IOException(e.Message, e.InnerException);
             }
         }
@@ -74,6 +128,11 @@ namespace Services.Archiving
         {
             try
             {
+                if (zipFiles == null)
+                {
+                    return false;
+                }
+
                 if (zipFiles.Count <= 0)
                 {
                     return false;
@@ -144,6 +203,5 @@ namespace Services.Archiving
                 throw new IOException(e.Message, e.InnerException);
             }
         }
-
     }
 }

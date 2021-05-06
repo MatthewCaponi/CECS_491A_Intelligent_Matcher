@@ -220,6 +220,108 @@ namespace ControllerLayerTest.Archiving
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
         }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
+        public void DeleteArchivedFiles_DeleteComplete_ReturnTrue(string startTime, string endTime)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = true;
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+
+            mockArchiveManager.Setup(x => x.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime))).Returns(true);
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.NoSuchFilesExist)]
+        public void DeleteArchivedFiles_DeleteNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error.ToString();
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+
+            mockArchiveManager.Setup(x => x.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime))).Returns(false);
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow(ErrorMessage.Null)]
+        public void DeleteArchivedFiles_PassingNull_ReturnFalse(ErrorMessage error)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error.ToString();
+
+            var archiveModel = new ArchiveModel();
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
+        public void DeleteArchivedFiles_IOException_ReturnFalse(string startTime, string endTime)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = false;
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+
+            mockArchiveManager.Setup(x => x.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime))).Throws(new IOException());
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+        }
         #endregion
     }
 }

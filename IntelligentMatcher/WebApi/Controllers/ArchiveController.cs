@@ -58,6 +58,42 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        public ArchiveResultModel DeleteArchivedFiles([FromBody] ArchiveModel archiveModel)
+        {
+            var archiveResultModel = new ArchiveResultModel();
+
+            try
+            {
+                if (archiveModel.StartDate == null || archiveModel.EndDate == null)
+                {
+                    archiveResultModel.Success = false;
+                    archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+
+                    return archiveResultModel;
+                }
+
+                var deleteSuccess = _archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(archiveModel.StartDate),
+                    DateTimeOffset.Parse(archiveModel.EndDate));
+
+                archiveResultModel.Success = deleteSuccess;
+
+                if (!archiveResultModel.Success)
+                {
+                    archiveResultModel.ErrorMessage = ErrorMessage.NoSuchFilesExist.ToString();
+                }
+
+                return archiveResultModel;
+            }
+            catch (IOException)
+            {
+                archiveResultModel.Success = false;
+                archiveResultModel.ErrorMessage = "Deletion Failed! Attempt to delete a file went wrong.";
+
+                return archiveResultModel;
+            }
+        }
+
+        [HttpPost]
         public ArchiveResultModel RecoverLogFiles([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();
@@ -72,10 +108,10 @@ namespace WebApi.Controllers
                     return archiveResultModel;
                 }
 
-                var archiveSuccess = _archiveManager.RecoverLogFiles(DateTimeOffset.Parse(archiveModel.StartDate),
+                var recoverSuccess = _archiveManager.RecoverLogFiles(DateTimeOffset.Parse(archiveModel.StartDate),
                     DateTimeOffset.Parse(archiveModel.EndDate));
 
-                archiveResultModel.Success = archiveSuccess;
+                archiveResultModel.Success = recoverSuccess;
 
                 if (!archiveResultModel.Success)
                 {

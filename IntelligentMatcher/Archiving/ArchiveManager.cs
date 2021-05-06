@@ -18,6 +18,11 @@ namespace Archiving
         {
             try
             {
+                if(startTime == null || endTime == null)
+                {
+                    return false;
+                }
+
                 string currentDirectory = Environment.CurrentDirectory;
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
                 string logDirectory = $"{projectDirectory}\\logs";
@@ -42,27 +47,65 @@ namespace Archiving
             }
         }
 
-        public bool RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public bool DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
+                if (startTime == null || endTime == null)
+                {
+                    return false;
+                }
+
                 string currentDirectory = Environment.CurrentDirectory;
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
                 string archiveDirectory = $"{projectDirectory}\\archivedLogs";
 
-                string[] allFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
-                List<string> validFiles = new List<string>();
+                string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
+                List<string> validZipFiles = new List<string>();
 
-                foreach (var file in allFiles)
+                foreach (var file in allZipFiles)
                 {
                     DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
                     if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
                     {
-                        validFiles.Add(file);
+                        validZipFiles.Add(file);
                     }
                 }
 
-                return _archiveService.RecoverLogFiles(validFiles);
+                return _archiveService.DeleteArchivedFiles(validZipFiles);
+            }
+            catch (IOException e)
+            {
+                throw new IOException(e.Message, e.InnerException);
+            }
+        }
+
+        public bool RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        {
+            try
+            {
+                if (startTime == null || endTime == null)
+                {
+                    return false;
+                }
+
+                string currentDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+                string archiveDirectory = $"{projectDirectory}\\archivedLogs";
+
+                string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
+                List<string> validZipFiles = new List<string>();
+
+                foreach (var file in allZipFiles)
+                {
+                    DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
+                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    {
+                        validZipFiles.Add(file);
+                    }
+                }
+
+                return _archiveService.RecoverLogFiles(validZipFiles);
             }
             catch (IOException e)
             {

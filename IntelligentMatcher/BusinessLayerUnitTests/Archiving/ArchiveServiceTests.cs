@@ -80,10 +80,10 @@ namespace BusinessLayerUnitTests.Archiving
             files.Add(logPath3);
 
             // Act
-            var result = archiveService.ArchiveLogFiles(files);
+            var archiveResult = archiveService.ArchiveLogFiles(files);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(archiveResult);
         }
 
         [TestMethod]
@@ -93,10 +93,134 @@ namespace BusinessLayerUnitTests.Archiving
             List<string> files = new List<string>();
 
             // Act
-            var result = archiveService.ArchiveLogFiles(files);
+            var archiveResult = archiveService.ArchiveLogFiles(files);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.IsFalse(archiveResult);
+        }
+
+        [TestMethod]
+        public void ArchiveLogFiles_NullList_ReturnFalse()
+        {
+            // Arrange
+            List<string> files = null;
+
+            // Act
+            var archiveResult = archiveService.ArchiveLogFiles(files);
+
+            // Assert
+            Assert.IsFalse(archiveResult);
+        }
+
+        [DataTestMethod]
+        [DataRow("TestLog1.txt", "TestLog2.txt", "TestLog3.txt")]
+        public void DeleteArchivedFiles_ArchiveDeleted_ReturnTrue(string file1, string file2, string file3)
+        {
+            // Arrange
+            string currentDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+
+            string textDirectory = $"{projectDirectory}\\logs";
+
+            string logPath1 = Path.Combine(textDirectory, file1);
+            string logPath2 = Path.Combine(textDirectory, file2);
+            string logPath3 = Path.Combine(textDirectory, file3);
+
+            string builtMessage = "Test Log";
+
+            if (!File.Exists(logPath1))
+            {
+                using (StreamWriter writer = File.CreateText(logPath1))
+                {
+                    writer.WriteLine(builtMessage);
+                }
+            }
+            else
+            {
+                using (StreamWriter writer = File.AppendText(logPath1))
+                {
+                    writer.WriteLine(builtMessage);
+                }
+            }
+
+            if (!File.Exists(logPath2))
+            {
+                using (StreamWriter writer = File.CreateText(logPath2))
+                {
+                    writer.WriteLine(builtMessage);
+                }
+            }
+            else
+            {
+                using (StreamWriter writer = File.AppendText(logPath2))
+                {
+                    writer.WriteLine(builtMessage);
+                }
+            }
+
+            if (!File.Exists(logPath3))
+            {
+                using (StreamWriter writer = File.CreateText(logPath3))
+                {
+                    writer.WriteLine(builtMessage);
+                }
+            }
+            else
+            {
+                using (StreamWriter writer = File.AppendText(logPath3))
+                {
+                    writer.WriteLine(builtMessage);
+                }
+            }
+
+            List<string> files = new List<string>();
+
+            files.Add(logPath1);
+            files.Add(logPath2);
+            files.Add(logPath3);
+
+            var archiveResult = archiveService.ArchiveLogFiles(files);
+
+            string zipFile = $"{ (DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.zip";
+            string targetPath = $"{projectDirectory}\\archivedLogs";
+
+            string zipPath = Path.Combine(targetPath, zipFile);
+
+            List<string> zipFiles = new List<string>();
+
+            zipFiles.Add(zipPath);
+
+            // Act
+            var deleteResult = archiveService.DeleteArchivedFiles(zipFiles);
+
+            // Assert
+            Assert.IsTrue(deleteResult);
+        }
+
+        [TestMethod]
+        public void DeleteArchivedFiles_EmptyList_ReturnFalse()
+        {
+            // Arrange
+            List<string> files = new List<string>();
+
+            // Act
+            var deleteResult = archiveService.DeleteArchivedFiles(files);
+
+            // Assert
+            Assert.IsFalse(deleteResult);
+        }
+
+        [TestMethod]
+        public void DeleteArchivedFiles_NullList_ReturnFalse()
+        {
+            // Arrange
+            List<string> files = null;
+
+            // Act
+            var deleteResult = archiveService.DeleteArchivedFiles(files);
+
+            // Assert
+            Assert.IsFalse(deleteResult);
         }
 
         [DataTestMethod]
@@ -191,10 +315,23 @@ namespace BusinessLayerUnitTests.Archiving
             List<string> files = new List<string>();
 
             // Act
-            var result = archiveService.RecoverLogFiles(files);
+            var recoverResult = archiveService.RecoverLogFiles(files);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.IsFalse(recoverResult);
+        }
+
+        [TestMethod]
+        public void RecoverLogFiles_NullList_ReturnFalse()
+        {
+            // Arrange
+            List<string> files = null;
+
+            // Act
+            var recoverResult = archiveService.RecoverLogFiles(files);
+
+            // Assert
+            Assert.IsFalse(recoverResult);
         }
     }
 }

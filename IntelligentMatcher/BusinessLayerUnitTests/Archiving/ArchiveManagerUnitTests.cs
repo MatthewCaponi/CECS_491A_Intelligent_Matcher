@@ -80,6 +80,69 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
+        public void DeleteArchivedFiles_DeleteSuccess_ReturnTrue(string startTime, string endTime)
+        {
+            // Arrange
+            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(true);
+
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+
+            // Act
+            var deleteResult = archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime));
+
+            // Assert
+            Assert.IsTrue(deleteResult);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
+        public void DeleteArchivedFiles_DeleteFailure_ReturnFalse(string startTime, string endTime)
+        {
+            // Arrange
+            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(false);
+
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+
+            // Act
+            var deleteResult = archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime));
+
+            // Assert
+            Assert.IsFalse(deleteResult);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
+        public void DeleteArchivedFiles_IOException_ReturnException(string startTime, string endTime)
+        {
+            // Arrange
+            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Throws(new IOException());
+
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+
+            var actualResult = false;
+
+            // Act
+            try
+            {
+                var deleteResult = archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime));
+            }
+            catch (IOException)
+            {
+                actualResult = true;
+            }
+            finally
+            {
+                // Assert
+                Assert.IsTrue(actualResult);
+            }
+
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
         public void RecoverLogFiles_RecoverSuccess_ReturnTrue(string startTime, string endTime)
         {
             // Arrange

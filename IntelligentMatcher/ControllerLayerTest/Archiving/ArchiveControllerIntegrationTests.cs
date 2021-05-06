@@ -65,6 +65,31 @@ namespace ControllerLayerTest.Archiving
             // Assert
             Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
         }
+
+        [DataTestMethod]
+        [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", 5000)]
+        public void DeleteArchivedFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
+        {
+            // Arrange
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+
+            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            ArchiveController archiveController = new ArchiveController(archiveManager);
+
+            // Act
+            var timer = Stopwatch.StartNew();
+            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+            timer.Stop();
+
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            // Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
         #endregion
     }
 }
