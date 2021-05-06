@@ -7,7 +7,7 @@ namespace BusinessLayer.CrossCuttingConcerns
     public class Result<T>
     {
         public bool WasSuccessful { get; set; }
-        public ErrorMessage ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }
         public T SuccessValue { get; set; }
         public static Result<T> Success(T successValue)
         {
@@ -18,7 +18,7 @@ namespace BusinessLayer.CrossCuttingConcerns
             };
         }
 
-        public static Result<T> Failure(ErrorMessage errorMessage)
+        public static Result<T> Failure(string errorMessage)
         {
             return new Result<T>
             {

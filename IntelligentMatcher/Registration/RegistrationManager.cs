@@ -22,7 +22,7 @@ using BusinessLayer.CrossCuttingConcerns;
 
 namespace Registration
 {
-    public class RegistrationManager : IRegistrationManager
+    public class RegistrationManager : BusinessLayerBase, IRegistrationManager
     {
 
         private readonly ILogService _logger;
@@ -48,96 +48,105 @@ namespace Registration
             _logger = logger;
         }
 
-        public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
-            WebUserProfileModel userModel, string password, string ipAddress)
+        public async Task<Result<int>> RegisterAccount(WebUserAccountModel webUserAccountModel,
+            WebUserProfileModel webUserProfileModel, string password)
         {
-            try
+            #region InputValidation
+            // Create Result to determine the result and message the UI will present
+            if (ContainsNullOrEmptyParameter(webUserAccountModel))
             {
-                // Create Result to determine the result and message the UI will present
-                var resultModel = new Result<int>();
-                if (accountModel.Username == null || accountModel.EmailAddress == null || userModel.FirstName == null ||
-                    userModel.Surname == null || userModel.DateOfBirth == null || password == null)
-                {
-                    resultModel.WasSuccessful = false;
-                    resultModel.ErrorMessage = ErrorMessage.Null;
-
-                    return resultModel;
-                }
-                else if (password.Length >= 8 && password.Any(char.IsDigit)
-                        && password.Any(char.IsUpper) && password.Any(char.IsLower))
-                {
-                    var usernameAlreadyExists = await _validationService.UsernameExists(accountModel.Username);
-
-                    if (usernameAlreadyExists)
-                    {
-                        // Log and return Username existing result
-                        _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                        resultModel.WasSuccessful = false;
-                        resultModel.ErrorMessage = ErrorMessage.UsernameExists;
-
-                        return resultModel;
-                    }
-
-                    var emailAlreadyExists = await _validationService.EmailExists(accountModel.EmailAddress);
-
-                    if (emailAlreadyExists)
-                    {
-                        // Log and return Email existing result
-                        _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                        resultModel.WasSuccessful = false;
-                        resultModel.ErrorMessage = ErrorMessage.EmailExists;
-
-                        return resultModel;
-                    }
-
-                    // Creates User Account and gets Account ID to pass along
-                    var accountID = await _userAccountService.CreateAccount(accountModel);
-
-                    // Sets the password for the new Account
-                    await _cryptographyService.newPasswordEncryptAsync(password, accountID);
-
-                    // Passes on the Account ID to the User Profile Model
-                    userModel.UserAccountId = accountID;
-
-                    // Create User Profile with the Passed on Account ID
-                    var userProfileId = await _userProfileService.CreateUserProfile(userModel);
-
-                    //Log and Return result
-                    _logger.Log("User: " + accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
-                    resultModel.WasSuccessful = true;
-                    resultModel.SuccessValue = accountID;
-
-                    await _emailService.CreateVerificationToken(accountID);
-
-                    var emailResult = await SendVerificationEmail(accountID);
-
-                    //Log Email Result
-                    if (emailResult == true)
-                    {
-                        _logger.Log("Verification email sent to " + accountModel.Username, LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
-                    }
-                    else
-                    {
-                        _logger.Log("Verification email failed to send to " + accountModel.Username, LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                    }
-
-                    return resultModel;
-                }
-
-                resultModel.WasSuccessful = false;
-                resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
-
-                return resultModel;
+                return Result<int>.Failure(ErrorMessage.ContainsNullOrEmptyParameters.ToString());
             }
-            catch (SqlCustomException e)
+
+            if (ContainsNullOrEmptyParameter(webUserProfileModel))
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<int>.Failure(ErrorMessage.ContainsNullOrEmptyParameters.ToString());
             }
-            catch (NullReferenceException e)
+
+            if (String.IsNullOrEmpty(password))
             {
-                throw new NullReferenceException(e.Message, e.InnerException);
+                return Result<int>.Failure(ErrorMessage.IsNullOrEmpty.ToString());
             }
+
+            if (InvalidMinLength(password, 8))
+            {
+                return Result<int>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            if (!ContainsRequiredCharacterTypes(password, true, true, true, true))
+            {
+                return Result<int>.Failure(ErrorMessage.LacksMinCharacterTypes.ToString());
+            }
+
+            #endregion
+
+            #region BusinessValidation
+
+            if (await _validationService.UsernameExists(webUserAccountModel.Username))
+            {
+                _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
+                return Result<int>.Failure(ErrorMessage.UsernameExists.ToString());
+            }
+
+            if (await _validationService.EmailExists(webUserAccountModel.EmailAddress))
+            {
+                _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
+                return Result<int>.Failure(ErrorMessage.EmailExists.ToString());
+            }
+
+            #endregion
+
+            // Creates User Account and gets Account ID to pass along
+            var result = await _userAccountService.CreateAccount(webUserAccountModel);
+
+            if (!result.WasSuccessful)
+            {
+                return Result<int>.Failure(result.ErrorMessage.ToString());
+            }
+
+            var accountID = result.SuccessValue;
+
+            // Sets the password for the new Account
+            var encrypted = !await _cryptographyService.newPasswordEncryptAsync(password, accountID);
+            if (!encrypted)
+            {
+                return Result<int>.Failure("Password Encryption Failed");
+            }
+
+            // Passes on the Account ID to the User Profile Model
+            webUserProfileModel.UserAccountId = accountID;
+
+            // Create User Profile with the Passed on Account ID
+            var userProfileId = await _userProfileService.CreateUserProfile(webUserProfileModel);
+
+            //Log and Return result
+            _logger.Log("User: " + webUserAccountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
+            resultModel.WasSuccessful = true;
+            resultModel.SuccessValue = accountID;
+
+            await _emailService.CreateVerificationToken(accountID);
+
+            var emailResult = await SendVerificationEmail(accountID);
+
+            //Log Email Result
+            if (emailResult == true)
+            {
+                _logger.Log("Verification email sent to " + webUserAccountModel.Username, LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
+            }
+            else
+            {
+                _logger.Log("Verification email failed to send to " + webUserAccountModel.Username, LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
+            }
+
+            return resultModel;
         }
+
+            resultModel.WasSuccessful = false;
+            resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
+
+            return resultModel;
+        }
+    }
 
         public async Task<bool> SendVerificationEmail(int accountId)
         {

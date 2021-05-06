@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Collections.Generic;
 using Exceptions;
+using DataAccessLayer.CrossCuttingConcerns;
 
 namespace DataAccess.Repositories
 {
-    public class UserProfileRepository : IUserProfileRepository
+    public class UserProfileRepository : DataAccessBase, IUserProfileRepository
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
@@ -19,28 +20,29 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
 
-        public async Task<IEnumerable<UserProfileModel>> GetAllUserProfiles()
+        public async Task<Result<IEnumerable<UserProfileModel>>> GetAllUserProfiles()
         {
+            string storedProcedure = "dbo.UserProfile_Get_All";
             try
             {
-                var storedProcedure = "dbo.UserProfile_Get_All";
-
-                return await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
+                var profiles = await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
                                                                               new { },
                                                                               _connectionString.SqlConnectionString);
+
+                return Result<IEnumerable<UserProfileModel>>.Success(profiles);
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<IEnumerable<UserProfileModel>>.Failure(e.ToString());
             }
         }
 
-        public async Task<UserProfileModel> GetUserProfileById(int id)
+        public async Task<Result<UserProfileModel>> GetUserProfileById(int id)
         {
+            string storedProcedure = "dbo.UserProfile_Get_ById";
+
             try
             {
-                var storedProcedure = "dbo.UserProfile_Get_ById";
-
                 var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
                     new
                     {
@@ -48,20 +50,20 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<UserProfileModel>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<UserProfileModel>.Failure(e.ToString());
             }
         }
 
-        public async Task<UserProfileModel> GetUserProfileByAccountId(int accountId)
+        public async Task<Result<UserProfileModel>> GetUserProfileByAccountId(int accountId)
         {
+            string storedProcedure = "dbo.UserProfile_Get_ByAccountId";
+
             try
             {
-                var storedProcedure = "dbo.UserProfile_Get_ByAccountId";
-
                 var row = await _dataGateway.LoadData<UserProfileModel, dynamic>(storedProcedure,
                     new
                     {
@@ -69,60 +71,70 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<UserProfileModel>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<UserProfileModel>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> CreateUserProfile(UserProfileModel model)
+        public async Task<Result<int>> CreateUserProfile(UserProfileModel model)
         {
+            if (!InvalidLength(model, 50))
+            {
+                return Result<int>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            if (!IsNull(model))
+            {
+                return Result<int>.Failure(ErrorMessage.NullObject.ToString());
+            }
+
+            if (!ContainsNullOrEmptyParameter(model))
+            {
+                return Result<int>.Failure(ErrorMessage.NullOrEmptyParameter.ToString());
+            }
+
+            var storedProcedure = "dbo.UserProfile_Create";
+
+            DynamicParameters p = new DynamicParameters();
+
+            p.Add("FirstName", model.FirstName);
+            p.Add("Surname", model.Surname);
+            p.Add("DateOfBirth", model.DateOfBirth);
+            p.Add("UserAccountId", model.UserAccountId);
+            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+
             try
             {
-                if(model.FirstName.Length <= 50 && model.Surname.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserProfile_Create";
-
-                    DynamicParameters p = new DynamicParameters();
-
-                    p.Add("FirstName", model.FirstName);
-                    p.Add("Surname", model.Surname);
-                    p.Add("DateOfBirth", model.DateOfBirth);
-                    p.Add("UserAccountId", model.UserAccountId);
-                    p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
-
-                    await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
-                    return p.Get<int>("Id");
-                }
-                else
-                {
-                    return 0;
-                }
+                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
+                return Result<int>.Success(p.Get<int>("Id"));
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<int>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> DeleteUserProfileByAccountId(int userAccountId)
+        public async Task<Result<bool>> DeleteUserProfileByAccountId(int userAccountId)
         {
+            var storedProcedure = "dbo.UserProfile_Delete_ById";
+
             try
             {
-                var storedProcedure = "dbo.UserProfile_Delete_ById";
-
-                return await _dataGateway.Execute(storedProcedure,
+                await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  UserAccountId = userAccountId
                                              },
                                              _connectionString.SqlConnectionString);
+
+                return Result<bool>.Success(true);
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
     }

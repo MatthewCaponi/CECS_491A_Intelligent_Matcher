@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer.CrossCuttingConcerns;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
@@ -8,15 +9,14 @@ namespace IntelligentMatcher.Services
 {
     public interface IUserAccountService
     {
-        Task<bool> ChangeEmail(int accountId, string newEmail);
-        Task<bool> ChangePassword(int accountId, string newPassword);
-        Task<bool> ChangeUsername(int accountId, string newUsername);
-        Task<int> CreateAccount(WebUserAccountModel webUserAccountModel);
-        Task<bool> DeleteAccount(int id);
-        Task<List<WebUserAccountModel>> GetAllUserAccounts();
-        Task<WebUserAccountModel> GetUserAccount(int id);
-        Task<WebUserAccountModel> GetUserAccountByUsername(string username);
-        Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress);
-
+        Task<Result<List<WebUserAccountModel>>> GetAllUserAccounts();
+        Task<Result<WebUserAccountModel>> GetUserAccount(int id);
+        Task<Result<WebUserAccountModel>> GetUserAccountByUsername(string username);
+        Task<Result<WebUserAccountModel>> GetUserAccountByEmail(string emailAddress);
+        Task<Result<int>> CreateAccount(WebUserAccountModel webUserAccountModel);
+        Task<Result<bool>> DeleteAccount(int id);
+        Task<Result<bool>> ChangeUsername(int accountId, string newUsername);
+        Task<Result<bool>> ChangePassword(int accountId, string newPassword);
+        Task<Result<bool>> ChangeEmail(int accountId, string newEmail);
     }
 }

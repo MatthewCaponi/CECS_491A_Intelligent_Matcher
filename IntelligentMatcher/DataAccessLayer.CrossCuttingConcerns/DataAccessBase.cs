@@ -43,6 +43,16 @@ namespace DataAccessLayer.CrossCuttingConcerns
             return false;
         }
 
+        public bool ContainsNullOrEmptyParameter<T>(T model)
+        {
+            if (ContainsNullOrEmptyParameter(model, null))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public bool ContainsNullOrEmptyParameter<T>(T model, List<string> exemptParameters)
         {
             int i = 0;
@@ -50,9 +60,12 @@ namespace DataAccessLayer.CrossCuttingConcerns
             {
                 if (Nullable.GetUnderlyingType(property.GetType()) == null)
                 {
-                    if (property.Name.ToString() == exemptParameters[i])
+                    if (exemptParameters != null)
                     {
-                        continue;
+                        if (property.Name.ToString() == exemptParameters[i])
+                        {
+                            continue;
+                        }
                     }
 
                     if (property.GetValue(model, null) == null)

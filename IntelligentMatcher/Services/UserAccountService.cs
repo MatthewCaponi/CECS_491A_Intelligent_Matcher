@@ -1,17 +1,14 @@
-﻿using DataAccess.Repositories;
-using Exceptions;
+﻿using BusinessLayer.CrossCuttingConcerns;
+using DataAccess.Repositories;
 using Models;
 using Services;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using UserManagement.Models;
 
 namespace IntelligentMatcher.Services
 {
-    public class UserAccountService : IUserAccountService
+    public class UserAccountService : BusinessLayerBase, IUserAccountService
     {
 
         private IUserAccountRepository _userAccountRepository;
@@ -21,11 +18,14 @@ namespace IntelligentMatcher.Services
             _userAccountRepository = userAccountRepository;
         }
 
- 
-        public async Task<List<WebUserAccountModel>> GetAllUserAccounts()
+        public async Task<Result<List<WebUserAccountModel>>> GetAllUserAccounts()
         {
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.GetAllAccounts(), new Result<List<WebUserAccountModel>>());
 
-                var userAccounts = await _userAccountRepository.GetAllAccounts();
+            if (result.WasSuccessful)
+            {
+                var userAccounts = result.SuccessValue;
+
                 List<WebUserAccountModel> webUserAccounts = new List<WebUserAccountModel>();
                 foreach (var userAccountModel in userAccounts)
                 {
@@ -33,154 +33,166 @@ namespace IntelligentMatcher.Services
                     webUserAccounts.Add(webUserAccountModel);
                 }
 
-                return webUserAccounts;
+                return Result<List<WebUserAccountModel>>.Success(webUserAccounts);
             }
-            catch (SqlCustomException e)
-            {
-                throw new SqlCustomException(e.Message, e.InnerException);
-            }
-            catch (NullReferenceException e)
-            {
-                throw new NullReferenceException(e.Message, e.InnerException);
-            }
-        }
 
-        public async Task<WebUserAccountModel> GetUserAccount(int id)
-        {
-            try
-            {
-                var userAccountModel = await _userAccountRepository.GetAccountById(id);
-                var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
-
-                return webUserAccountModel;
-            }
-            catch (SqlCustomException e)
-            {
-                throw new SqlCustomException(e.Message, e.InnerException);
-            }
-            catch (NullReferenceException e)
-            {
-                throw new NullReferenceException(e.Message, e.InnerException);
-            }
-        }
-
-        public async Task<WebUserAccountModel> GetUserAccountByUsername(string username)
-        {
-            try
-            {
-                var userAccountModel = await _userAccountRepository.GetAccountByUsername(username);
-                if (userAccountModel == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
-                    return webUserAccountModel;
-                }
-            }
-            catch (SqlCustomException e)
-            {
-                throw new SqlCustomException(e.Message, e.InnerException);
-            }
-            catch (NullReferenceException e)
-            {
-                throw new NullReferenceException(e.Message, e.InnerException);
-            }
-        }
-
-        public async Task<WebUserAccountModel> GetUserAccountByEmail(string emailAddress)
-        {
-            try
-            {
-                var userAccountModel = await _userAccountRepository.GetAccountByEmail(emailAddress);
-                if (userAccountModel == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
-                    return webUserAccountModel;
-                }
-            }
-            catch (SqlCustomException e)
-            {
-                throw new SqlCustomException(e.Message, e.InnerException);
-            }
-            catch (NullReferenceException e)
-            {
-                throw new NullReferenceException(e.Message, e.InnerException);
-            }
+            return Result<List<WebUserAccountModel>>.Failure(result.ErrorMessage.ToString());
         }
 
 
-        public async Task<int> CreateAccount(WebUserAccountModel webUserAccountModel)
+        public async Task<Result<WebUserAccountModel>> GetUserAccount(int id)
         {
-            try
-            {
-                var userAccountModel = ModelConverterService.ConvertTo(webUserAccountModel, new UserAccountModel());
-                var userAccountId = await _userAccountRepository.CreateAccount(userAccountModel);
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.GetAccountById(id), new Result<WebUserAccountModel>());
 
-                return userAccountId;
-            }
-            catch (SqlCustomException e)
+            if (!result.WasSuccessful)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<WebUserAccountModel>.Failure(result.ErrorMessage.ToString());
             }
+
+            var userAccountModel = result.SuccessValue;
+
+            if (IsNull(userAccountModel))
+            {
+                return Result<WebUserAccountModel>.Failure(ErrorMessage.NullObject.ToString());
+            }
+
+            var webUserAccountModel = ModelConverterService.ConvertTo(result.SuccessValue, new WebUserAccountModel());
+
+            return Result<WebUserAccountModel>.Success(webUserAccountModel);
         }
 
-        public async Task<bool> DeleteAccount(int id)
+        public async Task<Result<WebUserAccountModel>> GetUserAccountByUsername(string username)
         {
-            try
+            if (string.IsNullOrEmpty(username))
             {
-                int returnValue = await _userAccountRepository.DeleteAccountById(id);
+                return Result<WebUserAccountModel>.Failure(ErrorMessage.IsNullOrEmpty.ToString());
+            }
 
-                return true;
-            }
-            catch (SqlCustomException e)
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.GetAccountByUsername(username), new Result<WebUserAccountModel>());
+
+            if (!result.WasSuccessful)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<WebUserAccountModel>.Failure(result.ErrorMessage.ToString());
             }
+
+            var userAccountModel = result.SuccessValue;
+
+            if (IsNull(userAccountModel))
+            {
+                return Result<WebUserAccountModel>.Failure(ErrorMessage.NullObject.ToString());
+            }
+
+            var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+            return Result<WebUserAccountModel>.Success(webUserAccountModel);
+
         }
 
-        public async Task<bool> ChangeUsername(int accountId, string newUsername)
+        public async Task<Result<WebUserAccountModel>> GetUserAccountByEmail(string emailAddress)
         {
-            try
+            if (string.IsNullOrEmpty(emailAddress))
             {
-                var returned = await _userAccountRepository.UpdateAccountUsername(accountId, newUsername);
-                return true;
+                return Result<WebUserAccountModel>.Failure(ErrorMessage.IsNullOrEmpty.ToString());
             }
-            catch (SqlCustomException e)
+
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.GetAccountByUsername(emailAddress), new Result<WebUserAccountModel>());
+
+            if (!result.WasSuccessful)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<WebUserAccountModel>.Failure(result.ErrorMessage.ToString());
             }
+
+            var userAccountModel = result.SuccessValue;
+
+            if (IsNull(userAccountModel))
+            {
+                return Result<WebUserAccountModel>.Failure(ErrorMessage.NullObject.ToString());
+            }
+
+            var webUserAccountModel = ModelConverterService.ConvertTo(userAccountModel, new WebUserAccountModel());
+            return Result<WebUserAccountModel>.Success(webUserAccountModel);
         }
 
-        public async Task<bool> ChangePassword(int accountId, string newPassword)
+
+        public async Task<Result<int>> CreateAccount(WebUserAccountModel webUserAccountModel)
         {
-            try
+            if (IsNull(webUserAccountModel))
             {
-                var returned = await _userAccountRepository.UpdateAccountPassword(accountId, newPassword);
-                return true;
+                return Result<int>.Failure(ErrorMessage.NullObject.ToString());
             }
-            catch (SqlCustomException e)
+
+            if (ContainsNullOrEmptyParameter(webUserAccountModel))
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<int>.Failure(ErrorMessage.ContainsNullOrEmptyParameters.ToString());
             }
+
+            var userAccountModel = ModelConverterService.ConvertTo(webUserAccountModel, new UserAccountModel());
+
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.CreateAccount(userAccountModel), new Result<int>());
+
+            if (!result.WasSuccessful)
+            {
+                return Result<int>.Failure(result.ErrorMessage.ToString());
+            }
+
+            return Result<int>.Success(result.SuccessValue);
         }
 
-        public async Task<bool> ChangeEmail(int accountId, string newEmail)
+        public async Task<Result<bool>> DeleteAccount(int id)
         {
-            try
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.DeleteAccountById(id), new Result<bool>());
+
+            if (!result.WasSuccessful)
             {
-                var returned = await _userAccountRepository.UpdateAccountEmail(accountId, newEmail);
-                return true;
+                return Result<bool>.Failure(result.ErrorMessage.ToString());
             }
-            catch (SqlCustomException e)
+
+            return Result<bool>.Success(true);
+        }
+
+        public async Task<Result<bool>> ChangeUsername(int accountId, string newUsername)
+        {
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.UpdateAccountUsername(accountId, newUsername), new Result<bool>());
+
+            if (!result.WasSuccessful)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(result.ErrorMessage.ToString());
             }
+
+            return Result<bool>.Success(true);
+        }
+
+        public async Task<Result<bool>> ChangePassword(int accountId, string newPassword)
+        {
+            if (string.IsNullOrEmpty(newPassword))
+            {
+                return Result<bool>.Failure(ErrorMessage.IsNullOrEmpty.ToString());
+            }
+
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.UpdateAccountPassword(accountId, newPassword), new Result<bool>());
+
+            if (!result.WasSuccessful)
+            {
+                return Result<bool>.Failure(result.ErrorMessage.ToString());
+            }
+
+            return Result<bool>.Success(true);
+        }
+
+        public async Task<Result<bool>> ChangeEmail(int accountId, string newEmail)
+        {
+            if (string.IsNullOrEmpty(newEmail))
+            {
+                return Result<bool>.Failure(ErrorMessage.IsNullOrEmpty.ToString());
+            }
+
+            var result = ModelConverterService.ConvertTo(await _userAccountRepository.UpdateAccountEmail(accountId, newEmail), new Result<bool>());
+
+            if (!result.WasSuccessful)
+            {
+                return Result<bool>.Failure(result.ErrorMessage.ToString());
+            }
+
+            return Result<bool>.Success(true);
         }
     }
 }

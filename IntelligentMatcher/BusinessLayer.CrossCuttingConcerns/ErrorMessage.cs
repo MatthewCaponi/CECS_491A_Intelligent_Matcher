@@ -18,6 +18,11 @@ namespace BusinessLayer.CrossCuttingConcerns
         NoMatch,
         TooManyAttempts,
         CodeExpired,
-        InvalidPassword
+        InvalidPassword,
+        IsNullOrEmpty,
+        NullObject,
+        ContainsNullOrEmptyParameters,
+        InvalidLength,
+        LacksMinCharacterTypes
     }
 }
