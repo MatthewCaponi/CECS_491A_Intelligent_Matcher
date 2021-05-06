@@ -76,7 +76,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 
             await userAccountSettingsManager.CreateUserAccountSettingsAsync(userAccountSettingsModel);

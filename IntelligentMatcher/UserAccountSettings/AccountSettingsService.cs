@@ -6,7 +6,7 @@ using Models;
 namespace UserAccountSettings
 {
 
-    public class AccountSettingsManager : IAccountSettingsManager
+    public class AccountSettingsService : IAccountSettingsService
     {
 
         private readonly IUserAccountRepository _userAccountRepository;
@@ -14,7 +14,7 @@ namespace UserAccountSettings
         private readonly ICryptographyService _cryptographyService;
         private readonly IAuthenticationService _authenticationService;
 
-        public AccountSettingsManager(IUserAccountRepository userAccountRepository, IUserAccountSettingsRepository userAccountSettingRepository, ICryptographyService cryptographyService, IAuthenticationService authenticationService)
+        public AccountSettingsService(IUserAccountRepository userAccountRepository, IUserAccountSettingsRepository userAccountSettingRepository, ICryptographyService cryptographyService, IAuthenticationService authenticationService)
         {
             _userAccountRepository = userAccountRepository;
             _userAccountSettingRepository = userAccountSettingRepository;

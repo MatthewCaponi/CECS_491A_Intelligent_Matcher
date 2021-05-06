@@ -177,13 +177,22 @@ async createFriendRequest(){
     body: JSON.stringify(IdsModel)
     }).
     then(r => r.json()).then(res=>{
+        if(res == true){
+          this.setState({friendRequestMessage: ""})
 
+          this.getFriendData();
+          this.render();
+          this.friendusername.value = "";
+          this.setState({friendRequestMessage: "Friend Request Sent"})
+
+
+        }else{
+          this.setState({friendRequestMessage: "User Does Not Exist"})
+
+        }
     }
     );
-    this.setState({friendRequestMessage: ""})
 
-    this.getFriendData();
-    this.render();
   }else{
     this.setState({friendRequestMessage: this.friendusername.value + "has blocked you" })
   }
@@ -211,7 +220,6 @@ async createFriendRequest(){
 
 
 
-this.friendusername.value = "";
 }
 
 async blockFriend(friendId){
@@ -358,8 +366,15 @@ async search(){
 
                                 {
 (friend.userProfileImage != null && friend.userProfileImage != "") ?
-                                    (                                           <Image avatar src= {filePath + friend.userProfileImage}  circular />
+                                    (                    
+                                      
+                         
+                                      
+                                      <Image style={{'font-size':42}}  src= {filePath + friend.userProfileImage}  circular />
 
+
+
+                                  
                                       ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
                                       )}
 

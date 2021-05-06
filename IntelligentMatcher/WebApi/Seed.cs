@@ -16,6 +16,8 @@ using PublicUserProfile;
 using TestHelper;
 using Registration.Services;
 using IntelligentMatcher.Services;
+using Services;
+using UserManagement.Services;
 
 namespace WebApi
 {
@@ -99,7 +101,11 @@ namespace WebApi
             await TestCleaner.CleanDatabase();
             await DataAccessTestHelper.ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
 
-            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo, new ValidationService(userAccountService, userProfileService)));
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
 
 
@@ -174,7 +180,7 @@ namespace WebApi
                 publicUserProfileModel.Hobbies = "These are my hobbies";
                 publicUserProfileModel.Intrests = "These are my intrests";
                 publicUserProfileModel.Height = "This is how tall I am";
-                await publicUserProfileManager.createPublicUserProfileAsync(publicUserProfileModel);
+                await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
 
                 await emailService.CreateVerificationToken(publicUserProfileModel.UserId);
 
@@ -238,7 +244,12 @@ namespace WebApi
 
 
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo, friendRequestListRepo, userAccountRepository, friendBlockListRepo, publicUserProfileRepo);
+            IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+            IUserInteractionService userInteractionService = new UserInteractionService(friendBlockListRepo, friendListRepo, friendRequestListRepo, userReportsRepo, validationService);
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository, publicUserProfileService, userInteractionService);
 
             for (int i = 10; i < 15; i++)
             {

@@ -15,6 +15,8 @@ using System.Linq;
 using FriendList;
 using PublicUserProfile;
 using Moq;
+using Services;
+
 namespace BusinessLayerUnitTests.FriendList
 {
     [TestClass]
@@ -28,13 +30,11 @@ namespace BusinessLayerUnitTests.FriendList
         public async Task RequestFriendAsync_FriendRequested_NewFriendRequested(int userId1, int userId2)
         {
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
             try
             {
                 await friendListManager.RequestFriendAsync(userId1, userId2);
@@ -60,13 +60,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -92,13 +90,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -121,13 +117,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -151,13 +145,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -181,13 +173,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -223,13 +213,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -249,13 +237,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
             try
             {
                 await friendListManager.RequestFriendAsync(userId1, userId2);
@@ -277,13 +263,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -308,13 +292,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -337,13 +319,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -367,13 +347,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -394,14 +372,11 @@ namespace BusinessLayerUnitTests.FriendList
         public async Task GetFriendStatusUserIdAsync_GetStatus_StatusRequested(int userId1, int userId2)
         {
 
-
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
 
             try
             {
@@ -425,13 +400,11 @@ namespace BusinessLayerUnitTests.FriendList
         {
 
 
-            Mock<IFriendListRepo> friendListRepo = new Mock<IFriendListRepo>();
-            Mock<IFriendRequestListRepo> friendRequestListRepo = new Mock<IFriendRequestListRepo>();
             Mock<IUserAccountRepository> userAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IFriendBlockListRepo> friendBlockListRepo = new Mock<IFriendBlockListRepo>();
-            Mock<IPublicUserProfileRepo> publicUserProfileRepo = new Mock<IPublicUserProfileRepo>();
 
-            IFriendListManager friendListManager = new FriendListManager(friendListRepo.Object, friendRequestListRepo.Object, userAccountRepository.Object, friendBlockListRepo.Object, publicUserProfileRepo.Object);
+            Mock<IPublicUserProfileService> publicUserProfileService = new Mock<IPublicUserProfileService>();
+            Mock<IUserInteractionService> userInteractionService = new Mock<IUserInteractionService>();
+            IFriendListManager friendListManager = new FriendListManager(userAccountRepository.Object, publicUserProfileService.Object, userInteractionService.Object);
             try
             {
                 await friendListManager.RequestFriendAsync(userId1, userId2);

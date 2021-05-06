@@ -3,6 +3,7 @@ import { Table, Grid, Form } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
+import UserListings from "../Components/UserListings";
 
 import _ from 'lodash'
 
@@ -87,6 +88,9 @@ export class UserProfile extends Component {
 
     <Grid.Row columns={2}>
     <Grid.Column>
+
+    <UserListings />
+
 </Grid.Column>
 <Grid.Column>
 <div>

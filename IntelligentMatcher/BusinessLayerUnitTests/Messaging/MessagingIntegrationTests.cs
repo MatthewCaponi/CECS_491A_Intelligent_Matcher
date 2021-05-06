@@ -114,7 +114,7 @@ namespace BusinessLayerUnitTests.Messaging
 
 
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 
             await userAccountSettingsManager.CreateUserAccountSettingsAsync(userAccountSettingsModel);
@@ -285,7 +285,7 @@ namespace BusinessLayerUnitTests.Messaging
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
-       
+            
                 await messagingService.SendMessageAsync(model);
                 await messagingService.DeleteMessageAsync(0);
       
