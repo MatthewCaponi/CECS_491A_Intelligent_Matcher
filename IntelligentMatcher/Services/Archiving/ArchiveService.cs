@@ -66,26 +66,7 @@ namespace Services.Archiving
             }
             catch (IOException e)
             {
-                try
-                {
-                    string currentDirectory = Environment.CurrentDirectory;
-                    string projectDirectory = Directory.GetParent(currentDirectory).FullName;
-                    string targetPath = $"{projectDirectory}\\archived";
-
-                    //create the archive directory if it does not exist
-                    if (Directory.Exists(targetPath))
-                    {
-                        string[] allZips = Directory.GetFiles(targetPath);
-
-                        File.Delete(allZips[0]);
-                    }
-
-                    throw new IOException(e.Message, e.InnerException);
-                }
-                catch
-                {
-                    throw new IOException(e.Message, e.InnerException);
-                }
+                throw new IOException(e.Message, e.InnerException);
             }
         }
 
@@ -100,7 +81,7 @@ namespace Services.Archiving
 
                 string currentDirectory = Environment.CurrentDirectory;
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
-                string archiveDirectory = $"{projectDirectory}\\archived";
+                string archiveDirectory = $"{projectDirectory}\\archivedLogs";
                 string recoverDirectory = $"{projectDirectory}\\logs\\Recovered";
 
                 //create the recover directory if it does not exist

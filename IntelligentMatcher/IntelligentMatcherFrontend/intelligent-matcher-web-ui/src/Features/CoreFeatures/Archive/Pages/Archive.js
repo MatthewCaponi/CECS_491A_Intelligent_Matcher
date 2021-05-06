@@ -10,7 +10,7 @@ function Archive(){
 
     function archiveAllHandler(e){
         var ArchiveModel = e;
-        if(e.startDate != "" && e.endDate != "" ){
+        if(e.startDate != "" && e.endDate != ""){
             fetch('http://localhost:5000/Archive/ArchiveLogFiles',
             {
             method: "POST",
@@ -20,6 +20,30 @@ function Archive(){
             then(r => r.json()).then(res=>{
                 if(res.success){
                     alert("Archive Complete");
+                }
+                else{
+                    alert(res.errorMessage);
+                }
+            }
+            );
+        }
+        else{
+            alert("Input is Empty");
+        }
+    }
+
+    function recoverAllHandler(e){
+        var ArchiveModel = e;
+        if(e.startDate != "" && e.endDate != ""){
+            fetch('http://localhost:5000/Archive/RecoverLogFiles',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ArchiveModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Recovery Complete");
                 }
                 else{
                     alert(res.errorMessage);
@@ -73,7 +97,19 @@ function Archive(){
                 </Button>
             </Grid.Row>
             <Grid.Row>
-                <Button href="http://localhost:3000/" compact size="tiny" circular inverted color="blue">Return Home</Button>
+                <Button
+                    onClick={()=>recoverAllHandler({
+                        startDate:startDateState,
+                        endDate:endDateState,
+                    })}
+                    compact size="tiny"
+                    circular inverted color="blue"
+                >
+                Recover All Archived Logs
+                </Button>
+            </Grid.Row>
+            <Grid.Row>
+                <Button href="http://localhost:3000/" compact size="tiny" circular inverted color="purple">Return Home</Button>
             </Grid.Row>
             </Grid>
         </div>
