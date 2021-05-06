@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLayer.CrossCuttingConcerns\BusinessLayer.CrossCuttingConcerns.csproj" />
     <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />

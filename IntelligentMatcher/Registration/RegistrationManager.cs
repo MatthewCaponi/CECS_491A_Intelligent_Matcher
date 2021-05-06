@@ -18,6 +18,7 @@ using WebApi.Models;
 using System.IO;
 using System.Linq;
 using Exceptions;
+using BusinessLayer.CrossCuttingConcerns;
 
 namespace Registration
 {
@@ -57,7 +58,7 @@ namespace Registration
                 if (accountModel.Username == null || accountModel.EmailAddress == null || userModel.FirstName == null ||
                     userModel.Surname == null || userModel.DateOfBirth == null || password == null)
                 {
-                    resultModel.Success = false;
+                    resultModel.WasSuccessful = false;
                     resultModel.ErrorMessage = ErrorMessage.Null;
 
                     return resultModel;
@@ -71,7 +72,7 @@ namespace Registration
                     {
                         // Log and return Username existing result
                         _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                        resultModel.Success = false;
+                        resultModel.WasSuccessful = false;
                         resultModel.ErrorMessage = ErrorMessage.UsernameExists;
 
                         return resultModel;
@@ -83,7 +84,7 @@ namespace Registration
                     {
                         // Log and return Email existing result
                         _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
-                        resultModel.Success = false;
+                        resultModel.WasSuccessful = false;
                         resultModel.ErrorMessage = ErrorMessage.EmailExists;
 
                         return resultModel;
@@ -103,7 +104,7 @@ namespace Registration
 
                     //Log and Return result
                     _logger.Log("User: " + accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
-                    resultModel.Success = true;
+                    resultModel.WasSuccessful = true;
                     resultModel.SuccessValue = accountID;
 
                     await _emailService.CreateVerificationToken(accountID);
@@ -123,7 +124,7 @@ namespace Registration
                     return resultModel;
                 }
 
-                resultModel.Success = false;
+                resultModel.WasSuccessful = false;
                 resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
 
                 return resultModel;

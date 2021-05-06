@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Linq;
 using Dapper;
 using Exceptions;
+using DataAccessLayer.CrossCuttingConcerns;
 
 namespace DataAccess.Repositories
 {
-    public class UserAccountRepository : IUserAccountRepository
+    public class UserAccountRepository : DataAccessBase, IUserAccountRepository
     {
         private readonly IDataGateway _dataGateway;
         private readonly IConnectionStringData _connectionString;
@@ -21,28 +22,29 @@ namespace DataAccess.Repositories
             _connectionString = connectionString;
         }
  
-        public async Task<IEnumerable<UserAccountModel>> GetAllAccounts()
+        public async Task<Result<IEnumerable<UserAccountModel>>> GetAllAccounts()
         {
+            string storedProcedure = "dbo.UserAccount_Get_All";
             try
             {
-                string storedProcedure = "dbo.UserAccount_Get_All";
-
-                return await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
+                var accounts = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                                                                               new { },
                                                                               _connectionString.SqlConnectionString);
+
+                return Result<IEnumerable<UserAccountModel>>.Success(accounts);
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<IEnumerable<UserAccountModel>>.Failure(e.ToString());
             }
         }
 
-        public async Task<UserAccountModel> GetAccountById(int id)
+        public async Task<Result<UserAccountModel>> GetAccountById(int id)
         {
+            string storedProcedure = "dbo.UserAccount_Get_ById";
+
             try
             {
-                string storedProcedure = "dbo.UserAccount_Get_ById";
-
                 var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                     new
                     {
@@ -50,20 +52,25 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<UserAccountModel>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<UserAccountModel>.Failure(e.ToString());
             }
         }
 
-        public async Task<UserAccountModel> GetAccountByUsername(string username)
+        public async Task<Result<UserAccountModel>> GetAccountByUsername(string username)
         {
+            if (String.IsNullOrEmpty(username))
+            {
+                return Result<UserAccountModel>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Get_ByUsername";
+
             try
             {
-                var storedProcedure = "dbo.UserAccount_Get_ByUsername";
-
                 var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                     new
                     {
@@ -71,20 +78,25 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<UserAccountModel>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<UserAccountModel>.Failure(e.ToString());
             }
         }
 
-        public async Task<UserAccountModel> GetAccountByEmail(string email)
+        public async Task<Result<UserAccountModel>> GetAccountByEmail(string email)
         {
+            if (String.IsNullOrEmpty(email))
+            {
+                return Result<UserAccountModel>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Get_ByEmail";
+
             try
             {
-                var storedProcedure = "dbo.UserAccount_Get_ByEmail";
-
                 var row = await _dataGateway.LoadData<UserAccountModel, dynamic>(storedProcedure,
                     new
                     {
@@ -92,20 +104,20 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<UserAccountModel>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<UserAccountModel>.Failure(e.ToString());
             }
         }
 
-        public async Task<string> GetSaltById(int id)
+        public async Task<Result<string>> GetSaltById(int id)
         {
+            var storedProcedure = "dbo.UserAccount_GetSalt_ById";
+
             try
             {
-                var storedProcedure = "dbo.UserAccount_GetSalt_ById";
-
                 var row = await _dataGateway.LoadData<string, dynamic>(storedProcedure,
                     new
                     {
@@ -113,15 +125,15 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<string>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<string>.Failure(e.ToString());
             }
         }
 
-        public async Task<string> GetPasswordById(int id)
+        public async Task<Result<string>> GetPasswordById(int id)
         {
             try
             {
@@ -134,17 +146,17 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<string>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<string>.Failure(e.ToString());
             }
         }
 
 
 
-        public async Task<string> GetStatusById(int id)
+        public async Task<Result<string>> GetStatusById(int id)
         {
             try
             {
@@ -157,230 +169,268 @@ namespace DataAccess.Repositories
                     },
                     _connectionString.SqlConnectionString);
 
-                return row.FirstOrDefault();
+                return Result<string>.Success(row.FirstOrDefault());
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<string>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> CreateAccount(UserAccountModel model)
+        public async Task<Result<int>> CreateAccount(UserAccountModel model)
         {
+            if (!InvalidLength(model, 50))
+            {
+                return Result<int>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            if (!IsNull(model))
+            {
+                return Result<int>.Failure(ErrorMessage.NullObject.ToString());
+            }
+
+            if (!ContainsNullOrEmptyParameter(model, new List<string> { nameof(model.Password), nameof(model.Salt) }))
+            {
+                return Result<int>.Failure(ErrorMessage.NullOrEmptyParameter.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Create";
+
+            DynamicParameters p = new DynamicParameters();
+
+            p.Add("Username", model.Username);
+            p.Add("Password", model.Password);
+            p.Add("Salt", model.Salt);
+            p.Add("EmailAddress", model.EmailAddress);
+            p.Add("AccountType", model.AccountType);
+            p.Add("AccountStatus", model.AccountStatus);
+            p.Add("CreationDate", model.CreationDate);
+            p.Add("UpdationDate", model.UpdationDate);
+
+            p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
+
             try
             {
-                if(model.Username.Length <= 50 && model.EmailAddress.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserAccount_Create";
+                await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
 
-                    DynamicParameters p = new DynamicParameters();
-
-                    p.Add("Username", model.Username);
-                    p.Add("Password", model.Password);
-                    p.Add("Salt", model.Salt);
-                    p.Add("EmailAddress", model.EmailAddress);
-                    p.Add("AccountType", model.AccountType);
-                    p.Add("AccountStatus", model.AccountStatus);
-                    p.Add("CreationDate", model.CreationDate);
-                    p.Add("UpdationDate", model.UpdationDate);
-
-                    p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
-
-                    await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
-
-                    return p.Get<int>("Id");
-                }
-                else
-                {
-                    return 0;
-                }
+                return Result<int>.Success(p.Get<int>("Id"));
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<int>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> DeleteAccountById(int id)
+        public async Task<Result<bool>> DeleteAccountById(int id)
         {
+            var storedProcedure = "dbo.UserAccount_Delete_ById";
+
             try
             {
-                var storedProcedure = "dbo.UserAccount_Delete_ById";
-
-                return await _dataGateway.Execute(storedProcedure,
+                await _dataGateway.Execute(storedProcedure,
                                              new
                                              {
                                                  Id = id
                                              },
                                              _connectionString.SqlConnectionString);
+
+                return Result<bool>.Success(true);
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> UpdateAccountUsername(int id, string username)
+        public async Task<Result<bool>> UpdateAccountUsername(int id, string username)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                return Result<bool>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+            if (InvalidLength(username, 50))
+            {
+                return Result<bool>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Update_Username";
+
             try
             {
-                if(username.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserAccount_Update_Username";
+                await _dataGateway.Execute(storedProcedure,
+                                                new
+                                                {
+                                                    Id = id,
+                                                    Username = username
+                                                },
+                                                _connectionString.SqlConnectionString);
 
-                    return await _dataGateway.Execute(storedProcedure,
-                                                 new
-                                                 {
-                                                     Id = id,
-                                                     Username = username
-                                                 },
-                                                 _connectionString.SqlConnectionString);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Result<bool>.Success(true);
+                
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> UpdateAccountEmail(int id, string email)
+        public async Task<Result<bool>> UpdateAccountEmail(int id, string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                return Result<bool>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+            if (InvalidLength(email, 50))
+            {
+                return Result<bool>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Update_Email";
+
             try
             {
-                if (email.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserAccount_Update_Email";
+                await _dataGateway.Execute(storedProcedure,
+                                                new
+                                                {
+                                                    Id = id,
+                                                    EmailAddress = email
+                                                },
+                                                _connectionString.SqlConnectionString);
 
-                    return await _dataGateway.Execute(storedProcedure,
-                                                 new
-                                                 {
-                                                     Id = id,
-                                                     EmailAddress = email
-                                                 },
-                                                 _connectionString.SqlConnectionString);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Result<bool>.Success(true);
+
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> UpdateAccountPassword(int id, string password)
+        public async Task<Result<bool>> UpdateAccountPassword(int id, string password)
         {
+            if (string.IsNullOrEmpty(password))
+            {
+                return Result<bool>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+            if (InvalidLength(password, 50))
+            {
+                return Result<bool>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Update_Password";
+
             try
             {
-                if (password.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserAccount_Update_Password";
+                await _dataGateway.Execute(storedProcedure,
+                                                new
+                                                {
+                                                    Id = id,
+                                                    Password = password
+                                                },
+                                                _connectionString.SqlConnectionString);
 
-                    return await _dataGateway.Execute(storedProcedure,
-                                                 new
-                                                 {
-                                                     Id = id,
-                                                     Password = password
-                                                 },
-                                                 _connectionString.SqlConnectionString);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Result<bool>.Success(true);
+
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> UpdateAccountSalt(int id, string salt)
+        public async Task<Result<bool>> UpdateAccountSalt(int id, string salt)
         {
+            if (string.IsNullOrEmpty(salt))
+            {
+                return Result<bool>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+            if (InvalidLength(salt, 50))
+            {
+                return Result<bool>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Update_Salt";
+
             try
             {
-                if (salt.Length <= 100)
-                {
-                    var storedProcedure = "dbo.UserAccount_Update_Salt";
+                await _dataGateway.Execute(storedProcedure,
+                                                new
+                                                {
+                                                    Id = id,
+                                                    Salt = salt
+                                                },
+                                                _connectionString.SqlConnectionString);
 
-                    return await _dataGateway.Execute(storedProcedure,
-                                                 new
-                                                 {
-                                                     Id = id,
-                                                     Salt = salt
-                                                 },
-                                                 _connectionString.SqlConnectionString);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Result<bool>.Success(true);
+
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
 
-
-        public async Task<int> UpdateAccountStatus(int id, string accountStatus)
+        public async Task<Result<bool>> UpdateAccountStatus(int id, string accountStatus)
         {
+            if (string.IsNullOrEmpty(accountStatus))
+            {
+                return Result<bool>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+            if (InvalidLength(accountStatus, 50))
+            {
+                return Result<bool>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
+
             try
             {
-                if (accountStatus.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserAccount_Update_AccountStatus";
+                await _dataGateway.Execute(storedProcedure,
+                                                new
+                                                {
+                                                    AccountStatus = accountStatus,
+                                                    Id = id
+                                                },
+                                                _connectionString.SqlConnectionString);
 
-                    return await _dataGateway.Execute(storedProcedure,
-                                                 new
-                                                 {
-                                                     AccountStatus = accountStatus,
-                                                     Id = id
-                                                 },
-                                                 _connectionString.SqlConnectionString);
-                }
-                else
-                {
-                    return 0;
-                }
+                return Result<bool>.Success(true);
+
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
 
-        public async Task<int> UpdateAccountType(int id, string accountType)
+        public async Task<Result<bool>> UpdateAccountType(int id, string accountType)
         {
+            if (string.IsNullOrEmpty(accountType))
+            {
+                return Result<bool>.Failure(ErrorMessage.NullOrEmpty.ToString());
+            }
+            if (InvalidLength(accountType, 50))
+            {
+                return Result<bool>.Failure(ErrorMessage.InvalidLength.ToString());
+            }
+
+            var storedProcedure = "dbo.UserAccount_Update_AccountType";
+
             try
             {
-                if (accountType.Length <= 50)
-                {
-                    var storedProcedure = "dbo.UserAccount_Update_AccountType";
+                await _dataGateway.Execute(storedProcedure,
+                                                new
+                                                {
+                                                    AccountType = accountType,
+                                                    Id = id
+                                                },
+                                                _connectionString.SqlConnectionString);
 
-                    return await _dataGateway.Execute(storedProcedure,
-                                                 new
-                                                 {
-                                                     AccountType = accountType,
-                                                     Id = id
+                return Result<bool>.Success(true);
 
-                                                 },
-                                                 _connectionString.SqlConnectionString);
-                }
-                else
-                {
-                    return 0;
-                }
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException(e.Message, e.InnerException);
+                return Result<bool>.Failure(e.ToString());
             }
         }
     }

@@ -23,6 +23,7 @@ using TestHelper;
 using UserManagement.Models;
 using UserManagement.Services;
 using WebApi.Controllers;
+using BusinessLayer.CrossCuttingConcerns;
 
 namespace ControllerLayerTest.Registration
 {

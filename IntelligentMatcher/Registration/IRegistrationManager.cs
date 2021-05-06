@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserManagement.Models;
 using BusinessModels;
+using BusinessLayer.CrossCuttingConcerns;
 
 namespace Registration
 {

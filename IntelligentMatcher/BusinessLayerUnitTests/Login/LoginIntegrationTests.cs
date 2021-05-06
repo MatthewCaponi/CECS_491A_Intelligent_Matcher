@@ -1,4 +1,5 @@
-﻿using BusinessModels;
+﻿using BusinessLayer.CrossCuttingConcerns;
+using BusinessModels;
 using DataAccess;
 using DataAccess.Repositories;
 using DataAccessUnitTestes;
@@ -152,7 +153,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -163,7 +164,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.Login(username, password, ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -206,7 +207,7 @@ namespace BusinessLayerUnitTests.Login
 
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
@@ -220,7 +221,7 @@ namespace BusinessLayerUnitTests.Login
             var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1));
         }
@@ -263,7 +264,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
@@ -277,7 +278,7 @@ namespace BusinessLayerUnitTests.Login
             var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1) &&
                 newBusinessLoginAttemptsModel.SuspensionEndTime != oldBusinessLoginAttemptsModel.SuspensionEndTime);
@@ -321,7 +322,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -333,7 +334,7 @@ namespace BusinessLayerUnitTests.Login
             var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 businessLoginAttemptsModel.LoginCounter == 1);
         }
@@ -376,7 +377,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -388,7 +389,7 @@ namespace BusinessLayerUnitTests.Login
             var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 businessLoginAttemptsModel.LoginCounter == 1);
         }
@@ -431,7 +432,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
@@ -445,7 +446,7 @@ namespace BusinessLayerUnitTests.Login
             var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1));
         }
@@ -488,7 +489,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             var oldBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
@@ -502,7 +503,7 @@ namespace BusinessLayerUnitTests.Login
             var newBusinessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 newBusinessLoginAttemptsModel.LoginCounter == (oldBusinessLoginAttemptsModel.LoginCounter + 1) &&
                 newBusinessLoginAttemptsModel.SuspensionEndTime != oldBusinessLoginAttemptsModel.SuspensionEndTime);
@@ -546,7 +547,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -558,7 +559,7 @@ namespace BusinessLayerUnitTests.Login
             var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 businessLoginAttemptsModel.LoginCounter == 1);
         }
@@ -601,7 +602,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -613,7 +614,7 @@ namespace BusinessLayerUnitTests.Login
             var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage &&
                 businessLoginAttemptsModel.LoginCounter == 1);
         }
@@ -656,7 +657,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = await userAccountService.GetUserAccountByUsername(username);
 
             // Initialize manager with the dependencies
@@ -668,7 +669,7 @@ namespace BusinessLayerUnitTests.Login
             var businessLoginAttemptsModel = await loginAttemptsService.GetLoginAttemptsByIpAddress(ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id &&
                 actualResult.SuccessValue.Username == expectedResult.SuccessValue.Username &&
                 businessLoginAttemptsModel.LoginCounter == 0);
@@ -714,7 +715,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -725,7 +726,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -767,7 +768,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -778,7 +779,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -832,7 +833,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = username;
 
             // Initialize manager with the dependencies
@@ -843,7 +844,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
         }
         #endregion
@@ -887,7 +888,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -899,7 +900,7 @@ namespace BusinessLayerUnitTests.Login
                 DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -941,7 +942,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -953,7 +954,7 @@ namespace BusinessLayerUnitTests.Login
                 DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -995,7 +996,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -1007,7 +1008,7 @@ namespace BusinessLayerUnitTests.Login
                 DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -1061,7 +1062,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Initialize manager with the dependencies
@@ -1073,7 +1074,7 @@ namespace BusinessLayerUnitTests.Login
                 DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id);
         }
         #endregion
@@ -1116,7 +1117,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -1129,7 +1130,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.ErrorMessage == expectedResult.ErrorMessage
                 );
         }
@@ -1171,7 +1172,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -1184,7 +1185,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.ErrorMessage == expectedResult.ErrorMessage
                 );
         }
@@ -1226,7 +1227,7 @@ namespace BusinessLayerUnitTests.Login
                 (new SQLServerGateway(), new ConnectionStringData()));
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Initialize manager with the dependencies
@@ -1239,7 +1240,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.ErrorMessage == expectedResult.ErrorMessage
                 );
         }
@@ -1294,7 +1295,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Initialize manager with the dependencies
@@ -1307,7 +1308,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id
                 );
         }
@@ -1368,7 +1369,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Initialize manager with the dependencies
@@ -1384,7 +1385,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue(password != accountModel.Password &&
                 salt != accountModel.Salt &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue.Id == expectedResult.SuccessValue.Id);
         }
         #endregion

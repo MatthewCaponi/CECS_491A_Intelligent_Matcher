@@ -1,4 +1,5 @@
-﻿using BusinessModels;
+﻿using BusinessLayer.CrossCuttingConcerns;
+using BusinessModels;
 using ControllerModels;
 using Login;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -43,7 +44,7 @@ namespace BusinessLayerUnitTests.WebApi
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             mockLoginManager.Setup(x => x.Login(username, password, ipAddress)).Returns(Task.FromResult(expectedResult));
@@ -56,7 +57,7 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Success == expectedResult.WasSuccessful &&
                     actualResult.Username == expectedResult.SuccessValue.Username &&
                     actualResult.AccountType == expectedResult.SuccessValue.AccountType.ToString() &&
                     actualResult.AccountStatus == expectedResult.SuccessValue.AccountStatus.ToString()
@@ -77,7 +78,7 @@ namespace BusinessLayerUnitTests.WebApi
             forgotInformationModel.dateOfBirth = dateOfBirth;
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = username;
 
             mockLoginManager.Setup(x => x.ForgotUsername(emailAddress, DateTimeOffset.Parse(dateOfBirth)))
@@ -91,7 +92,7 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Success == expectedResult.WasSuccessful &&
                     actualResult.Username == expectedResult.SuccessValue
                 );
         }
@@ -126,7 +127,7 @@ namespace BusinessLayerUnitTests.WebApi
             var businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             mockLoginManager.Setup(x => x.ForgotPasswordValidation(username, emailAddress, DateTimeOffset.Parse(dateOfBirth)))
@@ -140,7 +141,7 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Success == expectedResult.WasSuccessful &&
                     actualResult.AccountId == expectedResult.SuccessValue.Id
                 );
         }
@@ -172,7 +173,7 @@ namespace BusinessLayerUnitTests.WebApi
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             mockLoginManager.Setup(x => x.ForgotPasswordCodeInput(code, accountId)).Returns(Task.FromResult(expectedResult));
@@ -185,7 +186,7 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Success == expectedResult.WasSuccessful &&
                     actualResult.AccountId == expectedResult.SuccessValue.Id
                 );
         }
@@ -217,7 +218,7 @@ namespace BusinessLayerUnitTests.WebApi
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             mockLoginManager.Setup(x => x.ResetPassword(password, accountId)).Returns(Task.FromResult(expectedResult));
@@ -230,7 +231,7 @@ namespace BusinessLayerUnitTests.WebApi
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.Success == expectedResult.WasSuccessful &&
                     actualResult.AccountId == expectedResult.SuccessValue.Id
                 );
         }

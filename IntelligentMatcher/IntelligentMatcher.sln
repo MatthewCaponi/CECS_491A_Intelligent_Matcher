@@ -4,11 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "IntelligentMatcherUserDatabase", "UserDatabase\IntelligentMatcherUserDatabase.sqlproj", "{3CE732A6-6040-4B36-8CA8-1A7AAF80724D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement", "UserManagement\UserManagement.csproj", "{875145C4-6477-4993-A865-EE4CE1CECDD3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B9AA3749-F496-49AC-8CDD-20B812D2DAD2} = {B9AA3749-F496-49AC-8CDD-20B812D2DAD2}
 		{683879BC-A735-421B-B164-6E3AE56FB39C} = {683879BC-A735-421B-B164-6E3AE56FB39C}
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLayer", "BusinessLayer", "{30F34A1E-63FF-4BB4-ADB7-80F304C356A8}"
@@ -29,6 +33,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging", "Logging\Logging.csproj", "{DE0652BC-24CC-4C6C-9714-0C5A98853C91}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4AB53DEC-B491-4FBA-B0BD-F892D6B5461A} = {4AB53DEC-B491-4FBA-B0BD-F892D6B5461A}
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessUnitTestes", "DataAccessUnitTestes\DataAccessUnitTestes.csproj", "{B07072F3-D66B-42C5-9883-9EB1C90D4FF0}"
@@ -43,6 +48,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{B9AA3749-F496-49AC-8CDD-20B812D2DAD2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{683879BC-A735-421B-B164-6E3AE56FB39C} = {683879BC-A735-421B-B164-6E3AE56FB39C}
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessModels", "BusinessModels\BusinessModels.csproj", "{683879BC-A735-421B-B164-6E3AE56FB39C}"
@@ -53,28 +59,55 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailVerification", "EmailVerification\EmailVerification.csproj", "{B224F819-DE16-4CE6-9A3F-2A418CDDB52B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Security", "Security\Security.csproj", "{AE0FC528-EB30-4A8E-97CD-411434997599}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalListings", "TraditionalListings\TraditionalListings.csproj", "{3DC611F0-88AC-4A74-8393-9E7C1083A0C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraditionalListingSearch", "TraditionalListingSearch\TraditionalListingSearch.csproj", "{0BCD2109-AA8A-49BA-A754-F796C22EAA2F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserAccountSettings", "UserAccountSettings\UserAccountSettings.csproj", "{8E6B46A7-E35A-49D3-A698-452B1B2CF2AF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Registration", "Registration\Registration.csproj", "{6EE4E71B-963B-4088-91A0-3868794587F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHelper", "TestHelper\TestHelper.csproj", "{4C005678-7171-4D26-BC47-5F931C9264F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Login", "Login\Login.csproj", "{9C176019-7E2B-4AF5-A2C8-AC40FF2888D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerLayerTest", "ControllerLayerTest\ControllerLayerTest.csproj", "{35766F9E-5F00-4EAE-A5E3-36C1B9A077B4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging", "Messaging\Messaging.csproj", "{A5E9DF47-65A0-4021-81D6-89B824BB0CF5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerModels", "ControllerModels\ControllerModels.csproj", "{0AA63432-BEF6-4936-8161-B1BD95193E11}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendList", "FriendList\FriendList.csproj", "{1186FC83-C5D3-4716-92B8-EE86A8FF2D65}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicUserProfile", "PublicUserProfile\PublicUserProfile.csproj", "{B11B5A59-9268-4D8C-9516-1E297F71A015}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {23C151FD-1612-4B30-B07F-1C177FD6592B}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{FDF976BE-07F0-4474-BDA2-645B43134555}"
 EndProject
@@ -93,6 +126,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizationResolutionSystem", "AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj", "{102B2F75-66E3-4FF0-8549-1F5B8E26854B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exceptions", "Exceptions\Exceptions.csproj", "{1FA40F8A-0D62-4A39-B4F6-09BB0D990663}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer.CrossCuttingConcerns", "BusinessLayer.CrossCuttingConcerns\BusinessLayer.CrossCuttingConcerns.csproj", "{23C151FD-1612-4B30-B07F-1C177FD6592B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cross-Cutting Concerns", "Cross-Cutting Concerns", "{2552FEA4-404A-4402-B66E-327424EFCAC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer.CrossCuttingConcerns", "DataAccessLayer.CrossCuttingConcerns\DataAccessLayer.CrossCuttingConcerns.csproj", "{8B307483-EC67-4DF0-B09D-8848ECDE4839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -222,6 +261,14 @@ Global
 		{1FA40F8A-0D62-4A39-B4F6-09BB0D990663}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FA40F8A-0D62-4A39-B4F6-09BB0D990663}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FA40F8A-0D62-4A39-B4F6-09BB0D990663}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23C151FD-1612-4B30-B07F-1C177FD6592B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23C151FD-1612-4B30-B07F-1C177FD6592B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23C151FD-1612-4B30-B07F-1C177FD6592B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23C151FD-1612-4B30-B07F-1C177FD6592B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B307483-EC67-4DF0-B09D-8848ECDE4839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B307483-EC67-4DF0-B09D-8848ECDE4839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B307483-EC67-4DF0-B09D-8848ECDE4839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B307483-EC67-4DF0-B09D-8848ECDE4839}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,6 +304,9 @@ Global
 		{280B529E-D3ED-43B5-8778-0ABD2AC5C346} = {D1CFDE0D-5FBD-4143-B164-C77527F9E84F}
 		{102B2F75-66E3-4FF0-8549-1F5B8E26854B} = {D1CFDE0D-5FBD-4143-B164-C77527F9E84F}
 		{1FA40F8A-0D62-4A39-B4F6-09BB0D990663} = {F50ADB4B-3B7F-4A5E-928C-EF32CD1BA866}
+		{23C151FD-1612-4B30-B07F-1C177FD6592B} = {2552FEA4-404A-4402-B66E-327424EFCAC0}
+		{2552FEA4-404A-4402-B66E-327424EFCAC0} = {30F34A1E-63FF-4BB4-ADB7-80F304C356A8}
+		{8B307483-EC67-4DF0-B09D-8848ECDE4839} = {F50ADB4B-3B7F-4A5E-928C-EF32CD1BA866}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF33D655-7913-49CE-90DE-24BB5A7DA8E0}

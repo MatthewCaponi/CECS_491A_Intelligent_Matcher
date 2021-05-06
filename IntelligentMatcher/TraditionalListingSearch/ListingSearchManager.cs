@@ -1,4 +1,5 @@
-﻿using BusinessModels;
+﻿using BusinessLayer.CrossCuttingConcerns;
+using BusinessModels;
 using BusinessModels.ListingModels;
 using DataAccess;
 using System;
@@ -23,7 +24,7 @@ namespace TraditionalListingSearch
         {
          
             var result = new Result<List<BusinessListingModel>>();
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _listingGetterService.GetAllListing();
             return result;
 
@@ -31,14 +32,14 @@ namespace TraditionalListingSearch
         public async Task<Result<List<BusinessCollaborationModel>>> GetAllCollaborationListings()
         {
             var result = new Result<List<BusinessCollaborationModel>>();
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _listingGetterService.GetAllCollaborationListing();
             return result;
         }
         public async Task<Result<List<BusinessRelationshipModel>>> GetAllRelationshipListings()
         {
             var result = new Result<List<BusinessRelationshipModel>>();
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _listingGetterService.GetAllRelationshipListing();
             return result;
         }
@@ -46,7 +47,7 @@ namespace TraditionalListingSearch
         public async Task<Result<List<BusinessTeamModel>>> GetAllTeamListings()
         {
             var result = new Result<List<BusinessTeamModel>>();
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _listingGetterService.GetAllTeamModelListing();
             return result;
         }

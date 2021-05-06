@@ -6,6 +6,7 @@ using IntelligentMatcher.Services;
 using BusinessModels;
 using Services;
 using System.Collections.Generic;
+using BusinessLayer.CrossCuttingConcerns;
 
 namespace IntelligentMatcher.UserManagement
 {
@@ -30,12 +31,12 @@ namespace IntelligentMatcher.UserManagement
             var result = new Result<WebUserProfileModel>();
             if (!await _validationService.UserExists(id))
             {
-                result.Success = false;
+                result.WasSuccessful = false;
                 result.ErrorMessage = ErrorMessage.UserDoesNotExist;
                 return result;
             }
 
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _userProfileService.GetUserProfile(id);
             return result;
         }
@@ -43,7 +44,7 @@ namespace IntelligentMatcher.UserManagement
         public async Task<Result<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
             var result = new Result<List<WebUserProfileModel>>();
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _userProfileService.GetAllUsers();
             return result;
         }
@@ -53,12 +54,12 @@ namespace IntelligentMatcher.UserManagement
             var result = new Result<WebUserAccountModel>();
             if (!await _validationService.UserExists(id))
             {
-                result.Success = false;
+                result.WasSuccessful = false;
                 result.ErrorMessage = ErrorMessage.UserDoesNotExist;
                 return result;
             }
 
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _userAccountService.GetUserAccount(id);
             return result;
         }
@@ -67,7 +68,7 @@ namespace IntelligentMatcher.UserManagement
         {
             var result = new Result<List<WebUserAccountModel>>();
 
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = await _userAccountService.GetAllUserAccounts();
             return result;
         }
@@ -75,7 +76,7 @@ namespace IntelligentMatcher.UserManagement
         public async Task<Result<int>> CreateUser(WebUserAccountModel webUserAccountModel, WebUserProfileModel webUserProfileModel)
         {
             var result = new Result<int>();
-            result.Success = false;
+            result.WasSuccessful = false;
             if (_validationService.IsNull(webUserAccountModel))
             {
                 result.ErrorMessage = ErrorMessage.Null;
@@ -96,7 +97,7 @@ namespace IntelligentMatcher.UserManagement
             webUserProfileModel.UserAccountId = userAccountID;
             await _userProfileService.CreateUserProfile(webUserProfileModel);
 
-            result.Success = true;
+            result.WasSuccessful = true;
             result.SuccessValue = userAccountID;
             return result;
         }

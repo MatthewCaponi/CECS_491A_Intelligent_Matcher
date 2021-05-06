@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BusinessModels;
+using BusinessLayer.CrossCuttingConcerns;
 using UserManagement.Models;
 
 namespace Login

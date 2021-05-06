@@ -13,6 +13,7 @@ using IntelligentMatcher.Services;
 using Services;
 using Registration.Services;
 using Exceptions;
+using BusinessLayer.CrossCuttingConcerns;
 
 namespace WebApi.Controllers
 {
@@ -85,9 +86,9 @@ namespace WebApi.Controllers
                 var registrationResult = await _registrationManager.RegisterAccount(userAccount, userProfile,
                     registrationModel.password, registrationModel.ipAddress);
 
-                registrationResultModel.Success = registrationResult.Success;
+                registrationResultModel.Success = registrationResult.WasSuccessful;
 
-                if (registrationResult.Success)
+                if (registrationResult.WasSuccessful)
                 {
                     registrationResultModel.AccountId = registrationResult.SuccessValue;
                     registrationResultModel.ErrorMessage = ErrorMessage.None.ToString();

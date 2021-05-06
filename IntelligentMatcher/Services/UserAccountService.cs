@@ -14,7 +14,6 @@ namespace IntelligentMatcher.Services
     public class UserAccountService : IUserAccountService
     {
 
-
         private IUserAccountRepository _userAccountRepository;
 
         public UserAccountService(IUserAccountRepository userAccountRepository)
@@ -25,8 +24,7 @@ namespace IntelligentMatcher.Services
  
         public async Task<List<WebUserAccountModel>> GetAllUserAccounts()
         {
-            try
-            {
+
                 var userAccounts = await _userAccountRepository.GetAllAccounts();
                 List<WebUserAccountModel> webUserAccounts = new List<WebUserAccountModel>();
                 foreach (var userAccountModel in userAccounts)

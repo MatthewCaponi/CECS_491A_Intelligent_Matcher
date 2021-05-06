@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessModels
+namespace BusinessLayer.CrossCuttingConcerns
 {
     public enum ErrorMessage
     {
