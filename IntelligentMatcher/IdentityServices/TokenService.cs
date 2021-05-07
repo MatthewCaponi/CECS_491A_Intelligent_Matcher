@@ -1,4 +1,5 @@
 ﻿using BusinessModels.UserAccessControl;
+using Cross_Cutting_Concerns;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -113,7 +114,19 @@ namespace IdentityServices
 
         public List<UserClaimModel> ExtractClaims(string token)
         {
+            var decodedToken = DecodeToken(token);
+            decodedToken.Claims.ToList().ForEach(a => { Console.WriteLine(a.Type + "-" + a.Value); });
+            List<UserClaimModel> userClaims = new List<UserClaimModel>();
 
+            foreach (var claim in decodedToken.Claims)
+            {
+                var userClaim = ModelConverterService.ConvertTo(claim, new UserClaimModel());
+                userClaims.Add(userClaim);
+            };
+
+            userClaims.ForEach(a => { Console.WriteLine(a.Type + ": " + a.Value); });
+
+            return userClaims;
         }
     }
 }

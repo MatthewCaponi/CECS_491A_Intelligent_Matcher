@@ -8,6 +8,6 @@ namespace IdentityServices
     {
         string CreateToken(List<UserClaimModel> userClaims);
         bool ValidateToken(string token);
-        JwtSecurityToken DecodeToken(string token);
+        List<UserClaimModel> ExtractClaims(string token);
     }
 }

@@ -11,6 +11,7 @@ using UserManagement.Models;
 using WebApi.Models;
 using Cross_Cutting_Concerns;
 using WebApi.Controllers;
+using AuthorizationResolutionSystem;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -20,11 +21,13 @@ namespace IntelligentMatcherUI.Controllers
     {
         private readonly IUserManager _userManager;
         private readonly ITokenService _tokenService;
+        private readonly IAuthorizationResolutionManager _authorizationResolutionManager;
 
-        public UserManagementController(IUserManager userManager, ITokenService tokenService)
+        public UserManagementController(IUserManager userManager, ITokenService tokenService, IAuthorizationResolutionManager authorizationResolutionManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _authorizationResolutionManager = authorizationResolutionManager;
         }
 
         [HttpGet]
@@ -36,36 +39,13 @@ namespace IntelligentMatcherUI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
-            ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var decodedToken = _tokenService.DecodeToken(token);
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
 
-            decodedToken.Claims.ToList().ForEach(a => { Console.WriteLine(a.Type + "-" + a.Value); });
-            List<UserClaimModel> userClaims= new List<UserClaimModel>();
-
-            foreach (var claim in decodedToken.Claims)
-            {
-                var userClaim = ModelConverterService.ConvertTo(claim, new UserClaimModel());
-                userClaims.Add(userClaim);
-            };
-
-            userClaims.ForEach(a => { Console.WriteLine(a.Type + ": " + a.Value); });
-
-            var scope = userClaims.Where(a => a.Type == "Scope").FirstOrDefault();
-            var role = userClaims.Where(a => a.Type == "Role").FirstOrDefault();
-
-            string [] scopes = scope.Value.ToString().Split(',');
-
-            //ClaimsPrinciple claimsPrinciple = new ClaimsPrinciple()
-            //{
-            //    Id = 0,
-            //    Claims = userClaims,
-            //    Scopes = scopes
-            //}
-            if (!(scopes.Contains("User Management") && scopes.Contains("Read") && role.Value == "Admin"))
+            if(!_authorizationResolutionManager.Authorize(token))
             {
                 return StatusCode(403);
             }
-     
+
             return Ok((await _userManager.GetAllUserProfiles()).SuccessValue);
         }
 

@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj" />
+	<ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
 	<ProjectReference Include="..\ControllerModels\ControllerModels.csproj" />
 	<ProjectReference Include="..\Cross-Cutting Concerns\Cross-Cutting Concerns.csproj" />
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />

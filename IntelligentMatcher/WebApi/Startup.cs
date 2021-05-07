@@ -26,6 +26,8 @@ using PublicUserProfile;
 using Logging;
 using WebApi.Custom_Middleware;
 using IdentityServices;
+using AuthorizationResolutionSystem;
+using UserAccessControlServices;
 
 namespace WebApi
 {
@@ -50,7 +52,9 @@ namespace WebApi
 
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
