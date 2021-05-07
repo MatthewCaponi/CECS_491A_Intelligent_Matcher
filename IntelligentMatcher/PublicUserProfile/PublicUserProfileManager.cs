@@ -5,69 +5,103 @@ using Models;
 using DataAccess;
 using DataAccess.Repositories;
 using System.Threading.Tasks;
+using Services;
 
 namespace PublicUserProfile
 {
     public class PublicUserProfileManager : IPublicUserProfileManager
     {
-        IPublicUserProfileRepo _publicUserProfileRepo;
-        public PublicUserProfileManager(IPublicUserProfileRepo publicUserProfileRepo)
+        IPublicUserProfileService _publicUserProfileService;
+        public PublicUserProfileManager(IPublicUserProfileService publicUserProfileService)
         {
 
-            _publicUserProfileRepo = publicUserProfileRepo;
+            _publicUserProfileService = publicUserProfileService;
  
         }
-        public async Task<bool> editUserProfilePicture(PublicUserProfileModel model)
+        public async Task<bool> EditUserProfilePictureAsync(PublicUserProfileModel model)
         {
-            await _publicUserProfileRepo.UpdatePhoto(model.UserId, model.Photo);
+            await _publicUserProfileService.ChangeProfilePictureAsync(model);
             return true;
 
         }
 
-        public async Task<bool> setUserOnline(int UserId)
+        public async Task<bool> SetUserOnlineAsync(int userId)
         {
-            await _publicUserProfileRepo.UpdateStatus(UserId, "Online");
+            await _publicUserProfileService.SetUserOnlineAsync(userId);
             return true;
         }
 
-        public async Task<bool> setUserOffline(int UserId)
+        public async Task<bool> SetUserOfflineAsync(int userId)
         {
-            await _publicUserProfileRepo.UpdateStatus(UserId, "Offline");
+            await _publicUserProfileService.SetUserOfflineAsync(userId);
             return true;
         }
 
-        public async Task<bool> editPublicUserProfileAsync(PublicUserProfileModel model)
+        public async Task<bool> EditPublicUserProfileAsync(PublicUserProfileModel model)
         {
-            await _publicUserProfileRepo.UpdateAge(model.UserId, model.Age);
-            await _publicUserProfileRepo.UpdateDescription(model.UserId, model.Description);
-            await _publicUserProfileRepo.UpdateEthnicity(model.UserId, model.Ethnicity);
-            await _publicUserProfileRepo.UpdateGender(model.UserId, model.Gender);
-            await _publicUserProfileRepo.UpdateGoals(model.UserId, model.Goals);
-            await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Height);
-            await _publicUserProfileRepo.UpdateHobbies(model.UserId, model.Hobbies);
-            await _publicUserProfileRepo.UpdateIntrests(model.UserId, model.Intrests);
-            await _publicUserProfileRepo.UpdateJobs(model.UserId, model.Jobs);
-            await _publicUserProfileRepo.UpdateSexualOrientation(model.UserId, model.SexualOrientation);
-            await _publicUserProfileRepo.UpdateVisibility(model.UserId, model.Visibility);
+            if(model.Age < 1000)
+            {
+                await _publicUserProfileService.UpdateProfileAgeAsync(model);
+            }
+            if(model.Description.Length <= 1000)
+            {
+                await _publicUserProfileService.UpdateProfileDescriptionAsync(model);
+            }
+            if (model.Ethnicity.Length <= 100)
+            {
+                await _publicUserProfileService.UpdateProfileEthnicityAsync(model);
+            }
+            if (model.Gender == "Male" || model.Gender == "Female")
+            {
+                await _publicUserProfileService.UpdateProfileGenderAsync(model);
+            }
+            if (model.Goals.Length <= 1000)
+            {
+                await _publicUserProfileService.UpdateProfileGoalsAsync(model);
+            }
+            if (model.Height.Length <= 1000)
+            {
+                await _publicUserProfileService.UpdateProfileHeightAsync(model);
+            }
+            if (model.Hobbies.Length <= 1000)
+            {
+                await _publicUserProfileService.UpdateProfileHobbiesAsync(model);
+            }
+            if (model.Intrests.Length <= 1000)
+            {
+                await _publicUserProfileService.UpdateProfileIntrestsAsync(model);
+            }
+            if (model.Jobs.Length <= 1000)
+            {
+                await _publicUserProfileService.UpdateProfileJobsAsync(model);
+            }
+            if (model.SexualOrientation.Length <= 100)
+            {
+                await _publicUserProfileService.UpdateProfileSexualOrientationAsync(model);
+            }
+            if (model.Visibility == "Public" || model.Visibility == "Private" || model.Visibility == "Friends")
+            {
+                await _publicUserProfileService.UpdateProfileVisibilityAsync(model);
+            }
 
             return true;
         }
 
-        public async Task<bool> createPublicUserProfileAsync(PublicUserProfileModel model)
+        public async Task<bool> CeatePublicUserProfileAsync(PublicUserProfileModel model)
         {
             model.Status = "Offline";
             model.Visibility = "Public";
 
-            await _publicUserProfileRepo.CreatePublicProfile(model);
+            await _publicUserProfileService.CeatePublicUserProfileAsync(model);
             return true;
 
 
         }
 
 
-        public async Task<PublicUserProfileModel> GetUserProfile(int userId)
+        public async Task<PublicUserProfileModel> GetUserProfileAsync(int userId)
         {
-            return await _publicUserProfileRepo.GetPublicProfilebyUserId(userId);
+            return await _publicUserProfileService.GetUserProfileAsync(userId);
         }
 
     }

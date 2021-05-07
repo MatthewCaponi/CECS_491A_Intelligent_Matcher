@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Grid, Image } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import FriendsList from "../../FriendsList/Pages/FriendsList";
+import '../.././../../App'
 
 import _ from 'lodash'
 
@@ -17,7 +18,8 @@ export class ProfileData extends Component {
         userId: 1,
         mutualFriends: [],
         friendStatus: "",
-
+        edit: "no",
+        saveMessage: ""
         };
 
 
@@ -27,7 +29,7 @@ export class ProfileData extends Component {
     this.saveData = this.saveData.bind(this);
 
     this.getAccountData = this.getAccountData.bind(this);
-
+    
     this.getAccountData();
 
 }
@@ -37,14 +39,16 @@ export class ProfileData extends Component {
 async saveData(){
     var userProfileModel = {UserId: this.state.userId, Description: this.state.accountProfileData.description, Jobs: this.Jobs.value, Goals: this.Goals.value, Age: parseInt(this.Age.value), Gender: this.Gender.value, Ethnicity: this.Ethnicity.value, SexualOrientation: this.SexualOrientation.value, Height: this.Height.value, Hobbies: this.Hobbies.value, Intrests: this.Intrests.value, Visibility: this.Visibility.value};
 
-    await fetch('http://localhost:5000/UserProfile/SaveUserProfile',
+    await fetch(global.url + 'UserProfile/SaveUserProfile',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
     body: JSON.stringify(userProfileModel)
     }).
     then(r => r.json()).then(res=>{
-  
+        this.setState({edit: "no"});
+        this.setState({saveMessage: "Account Information Updated"});
+
     }
     );
     this.getAccountData();
@@ -52,7 +56,7 @@ async saveData(){
 }
 
 async getAccountData(){
-    await fetch('http://localhost:5000/UserProfile/GetUserProfile',
+    await fetch(global.url + 'UserProfile/GetUserProfile',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -64,7 +68,7 @@ async getAccountData(){
     ); 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/FriendList/GetMutualFriends',
+    await fetch(global.url + 'FriendList/GetMutualFriends',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -76,7 +80,7 @@ async getAccountData(){
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -142,7 +146,7 @@ async getAccountData(){
 
     const renderTable = () => {
 
-        if(this.state.userId == this.state.viewingId){
+        if(this.state.userId == this.state.viewingId && this.state.edit == "edit"){
             return (
     
                 <div>
@@ -156,7 +160,7 @@ async getAccountData(){
                             Jobs:
                             <form class="ui form">
 
-                            <textarea type="text" name="jobs" defaultValue={this.state.accountProfileData.jobs} ref={(input) => this.Jobs = input}></textarea>
+                            <textarea type="text" name="jobs" defaultValue={this.state.accountProfileData.jobs} ref={(input) => this.Jobs = input} maxlength="1000"></textarea>
                             </form>
                             </Table.Cell>
                          </Table.Row>
@@ -165,7 +169,7 @@ async getAccountData(){
                             Goals:
                             <form class="ui form">
 
-                            <textarea type="text" name="goals" defaultValue={this.state.accountProfileData.goals} ref={(input) => this.Goals = input}></textarea>
+                            <textarea type="text" name="goals" defaultValue={this.state.accountProfileData.goals} ref={(input) => this.Goals = input} maxlength="1000"></textarea>
                             </form>
 
                             </Table.Cell>
@@ -175,7 +179,7 @@ async getAccountData(){
                             Hobbies:
                             <form class="ui form">
 
-                            <textarea type="text" name="goals" defaultValue={this.state.accountProfileData.hobbies} ref={(input) => this.Hobbies = input}></textarea>
+                            <textarea type="text" name="goals" defaultValue={this.state.accountProfileData.hobbies} ref={(input) => this.Hobbies = input} maxlength="1000"></textarea>
                             </form>
                             </Table.Cell>
                          </Table.Row>
@@ -185,7 +189,7 @@ async getAccountData(){
                             Intrests:
                             <form class="ui form">
 
-                            <textarea type="text" name="goals" defaultValue={this.state.accountProfileData.intrests} ref={(input) => this.Intrests = input}></textarea>
+                            <textarea type="text" name="goals" defaultValue={this.state.accountProfileData.intrests} ref={(input) => this.Intrests = input} maxlength="1000"></textarea>
                             </form>
 
                             </Table.Cell>
@@ -195,7 +199,7 @@ async getAccountData(){
                             Age:
                             <form class="ui form">
 
-                            <input type="number" name="description" defaultValue={this.state.accountProfileData.age} ref={(input) => this.Age = input}></input>
+                            <input type="number" name="description" defaultValue={this.state.accountProfileData.age} ref={(input) => this.Age = input} ></input>
                             </form>
 
                             </Table.Cell>
@@ -219,7 +223,7 @@ async getAccountData(){
                             Ethnicity:
                             <form class="ui form">
 
-                            <input type="text" name="goals" defaultValue={this.state.accountProfileData.ethnicity} ref={(input) => this.Ethnicity = input}></input>
+                            <input type="text" name="goals" defaultValue={this.state.accountProfileData.ethnicity} ref={(input) => this.Ethnicity = input} maxlength="100"></input>
                             </form>
                             </Table.Cell>
                          </Table.Row>
@@ -229,7 +233,7 @@ async getAccountData(){
                             Sexual Orientation:
                             <form class="ui form">
 
-                            <input type="text" name="goals" defaultValue={this.state.accountProfileData.sexualOrientation} ref={(input) => this.SexualOrientation = input}></input>
+                            <input type="text" name="goals" defaultValue={this.state.accountProfileData.sexualOrientation} ref={(input) => this.SexualOrientation = input} maxlength="100"></input>
                             </form>
                             </Table.Cell>
                          </Table.Row>
@@ -238,7 +242,7 @@ async getAccountData(){
                             Height:
                             <form class="ui form">
 
-                            <input type="text" name="goals" defaultValue={this.state.accountProfileData.height} ref={(input) => this.Height = input}></input>
+                            <input type="text" name="goals" defaultValue={this.state.accountProfileData.height} ref={(input) => this.Height = input} maxlength="1000"></input>
                             </form>
                             </Table.Cell>
                          </Table.Row>
@@ -261,16 +265,20 @@ async getAccountData(){
                          <Table.Row>        
                             <Table.Cell>           
                             <button class="ui button" onClick={this.saveData}>Save Data</button>
+                            <button class="ui button" onClick={() => {        this.setState({edit: "no"})}}>Cancel</button>
+
                             </Table.Cell>
                          </Table.Row>
                      </Table.Body>
                 
                 </Table>
+
+
                   </div>
             );
         }
 
-        if(this.state.userId != this.state.viewingId){
+        if(this.state.userId != this.state.viewingId || (this.state.userId == this.state.viewingId && this.state.edit != "edit")){
             return (
     
                 <div>
@@ -284,7 +292,7 @@ async getAccountData(){
                  
                    
                         {    
-                        (this.state.accountProfileData.jobs != null && this.state.accountProfileData.goals != "") ?(
+                        (this.state.accountProfileData.jobs != null && this.state.accountProfileData.jobs != "") ?(
                         <Table.Row>        
                              <Table.Cell>   
                                             
@@ -391,11 +399,11 @@ async getAccountData(){
                       
                     
                      </Table.Body>
-                
+                     <button class="ui button" onClick={() => {        this.setState({edit: "edit"})}}>Edit</button>
+
                 </Table>
 
-
-                
+                        {this.state.saveMessage}
                   </div>
             );
         }

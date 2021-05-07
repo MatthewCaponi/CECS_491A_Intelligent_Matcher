@@ -4,8 +4,10 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import { Image } from 'semantic-ui-react'
 import ImageUpload from "../Components/ImageUpload";
-
+import '../.././../../App'
+import { Redirect } from 'react-router'
 import _ from 'lodash'
+import Messaging from '../../Messaging/Pages/Messaging';
 
 export class TopBar extends Component {
   static displayName = TopBar.name;
@@ -14,71 +16,107 @@ export class TopBar extends Component {
 
     super(props);
 
-    this.state = {  
+    this.state = 
+    {  
         userId: 1,
         viewingId: 0,
         friendStatus: "",
         accountProfileData: [],
         otherData: [],
-        file: ''   
+        file: ''   ,
+        reportmessage: "",
+        descriptionmessage: "",
+        edit: "",
+        navigate: ""
+    };
 
-        };
-        let url = window.location.href;
-        url = url.split("id=")
-        this.state.viewingId = parseInt(url[1]);   
-        this.getFriendStatus = this.getFriendStatus.bind(this);
-        this.saveData = this.saveData.bind(this);
-        this.removeFriend = this.removeFriend.bind(this);
-        this.cancelFriendRequest = this.cancelFriendRequest.bind(this);
-        this.createFriendRequest = this.createFriendRequest.bind(this);
-        this.setFile = this.setFile.bind(this);
-        this.getAccountData = this.getAccountData.bind(this);
-        this.getFriendStatus();
-        this.getAccountData();
+    let url = window.location.href;
+    url = url.split("id=")
+    this.state.viewingId = parseInt(url[1]);   
+
+    this.getFriendStatus = this.getFriendStatus.bind(this);
+    this.saveData = this.saveData.bind(this);
+    this.removeFriend = this.removeFriend.bind(this);
+    this.cancelFriendRequest = this.cancelFriendRequest.bind(this);
+    this.createFriendRequest = this.createFriendRequest.bind(this);
+    this.setFile = this.setFile.bind(this);        
+    this.reportUser = this.reportUser.bind(this);
+    this.getAccountData = this.getAccountData.bind(this);
+    this.routeChange = this.routeChange.bind(this);
+
+    this.getFriendStatus();
+    this.getAccountData();
   }
 
 
+  routeChange() {
+    this.setState({ navigate: true });
+  }
 
+
+async reportUser(){
+
+    if(this.reporttext.value.length > 0){
+
+        this.render();
+
+        var IdsModel = {ReportingId: this.state.userId, ReportedId: this.state.viewingId, Report: this.reporttext.value};
+  
+        await fetch(global.url + 'UserProfile/ReportUser',
+        {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(IdsModel)
+        }).
+        then(r => r.json()).then(res=>{
+        }
+        );
+
+    this.reporttext.value = "";
+    this.state.reportmessage = "User Reported";
+    this.getAccountData();
+    this.getFriendStatus();
+    this.render();
+
+    }
+    else
+    {
+        this.state.reportmessage = "Please enter some data";
+        this.render();
+    }
+}
 
 
   async cancelFriendRequest(){
+
     this.render();
   
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
   
-    await fetch('http://localhost:5000/FriendList/CancelFriendRequest',
+    await fetch(global.url + 'FriendList/CancelFriendRequest',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
     body: JSON.stringify(IdsModel)
     }).
-    then(r => r.json()).then(res=>{
-  
-    }
-    );
-      this.getAccountData();
-      this.getFriendStatus();
-  
-      this.render();
-  
+    then(r => r.json()).then(res=>{});
+
+    this.getAccountData();
+    this.getFriendStatus();
+    this.render();
   }
 
-  async createFriendRequest(){
+async createFriendRequest(){
 
-  
-  
       var IdsModel = {UserId: this.state.userId, FriendUsername: this.state.otherData.username};
   
-      await fetch('http://localhost:5000/FriendList/CreateFriendRequest',
+      await fetch(global.url + 'FriendList/CreateFriendRequest',
       {
       method: "POST",
       headers: {'Content-type':'application/json'},
       body: JSON.stringify(IdsModel)
       }).
-      then(r => r.json()).then(res=>{
-  
-      }
-      );
+      then(r => r.json()).then(res=>{ });
   
       this.getAccountData();
       this.getFriendStatus();
@@ -92,49 +130,49 @@ export class TopBar extends Component {
 
 
   async removeFriend(){
+
     this.render();
   
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
   
-    await fetch('http://localhost:5000/FriendList/RemoveFriend',
+    await fetch(global.url + 'FriendList/RemoveFriend',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
     body: JSON.stringify(IdsModel)
     }).
-    then(r => r.json()).then(res=>{
-  
-    }
-    );
+    then(r => r.json()).then(res=>{ });
+
     this.getAccountData();
     this.getFriendStatus();
-
-    this.render();
-  
+    this.render(); 
   }
 
   async saveData(){
     var userProfileModel = {UserId: this.state.userId, Description: this.Description.value, Jobs: this.state.accountProfileData.jobs, Goals: this.state.accountProfileData.goals, Age: parseInt(this.state.accountProfileData.age), Gender: this.state.accountProfileData.gender, Ethnicity: this.state.accountProfileData.ethnicity, SexualOrientation: this.state.accountProfileData.sexualOrientation, Height: this.state.accountProfileData.height, Hobbies: this.state.accountProfileData.hobbies, Intrests: this.state.accountProfileData.intrests, Visibility: this.state.accountProfileData.visibility};
 
-    await fetch('http://localhost:5000/UserProfile/SaveUserProfile',
+    await fetch(global.url + 'UserProfile/SaveUserProfile',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
     body: JSON.stringify(userProfileModel)
     }).
     then(r => r.json()).then(res=>{
-  
+        this.setState({descriptionmessage: "Account Information Updated"});
+
     }
-    );
+    );    
     this.getAccountData();
     this.render();
+
+
 }
 
   async getFriendStatus(){
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -146,7 +184,7 @@ export class TopBar extends Component {
 }
 
 async getAccountData(){
-    await fetch('http://localhost:5000/UserProfile/GetUserProfile',
+    await fetch(global.url + 'UserProfile/GetUserProfile',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -156,7 +194,7 @@ async getAccountData(){
     }   
     ); 
 
-    await fetch('http://localhost:5000/UserProfile/GetOtherData',
+    await fetch(global.url + 'UserProfile/GetOtherData',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -166,99 +204,119 @@ async getAccountData(){
     }   
     ); 
 }
+
 setFile(e) {    
     
-                    this.setState({ file: e.target.files[0] });    
+    this.setState({ file: e.target.files[0] });    
     
-            } 
-  render () {
+} 
+
+render () {
+
+    const circleImageStyle = 
+    {
+            position: 'relative',
+            width: '20%',
+            height: '20%',
+            overflow: 'hidden',
+            borderRadius: '100vh',
+            width: '200px',
+            height: '200px'
+          
+    }
+
+    
+    if (this.state.navigate) {
+        return <Redirect to={{ pathname:"/Messaging"}}      push={true} />
+    }
 
     var filePath = "\\uploaded\\";
     return (
         <Grid centered  divided='vertically'>
         <Grid.Row columns={2}>
             <Grid.Column textAlign='center'>
-
-            <Grid.Row >
-
-            {
-(this.state.accountProfileData.photo != null && this.state.accountProfileData.photo != "") ?
-    (                                                         <Image avatar src= {filePath +this.state.accountProfileData.photo} size='small' circular />
-
-
-      ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='small' circular />
-      )}
-
-                
-                
-                
+                <Grid.Row >
+                {
+                    (this.state.accountProfileData.photo != null && this.state.accountProfileData.photo != "") ?
+                    ( <Image style={circleImageStyle}  src= {filePath +this.state.accountProfileData.photo}   />) : 
+                    ( <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' size='small' circular />)
+                }              
                 </Grid.Row>
-
-            <Grid.Row>            {
-(this.state.viewingId == this.state.userId) ?
-                                    (            <ImageUpload/>
-                                      ) : ("")}</Grid.Row>
-            <Grid.Row >
-
-            {
-                (this.state.friendStatus.status == "Friends" && this.state.userId != this.state.viewingId) ?(
-                    <div><button class="ui button" onClick={this.removeFriend}>Remove Friend</button>   <button class="ui button" onClick={this.saveData}>Message</button></div>
-
-
-                 ) : ("")
-            }
-            {
-                (this.state.friendStatus.status == "None" && this.state.userId != this.state.viewingId) ?(
-                    <button class="ui button" onClick={this.createFriendRequest}>Add Friend</button>
-                 ) : ("")
-            }       
-            {
-                (this.state.friendStatus.status == "Requested" && this.state.userId != this.state.viewingId)  ?(
-                    <button class="ui button" onClick={this.cancelFriendRequest}>Cancel Request</button>
-                 ) : ("")
-            }         
-                
-                
-                
-                
+                <Grid.Row>            
+                {
+                    (this.state.viewingId == this.state.userId) ?
+                    (<ImageUpload/>) : 
+                    ("")
+                }    
+                </Grid.Row>
+                <Grid.Row >
+                {
+                    (this.state.friendStatus.status == "Friends" && this.state.userId != this.state.viewingId) ?
+                    (<div><button class="ui button" onClick={this.removeFriend}>Remove Friend</button>   <button class="ui button" onClick={this.routeChange} >Message</button><br />  <textarea type="text" placeholder="report" name="reporttext"  ref={(input) => this.reporttext = input} maxlength="1000"></textarea><br /><button class="ui button"  onClick={this.reportUser}>Report</button><br />{this.state.reportmessage}</div>) : 
+                    ("")
+                }
+                {
+                    (this.state.friendStatus.status == "None" && this.state.userId != this.state.viewingId) ?
+                    (<div><button class="ui button" onClick={this.createFriendRequest}>Add Friend</button><br />  <textarea type="text" name="reporttext" placeholder="report" ref={(input) => this.reporttext = input} maxlength="1000"></textarea><br /><button class="ui button"   onClick={this.reportUser}>Report</button><br />{this.state.reportmessage}</div>) : 
+                    ("")
+                }       
+                {
+                    (this.state.friendStatus.status == "Requested" && this.state.userId != this.state.viewingId)  ?
+                    (<div><button class="ui button" onClick={this.cancelFriendRequest}>Cancel Request</button> <br /> <textarea type="text" name="reporttext" placeholder="report" ref={(input) => this.reporttext = input} maxlength="1000"></textarea><br /><button   class="ui button"  onClick={this.reportUser}>Report</button><br />{this.state.reportmessage}</div>) : 
+                    ("")
+                }           
                 </Grid.Row>
             </Grid.Column>
             <Grid.Column>
                 <Grid.Row >
-                {this.state.otherData.username}
-                <br />
-                {   
-                                    (this.state.accountProfileData.status == "Offline") ?
-                                        ("🔴") : ("🟢")
-                                } 
-                        {this.state.accountProfileData.status}
+                    {this.state.otherData.username}
+                    <br />
+                    {   
+                        (this.state.accountProfileData.status == "Offline") ?
+                        ("🔴") : 
+                        ("🟢")
+                    } 
+                    {this.state.accountProfileData.status}
                 </Grid.Row>
                 <Grid.Row >
-                Joined: {this.state.otherData.joinDate}
+                    Joined: {this.state.otherData.joinDate}
                 </Grid.Row>
+ 
                 <Grid.Row >
 
-            {
-                (this.state.userId == this.state.viewingId
-                    ) ?(       
+                    {
+                        (this.state.userId == this.state.viewingId && this.state.edit == "edit") ?
+                        (       
                         <div>               
-                        <form class="ui form">
-                            Description:
-                        <textarea type="text" name="description" defaultValue={this.state.accountProfileData.description} ref={(input) => this.Description = input}></textarea>
+                            <form class="ui form">
+                                Description:
+                                <textarea type="text" name="description" defaultValue={this.state.accountProfileData.description} ref={(input) => this.Description = input} maxlength="1000"></textarea>
+                            </form>
+                            <button class="ui button" onClick={this.saveData}>Save Description</button> <button class="ui button" onClick={() => {        this.setState({edit: "no"})}}>Cancel</button>
+                             <br /> 
+                             {this.state.descriptionmessage}
+                        </div>   
+                         ) : 
+                         (<div> 
+                             <br /> 
+                             {this.state.accountProfileData.description}
+                         </div>
+                         )
+                    }
+                    {
+                        (this.state.userId == this.state.viewingId && this.state.edit != "edit" ) ?
+                        (<div>  
+                            <br />           
+                            <button class="ui button" onClick={() => {        this.setState({edit: "edit"})}}>Edit</button>
+                        </div>
+                        ) : 
+                        ("")
+                    }
 
-                        </form>
-                                                <button class="ui button" onClick={this.saveData}>Save Data</button></div>   
-
-                 ) : (<div> <br /> {this.state.accountProfileData.description}</div>)
-            }
                 </Grid.Row>
-
             </Grid.Column>
-    </Grid.Row>
-
-        </Grid>
-
-
+        </Grid.Row>
+    </Grid>
     );
   }
 }

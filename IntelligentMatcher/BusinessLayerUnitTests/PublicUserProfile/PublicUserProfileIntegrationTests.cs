@@ -13,17 +13,24 @@ using Security;
 using UserAccountSettings;
 using System.Linq;
 using PublicUserProfile;
+using Moq;
+using Services;
+using UserManagement.Services;
+using IntelligentMatcher.Services;
+
 namespace BusinessLayerUnitTests.PublicUserProfile
 {
     [TestClass]
     public class PublicUserProfileIntegrationTests
     {
+
         [TestInitialize()]
         public async Task Init()
         {
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
             var userChannels = await userChannelsRepo.GetAllUserChannelsAsync();
 
@@ -56,8 +63,11 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
-            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
 
+
+
+
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
             var profiles = await publicUserProfileRepo.GetAllPublicProfiles();
 
             foreach (var profile in profiles)
@@ -66,9 +76,6 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             }
 
             await DataAccessTestHelper.ReseedAsync("PublicUserProfile", 0, connectionString, dataGateway);
-
-
-
 
 
 
@@ -122,7 +129,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
 
             IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsManager userAccountSettingsManager = new AccountSettingsManager(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 
             await userAccountSettingsManager.CreateUserAccountSettingsAsync(userAccountSettingsModel);
@@ -203,7 +210,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             await DataAccessTestHelper.ReseedAsync("Channels", 0, connectionString, dataGateway);
 
 
- 
+
 
 
             var settings = await userAccountSettingsRepository.GetAllSettings();
@@ -228,7 +235,6 @@ namespace BusinessLayerUnitTests.PublicUserProfile
 
 
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-
             var profiles = await publicUserProfileRepo.GetAllPublicProfiles();
 
             foreach (var profile in profiles)
@@ -237,6 +243,7 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             }
 
             await DataAccessTestHelper.ReseedAsync("PublicUserProfile", 0, connectionString, dataGateway);
+
 
         }
 
@@ -248,27 +255,31 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+            try
+            {
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
-            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+                PublicUserProfileModel profile = await publicUserProfileManager.GetUserProfileAsync(userId);
 
-            if (models == null)
-            {
-                Assert.IsTrue(false);
-            }
-            if (models.Count() == 0)
-            {
-                Assert.IsTrue(false);
-            }
-            foreach(var profile in models)
-            {
-                if(profile.UserId == userId)
+                if (profile == null)
+                {
+                    Assert.IsTrue(false);
+                }
+
+                if (profile.UserId == userId)
                 {
                     Assert.IsTrue(true);
                 }
@@ -277,56 +288,68 @@ namespace BusinessLayerUnitTests.PublicUserProfile
                     Assert.IsTrue(false);
                 }
             }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+  
                  
 
         }
 
         [DataTestMethod]
-        [DataRow(1, "Description", "Job", "Goal", 21, "Gender", "Ethnicity", "SexualOrientation", "Height", "Visible", "Online", "Photo", "Intrests", "Hobbies")]
+        [DataRow(1, "Description", "Job", "Goal", 21, "Male", "Ethnicity", "SexualOrientation", "Height", "Public", "Online", "Photo", "Intrests", "Hobbies")]
         public async Task editPublicUserProfileAsync_EditProfile_ProfileSuccessfullyEdited(int userId, string description, string job, string goals, int age, string gender, string ethnicity, string sexualOrientation, string height, string visibility, string status, string photo, string intrests, string hobbies)
         {
 
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
 
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
+            
+            
+            
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+ 
 
-            model.Description = description;
-            model.Jobs = job;
-            model.Goals = goals;
-            model.Age = age;
-            model.Gender = gender;
-            model.Ethnicity = ethnicity;
-            model.SexualOrientation = sexualOrientation;
-            model.Height = height;
-            model.Visibility = visibility;
-            model.Status = status;
-            model.Photo = photo;
-            model.Intrests = intrests;
-            model.Hobbies = hobbies;
-
-            await publicUserProfileManager.editPublicUserProfileAsync(model);
-
-
-            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
-
-            if (models == null)
+            try
             {
-                Assert.IsTrue(false);
-            }
-            if (models.Count() == 0)
-            {
-                Assert.IsTrue(false);
-            }
-            foreach (var profile in models)
-            {
-                if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility &&   profile.Intrests == intrests)
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
+
+                model.Description = description;
+                model.Jobs = job;
+                model.Goals = goals;
+                model.Age = age;
+                model.Gender = gender;
+                model.Ethnicity = ethnicity;
+                model.SexualOrientation = sexualOrientation;
+                model.Height = height;
+                model.Visibility = visibility;
+                model.Status = status;
+                model.Intrests = intrests;
+                model.Hobbies = hobbies;
+                await publicUserProfileManager.EditPublicUserProfileAsync(model);
+                PublicUserProfileModel profile = await publicUserProfileRepo.GetPublicProfilebyUserId(userId);
+
+                if (profile == null)
+                {
+                    Assert.IsTrue(false);
+                }
+
+                if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility && profile.Intrests == intrests)
                 {
                     Assert.IsTrue(true);
                 }
@@ -335,6 +358,11 @@ namespace BusinessLayerUnitTests.PublicUserProfile
                     Assert.IsTrue(false);
                 }
             }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
 
 
         }
@@ -343,46 +371,57 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         [DataRow(1, "Photo")]
         public async Task editUserProfilePicture_EditPhoto_PhotoSuccessfullyEdited(int userId, string photo)
         {
-
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
 
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
             PublicUserProfileModel model = new PublicUserProfileModel();
 
-            model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
-
-
-            model.Photo = photo;
-
-
-            await publicUserProfileManager.editUserProfilePicture(model);
-
-
-            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
-
-            if (models == null)
+            try
             {
-                Assert.IsTrue(false);
-            }
-            if (models.Count() == 0)
-            {
-                Assert.IsTrue(false);
-            }
-            foreach (var profile in models)
-            {
-                if (profile.Photo == photo )
-                {
-                    Assert.IsTrue(true);
-                }
-                else
+                model.UserId = userId;
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
+                model.Photo = photo;
+                await publicUserProfileManager.EditUserProfilePictureAsync(model);
+
+                IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+
+                if (models == null)
                 {
                     Assert.IsTrue(false);
                 }
+                if (models.Count() == 0)
+                {
+                    Assert.IsTrue(false);
+                }
+                foreach (var profile in models)
+                {
+                    if (profile.Photo == photo)
+                    {
+                        Assert.IsTrue(true);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(false);
+                    }
+                }
             }
+            catch
+            {
+                Assert.IsTrue(false);
+            }
+
+
 
 
         }
@@ -396,41 +435,57 @@ namespace BusinessLayerUnitTests.PublicUserProfile
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
-
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
-
-
-            await publicUserProfileManager.setUserOnline(userId);
-
-
-            await publicUserProfileManager.setUserOffline(userId);
-
-
-            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
-
-            if (models == null)
+            try
             {
-                Assert.IsTrue(false);
-            }
-            if (models.Count() == 0)
-            {
-                Assert.IsTrue(false);
-            }
-            foreach (var profile in models)
-            {
-                if (profile.Status == "Offline")
-                {
-                    Assert.IsTrue(true);
-                }
-                else
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
+
+
+                await publicUserProfileManager.SetUserOnlineAsync(userId);
+
+
+                await publicUserProfileManager.SetUserOfflineAsync(userId);
+
+
+                IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+
+                if (models == null)
                 {
                     Assert.IsTrue(false);
                 }
+                if (models.Count() == 0)
+                {
+                    Assert.IsTrue(false);
+                }
+                foreach (var profile in models)
+                {
+                    if (profile.Status == "Offline")
+                    {
+                        Assert.IsTrue(true);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(false);
+                    }
+                }
+
+            }
+            catch
+            {
+                Assert.IsTrue(false);
             }
 
 
@@ -441,36 +496,114 @@ namespace BusinessLayerUnitTests.PublicUserProfile
         [DataRow(1)]
         public async Task setUserOnline_SetOnline_UserSetOnline(int userId)
         {
-
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
 
             PublicUserProfileModel model = new PublicUserProfileModel();
 
             model.UserId = userId;
 
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
+
+            try
+            {
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
 
 
-            await publicUserProfileManager.setUserOnline(userId);
+                await publicUserProfileManager.SetUserOnlineAsync(userId);
 
 
 
-            IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
+                IEnumerable<PublicUserProfileModel> models = await publicUserProfileRepo.GetAllPublicProfiles();
 
-            if (models == null)
+                if (models == null)
+                {
+                    Assert.IsTrue(false);
+                }
+                if (models.Count() == 0)
+                {
+                    Assert.IsTrue(false);
+                }
+                foreach (var profile in models)
+                {
+                    if (profile.Status == "Online")
+                    {
+                        Assert.IsTrue(true);
+                    }
+                    else
+                    {
+                        Assert.IsTrue(false);
+                    }
+                }
+            }
+            catch
             {
                 Assert.IsTrue(false);
             }
-            if (models.Count() == 0)
+
+
+
+        }
+
+        [DataTestMethod]
+        [DataRow(1, "Description", "Job", "Goal", 21, "Male", "Ethnicity", "SexualOrientation", "Height", "Public", "Online", "Photo", "Intrests", "Hobbies")]
+        public async Task GetUserProfile_GetsProfile_ProfileGetSuccess(int userId, string description, string job, string goals, int age, string gender, string ethnicity, string sexualOrientation, string height, string visibility, string status, string photo, string intrests, string hobbies)
+        {
+
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
+            IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
+            IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
+            IValidationService validationService = new ValidationService(userAccountService, userProfileService);
+            IPublicUserProfileService publicUserProfileService = new PublicUserProfileService(publicUserProfileRepo, validationService);
+
+            PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileService);
+
+            PublicUserProfileModel model = new PublicUserProfileModel();
+
+            model.UserId = userId;
+
+            try
             {
-                Assert.IsTrue(false);
-            }
-            foreach (var profile in models)
-            {
-                if (profile.Status == "Online")
+                await publicUserProfileManager.CeatePublicUserProfileAsync(model);
+
+                model.Description = description;
+                model.Jobs = job;
+                model.Goals = goals;
+                model.Age = age;
+                model.Gender = gender;
+                model.Ethnicity = ethnicity;
+                model.SexualOrientation = sexualOrientation;
+                model.Height = height;
+                model.Status = status;
+                model.Photo = photo;
+                model.Intrests = intrests;
+                model.Hobbies = hobbies;
+
+                await publicUserProfileManager.EditPublicUserProfileAsync(model);
+
+
+                PublicUserProfileModel profile = await publicUserProfileManager.GetUserProfileAsync(userId);
+
+                if (profile == null)
+                {
+                    Assert.IsTrue(false);
+                }
+
+                if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility && profile.Intrests == intrests)
                 {
                     Assert.IsTrue(true);
                 }
@@ -479,59 +612,12 @@ namespace BusinessLayerUnitTests.PublicUserProfile
                     Assert.IsTrue(false);
                 }
             }
-
-
-        }
-
-        [DataTestMethod]
-        [DataRow(1, "Description", "Job", "Goal", 21, "Gender", "Ethnicity", "SexualOrientation", "Height", "Visible", "Online", "Photo", "Intrests", "Hobbies")]
-        public async Task GetUserProfile_GetsProfile_ProfileGetSuccess(int userId, string description, string job, string goals, int age, string gender, string ethnicity, string sexualOrientation, string height, string visibility, string status, string photo, string intrests, string hobbies)
-        {
-
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
-            IPublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(publicUserProfileRepo);
-
-            PublicUserProfileModel model = new PublicUserProfileModel();
-
-            model.UserId = userId;
-
-            await publicUserProfileManager.createPublicUserProfileAsync(model);
-
-            model.Description = description;
-            model.Jobs = job;
-            model.Goals = goals;
-            model.Age = age;
-            model.Gender = gender;
-            model.Ethnicity = ethnicity;
-            model.SexualOrientation = sexualOrientation;
-            model.Height = height;
-            model.Visibility = visibility;
-            model.Status = status;
-            model.Photo = photo;
-            model.Intrests = intrests;
-            model.Hobbies = hobbies;
-
-            await publicUserProfileManager.editPublicUserProfileAsync(model);
-
-
-            PublicUserProfileModel profile = await publicUserProfileManager.GetUserProfile(userId);
-
-       
-            if (profile.Description == description && profile.Hobbies == hobbies && profile.Jobs == job && profile.Goals == goals && profile.Age == age && profile.Gender == gender && profile.Ethnicity == ethnicity && profile.SexualOrientation == sexualOrientation && profile.Height == height && profile.Visibility == visibility &&  profile.Intrests == intrests)
+            catch
             {
-                Assert.IsTrue(true);
-             }
-             else
-             {
-                 Assert.IsTrue(false);
-              }
-           }
-
-
+                Assert.IsTrue(false);
+            }
+  
         }
-
-
     }
+}
 

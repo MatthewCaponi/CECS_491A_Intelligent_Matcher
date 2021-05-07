@@ -68,6 +68,7 @@
     <Folder Include="StoredProcedures\FriendRequestList" />
     <Folder Include="StoredProcedures\FriendBlockList" />
     <Folder Include="StoredProcedures\PublicUserProfile" />
+    <Folder Include="StoredProcedures\UserReports" />
     <Folder Include="StoredProcedures\UserAccessControl" />
     <Folder Include="StoredProcedures\UserAccessControl\Resource" />
     <Folder Include="StoredProcedures\UserAccessControl\Scope" />
@@ -78,6 +79,8 @@
     <Folder Include="StoredProcedures\UserAccessControl\UserScopeClaim" />
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicy" />
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicyPairing" />
+    <Folder Include="StoredProcedures\AccountVerification" />
+    <Folder Include="Snapshots" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -202,6 +205,11 @@
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdateStatus.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_UpdatePhoto.sql" />
     <Build Include="StoredProcedures\PublicUserProfile\PublicUserProfile_GetByUserId.sql" />
+    <Build Include="UserReports.sql" />
+    <Build Include="StoredProcedures\UserReports\UserReports_Create.sql" />
+    <Build Include="StoredProcedures\UserReports\UserReports_Delete.sql" />
+    <Build Include="StoredProcedures\UserReports\UserReports_GetAll.sql" />
+    <Build Include="StoredProcedures\UserAccount\UserAccount_GetStatus_ById.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Update_ById.sql" />
     <Build Include="StoredProcedures\UserAccountCode\UserAccountCode_Update_ByAccountId.sql" />
     <Build Include="Resource.sql" />
@@ -259,8 +267,18 @@
     <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Update.sql" />
     <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Delete_ById.sql" />
     <Build Include="StoredProcedures\TestCleaner_Delete_All.sql" />
+    <Build Include="AccountVerification.sql" />
+    <Build Include="StoredProcedures\AccountVerification\AccountVerification_Update_AccountStatusToken.sql" />
+    <Build Include="StoredProcedures\AccountVerification\AccountVerification_GetStatusToken_ByUserId.sql" />
+    <Build Include="StoredProcedures\AccountVerification\AccountVerification_Get_All.sql" />
+    <Build Include="StoredProcedures\AccountVerification\AccountVerification_Delete_ById.sql" />
+    <Build Include="StoredProcedures\AccountVerification\AccountVerification_Create.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllListingsByUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Snapshots\IntelligentMatcherUserDatabase_20210424_20-48-38.dacpac" />
   </ItemGroup>
 </Project>

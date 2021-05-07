@@ -1,30 +1,41 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+
 import './Login.css';
 
 function ForgotPasswordValidation() {
     const [usernameState, setUsernameState] = useState("");
     const [emailState, setEmailState] = useState("");
     const [dateOfBirthState, setDateOfBirthState] = useState("");
+    const history = useHistory();
+
     function submitHandler(e){
         var ForgotInformationModel = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Login/ForgotPasswordValidation',
-        {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(ForgotInformationModel)
-        }).
-        then(r => r.json()).then(res=>{
-            if(res.success){
-                alert("A Code Has Been Emailed to You.");
+        if(e.username != "" && e.emailAddress != "" && e.dateOfBirth != ""){
+            fetch('http://localhost:5000/Login/ForgotPasswordValidation',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ForgotInformationModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("A Code Has Been Emailed to You.");
+                    history.push("/ForgotPasswordCodeInput", { accountId: res.accountId });
+                }
+                else{
+                    alert(res.errorMessage);
+                }
             }
-            else{
-                alert(res.errorMessage);
-            }
+            );
         }
-        );
+        else{
+            alert("Input is Empty");
+        }
     }
+
     return (
         <Grid container>
         <Grid.Row>
@@ -72,9 +83,8 @@ function ForgotPasswordValidation() {
             >
             Submit
             </Button>
-            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">Go Back</Button>
-            <Button href="http://localhost:3000/ForgotPasswordCodeInput" compact size="tiny" circular inverted color="blue">
-                To Enter The Code
+            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
+                Go Back To Login
             </Button>
         </Grid.Row>
         </Grid>

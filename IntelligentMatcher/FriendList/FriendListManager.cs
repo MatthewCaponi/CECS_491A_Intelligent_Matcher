@@ -9,30 +9,28 @@ using Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Services;
+
 namespace FriendList
 {
     public class FriendListManager : IFriendListManager
     {
 
-        private readonly IFriendListRepo _friendListRepo;
-        private readonly IFriendRequestListRepo _friendRequestListRepo;
         private readonly IUserAccountRepository _userAccountRepository;
-        private readonly IFriendBlockListRepo _friendBlockListRepo;
-        private readonly IPublicUserProfileRepo _publicUserProfileRepo;
+        private readonly IPublicUserProfileService _publicUserProfileService;
+        private readonly IUserInteractionService _userInteractionService;
 
-        public FriendListManager(IFriendListRepo friendListRepo, IFriendRequestListRepo friendRequestListRepo, IUserAccountRepository userAccountRepository, IFriendBlockListRepo friendBlockListRepo, IPublicUserProfileRepo publicUserProfileRepo)
+        public FriendListManager(IUserAccountRepository userAccountRepository, IPublicUserProfileService publicUserProfileService, IUserInteractionService userInteractionService)
         {
-            _friendListRepo = friendListRepo;
-            _friendRequestListRepo = friendRequestListRepo;
+            _publicUserProfileService = publicUserProfileService;
             _userAccountRepository = userAccountRepository;
-            _friendBlockListRepo = friendBlockListRepo;
-            _publicUserProfileRepo = publicUserProfileRepo;
+            _userInteractionService = userInteractionService;
         }
 
 
         public async Task<string> GetFriendStatusUserIdAsync(int userId1, int userId2)
         {
-            IEnumerable <FriendsListJunctionModel>  models = await _friendListRepo.GetAllUserFriends(userId1);
+            IEnumerable <FriendsListJunctionModel>  models = await _userInteractionService.GetAllUserFriends(userId1);
 
             foreach(var model in models)
             {
@@ -44,7 +42,7 @@ namespace FriendList
 
 
 
-            models = await _friendBlockListRepo.GetAllBlockingUser(userId1);
+            models = await _userInteractionService.GetAllBlockingUsers(userId1);
 
             foreach (var model in models)
             {
@@ -53,7 +51,7 @@ namespace FriendList
                     return "Blocked";
                 }
             }
-            models = await _friendBlockListRepo.GetAllBlockingUser(userId2);
+            models = await _userInteractionService.GetAllBlockingUsers(userId2);
 
             foreach (var model in models)
             {
@@ -63,7 +61,7 @@ namespace FriendList
                 }
             }
 
-            models = await _friendRequestListRepo.GetAllUserFriendRequests(userId1);
+            models = await _userInteractionService.GetAllUserFriendRequests(userId1);
 
             foreach (var model in models)
             {
@@ -72,7 +70,7 @@ namespace FriendList
                     return "Requested";
                 }
             }
-            models = await _friendRequestListRepo.GetAllUserFriendRequests(userId2);
+            models = await _userInteractionService.GetAllUserFriendRequests(userId2);
 
             foreach (var model in models)
             {
@@ -89,24 +87,19 @@ namespace FriendList
 
         public async Task<bool> BlockFriendAsync(int userId, int blockedUserId)
         {
-            await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, blockedUserId);
+            await _userInteractionService.RemoveFriendRequestAsync(userId, blockedUserId);
             await RemoveFriendAsync(userId, blockedUserId);
             FriendsListJunctionModel model = new FriendsListJunctionModel();
-            model.User1Id = userId;
-            model.User2Id = blockedUserId;
-            model.Date = DateTime.UtcNow;
-            await _friendBlockListRepo.AddFriendBlock(model);
+            await _userInteractionService.CreateBlockAsync(userId, blockedUserId);
             return true;
         }
 
-        public async Task<int> ConfirmFriendAsync(int requetUserId, int requestedUserId)
+        public async Task<bool> ConfirmFriendAsync(int requetUserId, int requestedUserId)
         {
-            await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(requetUserId, requestedUserId);
+            await _userInteractionService.RemoveFriendRequestAsync(requetUserId, requestedUserId);
             FriendsListJunctionModel model = new FriendsListJunctionModel();
-            model.User1Id = requetUserId;
-            model.User2Id = requestedUserId;
-            model.Date = DateTime.UtcNow;
-            return await _friendListRepo.AddFriend(model);
+            return await _userInteractionService.CreateFriendshipAsync(requetUserId, requestedUserId);
+            
 
         }
 
@@ -115,11 +108,11 @@ namespace FriendList
         public async Task<IEnumerable<FriendListModel>> GetMutualFriends(int userId1, int userId2)
         {
 
-            IEnumerable<FriendsListJunctionModel> junctionModel1 = await _friendListRepo.GetAllUserFriends(userId1);
+            IEnumerable<FriendsListJunctionModel> junctionModel1 = await _userInteractionService.GetAllUserFriends(userId1);
 
 
 
-            IEnumerable<FriendsListJunctionModel> junctionModel2 = await _friendListRepo.GetAllUserFriends(userId2);
+            IEnumerable<FriendsListJunctionModel> junctionModel2 = await _userInteractionService.GetAllUserFriends(userId2);
 
             List<FriendsListJunctionModel> junctionModel = new List<FriendsListJunctionModel>();
 
@@ -156,7 +149,7 @@ namespace FriendList
 
 
                     UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
-                    PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                    PublicUserProfileModel publicUserProfileModel = await _publicUserProfileService.GetUserProfileAsync(model.userId);
                     model.userProfileImage = publicUserProfileModel.Photo;
                     model.username = userAccount.Username;
                     model.date = DateTime.UtcNow;
@@ -181,7 +174,7 @@ namespace FriendList
 
         public async Task<IEnumerable<FriendListModel>> GetAllFriendAsync(int userId)
         {
-            IEnumerable<FriendsListJunctionModel> junctionModel = await _friendListRepo.GetAllUserFriends(userId);
+            IEnumerable<FriendsListJunctionModel> junctionModel = await _userInteractionService.GetAllUserFriends(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
             foreach (var junction in junctionModel)
@@ -197,7 +190,7 @@ namespace FriendList
                 }
 
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
-                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileService.GetUserProfileAsync(model.userId);
                 model.userProfileImage = publicUserProfileModel.Photo;
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
@@ -210,7 +203,7 @@ namespace FriendList
         }
         public async Task<IEnumerable<FriendListModel>> GetAllBlocksAsync(int userId)
         {
-            IEnumerable<FriendsListJunctionModel> junctionModel = await _friendBlockListRepo.GetAllUserFriendBlocks(userId);
+            IEnumerable<FriendsListJunctionModel> junctionModel = await _userInteractionService.GetAllBlockingUsers(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
             foreach (var junction in junctionModel)
@@ -226,7 +219,7 @@ namespace FriendList
                 }
 
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
-                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileService.GetUserProfileAsync(model.userId);
                 model.userProfileImage = publicUserProfileModel.Photo;
                 model.username = userAccount.Username;
                 model.date = DateTime.UtcNow;
@@ -243,7 +236,7 @@ namespace FriendList
 
         public async Task<IEnumerable<FriendListModel>> GetAllBlockingUserAsync(int userId)
         {
-            IEnumerable<FriendsListJunctionModel> junctionModel = await _friendBlockListRepo.GetAllBlockingUser(userId);
+            IEnumerable<FriendsListJunctionModel> junctionModel = await _userInteractionService.GetAllBlockingUsers(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
             foreach (var junction in junctionModel)
@@ -257,7 +250,7 @@ namespace FriendList
                 {
                     model.userId = junction.User1Id;
                 }
-                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileService.GetUserProfileAsync(model.userId);
                 model.userProfileImage = publicUserProfileModel.Photo;
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
                 model.username = userAccount.Username;
@@ -275,7 +268,7 @@ namespace FriendList
 
         public async Task<IEnumerable<FriendListModel>> GetAllRequestsAsync(int userId)
         {
-            IEnumerable< FriendsListJunctionModel> junctionModel = await _friendRequestListRepo.GetAllUserFriendRequests(userId);
+            IEnumerable< FriendsListJunctionModel> junctionModel = await _userInteractionService.GetAllUserFriendRequests(userId);
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
             foreach (var junction in junctionModel)
@@ -291,7 +284,7 @@ namespace FriendList
                     model.userId = junction.User1Id;
                 }
 
-                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileService.GetUserProfileAsync(model.userId);
                 model.userProfileImage = publicUserProfileModel.Photo;
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
                 model.username = userAccount.Username;
@@ -309,7 +302,7 @@ namespace FriendList
 
         public async Task<IEnumerable<FriendListModel>> GetAllRequestsOutgoingAsync(int userId)
         {
-            IEnumerable<FriendsListJunctionModel> junctionModel = await _friendRequestListRepo.GetAllUserFriendRequestsOutgoing(userId);
+            IEnumerable<FriendsListJunctionModel> junctionModel = await _userInteractionService.GetAllUserFriendRequestsOutgoing(userId);
 
             List<FriendListModel> friendListModel = new List<FriendListModel>();
 
@@ -326,7 +319,7 @@ namespace FriendList
                     model.userId = junction.User1Id;
                 }
 
-                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileRepo.GetPublicProfilebyUserId(model.userId);
+                PublicUserProfileModel publicUserProfileModel = await _publicUserProfileService.GetUserProfileAsync(model.userId);
                 model.userProfileImage = publicUserProfileModel.Photo;
                 UserAccountModel userAccount = await _userAccountRepository.GetAccountById(model.userId);
                 model.username = userAccount.Username;
@@ -344,19 +337,19 @@ namespace FriendList
 
         public async Task<bool> RemoveFriendAsync(int userId, int removedUserId)
         {
-            await _friendListRepo.DeleteFriendListbyUserIds(userId, removedUserId);
+            await _userInteractionService.RemoveFriendAsync(userId, removedUserId);
             return true;
         }
 
         public async Task<bool> CancelFriendRequestAsync(int userId, int removedUserId)
         {
-            await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, removedUserId);
+            await _userInteractionService.RemoveFriendRequestAsync(userId, removedUserId);
             return true;
         }
 
         public async Task<bool> RequestFriendAsync(int requestUserId, int requestedUserId)
         {
-            IEnumerable<FriendsListJunctionModel> junctionModel = await _friendRequestListRepo.GetAllUserFriendRequests(requestUserId);
+            IEnumerable<FriendsListJunctionModel> junctionModel = await _userInteractionService.GetAllUserFriendRequests(requestUserId);
 
             foreach (FriendsListJunctionModel junction in junctionModel)
             {
@@ -372,7 +365,7 @@ namespace FriendList
                 }
             }
 
-            IEnumerable<FriendsListJunctionModel> blockModel = await _friendBlockListRepo.GetAllUserFriendBlocks(requestUserId);
+            IEnumerable<FriendsListJunctionModel> blockModel = await _userInteractionService.GetAllUserFriendBlocks(requestUserId);
 
             foreach (FriendsListJunctionModel block in blockModel)
             {
@@ -388,8 +381,7 @@ namespace FriendList
             FriendsListJunctionModel model = new FriendsListJunctionModel();
             model.User1Id = requestUserId;
             model.User2Id = requestedUserId;
-            model.Date = DateTime.UtcNow;
-            await _friendRequestListRepo.AddFriendRequest(model);
+            await _userInteractionService.CreateFriendRequestAsync(requestUserId, requestedUserId);
             return true;
         }
     }

@@ -23,6 +23,7 @@ using Registration;
 using Registration.Services;
 using FriendList;
 using PublicUserProfile;
+using Logging;
 
 namespace WebApi
 {
@@ -43,6 +44,9 @@ namespace WebApi
 
             services.AddControllers();
             services.AddSingleton(Configuration);
+
+
+            services.AddTransient<ILogService, LogService>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
@@ -52,9 +56,15 @@ namespace WebApi
             services.AddTransient<IFriendListRepo, FriendListRepo>();
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
-
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
+
+            services.AddTransient<IUserReportsRepo, UserReportsRepo>();
+
+
+            services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IPublicUserProfileService, PublicUserProfileService>();
+
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
 
@@ -62,9 +72,14 @@ namespace WebApi
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
 
+            services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
+
+
+
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
+            services.AddTransient<IUserInteractionService, UserInteractionService>();
 
             services.AddTransient<IUserProfileService, UserProfileService>();
             services.AddTransient<IUserAccountService, UserAccountService>();

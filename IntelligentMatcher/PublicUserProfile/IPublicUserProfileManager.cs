@@ -8,16 +8,16 @@ namespace PublicUserProfile
 {
     public interface IPublicUserProfileManager
     {
-        Task<bool> createPublicUserProfileAsync(PublicUserProfileModel model);
+        Task<bool> CeatePublicUserProfileAsync(PublicUserProfileModel model);
 
-        Task<bool> editPublicUserProfileAsync(PublicUserProfileModel model);
+        Task<bool> EditPublicUserProfileAsync(PublicUserProfileModel model);
 
-        Task<PublicUserProfileModel> GetUserProfile(int userId);
+        Task<PublicUserProfileModel> GetUserProfileAsync(int userId);
          
-        Task<bool> editUserProfilePicture(PublicUserProfileModel model);
+        Task<bool> EditUserProfilePictureAsync(PublicUserProfileModel model);
 
-        Task<bool> setUserOffline(int UserId);
+        Task<bool> SetUserOfflineAsync(int userId);
 
-        Task<bool> setUserOnline(int UserId);
+        Task<bool> SetUserOnlineAsync(int userId);
      }
 }

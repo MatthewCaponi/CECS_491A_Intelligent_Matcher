@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { useHistory } from 'react-router-dom';
+
 import './Registration.css';
 
 function ResendEmail() {
-    const [accountState, setAccountState] = useState(1);
+    const history = useHistory();
+    // console.log(history);
+    const [accountState, setAccountState] = useState(history.location.state.accountId);
     function submitHandler(e){
         var accountId = e;
         // e.preventDefault();

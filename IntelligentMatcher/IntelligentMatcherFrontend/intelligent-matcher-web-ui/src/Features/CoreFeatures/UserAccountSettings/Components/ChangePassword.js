@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../.././../../App'
 
 export class ChangePassword extends Component {
   static displayName = ChangePassword.name;
@@ -12,7 +13,7 @@ export class ChangePassword extends Component {
   changePassword() {
     var ChangePasswordModel = {id: 1, oldPassword: this.oldPassword.value, newPassword: this.newPassword.value};
 
-    fetch('http://localhost:5000/useraccountsettings/changepassword',
+    fetch(global.url + 'useraccountsettings/changepassword',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
