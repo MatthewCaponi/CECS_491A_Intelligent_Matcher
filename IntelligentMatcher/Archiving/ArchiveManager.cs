@@ -47,6 +47,46 @@ namespace Archiving
             }
         }
 
+        public bool ArchiveLogFilesByCategory(DateTimeOffset startTime, DateTimeOffset endTime, string category)
+        {
+            try
+            {
+                if (startTime == null || endTime == null || category == null)
+                {
+                    return false;
+                }
+
+                string currentDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+                string categoryDirectory = $"{projectDirectory}\\logs\\{category}";
+
+                // check if the category directory exists
+                // if not, return false
+                if (!Directory.Exists(categoryDirectory))
+                {
+                    return false;
+                }
+
+                string[] allFiles = Directory.GetFiles(categoryDirectory, "*.*", SearchOption.AllDirectories);
+                List<string> validFiles = new List<string>();
+
+                foreach (var file in allFiles)
+                {
+                    DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
+                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    {
+                        validFiles.Add(file);
+                    }
+                }
+
+                return _archiveService.ArchiveLogFiles(validFiles);
+            }
+            catch (IOException e)
+            {
+                throw new IOException(e.Message, e.InnerException);
+            }
+        }
+
         public bool DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try

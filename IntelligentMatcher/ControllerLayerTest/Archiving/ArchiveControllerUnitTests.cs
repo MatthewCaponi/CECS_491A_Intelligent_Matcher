@@ -120,6 +120,115 @@ namespace ControllerLayerTest.Archiving
         }
 
         [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User_Logging")]
+        public void ArchiveLogFilesByCategory_ArchiveComplete_ReturnTrue(string startTime, string endTime, string category)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = true;
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+            archiveModel.Category = category;
+
+            mockArchiveManager.Setup(x => x.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime), category)).Returns(true);
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User_Logging", ErrorMessage.NoSuchFilesExist)]
+        public void ArchiveLogFilesByCategory_ArchiveNotComplete_ReturnFalse(string startTime, string endTime, string category,
+            ErrorMessage error)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error.ToString();
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+            archiveModel.Category = category;
+
+            mockArchiveManager.Setup(x => x.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime), category)).Returns(false);
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.Null)]
+        public void ArchiveLogFilesByCategory_PassingNull_ReturnFalse(string startTime, string endTime, ErrorMessage error)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = false;
+            expectedResult.ErrorMessage = error.ToString();
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User_Logging")]
+        public void ArchiveLogFilesByCategory_IOException_ReturnFalse(string startTime, string endTime, string category)
+        {
+            // Arrange
+            var expectedResult = new ArchiveResultModel();
+
+            expectedResult.Success = false;
+
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+            archiveModel.Category = category;
+
+            mockArchiveManager.Setup(x => x.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
+                DateTimeOffset.Parse(endTime), category)).Throws(new IOException());
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+
+            // Assert
+            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+        }
+
+        [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
         public void RecoverLogFiles_RecoverComplete_ReturnTrue(string startTime, string endTime)
         {

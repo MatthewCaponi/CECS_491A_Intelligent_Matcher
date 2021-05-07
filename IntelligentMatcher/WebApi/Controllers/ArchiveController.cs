@@ -58,6 +58,42 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        public ArchiveResultModel ArchiveLogFilesByCategory([FromBody] ArchiveModel archiveModel)
+        {
+            var archiveResultModel = new ArchiveResultModel();
+
+            try
+            {
+                if (archiveModel.StartDate == null || archiveModel.EndDate == null || archiveModel.Category == null)
+                {
+                    archiveResultModel.Success = false;
+                    archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+
+                    return archiveResultModel;
+                }
+
+                var archiveSuccess = _archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(archiveModel.StartDate),
+                    DateTimeOffset.Parse(archiveModel.EndDate), archiveModel.Category);
+
+                archiveResultModel.Success = archiveSuccess;
+
+                if (!archiveResultModel.Success)
+                {
+                    archiveResultModel.ErrorMessage = ErrorMessage.NoSuchFilesExist.ToString();
+                }
+
+                return archiveResultModel;
+            }
+            catch (IOException)
+            {
+                archiveResultModel.Success = false;
+                archiveResultModel.ErrorMessage = "Archive Failed! Storage might not have enough memory.";
+
+                return archiveResultModel;
+            }
+        }
+
+        [HttpPost]
         public ArchiveResultModel DeleteArchivedFiles([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();

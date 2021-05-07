@@ -57,6 +57,67 @@ namespace BusinessLayerUnitTests.Archiving
         }
 
         [DataTestMethod]
+        [DataRow("User Logged In", LogLevel.info, LogTarget.All, "User_Logging")]
+        public void ArchiveLogFilesByCategory_LogsArchived_ReturnTrue(string message, LogLevel logLevel,
+            LogTarget logTarget, string category)
+        {
+            // Arrange
+            logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
+            logService.Log(message, logTarget, logLevel, this.ToString(), category);
+
+            var startTime = DateTimeOffset.UtcNow.AddDays(-1);
+            var endTime = DateTimeOffset.UtcNow.AddDays(1);
+
+            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+
+            // Act
+            var result = archiveManager.ArchiveLogFilesByCategory(startTime, endTime, category);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User Logged In", LogLevel.info, LogTarget.All,
+            "User_Logging")]
+        public void ArchiveLogFilesByCategory_TimeRangeNotValid_ReturnFalse(string startTime, string endTime, string message,
+            LogLevel logLevel, LogTarget logTarget, string category)
+        {
+            // Arrange
+            logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
+            logService.Log(message, logTarget, logLevel, this.ToString(), category);
+
+            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+
+            // Act
+            var result = archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime),
+                category);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [DataTestMethod]
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User Logged In", LogLevel.info, LogTarget.All,
+            "Error_Logging")]
+        public void ArchiveLogFilesByCategory_CategoryNotExist_ReturnFalse(string startTime, string endTime, string message,
+            LogLevel logLevel, LogTarget logTarget, string category)
+        {
+            // Arrange
+            logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
+            logService.Log(message, logTarget, logLevel, this.ToString(), "User_Logging");
+
+            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+
+            // Act
+            var result = archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime),
+                category);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [DataTestMethod]
         [DataRow("User Logged In", LogLevel.info, LogTarget.All)]
         public void DeleteArchivedFiles_ArchiveDeleted_ReturnTrue(string message, LogLevel logLevel,
             LogTarget logTarget)

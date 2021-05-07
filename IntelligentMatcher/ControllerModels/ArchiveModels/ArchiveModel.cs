@@ -8,5 +8,6 @@ namespace ControllerModels.ArchiveModels
     {
         public string StartDate { get; set; }
         public string EndDate { get; set; }
+        public string Category { get; set; }
     }
 }

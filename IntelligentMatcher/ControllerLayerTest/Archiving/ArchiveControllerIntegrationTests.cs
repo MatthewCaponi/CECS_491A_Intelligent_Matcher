@@ -42,6 +42,33 @@ namespace ControllerLayerTest.Archiving
         }
 
         [DataTestMethod]
+        [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", "User_Logging", 5000)]
+        public void ArchiveLogFilesByCategory_ExecuteLessThan5Seconds(string startTime, string endTime, string category,
+            long expectedMaxExecutionTime)
+        {
+            // Arrange
+            var archiveModel = new ArchiveModel();
+
+            archiveModel.StartDate = startTime;
+            archiveModel.EndDate = endTime;
+            archiveModel.Category = category;
+
+            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            ArchiveController archiveController = new ArchiveController(archiveManager);
+
+            // Act
+            var timer = Stopwatch.StartNew();
+            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+            timer.Stop();
+
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            // Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
+
+        [DataTestMethod]
         [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", 5000)]
         public void RecoverLogFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
         {

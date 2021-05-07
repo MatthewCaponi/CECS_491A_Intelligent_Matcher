@@ -7,11 +7,36 @@ function Archive(){
 
     const [startDateState, setStartDateState] = useState("");
     const [endDateState, setEndDateState] = useState("");
+    const [categoryState, setCategoryState] = useState("");
 
     function archiveAllHandler(e){
         var ArchiveModel = e;
         if(e.startDate != "" && e.endDate != ""){
             fetch('http://localhost:5000/Archive/ArchiveLogFiles',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ArchiveModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Archive Complete");
+                }
+                else{
+                    alert(res.errorMessage);
+                }
+            }
+            );
+        }
+        else{
+            alert("Input is Empty");
+        }
+    }
+
+    function archiveCategoryHandler(e){
+        var ArchiveModel = e;
+        if(e.startDate != "" && e.endDate != "" && e.category != ""){
+            fetch('http://localhost:5000/Archive/ArchiveLogFilesByCategory',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -109,13 +134,36 @@ function Archive(){
                 </div>
             </Grid.Row>
             <Grid.Row>
+                <label htmlFor="category">
+                    Enter a Category of Logs to Archive:
+                </label>
+            </Grid.Row>
+            <Grid.Row>
+                <div class="ui input">
+                    <input type="text" name="category" placeholder="Category" onChange={e => setCategoryState(e.target.value)}/>
+                </div>
+            </Grid.Row>
+            <Grid.Row>
+                <Button
+                    onClick={()=>archiveCategoryHandler({
+                        startDate:startDateState,
+                        endDate:endDateState,
+                        category:categoryState
+                    })}
+                    compact size="tiny"
+                    circular inverted color="green"
+                >
+                Archived Logs within the Category and Date Range
+                </Button>
+            </Grid.Row>
+            <Grid.Row>
                 <Button
                     onClick={()=>archiveAllHandler({
                         startDate:startDateState,
                         endDate:endDateState,
                     })}
                     compact size="tiny"
-                    circular inverted color="green"
+                    circular inverted color="blue"
                 >
                 Archive All Logs in Date Range
                 </Button>
