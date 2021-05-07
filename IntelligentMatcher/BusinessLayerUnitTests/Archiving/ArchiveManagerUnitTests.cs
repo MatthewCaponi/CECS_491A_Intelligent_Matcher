@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinessLayerUnitTests.Archiving
 {
@@ -17,15 +18,15 @@ namespace BusinessLayerUnitTests.Archiving
         #region Unit Tests
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void ArchiveLogFiles_ArchiveSuccess_ReturnTrue(string startTime, string endTime)
+        public async Task ArchiveLogFiles_ArchiveSuccess_ReturnTrue(string startTime, string endTime)
         {
             // Arrange
-            mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Returns(true);
+            mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Returns(Task.FromResult(true));
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
 
             // Act
-            var archiveResult = archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
+            var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
 
             // Assert
@@ -34,15 +35,15 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void ArchiveLogFiles_ArchiveFailure_ReturnFalse(string startTime, string endTime)
+        public async Task ArchiveLogFiles_ArchiveFailure_ReturnFalse(string startTime, string endTime)
         {
             // Arrange
-            mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Returns(false);
+            mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Returns(Task.FromResult(false));
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
 
             // Act
-            var archiveResult = archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
+            var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
 
             // Assert
@@ -51,7 +52,7 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void ArchiveLogFiles_IOException_ReturnException(string startTime, string endTime)
+        public async Task ArchiveLogFiles_IOException_ReturnException(string startTime, string endTime)
         {
             // Arrange
             mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Throws(new IOException());
@@ -63,7 +64,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Act
             try
             {
-                var archiveResult = archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
+                var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
             }
             catch (IOException)
@@ -80,15 +81,15 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void DeleteArchivedFiles_DeleteSuccess_ReturnTrue(string startTime, string endTime)
+        public async Task DeleteArchivedFiles_DeleteSuccess_ReturnTrue(string startTime, string endTime)
         {
             // Arrange
-            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(true);
+            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(Task.FromResult(true));
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
 
             // Act
-            var deleteResult = archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+            var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
 
             // Assert
@@ -97,15 +98,15 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void DeleteArchivedFiles_DeleteFailure_ReturnFalse(string startTime, string endTime)
+        public async Task DeleteArchivedFiles_DeleteFailure_ReturnFalse(string startTime, string endTime)
         {
             // Arrange
-            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(false);
+            mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(Task.FromResult(false));
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
 
             // Act
-            var deleteResult = archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+            var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
 
             // Assert
@@ -114,7 +115,7 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void DeleteArchivedFiles_IOException_ReturnException(string startTime, string endTime)
+        public async Task DeleteArchivedFiles_IOException_ReturnException(string startTime, string endTime)
         {
             // Arrange
             mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Throws(new IOException());
@@ -126,7 +127,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Act
             try
             {
-                var deleteResult = archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+                var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
             }
             catch (IOException)
@@ -143,15 +144,15 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void RecoverLogFiles_RecoverSuccess_ReturnTrue(string startTime, string endTime)
+        public async Task RecoverLogFiles_RecoverSuccess_ReturnTrue(string startTime, string endTime)
         {
             // Arrange
-            mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Returns(true);
+            mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Returns(Task.FromResult(true));
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
 
             // Act
-            var recoverResult = archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
+            var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
 
             // Assert
@@ -160,15 +161,15 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void RecoverLogFiles_RecoverFailure_ReturnFalse(string startTime, string endTime)
+        public async Task RecoverLogFiles_RecoverFailure_ReturnFalse(string startTime, string endTime)
         {
             // Arrange
-            mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Returns(false);
+            mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Returns(Task.FromResult(false));
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
 
             // Act
-            var recoverResult = archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
+            var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
 
             // Assert
@@ -177,7 +178,7 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void RecoverLogFiles_IOException_ReturnException(string startTime, string endTime)
+        public async Task RecoverLogFiles_IOException_ReturnException(string startTime, string endTime)
         {
             // Arrange
             mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Throws(new IOException());
@@ -189,7 +190,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Act
             try
             {
-                var recoverResult = archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
+                var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
             }
             catch (IOException)

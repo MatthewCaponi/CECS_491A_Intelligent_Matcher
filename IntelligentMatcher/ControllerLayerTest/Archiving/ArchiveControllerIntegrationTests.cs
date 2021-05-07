@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using WebApi.Controllers;
 
 namespace ControllerLayerTest.Archiving
@@ -18,7 +19,7 @@ namespace ControllerLayerTest.Archiving
         #region Non-Functional Tests
         [DataTestMethod]
         [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", 5000)]
-        public void ArchiveLogFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
+        public async Task ArchiveLogFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
         {
             // Arrange
             var archiveModel = new ArchiveModel();
@@ -31,7 +32,7 @@ namespace ControllerLayerTest.Archiving
 
             // Act
             var timer = Stopwatch.StartNew();
-            var actualResult = archiveController.ArchiveLogFiles(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;
@@ -43,7 +44,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", "User_Logging", 5000)]
-        public void ArchiveLogFilesByCategory_ExecuteLessThan5Seconds(string startTime, string endTime, string category,
+        public async Task ArchiveLogFilesByCategory_ExecuteLessThan5Seconds(string startTime, string endTime, string category,
             long expectedMaxExecutionTime)
         {
             // Arrange
@@ -58,7 +59,7 @@ namespace ControllerLayerTest.Archiving
 
             // Act
             var timer = Stopwatch.StartNew();
-            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;
@@ -70,7 +71,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", 5000)]
-        public void RecoverLogFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
+        public async Task RecoverLogFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
         {
             // Arrange
             var archiveModel = new ArchiveModel();
@@ -83,7 +84,7 @@ namespace ControllerLayerTest.Archiving
 
             // Act
             var timer = Stopwatch.StartNew();
-            var actualResult = archiveController.RecoverLogFiles(archiveModel);
+            var actualResult = await archiveController.RecoverLogFiles(archiveModel);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;
@@ -95,7 +96,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2017 7:13:50 PM +00:00", "3/28/2028 7:13:50 PM +00:00", 5000)]
-        public void DeleteArchivedFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
+        public async Task DeleteArchivedFiles_ExecuteLessThan5Seconds(string startTime, string endTime, long expectedMaxExecutionTime)
         {
             // Arrange
             var archiveModel = new ArchiveModel();
@@ -108,7 +109,7 @@ namespace ControllerLayerTest.Archiving
 
             // Act
             var timer = Stopwatch.StartNew();
-            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+            var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;

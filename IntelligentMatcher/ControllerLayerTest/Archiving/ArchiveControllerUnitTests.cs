@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using WebApi.Controllers;
 
 namespace ControllerLayerTest.Archiving
@@ -19,7 +20,7 @@ namespace ControllerLayerTest.Archiving
         #region Unit Tests
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void ArchiveLogFiles_ArchiveComplete_ReturnTrue(string startTime, string endTime)
+        public async Task ArchiveLogFiles_ArchiveComplete_ReturnTrue(string startTime, string endTime)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -32,12 +33,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
 
             mockArchiveManager.Setup(x => x.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime))).Returns(true);
+                DateTimeOffset.Parse(endTime))).Returns(Task.FromResult(true));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFiles(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -45,7 +46,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.NoSuchFilesExist)]
-        public void ArchiveLogFiles_ArchiveNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
+        public async Task ArchiveLogFiles_ArchiveNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -59,12 +60,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
 
             mockArchiveManager.Setup(x => x.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime))).Returns(false);
+                DateTimeOffset.Parse(endTime))).Returns(Task.FromResult(false));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFiles(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -73,7 +74,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow(ErrorMessage.Null)]
-        public void ArchiveLogFiles_PassingNull_ReturnFalse(ErrorMessage error)
+        public async Task ArchiveLogFiles_PassingNull_ReturnFalse(ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -86,7 +87,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFiles(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -95,7 +96,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void ArchiveLogFiles_IOException_ReturnFalse(string startTime, string endTime)
+        public async Task ArchiveLogFiles_IOException_ReturnFalse(string startTime, string endTime)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -113,7 +114,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFiles(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -121,7 +122,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User_Logging")]
-        public void ArchiveLogFilesByCategory_ArchiveComplete_ReturnTrue(string startTime, string endTime, string category)
+        public async Task ArchiveLogFilesByCategory_ArchiveComplete_ReturnTrue(string startTime, string endTime, string category)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -135,12 +136,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.Category = category;
 
             mockArchiveManager.Setup(x => x.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime), category)).Returns(true);
+                DateTimeOffset.Parse(endTime), category)).Returns(Task.FromResult(true));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -148,7 +149,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User_Logging", ErrorMessage.NoSuchFilesExist)]
-        public void ArchiveLogFilesByCategory_ArchiveNotComplete_ReturnFalse(string startTime, string endTime, string category,
+        public async Task ArchiveLogFilesByCategory_ArchiveNotComplete_ReturnFalse(string startTime, string endTime, string category,
             ErrorMessage error)
         {
             // Arrange
@@ -164,12 +165,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.Category = category;
 
             mockArchiveManager.Setup(x => x.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime), category)).Returns(false);
+                DateTimeOffset.Parse(endTime), category)).Returns(Task.FromResult(false));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -178,7 +179,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.Null)]
-        public void ArchiveLogFilesByCategory_PassingNull_ReturnFalse(string startTime, string endTime, ErrorMessage error)
+        public async Task ArchiveLogFilesByCategory_PassingNull_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -194,7 +195,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -203,7 +204,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", "User_Logging")]
-        public void ArchiveLogFilesByCategory_IOException_ReturnFalse(string startTime, string endTime, string category)
+        public async Task ArchiveLogFilesByCategory_IOException_ReturnFalse(string startTime, string endTime, string category)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -222,7 +223,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.ArchiveLogFilesByCategory(archiveModel);
+            var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -230,7 +231,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void RecoverLogFiles_RecoverComplete_ReturnTrue(string startTime, string endTime)
+        public async Task RecoverLogFiles_RecoverComplete_ReturnTrue(string startTime, string endTime)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -243,12 +244,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
 
             mockArchiveManager.Setup(x => x.RecoverLogFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime))).Returns(true);
+                DateTimeOffset.Parse(endTime))).Returns(Task.FromResult(true));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.RecoverLogFiles(archiveModel);
+            var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -256,7 +257,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.NoSuchFilesExist)]
-        public void RecoverLogFiles_RecoverNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
+        public async Task RecoverLogFiles_RecoverNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -270,12 +271,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
 
             mockArchiveManager.Setup(x => x.RecoverLogFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime))).Returns(false);
+                DateTimeOffset.Parse(endTime))).Returns(Task.FromResult(false));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.RecoverLogFiles(archiveModel);
+            var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -284,7 +285,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow(ErrorMessage.Null)]
-        public void RecoverLogFiles_PassingNull_ReturnFalse(ErrorMessage error)
+        public async Task RecoverLogFiles_PassingNull_ReturnFalse(ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -297,7 +298,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.RecoverLogFiles(archiveModel);
+            var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -306,7 +307,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void RecoverLogFiles_IOException_ReturnFalse(string startTime, string endTime)
+        public async Task RecoverLogFiles_IOException_ReturnFalse(string startTime, string endTime)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -324,7 +325,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.RecoverLogFiles(archiveModel);
+            var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -332,7 +333,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void DeleteArchivedFiles_DeleteComplete_ReturnTrue(string startTime, string endTime)
+        public async Task DeleteArchivedFiles_DeleteComplete_ReturnTrue(string startTime, string endTime)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -345,12 +346,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
 
             mockArchiveManager.Setup(x => x.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime))).Returns(true);
+                DateTimeOffset.Parse(endTime))).Returns(Task.FromResult(true));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+            var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -358,7 +359,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.NoSuchFilesExist)]
-        public void DeleteArchivedFiles_DeleteNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
+        public async Task DeleteArchivedFiles_DeleteNotComplete_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -372,12 +373,12 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
 
             mockArchiveManager.Setup(x => x.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime))).Returns(false);
+                DateTimeOffset.Parse(endTime))).Returns(Task.FromResult(false));
 
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+            var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -386,7 +387,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow(ErrorMessage.Null)]
-        public void DeleteArchivedFiles_PassingNull_ReturnFalse(ErrorMessage error)
+        public async Task DeleteArchivedFiles_PassingNull_ReturnFalse(ErrorMessage error)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -399,7 +400,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+            var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);
@@ -408,7 +409,7 @@ namespace ControllerLayerTest.Archiving
 
         [DataTestMethod]
         [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public void DeleteArchivedFiles_IOException_ReturnFalse(string startTime, string endTime)
+        public async Task DeleteArchivedFiles_IOException_ReturnFalse(string startTime, string endTime)
         {
             // Arrange
             var expectedResult = new ArchiveResultModel();
@@ -426,7 +427,7 @@ namespace ControllerLayerTest.Archiving
             ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
 
             // Act
-            var actualResult = archiveController.DeleteArchivedFiles(archiveModel);
+            var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
             Assert.IsTrue(actualResult.Success == expectedResult.Success);

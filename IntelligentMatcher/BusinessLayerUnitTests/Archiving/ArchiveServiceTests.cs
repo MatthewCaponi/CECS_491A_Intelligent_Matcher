@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinessLayerUnitTests.Archiving
 {
@@ -15,7 +16,7 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("TestLog1.txt", "TestLog2.txt", "TestLog3.txt")]
-        public void ArchiveLogFiles_LogsArchived_ReturnTrue(string file1, string file2, string file3)
+        public async Task ArchiveLogFiles_LogsArchived_ReturnTrue(string file1, string file2, string file3)
         {
             // Arrange
             string currentDirectory = Environment.CurrentDirectory;
@@ -80,33 +81,33 @@ namespace BusinessLayerUnitTests.Archiving
             files.Add(logPath3);
 
             // Act
-            var archiveResult = archiveService.ArchiveLogFiles(files);
+            var archiveResult = await archiveService.ArchiveLogFiles(files);
 
             // Assert
             Assert.IsTrue(archiveResult);
         }
 
         [TestMethod]
-        public void ArchiveLogFiles_EmptyList_ReturnFalse()
+        public async Task ArchiveLogFiles_EmptyList_ReturnFalse()
         {
             // Arrange
             List<string> files = new List<string>();
 
             // Act
-            var archiveResult = archiveService.ArchiveLogFiles(files);
+            var archiveResult = await archiveService.ArchiveLogFiles(files);
 
             // Assert
             Assert.IsFalse(archiveResult);
         }
 
         [TestMethod]
-        public void ArchiveLogFiles_NullList_ReturnFalse()
+        public async Task ArchiveLogFiles_NullList_ReturnFalse()
         {
             // Arrange
             List<string> files = null;
 
             // Act
-            var archiveResult = archiveService.ArchiveLogFiles(files);
+            var archiveResult = await archiveService.ArchiveLogFiles(files);
 
             // Assert
             Assert.IsFalse(archiveResult);
@@ -114,7 +115,7 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("TestLog1.txt", "TestLog2.txt", "TestLog3.txt")]
-        public void DeleteArchivedFiles_ArchiveDeleted_ReturnTrue(string file1, string file2, string file3)
+        public async Task DeleteArchivedFiles_ArchiveDeleted_ReturnTrue(string file1, string file2, string file3)
         {
             // Arrange
             string currentDirectory = Environment.CurrentDirectory;
@@ -179,7 +180,7 @@ namespace BusinessLayerUnitTests.Archiving
             files.Add(logPath2);
             files.Add(logPath3);
 
-            var archiveResult = archiveService.ArchiveLogFiles(files);
+            var archiveResult = await archiveService.ArchiveLogFiles(files);
 
             string zipFile = $"{ (DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.zip";
             string targetPath = $"{projectDirectory}\\archivedLogs";
@@ -191,33 +192,33 @@ namespace BusinessLayerUnitTests.Archiving
             zipFiles.Add(zipPath);
 
             // Act
-            var deleteResult = archiveService.DeleteArchivedFiles(zipFiles);
+            var deleteResult = await archiveService.DeleteArchivedFiles(zipFiles);
 
             // Assert
             Assert.IsTrue(deleteResult);
         }
 
         [TestMethod]
-        public void DeleteArchivedFiles_EmptyList_ReturnFalse()
+        public async Task DeleteArchivedFiles_EmptyList_ReturnFalse()
         {
             // Arrange
             List<string> files = new List<string>();
 
             // Act
-            var deleteResult = archiveService.DeleteArchivedFiles(files);
+            var deleteResult = await archiveService.DeleteArchivedFiles(files);
 
             // Assert
             Assert.IsFalse(deleteResult);
         }
 
         [TestMethod]
-        public void DeleteArchivedFiles_NullList_ReturnFalse()
+        public async Task DeleteArchivedFiles_NullList_ReturnFalse()
         {
             // Arrange
             List<string> files = null;
 
             // Act
-            var deleteResult = archiveService.DeleteArchivedFiles(files);
+            var deleteResult = await archiveService.DeleteArchivedFiles(files);
 
             // Assert
             Assert.IsFalse(deleteResult);
@@ -225,7 +226,7 @@ namespace BusinessLayerUnitTests.Archiving
 
         [DataTestMethod]
         [DataRow("TestLog1.txt", "TestLog2.txt", "TestLog3.txt")]
-        public void RecoverLogFiles_LogsRecovered_ReturnTrue(string file1, string file2, string file3)
+        public async Task RecoverLogFiles_LogsRecovered_ReturnTrue(string file1, string file2, string file3)
         {
             // Arrange
             string currentDirectory = Environment.CurrentDirectory;
@@ -290,7 +291,7 @@ namespace BusinessLayerUnitTests.Archiving
             files.Add(logPath2);
             files.Add(logPath3);
 
-            var archiveResult = archiveService.ArchiveLogFiles(files);
+            var archiveResult = await archiveService.ArchiveLogFiles(files);
 
             string zipFile = $"{ (DateTime.Today.Date).ToString(@"yyyy-MM-dd")}.zip";
             string targetPath = $"{projectDirectory}\\archivedLogs";
@@ -302,33 +303,33 @@ namespace BusinessLayerUnitTests.Archiving
             zipFiles.Add(zipPath);
 
             // Act
-            var recoverResult = archiveService.RecoverLogFiles(zipFiles);
+            var recoverResult = await archiveService.RecoverLogFiles(zipFiles);
 
             // Assert
             Assert.IsTrue(recoverResult);
         }
 
         [TestMethod]
-        public void RecoverLogFiles_EmptyList_ReturnFalse()
+        public async Task RecoverLogFiles_EmptyList_ReturnFalse()
         {
             // Arrange
             List<string> files = new List<string>();
 
             // Act
-            var recoverResult = archiveService.RecoverLogFiles(files);
+            var recoverResult = await archiveService.RecoverLogFiles(files);
 
             // Assert
             Assert.IsFalse(recoverResult);
         }
 
         [TestMethod]
-        public void RecoverLogFiles_NullList_ReturnFalse()
+        public async Task RecoverLogFiles_NullList_ReturnFalse()
         {
             // Arrange
             List<string> files = null;
 
             // Act
-            var recoverResult = archiveService.RecoverLogFiles(files);
+            var recoverResult = await archiveService.RecoverLogFiles(files);
 
             // Assert
             Assert.IsFalse(recoverResult);

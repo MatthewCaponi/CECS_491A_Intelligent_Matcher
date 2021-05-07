@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Archiving
 {
@@ -14,7 +15,7 @@ namespace Archiving
         {
             _archiveService = archiveService;
         }
-        public bool ArchiveLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<bool> ArchiveLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace Archiving
                     }
                 }
 
-                return _archiveService.ArchiveLogFiles(validFiles);
+                return await _archiveService.ArchiveLogFiles(validFiles);
             }
             catch (IOException e)
             {
@@ -47,7 +48,7 @@ namespace Archiving
             }
         }
 
-        public bool ArchiveLogFilesByCategory(DateTimeOffset startTime, DateTimeOffset endTime, string category)
+        public async Task<bool> ArchiveLogFilesByCategory(DateTimeOffset startTime, DateTimeOffset endTime, string category)
         {
             try
             {
@@ -79,7 +80,7 @@ namespace Archiving
                     }
                 }
 
-                return _archiveService.ArchiveLogFiles(validFiles);
+                return await _archiveService.ArchiveLogFiles(validFiles);
             }
             catch (IOException e)
             {
@@ -87,7 +88,7 @@ namespace Archiving
             }
         }
 
-        public bool DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<bool> DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
@@ -112,7 +113,7 @@ namespace Archiving
                     }
                 }
 
-                return _archiveService.DeleteArchivedFiles(validZipFiles);
+                return await _archiveService.DeleteArchivedFiles(validZipFiles);
             }
             catch (IOException e)
             {
@@ -120,7 +121,7 @@ namespace Archiving
             }
         }
 
-        public bool RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<bool> RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
@@ -145,7 +146,7 @@ namespace Archiving
                     }
                 }
 
-                return _archiveService.RecoverLogFiles(validZipFiles);
+                return await _archiveService.RecoverLogFiles(validZipFiles);
             }
             catch (IOException e)
             {
