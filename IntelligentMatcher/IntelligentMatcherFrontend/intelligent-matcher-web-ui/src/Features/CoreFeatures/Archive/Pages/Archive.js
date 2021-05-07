@@ -56,6 +56,30 @@ function Archive(){
         }
     }
 
+    function deleteAllHandler(e){
+        var ArchiveModel = e;
+        if(e.startDate != "" && e.endDate != ""){
+            fetch('http://localhost:5000/Archive/DeleteArchivedFiles',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(ArchiveModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Deletion Complete");
+                }
+                else{
+                    alert(res.errorMessage);
+                }
+            }
+            );
+        }
+        else{
+            alert("Input is Empty");
+        }
+    }
+
     return(
         <div>
             <Grid container>
@@ -64,7 +88,7 @@ function Archive(){
             </Grid.Row>
             <Grid.Row>
                 <label htmlFor="startDate">
-                    Start Date:
+                    Start Date By Creation Date of the Log (Creation Date Is Different when the log is recovered):
                 </label>
             </Grid.Row>
             <Grid.Row>
@@ -75,7 +99,7 @@ function Archive(){
             </Grid.Row>
             <Grid.Row>
                 <label htmlFor="endDate">
-                    End Date:
+                    End Date By Creation Date of the Log (Creation Date Is Different when the log is recovered):
                 </label>
             </Grid.Row>
             <Grid.Row>
@@ -91,12 +115,10 @@ function Archive(){
                         endDate:endDateState,
                     })}
                     compact size="tiny"
-                    circular inverted color="red"
+                    circular inverted color="green"
                 >
-                Archive All Logs
+                Archive All Logs in Date Range
                 </Button>
-            </Grid.Row>
-            <Grid.Row>
                 <Button
                     onClick={()=>recoverAllHandler({
                         startDate:startDateState,
@@ -105,7 +127,22 @@ function Archive(){
                     compact size="tiny"
                     circular inverted color="blue"
                 >
-                Recover All Archived Logs
+                Recover All Archived Logs in Date Range
+                </Button>
+            </Grid.Row>
+            <Grid.Row>
+                <strong>* Once you delete the archives, there's no way to recover them.</strong>
+            </Grid.Row>
+            <Grid.Row>
+                <Button
+                    onClick={()=>deleteAllHandler({
+                        startDate:startDateState,
+                        endDate:endDateState,
+                    })}
+                    compact size="tiny"
+                    circular inverted color="red"
+                >
+                Delete All Archived Logs in Date Range
                 </Button>
             </Grid.Row>
             <Grid.Row>
