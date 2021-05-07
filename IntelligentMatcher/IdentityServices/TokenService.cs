@@ -68,7 +68,7 @@ namespace IdentityServices
             return token;
         }
 
-        public JwtSecurityToken ValidateToken(string token)
+        public bool ValidateToken(string token)
         {
             var tokenhandler = new JwtSecurityTokenHandler();
             var publicKeyEncrypted = _configuration["PublicKey"];
@@ -94,13 +94,21 @@ namespace IdentityServices
                     ClockSkew = TimeSpan.FromSeconds(5)
                 }, out var validatedToken);
 
-                return (JwtSecurityToken)validatedToken;
+                return true;
             }
             catch(Exception e)
             {
-                Debug.WriteLine(e.Message);
-                return null;
+                Console.WriteLine(e.Message);
+                return false;
             }
+        }
+
+        public JwtSecurityToken DecodeToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadJwtToken(token);
+
+            return jwtToken;
         }
     }
 }

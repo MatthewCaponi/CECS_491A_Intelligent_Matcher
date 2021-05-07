@@ -14,9 +14,11 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\ControllerModels\ControllerModels.csproj" />
+	<ProjectReference Include="..\Cross-Cutting Concerns\Cross-Cutting Concerns.csproj" />
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
 	<ProjectReference Include="..\FriendList\FriendList.csproj" />
+	<ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
 
 	<ProjectReference Include="..\Login\Login.csproj" />
 

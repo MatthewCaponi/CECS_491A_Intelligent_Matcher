@@ -1,11 +1,13 @@
 ﻿using BusinessModels.UserAccessControl;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace IdentityServices
 {
     public interface ITokenService
     {
         string CreateToken(List<UserClaimModel> userClaims);
-        public bool JwtSecurityToken(string token);
+        bool ValidateToken(string token);
+        JwtSecurityToken DecodeToken(string token);
     }
 }
