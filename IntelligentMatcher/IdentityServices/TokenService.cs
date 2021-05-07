@@ -29,7 +29,7 @@ namespace IdentityServices
 
             foreach (var userClaim in userClaims)
             {
-                switch (userClaim.Key)
+                switch (userClaim.Type)
                 {
                     case "iss":
                         jwtPayloadModel.Issuer = new UserClaimModel("iss", userClaim.Value);
@@ -103,12 +103,17 @@ namespace IdentityServices
             }
         }
 
-        public JwtSecurityToken DecodeToken(string token)
+        private JwtSecurityToken DecodeToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
             return jwtToken;
+        }
+
+        public List<UserClaimModel> ExtractClaims(string token)
+        {
+
         }
     }
 }

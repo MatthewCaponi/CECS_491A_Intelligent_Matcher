@@ -8,6 +8,6 @@ namespace WebApi.Models
     public class ClaimsPrinciple
     {
         public int Id { get; set; }
-        public List<Claim> Claims { get; set; }
+        public List<UserClaimModel> Claims { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace IdentityServices
             var claims = new List<Claim>();
             foreach (var userClaim in jwtPayloadModel.PublicClaims)
             {
-                claims.Add(new Claim(userClaim.Key, userClaim.Value));
+                claims.Add(new Claim(userClaim.Type, userClaim.Value));
             }
 
             var tokenHandler = new JsonWebTokenHandler();

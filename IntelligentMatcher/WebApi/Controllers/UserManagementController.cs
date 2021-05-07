@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 using UserManagement.Models;
 using WebApi.Models;
 using Cross_Cutting_Concerns;
+using WebApi.Controllers;
 
 namespace IntelligentMatcherUI.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class UserManagementController : ControllerBase
+    public class UserManagementController : ApiBaseController
     {
         private readonly IUserManager _userManager;
         private readonly ITokenService _tokenService;
@@ -35,16 +36,15 @@ namespace IntelligentMatcherUI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
-            var context = HttpContext.Request;
-            var token = context.Headers["Authorization"].ToString().Split(' ')[1];
+            ExtractHeader(HttpContext, "Authorization", ',', 1);
             var decodedToken = _tokenService.DecodeToken(token);
 
             decodedToken.Claims.ToList().ForEach(a => { Console.WriteLine(a.Type + "-" + a.Value); });
-            List<Claim> userClaims= new List<Claim>();
+            List<UserClaimModel> userClaims= new List<UserClaimModel>();
 
             foreach (var claim in decodedToken.Claims)
             {
-                var userClaim = ModelConverterService.ConvertTo(claim, new Claim());
+                var userClaim = ModelConverterService.ConvertTo(claim, new UserClaimModel());
                 userClaims.Add(userClaim);
             };
 
