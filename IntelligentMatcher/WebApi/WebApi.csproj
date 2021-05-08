@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\AuthorizationPolicySystem\AuthorizationPolicySystem.csproj" />
 	<ProjectReference Include="..\AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj" />
 	<ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
 	<ProjectReference Include="..\ControllerModels\ControllerModels.csproj" />
