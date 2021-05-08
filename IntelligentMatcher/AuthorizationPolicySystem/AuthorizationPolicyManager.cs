@@ -88,5 +88,56 @@ namespace AuthorizationPolicySystem
 
             return accessPolicy;
         }
+
+        public AccessPolicyModel ConfigureCustomPolicy(string scope, string role, string id)
+        {
+            var scopes = new List<string>();
+
+            scopes.Add(scope);
+
+            var accessPolicy = new AccessPolicyModel()
+            {
+
+                Scopes = scopes,
+                Claims = new List<UserClaimModel>()
+                {
+                    new UserClaimModel()
+                    {
+                        Type = nameof(role),
+                        Value = role
+                    },
+                    new UserClaimModel()
+                    {
+                        Type = nameof(id),
+                        Value = id.ToString()
+                    }
+                }
+            };
+
+            return accessPolicy;
+        }
+
+        public AccessPolicyModel ConfigureCustomPolicy(string scope, string id)
+        {
+            var scopes = new List<string>();
+
+            scopes.Add(scope);
+
+            var accessPolicy = new AccessPolicyModel()
+            {
+
+                Scopes = scopes,
+                Claims = new List<UserClaimModel>()
+                {
+                    new UserClaimModel()
+                    {
+                        Type = nameof(id),
+                        Value = id.ToString()
+                    }
+                }
+            };
+
+            return accessPolicy;
+        }
     }
 }

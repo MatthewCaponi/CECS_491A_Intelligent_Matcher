@@ -24,10 +24,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Archiving\Archiving.csproj" />
-    <ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\FriendList\FriendList.csproj" />
-    <ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
 
     <ProjectReference Include="..\Login\Login.csproj" />
 

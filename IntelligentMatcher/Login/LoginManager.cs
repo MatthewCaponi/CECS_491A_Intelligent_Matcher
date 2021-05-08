@@ -10,6 +10,8 @@ using UserManagement.Services;
 using Services;
 using System.Linq;
 using Exceptions;
+using AuthenticationSystem;
+using IdentityServices;
 
 namespace Login
 {
@@ -24,10 +26,11 @@ namespace Login
         private readonly IUserAccountService _userAccountService;
         private readonly IUserAccountCodeService _userAccountCodeService;
         private readonly IUserProfileService _userProfileService;
+        private readonly IAttributeAssignmentService _attributeAssignmentService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
             IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
-            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService)
+            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IAttributeAssignmentService attributeAssignmentService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
@@ -36,6 +39,7 @@ namespace Login
             _userAccountService = userAccountService;
             _userAccountCodeService = userAccountCodeService;
             _userProfileService = userProfileService;
+            _attributeAssignmentService = attributeAssignmentService;
         }
 
         public async Task<Result<WebUserAccountModel>> Login(string username, string password, string ipAddress)
@@ -108,6 +112,7 @@ namespace Login
                     return loginResult;
                 }
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
+                
 
                 loginResult.WasSuccessful = true;
                 loginResult.SuccessValue = account;

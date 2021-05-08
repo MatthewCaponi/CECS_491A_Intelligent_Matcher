@@ -22,6 +22,7 @@ function Login() {
 
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
+    const [token, setToken] = useState(false);
 
     function submitHandler(e){
         var LoginModel = e;
@@ -31,10 +32,12 @@ function Login() {
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
-            body: JSON.stringify(LoginModel)
+            body: JSON.stringify(LoginModel, token)
             }).
             then(r => r.json()).then(res=>{
                 if(res.success){
+                    setToken(token);
+                    localStorage.setItem('userToken', token)
                     alert("Successful Login for " + res.username);
                     history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
 
