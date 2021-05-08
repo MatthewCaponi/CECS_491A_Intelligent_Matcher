@@ -104,7 +104,7 @@ function Archive(){
         if(e.startDate != "" && e.endDate != ""){
             fetch('http://localhost:5000/Archive/DeleteArchivedFiles',
             {
-            method: "POST",
+            method: "DELETE",
             headers: {'Content-type':'application/json'},
             body: JSON.stringify(ArchiveModel)
             }).

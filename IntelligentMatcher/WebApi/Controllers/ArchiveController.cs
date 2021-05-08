@@ -93,7 +93,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<ActionResult<ArchiveResultModel>> DeleteArchivedFiles([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();
