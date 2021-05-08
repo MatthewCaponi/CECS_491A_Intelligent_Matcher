@@ -143,7 +143,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             foreach (var userScope in userScopeList)
             {
                 var scopeModel = await scopeService.GetScope(i);
-                if (userScope.Key == scopeModel.Name)
+                if (userScope.Type == scopeModel.Name)
                 {
                     ++i;
                     continue;

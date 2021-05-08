@@ -19,6 +19,7 @@ namespace BusinessModels
         TooManyAttempts,
         CodeExpired,
         InvalidPassword,
-        NoSuchFilesExist
+        NoSuchFilesExist,
+        Forbidden
     }
 }
