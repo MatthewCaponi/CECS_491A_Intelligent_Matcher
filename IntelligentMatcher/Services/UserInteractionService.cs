@@ -31,7 +31,12 @@ namespace Services
                 try
                 {
                     model.Date = DateTime.UtcNow;
-                    await _userReportsRepo.CreateReport(model);
+                    int result = await _userReportsRepo.CreateReport(model);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -151,7 +156,12 @@ namespace Services
                     model.User1Id = userId1;
                     model.User2Id = userId2;
                     model.Date = DateTime.UtcNow;
-                    await _friendListRepo.AddFriend(model); 
+                    int result = await _friendListRepo.AddFriend(model);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -175,7 +185,12 @@ namespace Services
                     model.User1Id = userId1;
                     model.User2Id = userId2;
                     model.Date = DateTime.UtcNow;
-                    await _friendRequestListRepo.AddFriendRequest(model); 
+                    int result = await _friendRequestListRepo.AddFriendRequest(model);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -198,7 +213,12 @@ namespace Services
                     model.User1Id = userId;
                     model.User2Id = blockedUserId;
                     model.Date = DateTime.UtcNow;
-                    await _friendBlockListRepo.AddFriendBlock(model); 
+                    int result = await _friendBlockListRepo.AddFriendBlock(model);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -216,7 +236,12 @@ namespace Services
             {
                 try
                 {
-                    await _friendListRepo.DeleteFriendListbyUserIds(userId, removedUserId);
+                    int result = await _friendListRepo.DeleteFriendListbyUserIds(userId, removedUserId);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -234,7 +259,12 @@ namespace Services
             {
                 try
                 {
-                    await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, removedUserId);
+                    int result = await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, removedUserId);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -252,7 +282,12 @@ namespace Services
             {
                 try
                 {
-                    await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, blockedUserId);
+                    int result = await _friendRequestListRepo.DeleteFriendRequestListbyUserIds(userId, blockedUserId);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -271,7 +306,12 @@ namespace Services
             {
                 try
                 {
-                    await _userReportsRepo.DeleteReportById(reportId);
+                    int result = await _userReportsRepo.DeleteReportById(reportId);
+                    if(result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch

@@ -50,11 +50,6 @@ namespace IntelligentMatcherUI.Controllers
                 return StatusCode(403);
             }
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
-
             try
             {
                 return Ok(await _friendListManager.GetAllFriendAsync(userId));

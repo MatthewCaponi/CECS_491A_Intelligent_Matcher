@@ -52,7 +52,7 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<bool> SendMessage([FromBody] SendMessageModel messageModel)
+        public async Task<ActionResult<bool>> SendMessage([FromBody] SendMessageModel messageModel)
         {
             try
             {
@@ -72,25 +72,43 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IEnumerable<MessageModel>> GetChannelMessages([FromBody] int channelId)
+        public async Task<ActionResult<IEnumerable<MessageModel>>> GetChannelMessages([FromBody] int channelId)
         {
-            IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(channelId);
+            try
+            {
+                IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(channelId);
 
-            return models;
+                return Ok(models);
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
+
+
         }
 
         [HttpPost]
-        public async Task<IEnumerable<UserIdModel>> GetAllUsersInGroup([FromBody] int channelId)
+        public async Task<ActionResult<IEnumerable<UserIdModel>>> GetAllUsersInGroup([FromBody] int channelId)
         {
+            try
+            {
+                IEnumerable<UserIdModel> models = await _messagingService.GetAllUsersInChannelAsync(channelId);
 
-            IEnumerable<UserIdModel> models = await _messagingService.GetAllUsersInChannelAsync(channelId);
+                return Ok(models);
+            }
+            catch
+            {
+                return StatusCode(404);
 
-            return models;
+            }
+
         }
 
 
         [HttpPost]
-        public async Task<bool> AddUserChannel([FromBody] UsernameChannelAdd model)
+        public async Task<ActionResult<bool>> AddUserChannel([FromBody] UsernameChannelAdd model)
         {
             try
             {
@@ -108,7 +126,7 @@ namespace IntelligentMatcherUI.Controllers
         }
         [HttpPost]
 
-        public async Task<bool> RemoveUserChannel([FromBody] UserChannelModel model)
+        public async Task<ActionResult<bool>> RemoveUserChannel([FromBody] UserChannelModel model)
         {
             try
             {
@@ -124,15 +142,23 @@ namespace IntelligentMatcherUI.Controllers
 
         [HttpPost]
 
-        public async Task<IEnumerable<ChannelModel>> GetUserChannels([FromBody] int userId)
+        public async Task<ActionResult<IEnumerable<ChannelModel>>> GetUserChannels([FromBody] int userId)
         {
+            try
+            {
+                return Ok(await _messagingService.GetAllUserChannelsAsync(userId));
 
-            return await _messagingService.GetAllUserChannelsAsync(userId);
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
 
         }
 
         [HttpPost]
-        public async Task<bool> CreateChannel([FromBody] CreateChannelModel channelModel)
+        public async Task<ActionResult<bool>> CreateChannel([FromBody] CreateChannelModel channelModel)
         {
             try
             {
@@ -153,7 +179,7 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<int> GetChannelOwner([FromBody] int channelid)
+        public async Task<ActionResult<int>> GetChannelOwner([FromBody] int channelid)
         {
 
             try
@@ -178,7 +204,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> DeleteChannel([FromBody] int channelid)
+        public async Task<ActionResult<bool>> DeleteChannel([FromBody] int channelid)
         {
             try
             {
@@ -193,7 +219,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> DeleteMessage([FromBody] int messageId)
+        public async Task<ActionResult<bool>> DeleteMessage([FromBody] int messageId)
         {
             try
             {
@@ -208,7 +234,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> SetOnline([FromBody] int userId)
+        public async Task<ActionResult<bool>> SetOnline([FromBody] int userId)
         {
             try
             {
@@ -222,7 +248,7 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> SetOffline([FromBody] int userId)
+        public async Task<ActionResult<bool>> SetOffline([FromBody] int userId)
         {
             try
             {
