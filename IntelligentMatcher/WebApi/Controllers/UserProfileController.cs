@@ -92,12 +92,9 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
-
-            try
-            {
-                return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
-
             }
+
+
             catch
             {
                 return StatusCode(404);
