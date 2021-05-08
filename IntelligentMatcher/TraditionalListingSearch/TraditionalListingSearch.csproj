@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\TraditionalListing\TraditionalListing.csproj" />
     <ProjectReference Include="..\UserDatabase\IntelligentMatcherUserDatabase.sqlproj" />
   </ItemGroup>

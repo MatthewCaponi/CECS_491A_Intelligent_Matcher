@@ -11,7 +11,7 @@ namespace TraditionalListingSearch
 {
     public class ListingSearchManager : IListingSearchManager
     {
-        private IListingGetterService _listingGetterService;
+        private ListingGetterService _listingGetterService;
 
 
         public ListingSearchManager(ListingGetterService listingGetterService)
@@ -21,7 +21,7 @@ namespace TraditionalListingSearch
 
         public async Task<Result<List<BusinessListingModel>>> GetAllListings()
         {
-
+         
             var result = new Result<List<BusinessListingModel>>();
             result.Success = true;
             result.SuccessValue = await _listingGetterService.GetAllListing();
@@ -48,23 +48,6 @@ namespace TraditionalListingSearch
             var result = new Result<List<BusinessTeamModel>>();
             result.Success = true;
             result.SuccessValue = await _listingGetterService.GetAllTeamModelListing();
-            return result;
-        }
-
-
-        public async Task<Result<List<BusinessDatingModel>>> GetAllDatingListings()
-        {
-            var result = new Result<List<BusinessDatingModel>>();
-            result.Success = true;
-            result.SuccessValue = await _listingGetterService.GetAllDatingListing();
-            return result;
-        }
-
-        public async Task<Result<List<BusinessListingModel>>> GetAllListingById(int id)
-        {
-            var result = new Result<List<BusinessListingModel>>();
-            result.Success = true;
-            result.SuccessValue = await _listingGetterService.GetAllListingById();
             return result;
         }
     }
