@@ -31,6 +31,10 @@ using IdentityServices;
 using AuthorizationResolutionSystem;
 using UserAccessControlServices;
 using AuthorizationPolicySystem;
+using DataAccess.Repositories.LoginTrackerRepositories;
+using DataAccess.Repositories.PageVisitTrackerRepositories;
+using DataAccess.Repositories.SearchTrackerRepositories;
+using UserAnalysisManager;
 
 namespace WebApi
 {
@@ -70,6 +74,10 @@ namespace WebApi
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
+            services.AddTransient<ILoginTrackerRepo, LoginTrackerRepo>();
+            services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
+            services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
+            services.AddTransient<IListingRepository, ListingRepository>();
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
 
@@ -94,6 +102,7 @@ namespace WebApi
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+            services.AddTransient<IUserAnalysisService, UserAnalysisService>();
 
             services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<ILoginManager, LoginManager>();

@@ -42,6 +42,13 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllFriends([FromBody] int userId)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
 
 
             try
@@ -58,6 +65,22 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequets([FromBody] int userId)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+
+            try
+            {
+                return Ok(await _friendListManager.GetAllRequestsAsync(userId));
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
 
             try
             {
@@ -91,7 +114,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-
                 await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -110,7 +132,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-
                 await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -128,7 +149,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-
                 await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -145,7 +165,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-
                 await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -160,6 +179,8 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetMutualFriends([FromBody] DualIdModel ids)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(),  true, false, false);
 
             try
             {
@@ -177,6 +198,8 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocking([FromBody] int userId)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
 
 
             try
