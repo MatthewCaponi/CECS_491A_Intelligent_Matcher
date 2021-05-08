@@ -42,7 +42,7 @@ namespace BusinessLayerUnitTests.Login
             businessLoginAttemptsModel.SuspensionEndTime = DateTimeOffset.Parse(suspensionEndTime);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -58,7 +58,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.Login(username, password, ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -88,7 +88,7 @@ namespace BusinessLayerUnitTests.Login
             WebUserAccountModel webUserAccountModel = null;
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -106,7 +106,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.Login(username, password, ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -150,7 +150,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -170,7 +170,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.Login(username, password, ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -213,7 +213,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Set conditional for the used mock object
@@ -233,7 +233,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.Login(username, password, ipAddress);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
         }
         #endregion
@@ -257,7 +257,7 @@ namespace BusinessLayerUnitTests.Login
             WebUserAccountModel webUserAccountModel = null;
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -273,7 +273,7 @@ namespace BusinessLayerUnitTests.Login
             var actualResult = await loginManager.ForgotUsername(givenEmail, DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -314,7 +314,7 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock objects
@@ -333,7 +333,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Assert
             Assert.IsTrue(DateTimeOffset.Parse(givenDateOfBirth) != webUserProfileModel.DateOfBirth &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -374,7 +374,7 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             var expectedResult = new Result<string>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = username;
 
             // Set conditional for the used mock objects
@@ -393,7 +393,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Assert
             Assert.IsTrue(DateTimeOffset.Parse(dateOfBirth) == webUserProfileModel.DateOfBirth &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
         }
         #endregion
@@ -417,7 +417,7 @@ namespace BusinessLayerUnitTests.Login
             WebUserAccountModel webUserAccountModel = null;
 
             var expectedResult = new Result<BusinessUserAccountCodeModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -434,7 +434,7 @@ namespace BusinessLayerUnitTests.Login
                 DateTimeOffset.Parse(dateOfBirth));
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -475,7 +475,7 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             var expectedResult = new Result<BusinessUserAccountCodeModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -493,7 +493,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Assert
             Assert.IsTrue(givenEmail != webUserAccountModel.EmailAddress &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -534,7 +534,7 @@ namespace BusinessLayerUnitTests.Login
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             var expectedResult = new Result<BusinessUserAccountCodeModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -555,7 +555,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue(emailAddress == webUserAccountModel.EmailAddress &&
                 DateTimeOffset.Parse(givenDateOfBirth) != webUserProfileModel.DateOfBirth &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.ErrorMessage == expectedResult.ErrorMessage);
         }
 
@@ -598,7 +598,7 @@ namespace BusinessLayerUnitTests.Login
             BusinessUserAccountCodeModel businessUserAccountCodeModel = new BusinessUserAccountCodeModel();
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Set conditional for the used mock object
@@ -621,7 +621,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue(emailAddress == webUserAccountModel.EmailAddress &&
                 DateTimeOffset.Parse(dateOfBirth) == webUserProfileModel.DateOfBirth &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
         }
         #endregion
@@ -644,7 +644,7 @@ namespace BusinessLayerUnitTests.Login
             BusinessUserAccountCodeModel businessUserAccountCodeModel = null;
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -662,7 +662,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.ErrorMessage == expectedResult.ErrorMessage
                 );
         }
@@ -690,7 +690,7 @@ namespace BusinessLayerUnitTests.Login
             businessUserAccountCodeModel.UserAccountId = accountId;
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -708,7 +708,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.ErrorMessage == expectedResult.ErrorMessage
                 );
         }
@@ -736,7 +736,7 @@ namespace BusinessLayerUnitTests.Login
             businessUserAccountCodeModel.UserAccountId = accountId;
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             // Set conditional for the used mock object
@@ -754,7 +754,7 @@ namespace BusinessLayerUnitTests.Login
             // Assert
             Assert.IsTrue
                 (
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.ErrorMessage == expectedResult.ErrorMessage
                 );
         }
@@ -794,7 +794,7 @@ namespace BusinessLayerUnitTests.Login
             businessUserAccountCodeModel.UserAccountId = accountId;
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Set conditional for the used mock object
@@ -815,7 +815,7 @@ namespace BusinessLayerUnitTests.Login
             Assert.IsTrue
                 (
                     code == businessUserAccountCodeModel.Code &&
-                    actualResult.Success == expectedResult.Success &&
+                    actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                     actualResult.SuccessValue == expectedResult.SuccessValue
                 );
         }
@@ -861,7 +861,7 @@ namespace BusinessLayerUnitTests.Login
             webUserAccountModel.UpdationDate = DateTimeOffset.Parse(updationDate);
 
             var expectedResult = new Result<WebUserAccountModel>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = webUserAccountModel;
 
             // Set conditional for the used mock object
@@ -880,7 +880,7 @@ namespace BusinessLayerUnitTests.Login
 
             // Assert
             Assert.IsTrue(password == userAccountModel.Password &&
-                actualResult.Success == expectedResult.Success &&
+                actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
         }
         #endregion

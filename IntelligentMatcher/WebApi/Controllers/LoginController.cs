@@ -40,7 +40,7 @@ namespace WebApi.Controllers
 
                 var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
 
-                loginResultModel.Success = loginResult.Success;
+                loginResultModel.Success = loginResult.WasSuccessful;
 
                 if (loginResultModel.Success)
                 {
@@ -92,7 +92,7 @@ namespace WebApi.Controllers
                 var forgotUsernameResult = await _loginManager.ForgotUsername(forgotInformationModel.emailAddress,
                     DateTimeOffset.Parse(forgotInformationModel.dateOfBirth));
 
-                forgotUsernameResultModel.Success = forgotUsernameResult.Success;
+                forgotUsernameResultModel.Success = forgotUsernameResult.WasSuccessful;
 
                 if (forgotUsernameResultModel.Success)
                 {
@@ -146,7 +146,7 @@ namespace WebApi.Controllers
                     (forgotInformationModel.username, forgotInformationModel.emailAddress,
                     DateTimeOffset.Parse(forgotInformationModel.dateOfBirth));
 
-                forgotPasswordResultModel.Success = forgotPasswordResult.Success;
+                forgotPasswordResultModel.Success = forgotPasswordResult.WasSuccessful;
 
                 if (forgotPasswordResultModel.Success)
                 {
@@ -198,7 +198,7 @@ namespace WebApi.Controllers
                 var forgotPasswordCodeResult = await _loginManager.ForgotPasswordCodeInput
                     (forgotPasswordCodeInputModel.code, forgotPasswordCodeInputModel.accountId);
 
-                forgotPasswordResultModel.Success = forgotPasswordCodeResult.Success;
+                forgotPasswordResultModel.Success = forgotPasswordCodeResult.WasSuccessful;
 
                 if (forgotPasswordResultModel.Success)
                 {
@@ -249,7 +249,7 @@ namespace WebApi.Controllers
                 var resetPasswordResult = await _loginManager.ResetPassword(resetPasswordModel.password,
                     resetPasswordModel.accountId);
 
-                forgotPasswordResultModel.Success = resetPasswordResult.Success;
+                forgotPasswordResultModel.Success = resetPasswordResult.WasSuccessful;
 
                 if (forgotPasswordResultModel.Success)
                 {
