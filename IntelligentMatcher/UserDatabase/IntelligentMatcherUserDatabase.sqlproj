@@ -300,8 +300,8 @@
     <Build Include="StoredProcedures\UserAnalysisTrackers\PageVisitTracker_GetAll.sql" />
     <Build Include="StoredProcedures\ListingSearchTracker\SearchTracker_Create.sql" />
     <Build Include="StoredProcedures\ListingSearchTracker\SearchTracker_DeletebyId.sql" />
-    <Build Include="StoredProcedures\ListingSearchTracker\Search_Tracker_GetAll.sql" />
     <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllListingsByUserId.sql" />
+    <Build Include="StoredProcedures\ListingSearchTracker\SearchTracker_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />
