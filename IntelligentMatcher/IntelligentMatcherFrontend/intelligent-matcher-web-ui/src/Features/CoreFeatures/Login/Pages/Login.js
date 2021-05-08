@@ -20,37 +20,39 @@ function Login() {
         
     }
 
-
-
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
 
     function submitHandler(e){
         var LoginModel = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Login/Login',
-        {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(LoginModel)
-        }).
-        then(r => r.json()).then(res=>{
-            if(res.success){
-                alert("Successful Login for " + res.username);
-                history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
+        if(e.username != "" && e.password != "" ){
+            fetch('http://localhost:5000/Login/Login',
+            {
+            method: "POST",
+            headers: {'Content-type':'application/json'},
+            body: JSON.stringify(LoginModel)
+            }).
+            then(r => r.json()).then(res=>{
+                if(res.success){
+                    alert("Successful Login for " + res.username);
+                    history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
 
+                }
+                else{
+                    alert(res.errorMessage);
+                }
             }
-            else{
-                alert(res.errorMessage);
-            }
+            );
         }
-        );
+        else{
+            alert("Input is Empty");
+        }
     }
 
     return (
         <div>
             <Grid container>
-
             <Grid.Row>
                 <h1>Login</h1>
             </Grid.Row>
@@ -88,7 +90,7 @@ function Login() {
                     onClick={()=>submitHandler({
                         username:usernameState,
                         password:passwordState,
-                        ipAddress:"127.0.0.3"
+                        ipAddress:"127.0.0.1"
                     })}
                     compact size="tiny"
                     circular inverted color="red"

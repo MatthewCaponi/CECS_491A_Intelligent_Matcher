@@ -5,6 +5,6 @@ namespace IdentityServices
 {
     public interface ITokenBuilderService
     {
-        string CreateToken(JwtPayloadModel jwtPayloadModel, string secret, RsaSecurityKey key);
+        public string CreateToken(JwtPayloadModel jwtPayloadModel);
     }
 }

@@ -4,6 +4,7 @@ using UserManagement.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Services;
+using Exceptions;
 
 namespace Services
 {
@@ -31,46 +32,74 @@ namespace Services
 
         public async Task<bool> UserExists(int id)
         {
-            var userAccounts = await (_userAccountService.GetAllUserAccounts());
-            if (userAccounts.Any(x => x.Id == id))
+            try
             {
-                return true;
-            }
+                var userAccounts = await (_userAccountService.GetAllUserAccounts());
+                if (userAccounts.Any(x => x.Id == id))
+                {
+                    return true;
+                }
 
-            return false;
+                return false;
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
         }
 
         public async Task<bool> UsernameExists(string username)
         {
-            var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.Username == username))
+            try
             {
-                return true;
-            }
+                var userAccounts = await _userAccountService.GetAllUserAccounts();
+                if (userAccounts.Any(x => x.Username == username))
+                {
+                    return true;
+                }
 
-            return false;
+                return false;
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
         }
 
         public async Task<bool> EmailExists(string emailAddress)
         {
-            var userAccounts = await _userAccountService.GetAllUserAccounts();
-            if (userAccounts.Any(x => x.EmailAddress == emailAddress))
+            try
             {
-                return true;
-            }
+                var userAccounts = await _userAccountService.GetAllUserAccounts();
+                if (userAccounts.Any(x => x.EmailAddress == emailAddress))
+                {
+                    return true;
+                }
 
-            return false;
+                return false;
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
         }
 
         public async Task<bool> UserIsActive(int id)
         {
-            var userAccount = await _userAccountService.GetUserAccount(id);
-            if (userAccount.AccountStatus == AccountStatus.Active.ToString())
+            try
             {
-                return true;
-            }
+                var userAccount = await _userAccountService.GetUserAccount(id);
+                if (userAccount.AccountStatus == AccountStatus.Active.ToString())
+                {
+                    return true;
+                }
 
-            return false;
+                return false;
+            }
+            catch (SqlCustomException e)
+            {
+                throw new SqlCustomException(e.Message, e.InnerException);
+            }
         }
     }
 }

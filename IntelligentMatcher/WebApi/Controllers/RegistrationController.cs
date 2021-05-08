@@ -1,10 +1,12 @@
 ﻿using BusinessModels;
+using BusinessModels.UserAccessControl;
 using ControllerModels;
 using ControllerModels.RegistrationModels;
 using Microsoft.AspNetCore.Mvc;
 using Registration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Models;
@@ -12,6 +14,7 @@ using UserManagement;
 using IntelligentMatcher.Services;
 using Services;
 using Registration.Services;
+using Exceptions;
 
 namespace WebApi.Controllers
 {
@@ -40,29 +43,32 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<bool> ConfirmUser([FromBody] TokenIdModel tokenIds)
         {
-
-
-
-            return await _emailService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
+            try
+            {
+                return await _emailService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
+            }
+            catch (SqlCustomException)
+            {
+                return false;
+            }
         }
 
         [HttpPost]
         public async Task<RegistrationResultModel> RegisterUser([FromBody] RegistrationModel registrationModel)
         {
-            var registrationResultModel = new RegistrationResultModel();
-
-            if(registrationModel.username == "" || registrationModel.password == "" || registrationModel.emailAddress == ""
-                || registrationModel.firstName == "" || registrationModel.surname == "" || registrationModel.dateOfBirth == "")
+            try
             {
-                registrationResultModel.Success = false;
-                registrationResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+                var registrationResultModel = new RegistrationResultModel();
 
-                return registrationResultModel;
-            }
+                if (registrationModel.username == null || registrationModel.password == null || registrationModel.emailAddress == null
+                    || registrationModel.firstName == null || registrationModel.surname == null || registrationModel.dateOfBirth == null)
+                {
+                    registrationResultModel.Success = false;
+                    registrationResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-            else if(registrationModel.password.Length >= 8 && registrationModel.password.Any(char.IsDigit)
-                && registrationModel.password.Any(char.IsUpper) && registrationModel.password.Any(char.IsLower))
-            {
+                    return registrationResultModel;
+                }
+
                 var userAccount = new WebUserAccountModel();
 
                 userAccount.Username = registrationModel.username;
@@ -97,20 +103,43 @@ namespace WebApi.Controllers
                     return registrationResultModel;
                 }
             }
+            catch (SqlCustomException)
+            {
+                var registrationResultModel = new RegistrationResultModel();
 
-            registrationResultModel.Success = false;
-            registrationResultModel.ErrorMessage = ErrorMessage.InvalidPassword.ToString();
+                registrationResultModel.Success = false;
+                registrationResultModel.ErrorMessage = "You could not be registered. Try again.";
 
-            return registrationResultModel;
+                return registrationResultModel;
+            }
+            catch (NullReferenceException)
+            {
+                var registrationResultModel = new RegistrationResultModel();
 
+                registrationResultModel.Success = false;
+                registrationResultModel.ErrorMessage = "A null was returned when registering";
+
+                return registrationResultModel;
+            }
         }
 
         [HttpPost]
         public async Task<bool> ResendEmail([FromBody] int accountId)
         {
-            var emailResult = await _registrationManager.SendVerificationEmail(accountId);
+            try
+            {
+                var emailResult = await _registrationManager.SendVerificationEmail(accountId);
 
-            return emailResult;
+                return emailResult;
+            }
+            catch (SqlCustomException)
+            {
+                return false;
+            }
+            catch (NullReferenceException)
+            {
+                return false;
+            }
         }
     }
 }

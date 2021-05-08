@@ -24,6 +24,11 @@ using Registration.Services;
 using FriendList;
 using PublicUserProfile;
 using Logging;
+using WebApi.Custom_Middleware;
+using IdentityServices;
+using AuthorizationResolutionSystem;
+using UserAccessControlServices;
+using AuthorizationPolicySystem;
 
 namespace WebApi
 {
@@ -46,6 +51,11 @@ namespace WebApi
             services.AddSingleton(Configuration);
 
             services.AddTransient<ILogService, LogService>();
+            services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
+            services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
@@ -66,15 +76,10 @@ namespace WebApi
 
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
-
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
-
             services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
-
-
-            
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
@@ -89,16 +94,13 @@ namespace WebApi
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
-
-            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseAuthorizationMiddleware();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
