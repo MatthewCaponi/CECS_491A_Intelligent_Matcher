@@ -193,7 +193,7 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
         {
- 
+
 
             try
             {
@@ -212,7 +212,7 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-  
+
                 UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
                 int friendId = model.Id;
                 await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
