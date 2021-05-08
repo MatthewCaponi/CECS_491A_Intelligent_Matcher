@@ -47,6 +47,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<PublicUserProfileModel>> GetUserProfile([FromBody] int userId)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
 
@@ -57,12 +58,17 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 return Ok(await _publicUserProfileManager.GetUserProfileAsync(userId));
+=======
+
+            return Ok(await _publicUserProfileManager.GetUserProfileAsync(userId));
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 
             }
             catch
             {
                 return StatusCode(404);
 
+<<<<<<< HEAD
             }
 =======
 
@@ -88,6 +94,12 @@ namespace IntelligentMatcherUI.Controllers
                 return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
 =======
 
+=======
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<DALListingModel>>> GetUserListings([FromBody] int userId)
+        {
+
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
             return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
 
@@ -106,6 +118,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
@@ -113,6 +126,8 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
+=======
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 =======
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
                 await _publicUserProfileManager.EditPublicUserProfileAsync(model);
@@ -132,6 +147,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.ReportingId.ToString(), true, false, false);
 
@@ -139,6 +155,8 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
+=======
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 =======
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
                 await _userInteractionService.CreateReportAsync(model);
@@ -158,6 +176,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
@@ -165,6 +184,8 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
+=======
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 =======
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
                 string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
@@ -194,6 +215,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<FriendStatus>> GetFriendStatus([FromBody] DualIdModel model)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
@@ -217,6 +239,9 @@ namespace IntelligentMatcherUI.Controllers
 
 =======
 
+=======
+
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
             string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
             FriendStatus friendStatus = new FriendStatus();
             friendStatus.Status = status;
@@ -231,6 +256,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
@@ -238,6 +264,8 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
+=======
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 =======
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
                 await _publicUserProfileManager.SetUserOnlineAsync(userId);
@@ -257,6 +285,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
@@ -265,6 +294,8 @@ namespace IntelligentMatcherUI.Controllers
                     return StatusCode(403);
                 }
 
+=======
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 =======
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
                 await _publicUserProfileManager.SetUserOfflineAsync(userId);
@@ -281,6 +312,7 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<NonUserProfileData>> GetOtherData([FromBody] int userId)
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
@@ -304,6 +336,9 @@ namespace IntelligentMatcherUI.Controllers
             }
 =======
 
+=======
+
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
             NonUserProfileData model = new NonUserProfileData();
             UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
             model.Username = userAccountModel.Username;
@@ -330,8 +365,11 @@ namespace IntelligentMatcherUI.Controllers
                     }
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+=======
+>>>>>>> parent of 802530b (authorizatoin bacjkend)
 =======
 >>>>>>> parent of 802530b (authorizatoin bacjkend)
 
