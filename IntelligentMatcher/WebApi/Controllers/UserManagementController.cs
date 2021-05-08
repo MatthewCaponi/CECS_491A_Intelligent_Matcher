@@ -42,7 +42,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<List<WebUserAccountModel>>> GetAllUserAccounts()
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -56,7 +56,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false, false);
 
             if(!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -70,7 +70,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<WebUserProfileModel>> GetUserProfile(int id)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), id.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), id.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {

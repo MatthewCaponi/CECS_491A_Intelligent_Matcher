@@ -20,6 +20,7 @@ namespace AuthorizationResolutionSystem
             _tokenService = tokenService;
             _authorizationService = authorizationService;
         }
+
         public bool Authorize(string token, AccessPolicyModel accessPolicy)
         {
             var claims = _tokenService.ExtractClaims(token);
