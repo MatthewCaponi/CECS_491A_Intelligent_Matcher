@@ -98,8 +98,8 @@ namespace TraditionalListings.Services
             var businessListing = ModelConverterService.ConvertTo(dalListing, new BusinessDatingModel());
             return businessListing;
 
-            
-          
+
+
         }
 
         public Task<List<BusinessListingModel>> GetAllListingById()

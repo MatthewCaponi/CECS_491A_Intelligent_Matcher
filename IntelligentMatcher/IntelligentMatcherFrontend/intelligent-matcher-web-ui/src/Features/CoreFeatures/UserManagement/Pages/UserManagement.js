@@ -27,7 +27,8 @@ function UserManagement () {
                 </Grid.Column>
                 
             </Grid.Row>
-            <Grid.Row />    
+            <Grid.Row /> 
+          
         </Grid>
             
 

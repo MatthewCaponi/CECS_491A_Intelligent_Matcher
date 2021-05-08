@@ -70,7 +70,7 @@ namespace WebApi
             services.AddTransient<IRelationshipRepository, RelationshipRepository>();
             services.AddTransient<IDatingRepository, DatingRepository>();
             services.AddTransient<ITeamModelRepository, TeamModelRepository>();
-            //services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
+            services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
             services.AddTransient<ILoginTrackerRepo, LoginTrackerRepo>();
             services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
             services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
@@ -80,7 +80,7 @@ namespace WebApi
             services.AddTransient<IListingCreationService, ListingCreationService>();
             services.AddTransient<IListingDeletionService, ListingDeletionService>();
             services.AddTransient<IListingUpdationService, ListingUpdationService>();
-            //services.AddTransient<IListingGetterService, ListingGetterService>();
+            services.AddTransient<IListingGetterService, ListingGetterService>();
 
            
 
@@ -121,7 +121,7 @@ namespace WebApi
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
-            //services.AddScoped<IListingSearchManager, ListingSearchManager>();
+            services.AddScoped<IListingSearchManager, ListingSearchManager>();
 
 
             services.AddScoped<IUserManager, UserManager>();

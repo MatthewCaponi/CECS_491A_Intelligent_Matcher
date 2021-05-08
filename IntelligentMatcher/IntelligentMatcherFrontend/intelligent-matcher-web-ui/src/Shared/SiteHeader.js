@@ -49,7 +49,17 @@ function SiteHeader() {
                     <Button href="http://localhost:3000/UserManagement" className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
                         Admin
                     </Button>
+                
                 </Grid.Column>
+
+                <Grid.Column container floated="right" verticalAlign="center" width={1}>           
+                    <Button href="http://localhost:3000/UserAnalysisMainPage" className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
+                        User Analysis Dashboard
+                    </Button>
+                
+                </Grid.Column>
+                
+                
                 <Grid.Column container floated="right" width={2} widescreen={1} computer={2} tablet={2}>
                     <Grid columns={3}>
                         <Grid.Column >
