@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Repositories;
 using IntelligentMatcher.Services;
+using Exceptions;
+using PostmarkDotNet.Exceptions;
 
 namespace Registration.Services
 {
@@ -87,38 +89,51 @@ namespace Registration.Services
 				await _accountVerificationRepo.CreateAccountVerification(userId, GenerateToken());
 				return true;
             }
-            catch
+            catch (SqlCustomException e)
             {
-				return false;
+				throw new SqlCustomException(e.Message, e.InnerException);
             }
-
 		}
 
 		public async Task<string> GetStatusToken(int userId)
 		{
-			return await _accountVerificationRepo.GetStatusTokenByUserId(userId);
+            try
+            {
+				return await _accountVerificationRepo.GetStatusTokenByUserId(userId);
+			}
+			catch (SqlCustomException e)
+			{
+				throw new SqlCustomException(e.Message, e.InnerException);
+			}
 		}
 
 
 
 		public async Task<bool> ValidateStatusToken(int userId, string token)
 		{
-			Console.WriteLine("Validating");
-			string existingStatusToken = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
-			Console.WriteLine(token);
-			Console.WriteLine(existingStatusToken);
-			if (existingStatusToken == token)
-			{
+            try
+            {
+				Console.WriteLine("Validating");
+				string existingStatusToken = await _accountVerificationRepo.GetStatusTokenByUserId(userId);
+				Console.WriteLine(token);
+				Console.WriteLine(existingStatusToken);
+				if (existingStatusToken == token)
+				{
 
 
-				await _userAccountRepository.UpdateAccountStatus(userId, "Active");
-				await _accountVerificationRepo.UpdateAccountStatusToken(userId, GenerateToken());
-				return true;
+					await _userAccountRepository.UpdateAccountStatus(userId, "Active");
+					await _accountVerificationRepo.UpdateAccountStatusToken(userId, GenerateToken());
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
-			else
-			{
-				return false;
-			}
+			catch (SqlCustomException e)
+            {
+				throw new SqlCustomException(e.Message, e.InnerException);
+            }
 
 		}
 
@@ -137,8 +152,6 @@ namespace Registration.Services
 				Tag = emailModel.Tag
 			};
 
-			
-
 			var client = new PostmarkClient(API_KEY);			
             try
             {
@@ -153,7 +166,7 @@ namespace Registration.Services
 					return false;
 				}
 			} 
-			catch
+			catch (PostmarkValidationException)
             {
 				return false;
 			}

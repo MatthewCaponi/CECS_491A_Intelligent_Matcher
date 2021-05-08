@@ -16,7 +16,7 @@ namespace DataAccess.Repositories
         Task<IEnumerable<DALDatingModel>> GetAllDatingListings();
 
 
-
+        Task<IEnumerable<DALListingModel>> GetAllListingsByUserId(int userId);
 
 
         
