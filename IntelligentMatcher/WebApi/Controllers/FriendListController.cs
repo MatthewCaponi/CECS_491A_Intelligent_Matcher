@@ -74,7 +74,7 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
         {
-
+            try
             {
                 return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
             }
