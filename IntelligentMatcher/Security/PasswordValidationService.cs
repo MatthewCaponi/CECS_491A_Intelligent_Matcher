@@ -7,13 +7,13 @@ using DataAccess.Repositories;
 using Models;
 namespace Security
 {
-    public class AuthenticationService : IAuthenticationService
+    public class PasswordValidationService : IPasswordValidationService
     {
 
 
         private readonly IUserAccountRepository _userAccountRepository;
 
-        public AuthenticationService(IUserAccountRepository userAccountRepository)
+        public PasswordValidationService(IUserAccountRepository userAccountRepository)
         {
             _userAccountRepository = userAccountRepository;
         }

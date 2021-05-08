@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Mailjet.Api" Version="2.0.1" />
-    <PackageReference Include="Postmark" Version="4.5.0" />
+    <PackageReference Include="Postmark" Version="4.5.2" />
     <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 

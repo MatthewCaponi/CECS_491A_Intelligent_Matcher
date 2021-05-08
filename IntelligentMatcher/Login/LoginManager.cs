@@ -10,6 +10,7 @@ using UserManagement.Services;
 using Services;
 using System.Linq;
 using Exceptions;
+using AuthenticationSystem;
 
 namespace Login
 {
@@ -17,25 +18,27 @@ namespace Login
     {
         private const int loginCounter = 0;
         private const int suspensionHours = 1;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IPasswordValidationService _passwordValidationService;
         private readonly ICryptographyService _cryptographyService;
         private readonly IEmailService _emailService;
         private readonly ILoginAttemptsService _loginAttemptService;
         private readonly IUserAccountService _userAccountService;
         private readonly IUserAccountCodeService _userAccountCodeService;
         private readonly IUserProfileService _userProfileService;
+        private readonly IPasswordValidationService _authenticationService;
 
-        public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
+        public LoginManager(IPasswordValidationService passwordValidationService, ICryptographyService cryptographyService,
             IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
-            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService)
+            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IAuthenticationService authenticationService )
         {
-            _authenticationService = authenticationService;
+            _passwordValidationService = passwordValidationService;
             _cryptographyService = cryptographyService;
             _emailService = emailService;
             _loginAttemptService = loginAttemptsService;
             _userAccountService = userAccountService;
             _userAccountCodeService = userAccountCodeService;
             _userProfileService = userProfileService;
+            _authenticationService = authenticationService;
         }
 
         public async Task<Result<WebUserAccountModel>> Login(string username, string password, string ipAddress)
@@ -90,7 +93,7 @@ namespace Login
                     return loginResult;
                 }
 
-                var authenticateUser = await _authenticationService.AuthenticatePasswordWithUsename(password, username);
+                var authenticateUser = await _passwordValidationService.AuthenticatePasswordWithUsename(password, username);
 
                 if (authenticateUser == false)
                 {
@@ -105,9 +108,11 @@ namespace Login
                     loginResult.Success = false;
                     loginResult.ErrorMessage = ErrorMessage.NoMatch;
 
+
                     return loginResult;
                 }
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
+
 
                 loginResult.Success = true;
                 loginResult.SuccessValue = account;

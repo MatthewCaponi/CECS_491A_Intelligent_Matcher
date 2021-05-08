@@ -173,7 +173,7 @@ namespace BusinessLayerUnitTests.Services
             userAccountSettingsModel.FontStyle = "Time New Roman";
             userAccountSettingsModel.ThemeColor = "White";
 
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 

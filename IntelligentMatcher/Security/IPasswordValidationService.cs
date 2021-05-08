@@ -6,7 +6,7 @@ using DataAccess;
 using DataAccess.Repositories;
 namespace Security
 {
-    public interface IAuthenticationService
+    public interface IPasswordValidationService
     {
         Task<bool> AuthenticatePasswordWithUserId(string password, int userId);
 

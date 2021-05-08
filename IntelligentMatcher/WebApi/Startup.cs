@@ -71,7 +71,7 @@ namespace WebApi
 
 
             services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IPasswordValidationService, PasswordValidationService>();
             services.AddTransient<IPublicUserProfileService, PublicUserProfileService>();
 
             services.AddTransient<ICryptographyService, CryptographyService>();

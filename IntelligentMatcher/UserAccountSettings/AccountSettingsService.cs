@@ -12,9 +12,9 @@ namespace UserAccountSettings
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IUserAccountSettingsRepository _userAccountSettingRepository;
         private readonly ICryptographyService _cryptographyService;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IPasswordValidationService _authenticationService;
 
-        public AccountSettingsService(IUserAccountRepository userAccountRepository, IUserAccountSettingsRepository userAccountSettingRepository, ICryptographyService cryptographyService, IAuthenticationService authenticationService)
+        public AccountSettingsService(IUserAccountRepository userAccountRepository, IUserAccountSettingsRepository userAccountSettingRepository, ICryptographyService cryptographyService, IPasswordValidationService authenticationService)
         {
             _userAccountRepository = userAccountRepository;
             _userAccountSettingRepository = userAccountSettingRepository;

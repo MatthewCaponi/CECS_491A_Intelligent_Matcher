@@ -110,7 +110,7 @@ namespace BusinessLayerUnitTests.Security
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccount); 
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccount); 
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUsename(password, username);
 
             if (AuthenticationToken == true)
@@ -134,7 +134,7 @@ namespace BusinessLayerUnitTests.Security
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUsename(password, username);
 
             if (AuthenticationToken == true)
@@ -158,7 +158,7 @@ namespace BusinessLayerUnitTests.Security
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithEmail(password, email);
 
             if (AuthenticationToken == true)
@@ -182,7 +182,7 @@ namespace BusinessLayerUnitTests.Security
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithEmail(password, email);
 
             if (AuthenticationToken == true)
@@ -206,7 +206,7 @@ namespace BusinessLayerUnitTests.Security
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccount);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccount);
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(password, userId);
 
             if(AuthenticationToken == true)
@@ -230,7 +230,7 @@ namespace BusinessLayerUnitTests.Security
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IUserAccountRepository userAccount = new UserAccountRepository(dataGateway, connectionString);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccount); 
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccount); 
             bool AuthenticationToken = await authenticationService.AuthenticatePasswordWithUserId(password, userId);
 
             if (AuthenticationToken == true)

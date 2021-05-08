@@ -120,7 +120,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -174,7 +174,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -232,7 +232,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -290,7 +290,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -345,7 +345,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -400,7 +400,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -457,7 +457,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -515,7 +515,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -570,7 +570,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -625,7 +625,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -683,7 +683,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(), 
                 new ConnectionStringData()));
@@ -736,7 +736,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -791,7 +791,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -856,7 +856,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -910,7 +910,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -964,7 +964,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -1020,7 +1020,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -1085,7 +1085,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -1140,7 +1140,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -1195,7 +1195,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -1253,7 +1253,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));
@@ -1323,7 +1323,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set the dependencies LoginManager uses
-            IAuthenticationService authenticationService = new AuthenticationService(new UserAccountRepository
+            IPasswordValidationService authenticationService = new PasswordValidationService(new UserAccountRepository
                 (new SQLServerGateway(), new ConnectionStringData()));
             ICryptographyService cryptographyService = new CryptographyService(new UserAccountRepository(new SQLServerGateway(),
                 new ConnectionStringData()));

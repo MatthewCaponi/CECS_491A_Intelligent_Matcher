@@ -113,7 +113,7 @@ namespace BusinessLayerUnitTests.Messaging
             userAccountSettingsModel.ThemeColor = "White";
 
 
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 

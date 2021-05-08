@@ -38,9 +38,6 @@ namespace IntelligentMatcherUI.Controllers
     [ApiController]
     public class MessagingController : ControllerBase
     {
-
-
-
         private readonly IMessagingService _messagingService;
         private readonly IUserAccountRepository _userAccountRepository;
 

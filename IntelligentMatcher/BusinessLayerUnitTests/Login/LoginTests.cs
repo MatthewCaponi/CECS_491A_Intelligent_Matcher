@@ -26,7 +26,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -70,7 +70,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -124,7 +124,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -187,7 +187,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -246,7 +246,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -287,7 +287,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -347,7 +347,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -406,7 +406,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -448,7 +448,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -507,7 +507,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -569,7 +569,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -633,7 +633,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -674,7 +674,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -720,7 +720,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -768,7 +768,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();
@@ -830,7 +830,7 @@ namespace BusinessLayerUnitTests.Login
         {
             // Arrange
             // Set mock objects for the dependencies LoginManager uses
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<IEmailService> mockEmailService = new Mock<IEmailService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             Mock<ILoginAttemptsService> mockLoginAttemptsService = new Mock<ILoginAttemptsService>();

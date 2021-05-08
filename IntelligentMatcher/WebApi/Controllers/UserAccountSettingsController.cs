@@ -89,7 +89,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.DeleteAccountByUserIDAsync(deleteModel.id, deleteModel.password);
@@ -106,7 +106,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangePasswordAsync(passwordModel.oldPassword, passwordModel.newPassword, passwordModel.id);
@@ -123,7 +123,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeFontSizeAsync(fontSize.id, Int32.Parse(fontSize.fontSize));
@@ -141,7 +141,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeEmailAsync(email.password, email.email, email.id);
@@ -170,7 +170,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeFontStyleAsync(fontStyle.id, fontStyle.fontStyle);
@@ -199,7 +199,7 @@ namespace IntelligentMatcherUI.Controllers
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeThemeColorAsync(theme.id, theme.theme);

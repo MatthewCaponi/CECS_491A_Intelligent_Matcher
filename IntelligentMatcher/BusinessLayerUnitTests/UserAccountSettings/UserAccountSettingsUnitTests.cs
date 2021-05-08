@@ -25,7 +25,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
             UserAccountSettingsModel model = new UserAccountSettingsModel();
@@ -55,7 +55,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
 
 
@@ -84,7 +84,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
@@ -108,7 +108,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
 
@@ -133,7 +133,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         {
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUserId(password, userId)).Returns(Task.FromResult(true));
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
@@ -158,7 +158,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             mockUserAccountRepository.Setup(x => x.UpdateAccountEmail(userId, email));
             mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUserId(password, userId)).Returns(Task.FromResult(true));
@@ -186,7 +186,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
         {
             Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
             Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
+            Mock<IPasswordValidationService> mockAuthenticationService = new Mock<IPasswordValidationService>();
             Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
             mockAuthenticationService.Setup(x => x.AuthenticatePasswordWithUserId(password, userId)).Returns(Task.FromResult(true));
             mockCryptographyService.Setup(x => x.newPasswordEncryptAsync(newPassword, userId)).Returns(Task.FromResult(true));

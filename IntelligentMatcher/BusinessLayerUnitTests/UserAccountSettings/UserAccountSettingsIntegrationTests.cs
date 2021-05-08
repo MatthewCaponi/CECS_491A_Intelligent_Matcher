@@ -77,7 +77,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             userAccountSettingsModel.ThemeColor = "White";
 
 
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
 
@@ -140,7 +140,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
             UserAccountSettingsModel model = new UserAccountSettingsModel();
             userAccountSettingsModel.Id = 0;
@@ -178,7 +178,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeFontSizeAsync(userId, FontSize);
@@ -211,7 +211,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeThemeColorAsync(userId, ThemeColor);
@@ -242,7 +242,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeFontStyleAsync(userId, fontStyle);
@@ -274,7 +274,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.DeleteAccountByUserIDAsync(userId, password);
@@ -303,7 +303,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangeEmailAsync(password, email, userId);
@@ -336,7 +336,7 @@ namespace BusinessLayerUnitTests.UserAccountSettings
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
+            IPasswordValidationService authenticationService = new PasswordValidationService(userAccountRepository);
             IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
 
             bool result = await userAccountSettingsManager.ChangePasswordAsync(password, newPassword, userId);
