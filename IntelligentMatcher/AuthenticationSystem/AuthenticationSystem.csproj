@@ -4,9 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
     <ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
+    <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
   </ItemGroup>
+
+
+
 
 </Project>
