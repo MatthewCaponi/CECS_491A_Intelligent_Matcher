@@ -8,13 +8,32 @@ namespace UserAccessControlServices
 {
     public class AuthorizationService : IAuthorizationService
     {
-        public bool Validate(ClaimsPrincipal claimsPrincipal)
+        public bool ValidateAccessPolicy(ClaimsPrincipal claimsPrincipal, AccessPolicyModel accessPolicy)
         {
-            var role = claimsPrincipal.Claims.Where(a => a.Type == "Role").FirstOrDefault();
+            var claims = claimsPrincipal.Claims;
+            var scopes = claimsPrincipal.Scopes;
 
-            if (!(claimsPrincipal.Scopes.Contains("User Management") && claimsPrincipal.Scopes.Contains("Read") && role.Value == "Admin"))
+            foreach (var scope in accessPolicy.Scopes)
             {
-                return false;
+                if (!scopes.Contains(scope))
+                {
+                    return false;
+                }
+            }
+
+            foreach (var claim in accessPolicy.Claims)
+            {
+                var key = claims.Where(a => a.Type == claim.Type).FirstOrDefault();
+
+                if (key == null)
+                {
+                    return false;
+                }
+
+                if (key.Value != claim.Value)
+                {
+                    return false;
+                }
             }
 
             return true;

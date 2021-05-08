@@ -4,6 +4,6 @@ namespace UserAccessControlServices
 {
     public interface IAuthorizationService
     {
-        bool Validate(ClaimsPrincipal claimsPrincipal);
+        bool ValidateAccessPolicy(ClaimsPrincipal claimsPrincipal, AccessPolicyModel accessPolicy);
     }
 }

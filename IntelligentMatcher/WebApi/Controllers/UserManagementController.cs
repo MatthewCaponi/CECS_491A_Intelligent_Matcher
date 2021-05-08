@@ -12,6 +12,8 @@ using WebApi.Models;
 using Cross_Cutting_Concerns;
 using WebApi.Controllers;
 using AuthorizationResolutionSystem;
+using BusinessModels.UserAccessControl;
+using UserClaimModel = BusinessModels.UserAccessControl.UserClaimModel;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -40,8 +42,24 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = new AccessPolicyModel()
+            {
+                Scopes = new List<string>()
+                {
+                    "User Management",
+                    "Read"
+                },
+                Claims = new List<UserClaimModel>()
+                { 
+                    new UserClaimModel()
+                    {
+                        Type = "Role",
+                        Value = "Admin"
+                    }
+                }
+            };
 
-            if(!_authorizationResolutionManager.Authorize(token))
+            if(!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }

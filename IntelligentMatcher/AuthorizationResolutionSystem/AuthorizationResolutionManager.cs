@@ -20,7 +20,7 @@ namespace AuthorizationResolutionSystem
             _tokenService = tokenService;
             _authorizationService = authorizationService;
         }
-        public bool Authorize(string token)
+        public bool Authorize(string token, AccessPolicyModel accessPolicy)
         {
             var claims = _tokenService.ExtractClaims(token);
             var scopes = claims.Where(a => a.Type == "Scope").FirstOrDefault().Value.Split(',').ToList();
@@ -30,7 +30,7 @@ namespace AuthorizationResolutionSystem
                 Scopes = scopes
             };
 
-            return _authorizationService.Validate(claimsPrincipal);
+            return _authorizationService.ValidateAccessPolicy(claimsPrincipal, accessPolicy);
         }
     }
 }
