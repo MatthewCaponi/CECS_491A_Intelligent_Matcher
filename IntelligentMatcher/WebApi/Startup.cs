@@ -73,8 +73,7 @@ namespace WebApi
             services.AddTransient<ILoginTrackerRepo, LoginTrackerRepo>();
             services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
             services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
-
-            services.AddTransient<IUserAnalysisService, UserAnalysisService>();
+            services.AddTransient<IListingRepository, ListingRepository>();
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
 
@@ -99,6 +98,7 @@ namespace WebApi
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+            services.AddTransient<IUserAnalysisService, UserAnalysisService>();
 
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();

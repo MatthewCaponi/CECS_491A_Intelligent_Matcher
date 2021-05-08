@@ -33,6 +33,7 @@
     <ProjectReference Include="..\Security\Security.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
+    <ProjectReference Include="..\UserAnalysisManager\UserAnalysisManager.csproj" />
     <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
   </ItemGroup>
 
