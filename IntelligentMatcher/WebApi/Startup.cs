@@ -28,6 +28,7 @@ using WebApi.Custom_Middleware;
 using IdentityServices;
 using AuthorizationResolutionSystem;
 using UserAccessControlServices;
+using AuthorizationPolicySystem;
 
 namespace WebApi
 {
@@ -52,6 +53,7 @@ namespace WebApi
 
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
+            services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();

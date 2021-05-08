@@ -124,8 +124,6 @@ namespace IdentityServices
                 userClaims.Add(userClaim);
             };
 
-            userClaims.ForEach(a => { Console.WriteLine(a.Type + ": " + a.Value); });
-
             return userClaims;
         }
     }
