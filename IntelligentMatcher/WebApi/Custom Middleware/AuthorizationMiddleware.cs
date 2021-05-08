@@ -44,7 +44,7 @@ namespace WebApi.Custom_Middleware
             {
                 var userClaims = new List<UserClaimModel>
             {
-                new UserClaimModel("scope", "user_management,read"),
+                new UserClaimModel("scope", "archiving,read,write"),
                 new UserClaimModel("role", "admin"),
                 new UserClaimModel("id", "1"),
                 new UserClaimModel("username", "TestUsername1"),

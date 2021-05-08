@@ -1,29 +1,49 @@
 ﻿using Archiving;
+using AuthorizationPolicySystem;
+using AuthorizationResolutionSystem;
 using BusinessModels;
 using ControllerModels.ArchiveModels;
+using IdentityServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApi.Access_Information;
 
 namespace WebApi.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class ArchiveController : ControllerBase
+    public class ArchiveController : ApiBaseController
     {
         private readonly IArchiveManager _archiveManager;
+        private readonly ITokenService _tokenService;
+        private readonly IAuthorizationResolutionManager _authorizationResolutionManager;
+        private readonly IAuthorizationPolicyManager _authorizationPolicyManager;
 
-        public ArchiveController(IArchiveManager archiveManager)
+        public ArchiveController(IArchiveManager archiveManager, ITokenService tokenService,
+            IAuthorizationResolutionManager authorizationResolutionManager, IAuthorizationPolicyManager authorizationPolicyManager)
         {
             _archiveManager = archiveManager;
+            _tokenService = tokenService;
+            _authorizationResolutionManager = authorizationResolutionManager;
+            _authorizationPolicyManager = authorizationPolicyManager;
         }
 
         [HttpPost]
         public async Task<ActionResult<ArchiveResultModel>> ArchiveLogFiles([FromBody] ArchiveModel archiveModel)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
+                Role.admin.ToString(), true, true);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+
             var archiveResultModel = new ArchiveResultModel();
 
             try
@@ -60,6 +80,15 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ArchiveResultModel>> ArchiveLogFilesByCategory([FromBody] ArchiveModel archiveModel)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
+                Role.admin.ToString(), true, true);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+
             var archiveResultModel = new ArchiveResultModel();
 
             try
@@ -93,9 +122,18 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<ActionResult<ArchiveResultModel>> DeleteArchivedFiles([FromBody] ArchiveModel archiveModel)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
+                Role.admin.ToString(), true, true);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+
             var archiveResultModel = new ArchiveResultModel();
 
             try
@@ -132,6 +170,15 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ArchiveResultModel>> RecoverLogFiles([FromBody] ArchiveModel archiveModel)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
+                Role.admin.ToString(), true, true);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+
             var archiveResultModel = new ArchiveResultModel();
 
             try
@@ -168,6 +215,15 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<string>>> GetCategories()
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
+                Role.admin.ToString(), true, false);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+
             try
             {
                 return await _archiveManager.GetCategories();
