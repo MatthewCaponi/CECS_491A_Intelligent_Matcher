@@ -149,7 +149,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
             IRegistrationManager registrationManager = new  RegistrationManager(mockEmailService.Object,
                 mockUserAccountService.Object, mockUserProfileService.Object, mockValidationService.Object,
@@ -160,7 +160,7 @@ namespace BusinessLayerUnitTests.Registration
                 password, ipAddress);
 
             //Assert
-            Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
+            Assert.IsTrue((actualResult.WasSuccessful == expectedResult.WasSuccessful) &&
                 (actualResult.ErrorMessage == expectedResult.ErrorMessage));
         }
 
@@ -198,7 +198,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
 
             Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
@@ -212,7 +212,7 @@ namespace BusinessLayerUnitTests.Registration
                 password, ipAddress);
 
             //Assert
-            Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
+            Assert.IsTrue((actualResult.WasSuccessful == expectedResult.WasSuccessful) &&
                 (actualResult.ErrorMessage == expectedResult.ErrorMessage));
         }
 
@@ -252,7 +252,7 @@ namespace BusinessLayerUnitTests.Registration
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
             Result<int> expectedResult = new Result<int>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = expectedId;
 
             Mock<IAccountVerificationRepo> mockAccountVerificionRepo = new Mock<IAccountVerificationRepo>();
@@ -266,7 +266,7 @@ namespace BusinessLayerUnitTests.Registration
                 password, ipAddress);
 
             //Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success &&
+            Assert.IsTrue(actualResult.WasSuccessful == expectedResult.WasSuccessful &&
                 actualResult.SuccessValue == expectedResult.SuccessValue);
         }
 
@@ -370,7 +370,7 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             Result<int> expectedResult = new Result<int>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
             Mock<ILogService> mockLogService = new Mock<ILogService>();
 
@@ -384,7 +384,7 @@ namespace BusinessLayerUnitTests.Registration
                 password, ipAddress);
 
             //Assert
-            Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
+            Assert.IsTrue((actualResult.WasSuccessful == expectedResult.WasSuccessful) &&
                 (actualResult.ErrorMessage == expectedResult.ErrorMessage));
         }
 
@@ -443,7 +443,7 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             Result<int> expectedResult = new Result<int>();
-            expectedResult.Success = false;
+            expectedResult.WasSuccessful = false;
             expectedResult.ErrorMessage = error;
             Mock<ILogService> mockLogService = new Mock<ILogService>();
             RegistrationManager registrationManager = new RegistrationManager(emailService,
@@ -458,7 +458,7 @@ namespace BusinessLayerUnitTests.Registration
 
 
             //Assert
-            Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
+            Assert.IsTrue((actualResult.WasSuccessful == expectedResult.WasSuccessful) &&
                 (actualResult.ErrorMessage == expectedResult.ErrorMessage));
         }
 
@@ -514,7 +514,7 @@ namespace BusinessLayerUnitTests.Registration
             webUserProfileModel.UserAccountId = webUserAccountModel.Id;
 
             Result<int> expectedResult = new Result<int>();
-            expectedResult.Success = true;
+            expectedResult.WasSuccessful = true;
             expectedResult.SuccessValue = expectedId;
 
             IUserAccountRepository userAccountRepository = new UserAccountRepository(new SQLServerGateway(), new ConnectionStringData());
@@ -530,7 +530,7 @@ namespace BusinessLayerUnitTests.Registration
                 password, ipAddress);
 
             //Assert
-            Assert.IsTrue((actualResult.Success == expectedResult.Success) &&
+            Assert.IsTrue((actualResult.WasSuccessful == expectedResult.WasSuccessful) &&
                 (actualResult.SuccessValue == expectedResult.SuccessValue));
         }
 
