@@ -44,13 +44,14 @@ namespace WebApi.Custom_Middleware
             {
                 var userClaims = new List<UserClaimModel>
             {
-                new UserClaimModel("Scope", "User Management,Read"),
-                new UserClaimModel("Role", "Admin"),
-                new UserClaimModel("Username", "TestUsername1"),
-                new UserClaimModel("EmailAddress", "TestEmailAddress1"),
-                new UserClaimModel("FirstName", "TestFirstName1"),
-                new UserClaimModel("LastName", "TestLastName1"),
-                new UserClaimModel("Birthdate", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
+                new UserClaimModel("scope", "user_management,read"),
+                new UserClaimModel("role", "admin"),
+                new UserClaimModel("id", "1"),
+                new UserClaimModel("username", "TestUsername1"),
+                new UserClaimModel("emailAddress", "TestEmailAddress1"),
+                new UserClaimModel("firstName", "TestFirstName1"),
+                new UserClaimModel("lastName", "TestLastName1"),
+                new UserClaimModel("birthdate", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                 new UserClaimModel("iss", "TestIssuer1"),
                 new UserClaimModel("sub", "TestSubject1"),
                 new UserClaimModel("aud", "TestAudience1"),
@@ -59,8 +60,8 @@ namespace WebApi.Custom_Middleware
                 new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
             };
 
-
                 createdToken = _tokenService.CreateToken(userClaims);
+                Console.WriteLine("--------------\nToken\n--------------\n" + createdToken);
                 _logService.Log(createdToken, LogTarget.All, LogLevel.info, this.ToString(), "API_Dev_Logs");
             }
 
@@ -68,7 +69,7 @@ namespace WebApi.Custom_Middleware
             if (headers["Authorization"].ToString().Contains("Bearer"))
             {
                 var value = headers["Authorization"].ToString().Split(' ')[1];
-                Console.WriteLine("Value: " + value);
+                
                 var validated = _tokenService.ValidateToken(value);
                 
                 if (!validated)
