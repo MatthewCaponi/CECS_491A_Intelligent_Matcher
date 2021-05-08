@@ -31,6 +31,7 @@ using IdentityServices;
 using AuthorizationResolutionSystem;
 using UserAccessControlServices;
 using AuthorizationPolicySystem;
+using AuthenticationSystem;
 
 namespace WebApi
 {
@@ -57,6 +58,9 @@ namespace WebApi
             services.AddTransient<IFolderHandlerService, FolderHandlerService>();
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<IAssignmentPolicyService, AssignmentPolicyService>();
+            services.AddTransient<IAttributeAssignmentService, AttributeAssignmentService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();

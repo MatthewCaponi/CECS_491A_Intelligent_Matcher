@@ -24,19 +24,18 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<LoginResultModel> Login([FromBody] LoginModel loginModel)
+        public async Task<string> Login([FromBody] LoginModel loginModel)
         {
-            try
-            {
+           
                 var loginResultModel = new LoginResultModel();
 
-                if (loginModel.username == null || loginModel.password == null)
-                {
-                    loginResultModel.Success = false;
-                    loginResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+                //if (loginModel.username == null || loginModel.password == null)
+                //{
+                //    loginResultModel.Success = false;
+                //    loginResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                    return loginResultModel;
-                }
+                //    return loginResultModel;
+                //}
 
                 var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
 
@@ -53,26 +52,26 @@ namespace WebApi.Controllers
                 //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
                 //}
 
-                return loginResultModel;
-            }
-            catch (SqlCustomException)
-            {
-                var loginResultModel = new LoginResultModel();
+                return loginResult.SuccessValue;
+            
+            //catch (SqlCustomException)
+            //{
+            //    var loginResultModel = new LoginResultModel();
 
-                loginResultModel.Success = false;
-                loginResultModel.ErrorMessage = "Could not verify the information given. Try again.";
+            //    loginResultModel.Success = false;
+            //    loginResultModel.ErrorMessage = "Could not verify the information given. Try again.";
 
-                return loginResultModel;
-            }
-            catch (NullReferenceException)
-            {
-                var loginResultModel = new LoginResultModel();
+            //    return loginResultModel;
+            //}
+            //catch (NullReferenceException)
+            //{
+            //    var loginResultModel = new LoginResultModel();
 
-                loginResultModel.Success = false;
-                loginResultModel.ErrorMessage = "A null was returned when checking the inputs.";
+            //    loginResultModel.Success = false;
+            //    loginResultModel.ErrorMessage = "A null was returned when checking the inputs.";
 
-                return loginResultModel;
-            }
+            //    return loginResultModel;
+            //}
         }
 
         [HttpPost]

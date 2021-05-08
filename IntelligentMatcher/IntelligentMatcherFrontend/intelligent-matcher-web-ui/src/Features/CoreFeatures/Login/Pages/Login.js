@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { AuthorizationContext } from '../../../../Context/AuthorizationContext';
 
 import './Login.css';
 
 function Login() {
     const history = useHistory();
-
+    const authorization = useContext(AuthorizationContext);
     let location = useLocation()
     let confMessage = "";
 

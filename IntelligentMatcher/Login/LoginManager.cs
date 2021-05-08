@@ -45,11 +45,11 @@ namespace Login
             _tokenService = tokenService;
         }
 
-        public async Task<Result<TokenStorage>> Login(string username, string password, string ipAddress)
+        public async Task<Result<string>> Login(string username, string password, string ipAddress)
         {
             try
             {
-                var loginResult = new Result<TokenStorage>();
+                var loginResult = new Result<string>();
                 if (username == null || password == null)
                 {
                     loginResult.WasSuccessful = false;
@@ -140,6 +140,7 @@ namespace Login
                 var idToken = _tokenService.CreateToken(new List<UserClaimModel>()
                     {
                         new UserClaimModel("id", account.Id.ToString()),
+                        new UserClaimModel("Scope", "id"),
                             new UserClaimModel("iss", this.ToString()),
                             new UserClaimModel("sub", account.Username),
                             new UserClaimModel("aud", account.Username),
@@ -158,7 +159,7 @@ namespace Login
                 tokenStorage.IdToken = idToken;
                 tokenStorage.AccessToken = accessToken;
                 loginResult.WasSuccessful = true;
-                loginResult.SuccessValue = tokenStorage;
+                loginResult.SuccessValue = idToken;
 
                 return loginResult;
             }
