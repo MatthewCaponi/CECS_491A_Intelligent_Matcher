@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import { Image } from 'semantic-ui-react'
+import '../.././../../App'
 
 import _ from 'lodash'
 
@@ -39,7 +40,7 @@ export class FriendsList extends Component {
   async getFriendData(){
 
 
-  await fetch('http://localhost:5000/FriendList/GetAllFriends',
+  await fetch(global.url + 'FriendList/GetAllFriends',
   {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -49,7 +50,7 @@ export class FriendsList extends Component {
   }   
   ); 
 
-  await fetch('http://localhost:5000/FriendList/GetAllRequets',
+  await fetch(global.url + 'FriendList/GetAllRequets',
   {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -59,7 +60,7 @@ export class FriendsList extends Component {
   }   
   ); 
 
-  await fetch('http://localhost:5000/FriendList/GetAllRequetsOutgoing',
+  await fetch(global.url + 'FriendList/GetAllRequetsOutgoing',
   {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -71,7 +72,7 @@ export class FriendsList extends Component {
 
 
 
-  await fetch('http://localhost:5000/FriendList/GetAllBlocks',
+  await fetch(global.url + 'FriendList/GetAllBlocks',
   {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -82,7 +83,7 @@ export class FriendsList extends Component {
   ); 
 
 
-  await fetch('http://localhost:5000/FriendList/GetAllBlocking',
+  await fetch(global.url + 'FriendList/GetAllBlocking',
   {
       method: "POST",
       headers: {'Content-type':'application/json'},
@@ -100,7 +101,7 @@ async approveFriend(friendId){
 
   var IdsModel = {UserId: this.state.userId, FriendId: friendId};
 
-  await fetch('http://localhost:5000/FriendList/ApproveFriend',
+  await fetch(global.url + 'FriendList/ApproveFriend',
   {
   method: "POST",
   headers: {'Content-type':'application/json'},
@@ -120,7 +121,7 @@ async removeFriend(friendId){
 
   var IdsModel = {UserId: this.state.userId, FriendId: friendId};
 
-  await fetch('http://localhost:5000/FriendList/RemoveFriend',
+  await fetch(global.url + 'FriendList/RemoveFriend',
   {
   method: "POST",
   headers: {'Content-type':'application/json'},
@@ -140,7 +141,7 @@ async cancelFriendRequest(friendId){
 
   var IdsModel = {UserId: this.state.userId, FriendId: friendId};
 
-  await fetch('http://localhost:5000/FriendList/CancelFriendRequest',
+  await fetch(global.url + 'FriendList/CancelFriendRequest',
   {
   method: "POST",
   headers: {'Content-type':'application/json'},
@@ -170,7 +171,7 @@ async createFriendRequest(){
 
     var IdsModel = {UserId: this.state.userId, FriendUsername: this.friendusername.value};
 
-    await fetch('http://localhost:5000/FriendList/CreateFriendRequest',
+    await fetch(global.url + 'FriendList/CreateFriendRequest',
     {
     method: "POST",
     headers: {'Content-type':'application/json'},
@@ -226,7 +227,7 @@ async blockFriend(friendId){
 
   var IdsModel = {UserId: this.state.userId, FriendId: friendId};
 
-  await fetch('http://localhost:5000/FriendList/BlockFriend',
+  await fetch(global.url + 'FriendList/BlockFriend',
   {
   method: "POST",
   headers: {'Content-type':'application/json'},
@@ -304,14 +305,12 @@ async search(){
     
   const friendstable = {
     display: 'block',
-    width: '20vw',
 
-    height: '30vh',
+    height: '50vh',
     overflowY: "auto"
   };
   const friendrequests = {
     display: 'block',
-    width: '20vw',
     height: '20vh',
     overflowY: "auto"
   };
@@ -319,7 +318,6 @@ async search(){
   const pendingrequests = {
     display: 'block',
     height: '20vh',
-    width: '20vw',
 
     overflowY: "auto"
   };

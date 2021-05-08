@@ -63,10 +63,6 @@ namespace IntelligentMatcherUI.Controllers
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
             try
             {
                 return Ok(await _publicUserProfileManager.GetUserProfileAsync(userId));
@@ -97,6 +93,10 @@ namespace IntelligentMatcherUI.Controllers
             {
                 return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
 
+            try
+            {
+                return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
+
             }
             catch
             {
@@ -111,13 +111,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
                 await _publicUserProfileManager.EditPublicUserProfileAsync(model);
                 return Ok(true);
             }
@@ -134,13 +127,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.ReportingId.ToString(), true, false, false);
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
                 await _userInteractionService.CreateReportAsync(model);
                 return Ok(true);
             }
@@ -157,13 +143,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
                 string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
                 var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
                 if (status == "Friends" && profileModel.Visibility == "Friends")
@@ -211,6 +190,20 @@ namespace IntelligentMatcherUI.Controllers
             }
 
 
+            try
+            {
+                string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+                FriendStatus friendStatus = new FriendStatus();
+                friendStatus.Status = status;
+                return Ok(friendStatus);
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
+
+
 
         }
 
@@ -219,13 +212,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
                 await _publicUserProfileManager.SetUserOnlineAsync(userId);
                 return Ok(true);
             }
@@ -242,13 +228,6 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
 
                 await _publicUserProfileManager.SetUserOfflineAsync(userId);
                 return Ok(true);
@@ -267,10 +246,6 @@ namespace IntelligentMatcherUI.Controllers
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
             try 
             {
                 NonUserProfileData model = new NonUserProfileData();
