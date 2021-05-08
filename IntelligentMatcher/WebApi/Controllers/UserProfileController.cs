@@ -61,14 +61,22 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<PublicUserProfileModel>> GetUserProfile([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            
-            return Ok(await _publicUserProfileManager.GetUserProfileAsync(userId));
+            try
+            {
+                return Ok(await _publicUserProfileManager.GetUserProfileAsync(userId));
+
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
 
         }
 
@@ -79,14 +87,22 @@ namespace IntelligentMatcherUI.Controllers
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             //var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
+            try
+            {
+                return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
 
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
         }
 
 
@@ -96,7 +112,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -119,7 +135,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.ReportingId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.ReportingId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -142,7 +158,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -175,16 +191,26 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<FriendStatus>> GetFriendStatus([FromBody] DualIdModel model)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
-            FriendStatus friendStatus = new FriendStatus();
-            friendStatus.Status = status;
-            return Ok(friendStatus);
+            try
+            {
+                string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+                FriendStatus friendStatus = new FriendStatus();
+                friendStatus.Status = status;
+                return Ok(friendStatus);
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
+
+
 
         }
 
@@ -194,7 +220,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -217,7 +243,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -239,18 +265,25 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<NonUserProfileData>> GetOtherData([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            NonUserProfileData model = new NonUserProfileData();
-            UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
-            model.Username = userAccountModel.Username;
-            string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
-            model.JoinDate = dates[0];
-            return Ok(model);
+            try 
+            {
+                NonUserProfileData model = new NonUserProfileData();
+                UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
+                model.Username = userAccountModel.Username;
+                string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
+                model.JoinDate = dates[0];
+                return Ok(model);
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
 
         }
 
@@ -271,7 +304,7 @@ namespace IntelligentMatcherUI.Controllers
                     }
                 }
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {

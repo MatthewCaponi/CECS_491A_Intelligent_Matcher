@@ -43,28 +43,44 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllFriends([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
 
-            return Ok(await _friendListManager.GetAllFriendAsync(userId));
+            try
+            {
+                return Ok(await _friendListManager.GetAllFriendAsync(userId));
 
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequets([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            return Ok(await _friendListManager.GetAllRequestsAsync(userId));
+
+            try
+            {
+                return Ok(await _friendListManager.GetAllRequestsAsync(userId));
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+
 
         }
 
@@ -72,13 +88,21 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
+            try
+            {
+                return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+
 
         }
 
@@ -88,7 +112,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -113,7 +137,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -137,7 +161,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -160,7 +184,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -181,13 +205,21 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetMutualFriends([FromBody] DualIdModel ids)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(),  true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(),  true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            return Ok(await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId));
+            try
+            {
+                return Ok(await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId));
+
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
 
         }
 
@@ -196,26 +228,44 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocking([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            return Ok(await _friendListManager.GetAllBlockingUserAsync(userId));
+
+            try
+            {
+                return Ok(await _friendListManager.GetAllBlockingUserAsync(userId));
+
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
 
         }
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            return Ok(await _friendListManager.GetAllBlocksAsync(userId));
+
+            try
+            {
+                return Ok(await _friendListManager.GetAllBlocksAsync(userId));
+
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
 
         }
 
@@ -225,7 +275,7 @@ namespace IntelligentMatcherUI.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
