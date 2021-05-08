@@ -15,6 +15,7 @@ namespace BusinessLayerUnitTests.Archiving
     public class ArchiveManagerIntegrationTests
     {
         private readonly IArchiveService archiveService = new ArchiveService();
+        private readonly IFolderHandlerService folderHandlerService = new FolderHandlerService();
         private readonly ILogService logService = new LogService();
 
         #region Integration Tests
@@ -30,7 +31,7 @@ namespace BusinessLayerUnitTests.Archiving
             var startTime = DateTimeOffset.UtcNow.AddDays(-1);
             var endTime = DateTimeOffset.UtcNow.AddDays(1);
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             // Act
             var result = await archiveManager.ArchiveLogFiles(startTime, endTime);
@@ -48,7 +49,7 @@ namespace BusinessLayerUnitTests.Archiving
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
             logService.Log(message, logTarget, logLevel, this.ToString(), "User_Logging");
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             // Act
             var result = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime));
@@ -69,7 +70,7 @@ namespace BusinessLayerUnitTests.Archiving
             var startTime = DateTimeOffset.UtcNow.AddDays(-1);
             var endTime = DateTimeOffset.UtcNow.AddDays(1);
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             // Act
             var result = await archiveManager.ArchiveLogFilesByCategory(startTime, endTime, category);
@@ -88,7 +89,7 @@ namespace BusinessLayerUnitTests.Archiving
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
             logService.Log(message, logTarget, logLevel, this.ToString(), category);
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             // Act
             var result = await archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
@@ -108,7 +109,7 @@ namespace BusinessLayerUnitTests.Archiving
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
             logService.Log(message, logTarget, logLevel, this.ToString(), "User_Logging");
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             // Act
             var result = await archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(startTime),
@@ -130,7 +131,7 @@ namespace BusinessLayerUnitTests.Archiving
             var startTime = DateTimeOffset.UtcNow.AddDays(-1);
             var endTime = DateTimeOffset.UtcNow.AddDays(1);
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
             var archiveResult = await archiveManager.ArchiveLogFiles(startTime, endTime);
 
             // Act
@@ -149,7 +150,7 @@ namespace BusinessLayerUnitTests.Archiving
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
             logService.Log(message, logTarget, logLevel, this.ToString(), "User_Logging");
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.UtcNow.AddDays(-1),
                 DateTimeOffset.UtcNow.AddDays(1));
@@ -174,7 +175,7 @@ namespace BusinessLayerUnitTests.Archiving
             var startTime = DateTimeOffset.UtcNow.AddDays(-1);
             var endTime = DateTimeOffset.UtcNow.AddDays(1);
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
             var archiveResult = await archiveManager.ArchiveLogFiles(startTime, endTime);
 
             // Act
@@ -193,7 +194,7 @@ namespace BusinessLayerUnitTests.Archiving
             logService.Log(message, logTarget, logLevel, this.ToString(), "Test_Logs");
             logService.Log(message, logTarget, logLevel, this.ToString(), "User_Logging");
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
 
             var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.UtcNow.AddDays(-1),
                 DateTimeOffset.UtcNow.AddDays(1));
@@ -203,6 +204,26 @@ namespace BusinessLayerUnitTests.Archiving
 
             // Assert
             Assert.IsFalse(recoverResult);
+        }
+
+        [DataTestMethod]
+        [DataRow("Recovered", "Test_Logs", "User_Logging")]
+        public async Task GetCategories_GetAllCategories_ReturnList(string sub1, string sub2, string sub3)
+        {
+            // Arrange
+            List<string> expectedResult = new List<string>();
+
+            expectedResult.Add(sub1);
+            expectedResult.Add(sub2);
+            expectedResult.Add(sub3);
+
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
+
+            // Act
+            var actualResult = await archiveManager.GetCategories();
+
+            // Assert
+            Assert.IsTrue(actualResult.Count == expectedResult.Count);
         }
         #endregion
     }

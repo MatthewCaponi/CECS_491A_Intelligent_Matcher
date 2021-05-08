@@ -8,6 +8,24 @@ function Archive(){
     const [startDateState, setStartDateState] = useState("");
     const [endDateState, setEndDateState] = useState("");
     const [categoryState, setCategoryState] = useState("");
+    const [listState, setListState] = useState([]);
+
+    useEffect( () => {
+        fetch('http://localhost:5000/Archive/GetCategories')
+        .then(response => response.json())
+        .then(responseData => {
+            setListState(responseData);
+        });
+    }, [])
+
+        let categoryList = listState.length > 0 && 
+        listState.map((category, i) =>
+        {
+            return(
+                <option key={i} value={category}>{category}</option>
+            )
+        })
+    
 
     function archiveAllHandler(e){
         var ArchiveModel = e;
@@ -35,7 +53,7 @@ function Archive(){
 
     function archiveCategoryHandler(e){
         var ArchiveModel = e;
-        if(e.startDate != "" && e.endDate != "" && e.category != ""){
+        if(e.startDate != "" && e.endDate != "" && e.category != "" && e.category != "none"){
             fetch('http://localhost:5000/Archive/ArchiveLogFilesByCategory',
             {
             method: "POST",
@@ -138,9 +156,13 @@ function Archive(){
                     Enter a Category of Logs to Archive:
                 </label>
             </Grid.Row>
+            
             <Grid.Row>
-                <div class="ui input">
-                    <input type="text" name="category" placeholder="Category" onChange={e => setCategoryState(e.target.value)}/>
+                <div>
+                    <select onChange={e => setCategoryState(e.target.value)}>
+                        <option key = "0" value="none">Select a category</option>
+                        {categoryList}
+                    </select>
                 </div>
             </Grid.Row>
             <Grid.Row>

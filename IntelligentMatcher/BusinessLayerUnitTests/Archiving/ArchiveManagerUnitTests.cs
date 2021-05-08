@@ -14,6 +14,7 @@ namespace BusinessLayerUnitTests.Archiving
     public class ArchiveManagerUnitTests
     {
         private readonly Mock<IArchiveService> mockArchiveService = new Mock<IArchiveService>();
+        private readonly Mock<IFolderHandlerService> mockFolderHandlerService = new Mock<IFolderHandlerService>();
 
         #region Unit Tests
         [DataTestMethod]
@@ -23,7 +24,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Returns(Task.FromResult(true));
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             // Act
             var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
@@ -40,7 +41,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Returns(Task.FromResult(false));
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             // Act
             var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
@@ -57,7 +58,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Throws(new IOException());
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             var actualResult = false;
 
@@ -86,7 +87,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(Task.FromResult(true));
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             // Act
             var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
@@ -103,7 +104,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Returns(Task.FromResult(false));
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             // Act
             var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
@@ -120,7 +121,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Throws(new IOException());
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             var actualResult = false;
 
@@ -149,7 +150,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Returns(Task.FromResult(true));
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             // Act
             var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
@@ -166,7 +167,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Returns(Task.FromResult(false));
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             // Act
             var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
@@ -183,7 +184,7 @@ namespace BusinessLayerUnitTests.Archiving
             // Arrange
             mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Throws(new IOException());
 
-            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object);
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
             var actualResult = false;
 
@@ -203,6 +204,62 @@ namespace BusinessLayerUnitTests.Archiving
                 Assert.IsTrue(actualResult);
             }
 
+        }
+
+        [DataTestMethod]
+        [DataRow("Recovered", "Test_Logs", "User_Logging")]
+        public async Task GetCategories_SubFoldersGet_ReturnList(string sub1, string sub2, string sub3)
+        {
+            // Arrange
+            List<string> expectedResult = new List<string>();
+
+            expectedResult.Add(sub1);
+            expectedResult.Add(sub2);
+            expectedResult.Add(sub3);
+
+            string currentDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+            string targetPath = $"{projectDirectory}\\logs";
+
+            mockFolderHandlerService.Setup(x => x.GetSubFolders(targetPath)).Returns(Task.FromResult(expectedResult));
+
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
+
+            // Act
+            var actualResult = await archiveManager.GetCategories();
+
+            // Assert
+            Assert.IsTrue(actualResult.Count == expectedResult.Count);
+        }
+
+        [TestMethod]
+        public async Task GetCategories_IOException_ReturnException()
+        {
+            // Arrange
+            string currentDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+            string targetPath = $"{projectDirectory}\\logs";
+
+            mockFolderHandlerService.Setup(x => x.GetSubFolders(targetPath)).Throws(new IOException());
+
+            IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
+
+            var catchResult = false;
+
+            // Act
+            try
+            {
+                var actualResult = await archiveManager.GetCategories();
+            }
+            catch (IOException)
+            {
+                catchResult = true;
+            }
+            finally
+            {
+                // Assert
+                Assert.IsTrue(catchResult);
+            }
         }
         #endregion
     }

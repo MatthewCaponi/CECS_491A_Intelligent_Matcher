@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Archiving
@@ -9,5 +10,6 @@ namespace Archiving
         Task<bool> ArchiveLogFilesByCategory(DateTimeOffset startTime, DateTimeOffset endTime, string category);
         Task<bool> DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime);
         Task<bool> RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime);
+        Task<List<string>> GetCategories();
     }
 }

@@ -49,6 +49,7 @@ namespace WebApi
 
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<IArchiveService, ArchiveService>();
+            services.AddTransient<IFolderHandlerService, FolderHandlerService>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();

@@ -164,5 +164,18 @@ namespace WebApi.Controllers
                 return archiveResultModel;
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<string>>> GetCategories()
+        {
+            try
+            {
+                return await _archiveManager.GetCategories();
+            }
+            catch (IOException)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

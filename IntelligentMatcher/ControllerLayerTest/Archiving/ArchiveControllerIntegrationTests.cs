@@ -15,6 +15,7 @@ namespace ControllerLayerTest.Archiving
     public class ArchiveControllerIntegrationTests
     {
         private readonly IArchiveService archiveService = new ArchiveService();
+        private readonly IFolderHandlerService folderHandlerService = new FolderHandlerService();
 
         #region Non-Functional Tests
         [DataTestMethod]
@@ -27,7 +28,7 @@ namespace ControllerLayerTest.Archiving
             archiveModel.StartDate = startTime;
             archiveModel.EndDate = endTime;
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
             ArchiveController archiveController = new ArchiveController(archiveManager);
 
             // Act
@@ -54,7 +55,7 @@ namespace ControllerLayerTest.Archiving
             archiveModel.EndDate = endTime;
             archiveModel.Category = category;
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
             ArchiveController archiveController = new ArchiveController(archiveManager);
 
             // Act
@@ -79,7 +80,7 @@ namespace ControllerLayerTest.Archiving
             archiveModel.StartDate = startTime;
             archiveModel.EndDate = endTime;
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
             ArchiveController archiveController = new ArchiveController(archiveManager);
 
             // Act
@@ -104,12 +105,32 @@ namespace ControllerLayerTest.Archiving
             archiveModel.StartDate = startTime;
             archiveModel.EndDate = endTime;
 
-            IArchiveManager archiveManager = new ArchiveManager(archiveService);
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
             ArchiveController archiveController = new ArchiveController(archiveManager);
 
             // Act
             var timer = Stopwatch.StartNew();
             var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
+            timer.Stop();
+
+            var actualExecutionTime = timer.ElapsedMilliseconds;
+            Debug.WriteLine("Actual Execution Time: " + actualExecutionTime);
+
+            // Assert
+            Assert.IsTrue(actualExecutionTime <= expectedMaxExecutionTime);
+        }
+
+        [DataTestMethod]
+        [DataRow(5000)]
+        public async Task GetCategories_ExecuteLessThan5Seconds(long expectedMaxExecutionTime)
+        {
+            // Arrange
+            IArchiveManager archiveManager = new ArchiveManager(archiveService, folderHandlerService);
+            ArchiveController archiveController = new ArchiveController(archiveManager);
+
+            // Act
+            var timer = Stopwatch.StartNew();
+            var actualResult = await archiveController.GetCategories();
             timer.Stop();
 
             var actualExecutionTime = timer.ElapsedMilliseconds;

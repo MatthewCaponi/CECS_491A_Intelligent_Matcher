@@ -433,6 +433,28 @@ namespace ControllerLayerTest.Archiving
             // Assert
             Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
+
+        [DataTestMethod]
+        [DataRow("Recovered", "Test_Logs", "User_Logging")]
+        public async Task GetCategories_SubFoldersGet_ReturnList(string sub1, string sub2, string sub3)
+        {
+            // Arrange
+            List<string> expectedResult = new List<string>();
+
+            expectedResult.Add(sub1);
+            expectedResult.Add(sub2);
+            expectedResult.Add(sub3);
+
+            mockArchiveManager.Setup(x => x.GetCategories()).Returns(Task.FromResult(expectedResult));
+
+            ArchiveController archiveController = new ArchiveController(mockArchiveManager.Object);
+
+            // Act
+            var actualResult = await archiveController.GetCategories();
+
+            // Assert
+            Assert.IsTrue(actualResult.Value.Count == expectedResult.Count);
+        }
         #endregion
     }
 }

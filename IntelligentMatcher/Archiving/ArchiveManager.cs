@@ -10,10 +10,12 @@ namespace Archiving
     public class ArchiveManager : IArchiveManager
     {
         private readonly IArchiveService _archiveService;
+        private readonly IFolderHandlerService _folderHandlerService;
 
-        public ArchiveManager(IArchiveService archiveService)
+        public ArchiveManager(IArchiveService archiveService, IFolderHandlerService folderHandlerService)
         {
             _archiveService = archiveService;
+            _folderHandlerService = folderHandlerService;
         }
         public async Task<bool> ArchiveLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
@@ -147,6 +149,24 @@ namespace Archiving
                 }
 
                 return await _archiveService.RecoverLogFiles(validZipFiles);
+            }
+            catch (IOException e)
+            {
+                throw new IOException(e.Message, e.InnerException);
+            }
+        }
+
+        public async Task<List<string>> GetCategories()
+        {
+            try
+            {
+                string currentDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+                string logDirectory = $"{projectDirectory}\\logs";
+
+                var categories = await _folderHandlerService.GetSubFolders(logDirectory);
+
+                return categories;
             }
             catch (IOException e)
             {
