@@ -75,7 +75,7 @@ namespace UserAnalysisManager
             List<UserAccountModel> dailyUsers = new List<UserAccountModel>(); //list of daily users 
             foreach(var model in models)
             {
-                if(model.CreationDate == date) 
+                if (model.CreationDate.Month == date.Month && model.CreationDate.Year == date.Year && model.CreationDate.Day == date.Day) //only count the requests in the day. 
                 {
                     dailyUsers.Add(model);
                 }
@@ -168,7 +168,7 @@ namespace UserAnalysisManager
             List<FriendsListJunctionModel> friendcount = new List<FriendsListJunctionModel>();
             foreach (var model in models)
             {
-                if(model.Date == dateTimeOffset) //only count the requests in the day. 
+                if(model.Date.Month == dateTimeOffset.Month && model.Date.Year == dateTimeOffset.Year && model.Date.Day == dateTimeOffset.Day) //only count the requests in the day. 
                 {
                     friendcount.Add(model);
                 }
@@ -298,7 +298,7 @@ namespace UserAnalysisManager
             {
                 if (model.AccountStatus == "Suspended") //if a user account status is suspended enter this 
                 {
-                    if(model.UpdationDate == dateTimeOffset)// if the user status is suspended, figure out if the update to the account model was made that day? 
+                    if (model.UpdationDate.Month == dateTimeOffset.Month && model.UpdationDate.Year == dateTimeOffset.Year && model.UpdationDate.Day == dateTimeOffset.Day) //only count the requests in the day. 
                     {
                         userAccountModels.Add(model);
                     }
@@ -316,7 +316,7 @@ namespace UserAnalysisManager
             {
                 if (model.AccountStatus == "Banned") //if a user account status is banned enter this 
                 {
-                    if (model.UpdationDate == dateTimeOffset)// if the user status is banned, figure out if the update to the account model was made that day? 
+                    if (model.UpdationDate.Month == dateTimeOffset.Month && model.UpdationDate.Year == dateTimeOffset.Year && model.UpdationDate.Day == dateTimeOffset.Day) //only count the requests in the day. 
                     {
                         userAccountModels.Add(model);
                     }
@@ -335,7 +335,7 @@ namespace UserAnalysisManager
             {
                 if (model.AccountStatus == "Shadow-Banned") //if a user account status is shadow banned enter this 
                 {
-                    if (model.UpdationDate == dateTimeOffset)// if the user status is shadow banned, figure out if the update to the account model was made that day? 
+                    if (model.UpdationDate.Month == dateTimeOffset.Month && model.UpdationDate.Year == dateTimeOffset.Year && model.UpdationDate.Day == dateTimeOffset.Day) //only count the requests in the day. 
                     {
                         userAccountModels.Add(model);
                     }
@@ -350,7 +350,7 @@ namespace UserAnalysisManager
             List<DALLoginTrackerModel> logins = new List<DALLoginTrackerModel>();
             foreach(var model in models)
             {
-                if(model.LoginTime == dateTimeOffset)
+                if (model.LoginTime.Month == dateTimeOffset.Month && model.LoginTime.Year == dateTimeOffset.Year && model.LoginTime.Day == dateTimeOffset.Day) //only count the requests in the day. 
                 {
                     logins.Add(model);
                 }
@@ -394,7 +394,7 @@ namespace UserAnalysisManager
             List<DALSearchTrackerModel> logins = new List<DALSearchTrackerModel>();
             foreach (var model in models)
             {
-                if (model.SearchTime== dateTimeOffset)
+                if (model.SearchTime.Month == dateTimeOffset.Month && model.SearchTime.Year == dateTimeOffset.Year && model.SearchTime.Day == dateTimeOffset.Day) //only count the requests in the day. 
                 {
                     logins.Add(model);
                 }

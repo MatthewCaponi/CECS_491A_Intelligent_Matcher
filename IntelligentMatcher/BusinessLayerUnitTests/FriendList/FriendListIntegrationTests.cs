@@ -188,32 +188,10 @@ namespace BusinessLayerUnitTests.FriendList
             publicUserProfileModel.UserId = i;
             await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
 
-            i = 3;
-            userAccountModel.Id = i;
-            userAccountModel.Username = "TestUser" + i;
-            userAccountModel.Password = "" + i;
-            userAccountModel.Salt = "" + i;
-            userAccountModel.EmailAddress = "TestEmailAddress" + i;
-            userAccountModel.AccountType = "TestAccountType" + i;
-            userAccountModel.AccountStatus = "TestAccountStatus" + i;
-            userAccountModel.CreationDate = DateTimeOffset.UtcNow;
-            userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
-
-            await userAccountRepository.CreateAccount(userAccountModel);
-            await cryptographyService.newPasswordEncryptAsync("Password", 1);
-            publicUserProfileModel = new PublicUserProfileModel();
-            publicUserProfileModel.UserId = i;
-            await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
-            userAccountSettingsModel.Id = 1;
-            userAccountSettingsModel.UserId = 2;
-            userAccountSettingsModel.FontSize = 12;
-            userAccountSettingsModel.FontStyle = "Time New Roman";
-            userAccountSettingsModel.ThemeColor = "White";
+     
 
 
 
-
-            await userAccountSettingsManager.CreateUserAccountSettingsAsync(userAccountSettingsModel);
 
         }
 
