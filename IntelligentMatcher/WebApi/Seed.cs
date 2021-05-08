@@ -149,7 +149,7 @@ namespace WebApi
                 userAccountModel.Password = "" + i;
                 userAccountModel.Salt = "" + i;
                 userAccountModel.EmailAddress = "TestEmailAddress" + i;
-                userAccountModel.AccountType = "TestAccountType" + i;
+                userAccountModel.AccountType = "admin" + i;
                 userAccountModel.AccountStatus = "TestAccountStatus" + i;
                 userAccountModel.CreationDate = DateTimeOffset.UtcNow;
                 userAccountModel.UpdationDate = DateTimeOffset.UtcNow;

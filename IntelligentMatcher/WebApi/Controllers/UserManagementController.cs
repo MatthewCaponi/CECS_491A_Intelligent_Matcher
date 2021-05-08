@@ -56,7 +56,8 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<List<WebUserProfileModel>>> GetAllUserProfiles()
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false, false);
+            //var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("user_management:read", "1");
 
             if(!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {

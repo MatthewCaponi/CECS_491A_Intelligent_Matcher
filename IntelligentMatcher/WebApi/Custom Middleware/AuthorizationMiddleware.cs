@@ -33,6 +33,10 @@ namespace WebApi.Custom_Middleware
         public Task Invoke(HttpContext httpContext)
         {
             var headers = httpContext.Request.Headers;
+            if (headers["Scope"].ToString().Contains("id"))
+            {
+                return _next(httpContext);
+            }
             string token = String.Empty;
             if (!headers.ContainsKey("Authorization"))
             {
@@ -40,10 +44,7 @@ namespace WebApi.Custom_Middleware
                 return Task.CompletedTask;
             }
             string createdToken = String.Empty;
-            if (headers["Scope"].ToString().Contains("id"))
-            {
-                return _next(httpContext);
-            }
+            
 
             if (headers["Authorization"].ToString().Contains("Bearer"))
             {

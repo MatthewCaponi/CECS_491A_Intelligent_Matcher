@@ -147,8 +147,6 @@ namespace Login
                             new UserClaimModel("exp", "30"),
                             new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                             new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                          new UserClaimModel("username", account.Username),
-                            new UserClaimModel("emailAddress", account.EmailAddress),
                             new UserClaimModel("firstName", profile.FirstName),
                             new UserClaimModel("lastName", profile.Surname),
                             new UserClaimModel("birthdate", profile.DateOfBirth.ToString()),

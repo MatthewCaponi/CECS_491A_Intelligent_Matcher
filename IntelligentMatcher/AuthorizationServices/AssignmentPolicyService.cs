@@ -9,9 +9,9 @@ namespace UserAccessControlServices
         public List<string> ConfigureAssignmentPolicy(string accountType)
         {
             var scopes = new List<string>();
-            if (accountType == "user")
+            if (accountType == "admin")
             {
-                scopes.Add("user_profile:any:read");
+                scopes.Add("user_management:read");
                 scopes.Add("user_profile:self:write");
                 scopes.Add("messaging_write");
                 scopes.Add("listing.read");

@@ -3,6 +3,7 @@ using ControllerModels;
 using ControllerModels.LoginModels;
 using Exceptions;
 using Login;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -24,11 +25,10 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Login([FromBody] LoginModel loginModel)
+        public async Task<ActionResult<Result<LoginResultModel>>> Login([FromBody] LoginModel loginModel)
         {
-           
                 var loginResultModel = new LoginResultModel();
-
+            
                 //if (loginModel.username == null || loginModel.password == null)
                 //{
                 //    loginResultModel.Success = false;
@@ -41,18 +41,20 @@ namespace WebApi.Controllers
 
                 loginResultModel.Success = loginResult.WasSuccessful;
 
-                //if (loginResultModel.Success)
-                //{
-                //    loginResultModel.Username = loginResult.SuccessValue.Username;
-                //    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
-                //    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
-                //}
-                //else
-                //{
-                //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
-                //}
-
-                return loginResult.SuccessValue;
+            //if (loginResultModel.Success)
+            //{
+            //    loginResultModel.Username = loginResult.SuccessValue.Username;
+            //    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
+            //    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
+            //}
+            //else
+            //{
+            //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
+            //}
+            CookieOptions option = new CookieOptions();
+            option.HttpOnly = false;
+            Response.Cookies.Append("IdToken", loginResult.SuccessValue, option);
+            return Ok("Success");
             
             //catch (SqlCustomException)
             //{

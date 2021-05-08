@@ -1,10 +1,13 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button} from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { AuthorizationContext } from '../../../../Context/AuthorizationContext';
+import jwt from 'jwt-decode';
+import { getCookie } from 'react-use-cookie';
 
 import './Login.css';
+import { get } from 'http';
 
 function Login() {
     const history = useHistory();
@@ -23,7 +26,8 @@ function Login() {
 
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
-    const [token, setToken] = useState(false);
+    const [token, setToken] = useState('');
+
 
     function submitHandler(e){
         var LoginModel = e;
@@ -32,19 +36,26 @@ function Login() {
             fetch('http://localhost:5000/Login/Login',
             {
             method: "POST",
-            headers: {'Content-type':'application/json'},
-            body: JSON.stringify(LoginModel, token)
+            headers: {'Content-type':'application/json',
+            'Accept': 'application/json',
+        'Scope': 'id'},
+        credentials: 'include',
+            body: JSON.stringify(LoginModel)
             }).
             then(r => r.json()).then(res=>{
-                if(res.success){
-                    setToken(token);
-                    localStorage.setItem('userToken', token)
-                    alert("Successful Login for " + res.username);
-                    history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
+                if(res){
+                    console.log("successful");
+                    var cookie = getCookie('IdToken');
+                    console.log(cookie);
+                    const idToken = setToken(jwt(cookie));
+                    console.log(idToken);
+                   alert("Successful Login for " + idToken.username);
+                   history.push("/Home", { username: idToken.username, accountType: idToken.accountType, accountStatus: idToken.accountStatus });
 
                 }
                 else{
-                    alert(res.errorMessage);
+                    alert(res);
+                    console.log(res);
                 }
             }
             );

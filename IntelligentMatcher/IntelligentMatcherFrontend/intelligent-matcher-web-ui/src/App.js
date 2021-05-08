@@ -33,10 +33,6 @@ function App() {
   global.url = "http://localhost:5000/";
 
   return (
-    <AuthorizationContext.Provider
-    value={{
-      token: token
-    }}>
     <div className="box">
       <SiteHeader/>
       <StatusToggle />
@@ -100,8 +96,6 @@ function App() {
         </Switch>
       </Router>
     </div>
-    </AuthorizationContext.Provider>
-      
   );
 }
 

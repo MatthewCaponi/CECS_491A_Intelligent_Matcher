@@ -109,7 +109,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseAuthorizationMiddleware();
+            
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -119,7 +120,9 @@ namespace WebApi
 
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(x => x.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+            app.UseAuthorizationMiddleware();
+            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //app.UseCors(x => x.WithOrigin("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthorization();
