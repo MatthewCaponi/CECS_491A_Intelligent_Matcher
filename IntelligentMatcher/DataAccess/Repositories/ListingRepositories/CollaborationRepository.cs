@@ -43,6 +43,18 @@ namespace DataAccess.Repositories.ListingRepositories
 
         }
 
+        public async Task<int> DeleteCollabListing(int id)
+        {
+            var storedProcedure = "dbo.DeleteCollaboration";
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             Id=id
+
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
+
         public async Task<int> UpdateListing(DALCollaborationModel dALCollaborationModel)
         {
             var storedProcedure = "dbo.EditCollaborationAttributes";
@@ -50,9 +62,9 @@ namespace DataAccess.Repositories.ListingRepositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             DalCollaborationModel_CollaborationType = dALCollaborationModel.CollaborationType,
-                                             DalCollaborationModel_InvolvementType = dALCollaborationModel.InvolvementType,
-                                             DalCollaborationModel_Experience = dALCollaborationModel.Experience
+                                             CollaborationType = dALCollaborationModel.CollaborationType,
+                                             InvolvementType = dALCollaborationModel.InvolvementType,
+                                             Experience = dALCollaborationModel.Experience
 
                                          },
                                          _connectionString.SqlConnectionString) ;

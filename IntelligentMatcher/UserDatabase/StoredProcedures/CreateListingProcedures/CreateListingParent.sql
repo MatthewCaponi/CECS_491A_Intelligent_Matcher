@@ -6,14 +6,15 @@
 	@NumberOfParticipants int,
 	@InPersonOrRemote nvarchar(50),
 	@UserAccountId int,
+	@CreationDate datetime,
 	@Id int output
 
 AS
 begin 
 	set nocount on;
 	insert into dbo.[Listing]([Title],[Details],[City],[State],[NumberOfParticipants],
-	[InPersonOrRemote],[UserAccountID])
-	values (@Title,@Details,@City,@State,@NumberOfParticipants,@InPersonOrRemote,@UserAccountId);
+	[InPersonOrRemote],[UserAccountID],[CreationDate])
+	values (@Title,@Details,@City,@State,@NumberOfParticipants,@InPersonOrRemote,@UserAccountId,@CreationDate);
 
 	set @Id = SCOPE_IDENTITY();
 end;

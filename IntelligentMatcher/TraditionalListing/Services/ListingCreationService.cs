@@ -42,6 +42,8 @@ namespace TraditionalListings.Services
                 newBusinessListingModel.NumberOfParticipants = newBusinessCollaborationModel.NumberOfParticipants;
                 newBusinessListingModel.InPersonOrRemote = newBusinessCollaborationModel.InPersonOrRemote;
                 newBusinessListingModel.UserAccountId = newBusinessCollaborationModel.UserAccountId;
+                newBusinessListingModel.CreationDate = newBusinessCollaborationModel.CreationDate;
+               
 
 
                 DALListingModel dALListingModel = new DALListingModel();
@@ -77,6 +79,7 @@ namespace TraditionalListings.Services
                 newBusinessListingModel.NumberOfParticipants = newBusinessRelationshipModel.NumberOfParticipants;
                 newBusinessListingModel.InPersonOrRemote = newBusinessRelationshipModel.InPersonOrRemote;
                 newBusinessListingModel.UserAccountId = newBusinessRelationshipModel.UserAccountId;
+                newBusinessListingModel.CreationDate = newBusinessRelationshipModel.CreationDate;
 
                 DALListingModel dALListingModel = new DALListingModel();
                 DALRelationshipModel dALRelationshipModel = new DALRelationshipModel();

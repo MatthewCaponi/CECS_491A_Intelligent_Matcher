@@ -7,5 +7,6 @@ namespace DataAccess.Repositories.ListingRepositories
     {
         Task<int> CreateListing(DALTeamModel dalTeamModel);
         Task<int> UpdateListing(DALTeamModel dalTeamModel);
+        Task<int> DeleteTeamListing(int id);
     }
 }

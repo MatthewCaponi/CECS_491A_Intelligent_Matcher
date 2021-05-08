@@ -40,6 +40,17 @@ namespace DataAccess.Repositories.ListingRepositories
 
         }
 
+        public async Task<int> DeleteRelationshipListing(int id)
+        {
+            var storedProcedure = "dbo.DeleteRelationship";
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             Id = id
+
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
 
         public async Task<int> UpdateListing(DALRelationshipModel dalRelationshipModell)
         {
@@ -48,10 +59,10 @@ namespace DataAccess.Repositories.ListingRepositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             DalRelationshipModel_RelationshipType = dalRelationshipModell.RelationshipType,
-                                             DalRelationshipModel_Age = dalRelationshipModell.Age,
-                                             DalRelationshipModel_Interests = dalRelationshipModell.Interests,
-                                             DalRelationshipModel_GenderPreference = dalRelationshipModell.GenderPreference
+                                             RelationshipType = dalRelationshipModell.RelationshipType,
+                                             Age = dalRelationshipModell.Age,
+                                             Interests = dalRelationshipModell.Interests,
+                                             GenderPreference = dalRelationshipModell.GenderPreference
 
                                          },
                                          _connectionString.SqlConnectionString);

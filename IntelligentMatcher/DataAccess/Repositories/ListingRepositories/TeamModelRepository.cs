@@ -39,8 +39,18 @@ namespace DataAccess.Repositories.ListingRepositories
 
 
         }
-        
-       
+
+        public async Task<int> DeleteTeamListing(int id)
+        {
+            var storedProcedure = "dbo.DeleteTeam";
+            return await _dataGateway.Execute(storedProcedure,
+                                         new
+                                         {
+                                             Id = id
+
+                                         },
+                                         _connectionString.SqlConnectionString);
+        }
 
         public async Task<int> UpdateListing(DALTeamModel dalTeamModel)
         {
@@ -49,10 +59,10 @@ namespace DataAccess.Repositories.ListingRepositories
             return await _dataGateway.Execute(storedProcedure,
                                          new
                                          {
-                                             DalTeamModel_TeamType = dalTeamModel.TeamType,
-                                             DalTeamModel_GameType=dalTeamModel.GameType,
-                                             DalTeamModel_Platform = dalTeamModel.Platform,
-                                             DalTeamModel_Experience = dalTeamModel.Experience,
+                                             TeamType = dalTeamModel.TeamType,
+                                             GameType=dalTeamModel.GameType,
+                                             Platform = dalTeamModel.Platform,
+                                             Experience = dalTeamModel.Experience,
 
                                          },
                                          _connectionString.SqlConnectionString);

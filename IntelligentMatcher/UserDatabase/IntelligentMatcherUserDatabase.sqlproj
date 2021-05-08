@@ -83,6 +83,9 @@
     <Folder Include="StoredProcedures\EditListingProcedures" />
     <Folder Include="StoredProcedures\AccountVerification" />
     <Folder Include="Snapshots" />
+    <Folder Include="StoredProcedures\DeleteListings" />
+    <Folder Include="StoredProcedures\ListingSearchTracker" />
+    <Folder Include="StoredProcedures\UserAnalysisTrackers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -266,7 +269,6 @@
     <Build Include="StoredProcedures\UserAccessControl\AccessPolicyPairing\AccessPolicyPairing_Delete_ById.sql" />
     <Build Include="StoredProcedures\TestCleaner_Delete_All.sql" />
     <Build Include="Dating.sql" />
-    <Build Include="StoredProcedures\DeleteListing.sql" />
     <Build Include="StoredProcedures\CreateListingProcedures\CreateCollaborationListing.sql" />
     <Build Include="StoredProcedures\CreateListingProcedures\CreateDatingListing.sql" />
     <Build Include="StoredProcedures\CreateListingProcedures\CreateListingParent.sql" />
@@ -285,6 +287,20 @@
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Get_All.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Delete_ById.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Create.sql" />
+    <Build Include="StoredProcedures\DeleteListings\DeleteCollaboration.sql" />
+    <Build Include="StoredProcedures\DeleteListings\DeleteListing.sql" />
+    <Build Include="StoredProcedures\DeleteListings\DeleteRelationship.sql" />
+    <Build Include="StoredProcedures\DeleteListings\DeleteTeam.sql" />
+    <Build Include="ListingSearchTracker_1.sql" />
+    <Build Include="StoredProcedures\UserAnalysisTrackers\LoginTracker_Create.sql" />
+    <Build Include="StoredProcedures\UserAnalysisTrackers\LoginTracker_DeletebyId.sql" />
+    <Build Include="StoredProcedures\UserAnalysisTrackers\LoginTracker_GetAll.sql" />
+    <Build Include="StoredProcedures\UserAnalysisTrackers\PageVisitTracker_Create.sql" />
+    <Build Include="StoredProcedures\UserAnalysisTrackers\PageVisitTracker_DeletebyId.sql" />
+    <Build Include="StoredProcedures\UserAnalysisTrackers\PageVisitTracker_GetAll.sql" />
+    <Build Include="StoredProcedures\ListingSearchTracker\SearchTracker_Create.sql" />
+    <Build Include="StoredProcedures\ListingSearchTracker\SearchTracker_DeletebyId.sql" />
+    <Build Include="StoredProcedures\ListingSearchTracker\Search_Tracker_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

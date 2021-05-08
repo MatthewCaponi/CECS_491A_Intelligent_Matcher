@@ -7,5 +7,6 @@ namespace DataAccess.Repositories.ListingRepositories
     {
         Task<int> CreateListing(DALCollaborationModel dalCollaborationModel);
         Task<int> UpdateListing(DALCollaborationModel dALCollaborationModel);
+        Task<int> DeleteCollabListing(int id);
     }
 }

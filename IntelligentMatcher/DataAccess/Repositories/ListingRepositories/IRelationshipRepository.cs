@@ -7,5 +7,7 @@ namespace DataAccess.Repositories.ListingRepositories
     {
         Task<int> CreateListing(DALRelationshipModel dalRelationshipModel);
         Task<int> UpdateListing(DALRelationshipModel dalRelationshipModell);
+        Task<int> DeleteRelationshipListing(int id);
+
     }
 }

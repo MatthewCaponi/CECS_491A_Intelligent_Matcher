@@ -35,7 +35,15 @@ function Login() {
         body: JSON.stringify(LoginModel)
         }).
         then(r => r.json()).then(res=>{
-            if(res.success){
+            if(res.success)
+            {
+                var model =  {Username: res.username};
+                fetch("http://localhost:5000/TrackData/TrackLogin", {
+                    method: "POST",
+                    headers: {'Content-type':'application/json'},
+                    body: JSON.stringify(model)
+                    });
+                
                 alert("Successful Login for " + res.username);
                 history.push("/Home", { username: res.username, accountType: res.accountType, accountStatus: res.accountStatus });
 

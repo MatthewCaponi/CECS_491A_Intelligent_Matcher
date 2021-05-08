@@ -5,6 +5,7 @@ using DataAccess.Repositories.ListingRepositories;
 using DataAccessUnitTestes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
+using Models.DALListingModels;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,49 @@ namespace BusinessLayerUnitTests.TraditionalListing
         [TestCleanup()]
         public async Task CleanUp()
         {
+           
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            ITraditionalListingSearchRepository traditionalListingSearchRepository = new TraditionalListingSearchRepository(dataGateway,connectionString);
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ICollaborationRepository collaborationRepository = new CollaborationRepository(dataGateway, connectionString);
+            IRelationshipRepository relationshipRepository = new RelationshipRepository(dataGateway, connectionString);
+            ITeamModelRepository teamModelRepository = new TeamModelRepository(dataGateway, connectionString);
+            IEnumerable<DALListingModel> models = await traditionalListingSearchRepository.GetAllListings();
+
+            foreach(var model in models)
+            {
+                await listingRepository.DeleteListing(model.Id);
+            }
+
+
+            IEnumerable<DALListingModel> cmodels = await traditionalListingSearchRepository.GetAllCollaborationListings();
+            foreach (var model in cmodels)
+            {
+                await collaborationRepository.DeleteCollabListing(model.Id);
+            }
+
+            //IEnumerable<DALListingModel> rmodels = await traditionalListingSearchRepository.GetAllRelationshipListings();
+            //foreach (var model in rmodels)
+            //{
+            //    await relationshipRepository.DeleteRelationshipListing(model.Id);
+            //}
+
+
+            //IEnumerable<DALListingModel> tmodels = await traditionalListingSearchRepository.GetAllTeamListings();
+            //foreach (var model in tmodels)
+            //{
+            //    await teamModelRepository.DeleteTeamListing(model.Id);
+            //}
+
+
             await DataAccessTestHelper.ReseedAsync("Listing", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("Collaboration", 0, connectionString, dataGateway);
             await DataAccessTestHelper.ReseedAsync("Relationship", 0, connectionString, dataGateway);
         }
+
+
+
 
         [DataTestMethod]
         [DataRow(1, "TestTitle", "TestDetails", "TestCity", "TestState", 5, "InPersonOrRemote", 123, "CollaborationType", "InvolvementType", "Experience")]
@@ -36,7 +74,7 @@ namespace BusinessLayerUnitTests.TraditionalListing
            , string InvolvementType, string experience)
         {
             //arrange- setup variables 
-            expectedID = 1;
+           
             BusinessCollaborationModel newBusinessCollaborationModel = new BusinessCollaborationModel();
             BusinessListingModel newBusinessListingModel = new BusinessListingModel();
             ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new SQLServerGateway(), new ConnectionStringData()),
@@ -62,13 +100,13 @@ namespace BusinessLayerUnitTests.TraditionalListing
         }
 
         [DataTestMethod]
-        [DataRow(1, "TestTitle", "TestDetails", "TestCity", "TestState", 5, "InPersonOrRemote", 124, "RelationshipType", 28, "Interest",
+        [DataRow(2, "TestTitle", "TestDetails", "TestCity", "TestState", 5, "InPersonOrRemote", 124, "RelationshipType", 28, "Interest",
           "GenderPreference")]
         public async Task CreateListing_ModelIsRelationship_ReturnsDALListingModel(int expectedID, string title, string detail, string city, string state,
          int numberOfPeople, string inperson, int acccountId, string relationship, int age, string interest, string gender)
         {
             //arrange- setup variables 
-            expectedID = 1;
+          
             BusinessRelationshipModel newBusinessRelationshipModel = new BusinessRelationshipModel();
             BusinessListingModel newBusinessListingModel = new BusinessListingModel();
             ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new SQLServerGateway(), new ConnectionStringData()),
@@ -95,13 +133,13 @@ namespace BusinessLayerUnitTests.TraditionalListing
         }
 
         [DataTestMethod]
-        [DataRow(1, "TestTitle", "TestDetails", "TestCity", "TestState", 5, "InPersonOrRemote", 124, "TestTeamType","TestGameType","TestPlatform",
+        [DataRow(3, "TestTitle", "TestDetails", "TestCity", "TestState", 5, "InPersonOrRemote", 124, "TestTeamType","TestGameType","TestPlatform",
             "TestExperience")]
         public async Task CreateListing_ModelIsTeam_ReturnsDALListingModel(int expectedID, string title, string detail, string city, string state,
         int numberOfPeople, string inperson, int acccountId, string teamType,string gameType,string platform,string experience )
         {
             //arrange- setup variables 
-            expectedID = 1;
+       
             BusinessTeamModel newBusinessTeamModel = new BusinessTeamModel();
             BusinessListingModel newBusinessListingModel = new BusinessListingModel();
             ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new SQLServerGateway(), new ConnectionStringData()),

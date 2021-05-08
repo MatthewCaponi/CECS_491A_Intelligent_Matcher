@@ -28,6 +28,11 @@ using TraditionalListings.Services;
 using TraditionalListings.Managers;
 using Models.DALListingModels;
 using Logging;
+using DataAccess.Repositories.LoginTrackerRepositories;
+using DataAccess.Repositories.PageVisitTrackerRepositories;
+using DataAccess.Repositories.SearchTrackerRepositories;
+using UserAnalysisManager;
+using TraditionalListingSearch;
 
 namespace WebApi
 {
@@ -65,13 +70,17 @@ namespace WebApi
             services.AddTransient<IRelationshipRepository, RelationshipRepository>();
             services.AddTransient<IDatingRepository, DatingRepository>();
             services.AddTransient<ITeamModelRepository, TeamModelRepository>();
-            services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
+            //services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
+            services.AddTransient<ILoginTrackerRepo, LoginTrackerRepo>();
+            services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
+            services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
+
 
 
             services.AddTransient<IListingCreationService, ListingCreationService>();
             services.AddTransient<IListingDeletionService, ListingDeletionService>();
             services.AddTransient<IListingUpdationService, ListingUpdationService>();
-            services.AddTransient<IListingGetterService, ListingGetterService>();
+            //services.AddTransient<IListingGetterService, ListingGetterService>();
 
            
 
@@ -102,9 +111,12 @@ namespace WebApi
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
+            //services.AddScoped<IListingSearchManager, ListingSearchManager>();
+
 
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
+            services.AddScoped<IUserAnalysisService,UserAnalysisService>();
 
             services.AddScoped<IListingsManager, ListingsManager>();
 

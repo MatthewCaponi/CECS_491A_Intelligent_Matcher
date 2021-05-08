@@ -11,7 +11,7 @@ namespace TraditionalListingSearch
 {
     public class ListingSearchManager : IListingSearchManager
     {
-        private ListingGetterService _listingGetterService;
+        private IListingGetterService _listingGetterService;
 
 
         public ListingSearchManager(ListingGetterService listingGetterService)

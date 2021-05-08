@@ -29,7 +29,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<DALCollaborationModel>> GetAllCollaborationListings()
         {
-            string storedProcedure = "dbo.ListingSearch_GetAllCollaborationListing";
+            string storedProcedure = "dbo.ListingSearch_GetAllCollaborationListings";
             return await _dataGateway.LoadData<DALCollaborationModel, dynamic>(storedProcedure,
                                                                                new { },
                                                                                _connectionString.SqlConnectionString);
