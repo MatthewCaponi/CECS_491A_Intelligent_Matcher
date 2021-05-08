@@ -211,10 +211,6 @@ namespace Services.Archiving
 
                     return true;
                 });
-                if (zipFiles == null)
-                {
-                    return false;
-                }
 
                 return recoverResult;
             }
