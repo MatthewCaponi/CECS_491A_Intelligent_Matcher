@@ -87,7 +87,7 @@ namespace BusinessLayerUnitTests.UserAnalysisDashboard
                 model.AccountStatus = "Suspended";
                 await userAccountRepository.UpdateAccountStatus(model.Id, model.AccountStatus);
 
-               
+
 
             }
 
@@ -183,6 +183,141 @@ namespace BusinessLayerUnitTests.UserAnalysisDashboard
             }
 
         }
+
+
+
+        [DataTestMethod]
+        public async Task GetALLUserRegistrationCount_Countaccounts()
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ILoginTrackerRepo loginTrackerRepo = new LoginTrackerRepo(dataGateway, connectionString);
+            IPageVisitTrackerRepo pageVisitTrackerRepo = new PageVisitTrackerRepo(dataGateway, connectionString);
+            ISearchTrackerRepo searchTrackerRepo = new SearchTrackerRepo(dataGateway, connectionString);
+            IUserAnalysisService userAnalysisService = new UserAnalysisService(friendListRepo, listingRepository, userAccountRepository,
+        loginTrackerRepo, pageVisitTrackerRepo, friendRequestListRepo, searchTrackerRepo);
+
+
+            int count = await userAnalysisService.GetALLUserRegistrationCount();
+            if (count != 20)
+            {
+                Assert.IsTrue(false);
+            }
+            Assert.IsTrue(true);
+        }
+
+
+        [DataTestMethod]
+        public async Task GetALLUserRegistrationCount_Day_Countaccounts()
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ILoginTrackerRepo loginTrackerRepo = new LoginTrackerRepo(dataGateway, connectionString);
+            IPageVisitTrackerRepo pageVisitTrackerRepo = new PageVisitTrackerRepo(dataGateway, connectionString);
+            ISearchTrackerRepo searchTrackerRepo = new SearchTrackerRepo(dataGateway, connectionString);
+            IUserAnalysisService userAnalysisService = new UserAnalysisService(friendListRepo, listingRepository, userAccountRepository,
+        loginTrackerRepo, pageVisitTrackerRepo, friendRequestListRepo, searchTrackerRepo);
+
+
+            int count = await userAnalysisService.GetALLUserRegistrationCount_Day(DateTimeOffset.UtcNow);
+            if (count != 20)
+            {
+                Assert.IsTrue(false);
+            }
+            Assert.IsTrue(true);
+        }
+
+
+        [DataTestMethod]
+        public async Task GetALLUserRegistrationCount_Year_Countaccounts()
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ILoginTrackerRepo loginTrackerRepo = new LoginTrackerRepo(dataGateway, connectionString);
+            IPageVisitTrackerRepo pageVisitTrackerRepo = new PageVisitTrackerRepo(dataGateway, connectionString);
+            ISearchTrackerRepo searchTrackerRepo = new SearchTrackerRepo(dataGateway, connectionString);
+            IUserAnalysisService userAnalysisService = new UserAnalysisService(friendListRepo, listingRepository, userAccountRepository,
+        loginTrackerRepo, pageVisitTrackerRepo, friendRequestListRepo, searchTrackerRepo);
+
+
+            int count = await userAnalysisService.GetALLUserRegistrationCount_Year(DateTimeOffset.UtcNow.Year);
+            if (count != 20)
+            {
+                Assert.IsTrue(false);
+            }
+            Assert.IsTrue(true);
+        }
+
+        [DataTestMethod]
+        public async Task GetALLUserRegistrationCount_Month_Countaccounts()
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ILoginTrackerRepo loginTrackerRepo = new LoginTrackerRepo(dataGateway, connectionString);
+            IPageVisitTrackerRepo pageVisitTrackerRepo = new PageVisitTrackerRepo(dataGateway, connectionString);
+            ISearchTrackerRepo searchTrackerRepo = new SearchTrackerRepo(dataGateway, connectionString);
+            IUserAnalysisService userAnalysisService = new UserAnalysisService(friendListRepo, listingRepository, userAccountRepository,
+        loginTrackerRepo, pageVisitTrackerRepo, friendRequestListRepo, searchTrackerRepo);
+
+
+            int count = await userAnalysisService.GetALLUserRegistrationCount_Month(DateTimeOffset.UtcNow.Month, DateTimeOffset.UtcNow.Year);
+            if (count != 20)
+            {
+                Assert.IsTrue(false);
+            }
+            Assert.IsTrue(true);
+        }
+
+        [DataTestMethod]
+        public async Task GetAllUsersRegisteredToday_Countaccounts()
+        {
+            IDataGateway dataGateway = new SQLServerGateway();
+            IConnectionStringData connectionString = new ConnectionStringData();
+            IFriendListRepo friendListRepo = new FriendListRepo(dataGateway, connectionString);
+            IFriendRequestListRepo friendRequestListRepo = new FriendRequestListRepo(dataGateway, connectionString);
+            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
+            IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
+            IPublicUserProfileRepo publicUserProfileRepo = new PublicUserProfileRepo(dataGateway, connectionString);
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ILoginTrackerRepo loginTrackerRepo = new LoginTrackerRepo(dataGateway, connectionString);
+            IPageVisitTrackerRepo pageVisitTrackerRepo = new PageVisitTrackerRepo(dataGateway, connectionString);
+            ISearchTrackerRepo searchTrackerRepo = new SearchTrackerRepo(dataGateway, connectionString);
+            IUserAnalysisService userAnalysisService = new UserAnalysisService(friendListRepo, listingRepository, userAccountRepository,
+        loginTrackerRepo, pageVisitTrackerRepo, friendRequestListRepo, searchTrackerRepo);
+
+
+            int count = await userAnalysisService.GetAllUsersRegisteredToday();
+            if (count != 20)
+            {
+                Assert.IsTrue(false);
+            }
+            Assert.IsTrue(true);
+        }
+
         //[DataTestMethod]
         //[DataRow("Suspended",  "3 / 28 / 2007")]
         //public async Task TrackSuspendedAccountsByDay_Countaccounts(string status,DateTimeOffset dateTimeOffset)
@@ -235,7 +370,7 @@ namespace BusinessLayerUnitTests.UserAnalysisDashboard
 
 
     }//end of class
-  
 
-  
+
+
 }
