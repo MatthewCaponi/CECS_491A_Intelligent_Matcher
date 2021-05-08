@@ -42,16 +42,16 @@ namespace WebApi.Controllers
 
                 loginResultModel.Success = loginResult.WasSuccessful;
 
-                if (loginResultModel.Success)
-                {
-                    loginResultModel.Username = loginResult.SuccessValue.Username;
-                    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
-                    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
-                }
-                else
-                {
-                    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
-                }
+                //if (loginResultModel.Success)
+                //{
+                //    loginResultModel.Username = loginResult.SuccessValue.Username;
+                //    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
+                //    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
+                //}
+                //else
+                //{
+                //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
+                //}
 
                 return loginResultModel;
             }

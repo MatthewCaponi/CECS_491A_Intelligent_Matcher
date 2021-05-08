@@ -5,6 +5,6 @@ namespace AuthenticationSystem
 {
     public interface IAttributeAssignmentService
     {
-        List<string> GetScopes(string token, AssignmentPolicyModel assignmentPolicyModel);
+        List<string> GetScopes(string token);
     }
 }
