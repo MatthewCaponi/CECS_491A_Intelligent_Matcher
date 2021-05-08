@@ -44,56 +44,56 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<PublicUserProfileModel> GetUserProfile([FromBody] int userId)
+        public async Task<ActionResult<PublicUserProfileModel>> GetUserProfile([FromBody] int userId)
         {
 
-            return await _publicUserProfileManager.GetUserProfileAsync(userId);
+            return Ok(await _publicUserProfileManager.GetUserProfileAsync(userId));
 
         }
 
         [HttpPost]
-        public async Task<IEnumerable<DALListingModel>> GetUserListings([FromBody] int userId)
+        public async Task<ActionResult<IEnumerable<DALListingModel>>> GetUserListings([FromBody] int userId)
         {
 
-            return await _traditionalListingSearchRepository.GetAllListingsByUserId(userId);
+            return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
 
         }
 
 
         [HttpPost]
-        public async Task<bool> SaveUserProfile([FromBody] PublicUserProfileModel model)
+        public async Task<ActionResult<bool>> SaveUserProfile([FromBody] PublicUserProfileModel model)
         {
             try
             {
                 await _publicUserProfileManager.EditPublicUserProfileAsync(model);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
 
         }
 
         [HttpPost]
-        public async Task<bool> ReportUser([FromBody] UserReportsModel model)
+        public async Task<ActionResult<bool>> ReportUser([FromBody] UserReportsModel model)
         {
             try
             {
                 await _userInteractionService.CreateReportAsync(model);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
         }
 
 
         [HttpPost]
-        public async Task<bool> GetViewStatus([FromBody] DualIdModel model)
+        public async Task<ActionResult<bool>> GetViewStatus([FromBody] DualIdModel model)
         {
             try
             {
@@ -101,19 +101,19 @@ namespace IntelligentMatcherUI.Controllers
                 var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
                 if (status == "Friends" && profileModel.Visibility == "Friends")
                 {
-                    return true;
+                    return Ok(true);
 
                 }
                 if (profileModel.Visibility == "Public")
                 {
-                    return true;
+                    return Ok(true);
 
                 }
-                return false;
+                return Ok(false);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
 
@@ -121,50 +121,50 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<FriendStatus> GetFriendStatus([FromBody] DualIdModel model)
+        public async Task<ActionResult<FriendStatus>> GetFriendStatus([FromBody] DualIdModel model)
         {
 
             string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
             FriendStatus friendStatus = new FriendStatus();
             friendStatus.Status = status;
-            return friendStatus;
+            return Ok(friendStatus);
 
         }
 
         [HttpPost]
-        public async Task<bool> SetOnline([FromBody] int userId)
+        public async Task<ActionResult<bool>> SetOnline([FromBody] int userId)
         {
             try
             {
                 await _publicUserProfileManager.SetUserOnlineAsync(userId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
 
         }
 
         [HttpPost]
-        public async Task<bool> SetOffline([FromBody] int userId)
+        public async Task<ActionResult<bool>> SetOffline([FromBody] int userId)
         {
             try
             {
                 await _publicUserProfileManager.SetUserOfflineAsync(userId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
 
         }
 
         [HttpPost]
-        public async Task<NonUserProfileData> GetOtherData([FromBody] int userId)
+        public async Task<ActionResult<NonUserProfileData>> GetOtherData([FromBody] int userId)
         {
 
             NonUserProfileData model = new NonUserProfileData();
@@ -172,12 +172,12 @@ namespace IntelligentMatcherUI.Controllers
             model.Username = userAccountModel.Username;
             string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
             model.JoinDate = dates[0];
-            return model;
+            return Ok(model);
 
         }
 
         [HttpPost]
-        public async Task<bool> UploadPhoto()
+        public async Task<ActionResult<bool>> UploadPhoto()
         {
 
 
@@ -211,23 +211,23 @@ namespace IntelligentMatcherUI.Controllers
                         model.UserId = userId;
                         model.Photo = newFileName;
                         await _publicUserProfileManager.EditUserProfilePictureAsync(model);
-                        return true;
+                        return Ok(true);
                     }
                     else
                     {
-                        return false;
+                        return Ok(false);
                     }
 
                 }
                 else
                 {
 
-                    return false;
+                    return Ok(false);
                 }
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
          

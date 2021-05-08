@@ -4,6 +4,7 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
 import UserListings from "../Components/UserListings";
+import '../.././../../App'
 
 import _ from 'lodash'
 
@@ -34,7 +35,7 @@ export class UserProfile extends Component {
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetViewStatus',
+    await fetch(global.url + 'UserProfile/GetViewStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -45,7 +46,7 @@ export class UserProfile extends Component {
     }   
     ); 
 
-    await fetch('http://localhost:5000/UserProfile/GetOtherData',
+    await fetch(global.url + 'UserProfile/GetOtherData',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -57,7 +58,7 @@ export class UserProfile extends Component {
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},

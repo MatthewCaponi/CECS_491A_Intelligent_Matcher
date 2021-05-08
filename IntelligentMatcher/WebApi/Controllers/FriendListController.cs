@@ -28,101 +28,133 @@ namespace IntelligentMatcherUI.Controllers
 
 
         [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetAllFriends([FromBody] int userId)
+        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllFriends([FromBody] int userId)
         {
 
-            return await _friendListManager.GetAllFriendAsync(userId);
+            return Ok(await _friendListManager.GetAllFriendAsync(userId));
 
         }
 
         [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetAllRequets([FromBody] int userId)
+        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequets([FromBody] int userId)
         {
 
-            return await _friendListManager.GetAllRequestsAsync(userId);
+            return Ok(await _friendListManager.GetAllRequestsAsync(userId));
 
         }
 
         [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetAllRequetsOutgoing([FromBody] int userId)
+        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
         {
 
-            return await _friendListManager.GetAllRequestsOutgoingAsync(userId);
+            return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
 
         }
 
         [HttpPost]
-        public async Task<bool> RemoveFriend([FromBody] DualIdModel ids)
+        public async Task<ActionResult<bool>> RemoveFriend([FromBody] DualIdModel ids)
         {
+            try
+            {
+                await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
 
-             await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
-            return true;
+            }
+
         }
 
 
 
         [HttpPost]
-        public async Task<bool> BlockFriend([FromBody] DualIdModel ids)
+        public async Task<ActionResult<bool>> BlockFriend([FromBody] DualIdModel ids)
         {
+            try
+            {
+                await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
 
-            await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
-            return true;
-        }
-
-
-        [HttpPost]
-        public async Task<bool> ApproveFriend([FromBody] DualIdModel ids)
-        {
-
-            await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
-            return true;
-        }
-
-        [HttpPost]
-        public async Task<bool> CancelFriendRequest([FromBody] DualIdModel ids)
-        {
-
-            await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
-            return true;
-        }
-
-        [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetMutualFriends([FromBody] DualIdModel ids)
-        {
-
-            return await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId);
+            }
 
         }
 
 
         [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetAllBlocking([FromBody] int userId)
+        public async Task<ActionResult<bool>> ApproveFriend([FromBody] DualIdModel ids)
+        {
+            try
+            {
+                await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<bool>> CancelFriendRequest([FromBody] DualIdModel ids)
+        {
+            try
+            {
+                await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetMutualFriends([FromBody] DualIdModel ids)
         {
 
-            return await _friendListManager.GetAllBlockingUserAsync(userId);
+            return Ok(await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId));
+
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocking([FromBody] int userId)
+        {
+
+            return Ok(await _friendListManager.GetAllBlockingUserAsync(userId));
 
         }
         [HttpPost]
-        public async Task<IEnumerable<FriendListModel>> GetAllBlocks([FromBody] int userId)
+        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
         {
 
-            return await _friendListManager.GetAllBlocksAsync(userId);
+            return Ok(await _friendListManager.GetAllBlocksAsync(userId));
 
         }
 
         [HttpPost]
-        public async Task<bool> CreateFriendRequest([FromBody] IdUsernameModel ids)
+        public async Task<ActionResult<bool>> CreateFriendRequest([FromBody] IdUsernameModel ids)
         {
             try
             {
                 UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
                 int friendId = model.Id;
                 await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
         }
