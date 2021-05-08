@@ -50,7 +50,6 @@ namespace WebApi
             services.AddControllers();
             services.AddSingleton(Configuration);
 
-
             services.AddTransient<ILogService, LogService>();
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
@@ -77,15 +76,10 @@ namespace WebApi
 
             services.AddTransient<ICryptographyService, CryptographyService>();
             services.AddTransient<ILoginAttemptsService, LoginAttemptsService>();
-
             services.AddTransient<IMessagesRepo, MessagesRepo>();
             services.AddTransient<IChannelsRepo, ChannelsRepo>();
             services.AddTransient<IUserChannelsRepo, UserChannelsRepo>();
-
             services.AddTransient<ITraditionalListingSearchRepository, TraditionalListingSearchRepository>();
-
-
-
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IFriendListManager, FriendListManager>();
             services.AddTransient<IPublicUserProfileManager, PublicUserProfileManager>();
@@ -100,11 +94,7 @@ namespace WebApi
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
-
-            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
