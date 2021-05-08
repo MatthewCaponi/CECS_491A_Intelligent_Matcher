@@ -50,6 +50,10 @@ namespace IntelligentMatcherUI.Controllers
                 return StatusCode(403);
             }
 
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
 
             try
             {
@@ -82,21 +86,19 @@ namespace IntelligentMatcherUI.Controllers
                 return StatusCode(404);
             }
 
-            try
-            {
-                return Ok(await _friendListManager.GetAllRequestsAsync(userId));
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
-
 
         }
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
         {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
             try
             {
                 return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
@@ -114,6 +116,13 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -132,6 +141,13 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -149,6 +165,13 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -165,6 +188,13 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
                 return Ok(true);
             }
@@ -182,6 +212,10 @@ namespace IntelligentMatcherUI.Controllers
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(),  true, false, false);
 
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
             try
             {
                 return Ok(await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId));
@@ -201,6 +235,10 @@ namespace IntelligentMatcherUI.Controllers
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
 
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
 
             try
             {
@@ -216,7 +254,13 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
         {
- 
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
+
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
 
             try
             {
@@ -235,7 +279,13 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-  
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
                 int friendId = model.Id;
                 await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
