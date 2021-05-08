@@ -1,14 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
-    <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
-    <ProjectReference Include="..\Cross-Cutting Concerns\Cross-Cutting Concerns.csproj" />
-    <ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
-  </ItemGroup>
 
 </Project>

@@ -1,130 +1,34 @@
 ﻿using BusinessModels.UserAccessControl;
-using Cross_Cutting_Concerns;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace IdentityServices
 {
-    public class TokenService : ITokenService
+    public class TokenService
     {
-        private readonly IConfiguration _configuration;
-        private readonly ITokenBuilderService _tokenBuilderService;
-
-        public TokenService(IConfiguration configuration, ITokenBuilderService tokenBuilderService)
+       public string CreateIdToken()
         {
-            _configuration = configuration;
-            _tokenBuilderService = tokenBuilderService;
-        }
-        public string CreateToken(List<UserClaimModel> userClaims)
-        {
-            var jwtPayloadModel = new JwtPayloadModel();
-
-            foreach (var userClaim in userClaims)
-            {
-                switch (userClaim.Type)
-                {
-                    case "iss":
-                        jwtPayloadModel.Issuer = new UserClaimModel("iss", userClaim.Value);
-                        break;
-
-                    case "sub":
-                        jwtPayloadModel.Subject = new UserClaimModel("sub", userClaim.Value);
-                        break;
-
-                    case "aud":
-                        jwtPayloadModel.Audience = new UserClaimModel("aud", userClaim.Value);
-                        break;
-
-                    case "exp":
-                        jwtPayloadModel.ExpirationTime = new UserClaimModel("exp", userClaim.Value);
-                        break;
-
-                    case "nbf":
-                        jwtPayloadModel.NotBefore = new UserClaimModel("nbf", userClaim.Value);
-                        break;
-
-                    case "iat":
-                        jwtPayloadModel.IssuedAt = new UserClaimModel("iat", userClaim.Value);
-                        break;
-
-                    default:
-                        {
-                            jwtPayloadModel.PublicClaims.Add(userClaim);
-                        }
-                        break;
-                }
-            }
-
-            var token = _tokenBuilderService.CreateToken(jwtPayloadModel);
-
-            return token;
+            return null;
         }
 
-        public bool ValidateToken(string token)
+        public string CreateAccessToken()
         {
-            var tokenhandler = new JwtSecurityTokenHandler();
-            var publicKeyEncrypted = _configuration["PublicKey"];
-            var publicKey = Convert.FromBase64String(publicKeyEncrypted);
-            var keySize = int.Parse(_configuration["SecurityKeySettings:KeySize"]);
-
-            using RSA rsa = RSA.Create(keySize);
-            rsa.ImportSubjectPublicKeyInfo(publicKey, out _);
-
-            try
-            {
-                tokenhandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new RsaSecurityKey(rsa),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    CryptoProviderFactory = new CryptoProviderFactory()
-                    {
-                        CacheSignatureProviders = false
-                    },
-                    ClockSkew = TimeSpan.FromSeconds(5)
-                }, out var validatedToken);
-
-                return true;
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
+            return null;
         }
 
-        private JwtSecurityToken DecodeToken(string token)
+        public string CreateRefreshToken()
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadJwtToken(token);
-
-            return jwtToken;
+            return null;
         }
 
-        public List<UserClaimModel> ExtractClaims(string token)
+        public string UpdateRefreshToken()
         {
-            var decodedToken = DecodeToken(token);
-            decodedToken.Claims.ToList().ForEach(a => { Console.WriteLine(a.Type + "-" + a.Value); });
-            List<UserClaimModel> userClaims = new List<UserClaimModel>();
-
-            foreach (var claim in decodedToken.Claims)
-            {
-                var userClaim = ModelConverterService.ConvertTo(claim, new UserClaimModel());
-                userClaims.Add(userClaim);
-            };
-
-            return userClaims;
+            return null;
         }
     }
 }

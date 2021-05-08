@@ -6,17 +6,12 @@ namespace BusinessModels.UserAccessControl
 {
     public class UserClaimModel
     {
-        public string Type { get; set; }
+        public string Key { get; set; }
         public string Value { get; set; }
-
-        public UserClaimModel()
-        {
-
-        }
 
         public UserClaimModel(string key, string value)
         {
-            Type = key;
+            Key = key;
             Value = value;
         }
     }

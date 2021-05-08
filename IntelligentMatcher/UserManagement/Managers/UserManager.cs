@@ -6,8 +6,6 @@ using IntelligentMatcher.Services;
 using BusinessModels;
 using Services;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
 
 namespace IntelligentMatcher.UserManagement
 {
@@ -17,16 +15,14 @@ namespace IntelligentMatcher.UserManagement
         private IUserProfileService _userProfileService;
         private IUserAccessService _userAccessService;
         private readonly IValidationService _validationService;
-        private readonly IConfiguration _configuration;
 
         public UserManager(IUserAccountService userAccountService, IUserProfileService userProfileService,
-            IUserAccessService userAccessService, IValidationService validationService, IConfiguration configuration)
+            IUserAccessService userAccessService, IValidationService validationService)
         {
             _userAccountService = userAccountService;
             _userProfileService = userProfileService;
             _userAccessService = userAccessService;
             _validationService = validationService;
-            _configuration = configuration;
         }
 
         public async Task<Result<WebUserProfileModel>> GetUserProfile(int id)
@@ -70,8 +66,7 @@ namespace IntelligentMatcher.UserManagement
         public async Task<Result<List<WebUserAccountModel>>> GetAllUserAccounts()
         {
             var result = new Result<List<WebUserAccountModel>>();
-            var key = _configuration["PrivateKeyTest"];
-            Console.WriteLine(key);
+
             result.Success = true;
             result.SuccessValue = await _userAccountService.GetAllUserAccounts();
             return result;

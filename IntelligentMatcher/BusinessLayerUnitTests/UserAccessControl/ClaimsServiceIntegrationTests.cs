@@ -143,7 +143,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             foreach (var userClaim in userClaimList)
             {
                 var claimModel = await claimsService.GetClaim(i);
-                if (userClaim.Type == claimModel.Name)
+                if (userClaim.Key == claimModel.Name)
                 {
                     ++i;
                     continue;
