@@ -7,6 +7,7 @@ import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import ListingForm from "./Features/CoreFeatures/ListingForm/Pages/ListingFormPage"
+import Archive from "./Features/CoreFeatures/Archive/Pages/Archive";
 import Login from "./Features/CoreFeatures/Login/Pages/Login";
 import ForgotUsername from "./Features/CoreFeatures/Login/Pages/ForgotUsername";
 import ForgotPasswordValidation from "./Features/CoreFeatures/Login/Pages/ForgotPasswordValidation";
@@ -47,7 +48,10 @@ function App() {
           </Route>
           <Route path="/ListingCategoryPage">
             <ListingCategoryPage />
-            </Route>    
+          </Route> 
+          <Route path="/Archive">
+            <Archive />
+          </Route>
           <Route path="/Login">
             <Login />
           </Route>

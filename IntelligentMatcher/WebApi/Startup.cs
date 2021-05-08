@@ -24,6 +24,8 @@ using Registration.Services;
 using FriendList;
 using PublicUserProfile;
 using Logging;
+using Services.Archiving;
+using Archiving;
 using WebApi.Custom_Middleware;
 using IdentityServices;
 using AuthorizationResolutionSystem;
@@ -55,6 +57,8 @@ namespace WebApi
             services.AddSingleton(Configuration);
 
             services.AddTransient<ILogService, LogService>();
+            services.AddTransient<IArchiveService, ArchiveService>();
+            services.AddTransient<IFolderHandlerService, FolderHandlerService>();
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
@@ -100,6 +104,7 @@ namespace WebApi
             services.AddTransient<IUserAccessService, UserAccessService>();
             services.AddTransient<IUserAnalysisService, UserAnalysisService>();
 
+            services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
@@ -109,7 +114,7 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseAuthorizationMiddleware();
+            //app.UseAuthorizationMiddleware();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
