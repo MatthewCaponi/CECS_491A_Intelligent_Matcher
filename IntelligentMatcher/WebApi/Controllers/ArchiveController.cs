@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ArchiveResultModel> ArchiveLogFiles([FromBody] ArchiveModel archiveModel)
+        public async Task<ActionResult<ArchiveResultModel>> ArchiveLogFiles([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();
 
@@ -58,7 +58,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ArchiveResultModel> ArchiveLogFilesByCategory([FromBody] ArchiveModel archiveModel)
+        public async Task<ActionResult<ArchiveResultModel>> ArchiveLogFilesByCategory([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();
 
@@ -94,7 +94,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ArchiveResultModel> DeleteArchivedFiles([FromBody] ArchiveModel archiveModel)
+        public async Task<ActionResult<ArchiveResultModel>> DeleteArchivedFiles([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();
 
@@ -130,7 +130,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ArchiveResultModel> RecoverLogFiles([FromBody] ArchiveModel archiveModel)
+        public async Task<ActionResult<ArchiveResultModel>> RecoverLogFiles([FromBody] ArchiveModel archiveModel)
         {
             var archiveResultModel = new ArchiveResultModel();
 

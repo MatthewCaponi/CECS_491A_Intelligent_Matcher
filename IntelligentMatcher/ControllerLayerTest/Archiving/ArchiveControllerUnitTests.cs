@@ -1,6 +1,7 @@
 ﻿using Archiving;
 using BusinessModels;
 using ControllerModels.ArchiveModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -41,7 +42,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -68,8 +69,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -90,8 +91,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -117,7 +118,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -144,7 +145,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -173,8 +174,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -198,8 +199,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -226,7 +227,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.ArchiveLogFilesByCategory(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -252,7 +253,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -279,8 +280,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -301,8 +302,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -328,7 +329,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.RecoverLogFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -354,7 +355,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
 
         [DataTestMethod]
@@ -381,8 +382,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -403,8 +404,8 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
-            Assert.IsTrue(actualResult.ErrorMessage == expectedResult.ErrorMessage);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.ErrorMessage == expectedResult.ErrorMessage);
         }
 
         [DataTestMethod]
@@ -430,7 +431,7 @@ namespace ControllerLayerTest.Archiving
             var actualResult = await archiveController.DeleteArchivedFiles(archiveModel);
 
             // Assert
-            Assert.IsTrue(actualResult.Success == expectedResult.Success);
+            Assert.IsTrue(actualResult.Value.Success == expectedResult.Success);
         }
         #endregion
     }
