@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
-                Role.admin.ToString(), true, true);
+                Role.admin.ToString(), true, true, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -82,7 +82,7 @@ namespace WebApi.Controllers
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
-                Role.admin.ToString(), true, true);
+                Role.admin.ToString(), true, true, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -127,7 +127,7 @@ namespace WebApi.Controllers
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
-                Role.admin.ToString(), true, true);
+                Role.admin.ToString(), true, true, true);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -172,7 +172,7 @@ namespace WebApi.Controllers
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
-                Role.admin.ToString(), true, true);
+                Role.admin.ToString(), true, true, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -217,7 +217,7 @@ namespace WebApi.Controllers
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
             var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.archiving.ToString(),
-                Role.admin.ToString(), true, false);
+                Role.admin.ToString(), true, false, false);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
