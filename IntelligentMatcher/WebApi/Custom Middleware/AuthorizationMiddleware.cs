@@ -37,32 +37,36 @@ namespace WebApi.Custom_Middleware
             {
                 return _next(httpContext);
             }
-            string token = String.Empty;
-            if (!headers.ContainsKey("Authorization"))
+            else
             {
-                httpContext.Response.StatusCode = 403;
-                return Task.CompletedTask;
-            }
-            string createdToken = String.Empty;
-            
-
-            if (headers["Authorization"].ToString().Contains("Bearer"))
-            {
-                var value = headers["Authorization"].ToString().Split(' ')[1];
-                
-                var validated = _tokenService.ValidateToken(value);
-                
-                if (!validated)
+                string token = String.Empty;
+                if (!headers.ContainsKey("Authorization"))
                 {
                     httpContext.Response.StatusCode = 403;
                     return Task.CompletedTask;
                 }
+                string createdToken = String.Empty;
 
-                _logService.Log(validated.ToString(), LogTarget.All, LogLevel.info, this.ToString(), "API_Dev_Logs");
+
+                if (headers["Authorization"].ToString().Contains("Bearer"))
+                {
+                    var value = headers["Authorization"].ToString().Split(' ')[1];
+
+                    var validated = _tokenService.ValidateToken(value);
+
+                    if (!validated)
+                    {
+                        httpContext.Response.StatusCode = 403;
+                        return Task.CompletedTask;
+                    }
+
+                    _logService.Log(validated.ToString(), LogTarget.All, LogLevel.info, this.ToString(), "API_Dev_Logs");
+                }
+
+                return _next(httpContext);
             }
-
-            return _next(httpContext);
         }
+            
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.

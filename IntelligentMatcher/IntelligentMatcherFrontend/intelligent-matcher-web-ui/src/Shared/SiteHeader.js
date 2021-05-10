@@ -1,10 +1,12 @@
-import React from 'react';
+import { React, useReducer, useState } from 'react';
 import { Header, Segment, Icon, Menu, Input, Container, Grid, Label, Dropdown, Button} from 'semantic-ui-react';
 import './SiteHeader.css';
-
-
+import { useCookies } from 'react-cookie';
+import { useHistory } from 'react-router-dom';
 
 function SiteHeader() {
+    const [cookies, setCookie, removeCookie] = useCookies(['IdToken']);
+    const history = useHistory();
     const buttonStyles = {
         backgroundColor: 'transparent',
         color: 'lightgrey'
@@ -15,6 +17,11 @@ function SiteHeader() {
             <Button icon="setting" className="message"/>
         </span>
     )
+
+    function logout() {
+        removeCookie('IdToken');
+        history.push('/');
+    }
 
     const authorized = true;
     return (
@@ -38,9 +45,9 @@ function SiteHeader() {
                 </Grid.Column>
                 <Grid.Column container />
                 <Grid.Column container>
-                    <Button href="http://localhost:3000/Login" name='Login' circular inverted>
+                    {/* <Button href="http://localhost:3000/Login" name='Login' circular inverted>
                         Login
-                    </Button>
+                    </Button> */}
                 </Grid.Column>
                 <Grid.Column container only="computer"/>
                 <Grid.Column container only="computer" />
@@ -68,7 +75,7 @@ function SiteHeader() {
                                     <Dropdown.Item icon='user' content='Account' />
                                     <Dropdown.Item icon='privacy' text='Privacy' />
                                     <Dropdown.Item icon='help' text='Help' />
-                                    <Dropdown.Item icon='logout' text='Logout' />
+                                    <Dropdown.Item icon='logout' text='Logout' onClick={logout} />
                                     </Dropdown.Menu>
                                 </Dropdown>
                         </Grid.Column>

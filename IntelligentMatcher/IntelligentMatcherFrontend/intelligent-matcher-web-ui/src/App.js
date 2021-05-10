@@ -2,7 +2,7 @@ import UserManagement from "./Features/CoreFeatures/UserManagement/Pages/UserMan
 import ListingTable from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
 import ListingCategoryPage from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingCategoryPage"
 import Home from "./Features/CoreFeatures/Home/Pages/Home";
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
@@ -20,9 +20,10 @@ import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 import UserProfile from "./Features/CoreFeatures/UserProfile/Pages/UserProfile";
 import StatusToggle from "./Features/CoreFeatures/UserProfile/Pages/StatusToggle";
 import ConfirmAccount from "./Features/CoreFeatures/Registration/Pages/ConfirmAccount";
-
-import { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { getCookie } from 'react-use-cookie';
+import jwt from 'jwt-decode';
+import { useCookies } from 'react-cookie';
+import { useEffect, useRef, useState } from 'react';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
@@ -30,14 +31,43 @@ import { AuthorizationContext } from "./Context/AuthorizationContext";
 
 function App() {
 
+  const [cookies, setCookie, removeCoookie] = useCookies(['IdToken']);
+  const history = useHistory();
+  const [loggedIn, setLoggedIn] = useState();
   global.url = "http://localhost:5000/";
+  useEffect(() => {
+    console.log(1);
+    try {
+      console.log(2);
+      console.log(cookies['IdToken']);
+      const idToken = cookies['IdToken'];
+      console.log(cookies['IdToken']);
+      const decodedIdToken = jwt(idToken).exp;
+      var currentDateTime = Date.now()/1000;
+      console.log(3);
+      if (decodedIdToken > currentDateTime)
+      {    console.log(4);
+        console.log("Logging in...");
+  
+          setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+      }
+    } catch {
+      console.log(5);
+      setLoggedIn(false);
+    }
+      
 
+  })
+  
   return (
     <div className="box">
-      <SiteHeader/>
+    <Router>
+      {loggedIn ? <SiteHeader /> : null }
       <StatusToggle />
-      <Router>
         <Switch>
+        {!loggedIn ? <Login /> : null}
           <Route path="/UserManagement">
             <UserManagement />
           </Route>
@@ -52,9 +82,6 @@ function App() {
           </Route> 
           <Route path="/Archive">
             <Archive />
-          </Route>
-          <Route path="/Login">
-            <Login />
           </Route>
           <Route path="/ForgotUsername">
             <ForgotUsername />
@@ -91,7 +118,8 @@ function App() {
             <ConfirmAccount />
           </Route>
           <Route path="/">
-            <Home />
+          {console.log("logged in: " + loggedIn)}
+            {loggedIn ?<Home /> : <Login />}
           </Route>
         </Switch>
       </Router>

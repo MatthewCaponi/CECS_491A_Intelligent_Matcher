@@ -47,10 +47,11 @@ function Login() {
                     console.log("successful");
                     var cookie = getCookie('IdToken');
                     console.log(cookie);
-                    const idToken = setToken(jwt(cookie));
+                    const idToken = jwt(cookie);
                     console.log(idToken);
-                   alert("Successful Login for " + idToken.username);
-                   history.push("/Home", { username: idToken.username, accountType: idToken.accountType, accountStatus: idToken.accountStatus });
+                    setToken(idToken);
+                    console.log("pushing time");
+                    history.push("/", { username: idToken.username, accountType: idToken.accountType, accountStatus: idToken.accountStatus });
 
                 }
                 else{
@@ -67,7 +68,7 @@ function Login() {
 
     return (
         <div>
-            <Grid container>
+            <Grid container centered>
             <Grid.Row>
                 <h1>Login</h1>
             </Grid.Row>

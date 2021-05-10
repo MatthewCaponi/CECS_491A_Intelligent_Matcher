@@ -144,12 +144,15 @@ namespace Login
                             new UserClaimModel("iss", this.ToString()),
                             new UserClaimModel("sub", account.Username),
                             new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "30"),
+                            new UserClaimModel("exp", "1"),
                             new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                             new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                             new UserClaimModel("firstName", profile.FirstName),
                             new UserClaimModel("lastName", profile.Surname),
                             new UserClaimModel("birthdate", profile.DateOfBirth.ToString()),
+                            new UserClaimModel("username", account.Username),
+                            new UserClaimModel("accountType", account.AccountType),
+                            new UserClaimModel("accountStatus", account.AccountStatus)
                                 });
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
 
