@@ -4,6 +4,7 @@ import { Grid, Header, Divider, Label, Search, Container, Button } from 'semanti
 import { useHistory } from 'react-router-dom';
 
 import './Home.css';
+import Cookies from 'js-cookie';
 
 function Home() {
 

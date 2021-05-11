@@ -59,8 +59,6 @@ namespace WebApi.Custom_Middleware
                         httpContext.Response.StatusCode = 403;
                         return Task.CompletedTask;
                     }
-
-                    _logService.Log(validated.ToString(), LogTarget.All, LogLevel.info, this.ToString(), "API_Dev_Logs");
                 }
 
                 return _next(httpContext);

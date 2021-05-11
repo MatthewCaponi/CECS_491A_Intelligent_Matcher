@@ -22,6 +22,7 @@ function SiteHeader() {
 
     function logout() {
         removeCookie('IdToken');
+        removeCookie('AccessToken');
         authnContext.logout();
         history.push('/');
     }

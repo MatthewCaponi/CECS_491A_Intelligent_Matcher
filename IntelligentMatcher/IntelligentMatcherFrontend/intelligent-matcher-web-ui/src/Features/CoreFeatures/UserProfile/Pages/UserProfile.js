@@ -4,6 +4,7 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
 import UserListings from "../Components/UserListings";
+import Cookies from 'js-cookie';
 
 import _ from 'lodash'
 
@@ -37,7 +38,8 @@ export class UserProfile extends Component {
     await fetch('http://localhost:5000/UserProfile/GetViewStatus',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({visibility: res});
@@ -48,7 +50,8 @@ export class UserProfile extends Component {
     await fetch('http://localhost:5000/UserProfile/GetOtherData',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.viewingId)
     }).then(r => r.json()).then(res=>{
         this.setState({otherData: res});
@@ -60,7 +63,8 @@ export class UserProfile extends Component {
     await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({friendStatus: res});

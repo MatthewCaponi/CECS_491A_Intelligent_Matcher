@@ -24,10 +24,6 @@ function UserManagement () {
         });
     }, [])
 
-    if (authnContext.getRole !== "admin") {
-
-        return <h1>Not Authorized</h1>;
-    }
     return (
         <Grid container centered>
             <Grid.Row>

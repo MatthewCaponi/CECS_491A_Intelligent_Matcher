@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import { Image } from 'semantic-ui-react'
+import Cookies from 'js-cookie';
 
 import _ from 'lodash'
 
@@ -42,7 +43,8 @@ export class FriendsList extends Component {
   await fetch('http://localhost:5000/FriendList/GetAllFriends',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({friends: res});
@@ -52,7 +54,8 @@ export class FriendsList extends Component {
   await fetch('http://localhost:5000/FriendList/GetAllRequets',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({requests: res});
@@ -62,7 +65,8 @@ export class FriendsList extends Component {
   await fetch('http://localhost:5000/FriendList/GetAllRequetsOutgoing',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({outgoing: res});
@@ -74,7 +78,8 @@ export class FriendsList extends Component {
   await fetch('http://localhost:5000/FriendList/GetAllBlocks',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({blocks: res});
@@ -85,7 +90,8 @@ export class FriendsList extends Component {
   await fetch('http://localhost:5000/FriendList/GetAllBlocking',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({blocking: res});
@@ -103,7 +109,8 @@ async approveFriend(friendId){
   await fetch('http://localhost:5000/FriendList/ApproveFriend',
   {
   method: "POST",
-  headers: {'Content-type':'application/json'},
+  headers: {'Content-type':'application/json',
+  'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
   body: JSON.stringify(IdsModel)
   }).
   then(r => r.json()).then(res=>{
@@ -123,7 +130,8 @@ async removeFriend(friendId){
   await fetch('http://localhost:5000/FriendList/RemoveFriend',
   {
   method: "POST",
-  headers: {'Content-type':'application/json'},
+  headers: {'Content-type':'application/json',
+  'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
   body: JSON.stringify(IdsModel)
   }).
   then(r => r.json()).then(res=>{
@@ -143,7 +151,8 @@ async cancelFriendRequest(friendId){
   await fetch('http://localhost:5000/FriendList/CancelFriendRequest',
   {
   method: "POST",
-  headers: {'Content-type':'application/json'},
+  headers: {'Content-type':'application/json',
+  'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
   body: JSON.stringify(IdsModel)
   }).
   then(r => r.json()).then(res=>{
@@ -173,7 +182,8 @@ async createFriendRequest(){
     await fetch('http://localhost:5000/FriendList/CreateFriendRequest',
     {
     method: "POST",
-    headers: {'Content-type':'application/json'},
+    headers: {'Content-type':'application/json',
+    'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
     body: JSON.stringify(IdsModel)
     }).
     then(r => r.json()).then(res=>{
@@ -229,7 +239,8 @@ async blockFriend(friendId){
   await fetch('http://localhost:5000/FriendList/BlockFriend',
   {
   method: "POST",
-  headers: {'Content-type':'application/json'},
+  headers: {'Content-type':'application/json',
+  'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
   body: JSON.stringify(IdsModel)
   }).
   then(r => r.json()).then(res=>{

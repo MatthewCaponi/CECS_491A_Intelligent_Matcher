@@ -35,7 +35,7 @@ namespace UserAccessControlServices
                             new UserClaimModel("iss", this.ToString()),
                             new UserClaimModel("sub", account.Username ),
                             new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "1"),
+                            new UserClaimModel("exp", "20"),
                             new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                             new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                             new UserClaimModel("firstName", profile.FirstName),
@@ -68,7 +68,7 @@ namespace UserAccessControlServices
                             new UserClaimModel("iss", this.ToString()),
                             new UserClaimModel("sub", account.Username),
                             new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "30"),
+                            new UserClaimModel("exp", "20"),
                             new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
                             new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
                                 });
