@@ -14,7 +14,7 @@ export class ChangeEmail extends Component {
   changeEmail() {
     var ChangeEmailModel = {id: 1, oldPassword: this.email.value, password: this.password.value};
 
-    fetch(global.url + 'useraccountsettings/changeemail',
+    fetch(global.url + 'UserAccountSettings/ChangeEmail',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},

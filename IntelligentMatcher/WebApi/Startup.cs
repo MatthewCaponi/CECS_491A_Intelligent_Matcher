@@ -35,6 +35,7 @@ using DataAccess.Repositories.LoginTrackerRepositories;
 using DataAccess.Repositories.PageVisitTrackerRepositories;
 using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
+using UserAccountSettings;
 
 namespace WebApi
 {
@@ -78,6 +79,7 @@ namespace WebApi
             services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
             services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
             services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<IUserAccountSettingsRepository, UserAccountSettingRepository>();
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
 
@@ -103,6 +105,7 @@ namespace WebApi
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
             services.AddTransient<IUserAnalysisService, UserAnalysisService>();
+            services.AddTransient<IAccountSettingsService, AccountSettingsService>();
 
             services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<ILoginManager, LoginManager>();

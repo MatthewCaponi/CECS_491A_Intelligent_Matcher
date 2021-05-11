@@ -26,7 +26,7 @@ using WebApi;
 using WebApi.Access_Information;
 using WebApi.Controllers;
 
-namespace IntelligentMatcherUI.Controllers
+namespace WebApi.Controllers
 {
 
     [Route("[controller]/[action]")]

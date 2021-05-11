@@ -15,7 +15,7 @@ using AuthorizationPolicySystem;
 using WebApi;
 using WebApi.Access_Information;
 
-namespace IntelligentMatcherUI.Controllers
+namespace WebApi.Controllers
 {
 
     [Route("[controller]/[action]")]

@@ -9,7 +9,7 @@
       super(props);
       this.state = {};
       this.changeTheme = this.changeTheme.bind(this);
-      fetch(global.url + 'useraccountsettings/getTheme',
+      fetch(global.url + 'UserAccountSettings/GetTheme',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -34,7 +34,7 @@
     changeTheme() {
       var ChangeThemeModel = {id: 1, theme: this.theme.value};
   
-      fetch(global.url + 'useraccountsettings/changetheme',
+      fetch(global.url + 'UserAccountSettings/ChangeTheme',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
