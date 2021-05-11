@@ -23,108 +23,114 @@ import ConfirmAccount from "./Features/CoreFeatures/Registration/Pages/ConfirmAc
 import { getCookie } from 'react-use-cookie';
 import jwt from 'jwt-decode';
 import { useCookies } from 'react-cookie';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
-import { AuthorizationContext } from "./Context/AuthorizationContext";
+import {AuthnContext} from './Context/AuthnContext';
 
 function App() {
-
+  const authnContext = useContext(AuthnContext);
   const [cookies, setCookie, removeCoookie] = useCookies(['IdToken']);
   const history = useHistory();
   const [loggedIn, setLoggedIn] = useState();
   global.url = "http://localhost:5000/";
   useEffect(() => {
-    console.log(1);
     try {
-      console.log(2);
-      console.log(cookies['IdToken']);
-      const idToken = cookies['IdToken'];
-      console.log(cookies['IdToken']);
-      const decodedIdToken = jwt(idToken).exp;
-      var currentDateTime = Date.now()/1000;
-      console.log(3);
-      if (decodedIdToken > currentDateTime)
-      {    console.log(4);
-        console.log("Logging in...");
-  
-          setLoggedIn(true);
+      if (cookies['IdToken'] !== null) {
+        const idToken = cookies['IdToken'];
+        const decodedIdToken = jwt(idToken).exp;
+        var currentDateTime = Date.now()/1000;
+        if (decodedIdToken > currentDateTime)
+        {  
+            authnContext.login();
+        } else {
+          authnContext.logout();
+        }
       } else {
-        setLoggedIn(false);
+        authnContext.logout();
       }
-    } catch {
-      console.log(5);
-      setLoggedIn(false);
+    } catch (error) {
+      console.log(error.message);
     }
-      
+    }, [])
 
-  })
+    if (!authnContext.isLoggedIn) {
+      return (
+      <div className="box">
+        <Router>
+          <Switch>
+            <Route path="/ForgotUsername">
+               <ForgotUsername />
+            </Route>
+            <Route path="/ForgotPasswordValidation">
+              <ForgotPasswordValidation />
+            </Route>
+            <Route path='/ForgotPasswordCodeInput'>
+              <ForgotPasswordCodeInput />
+            </Route>
+            <Route path="/ResetPassword">
+              <ResetPassword />
+            </Route>
+            <Route path="/Registration">
+              <Registration />
+            </Route>
+            <Route path="/ResendEmail">
+              <ResendEmail />
+            </Route>
+            <Route path="/">
+              <Login />
+            </Route>
+          </Switch>
+        </Router>
+      </div>)
+    } else {
+      return (
+        <div className="box">
+        <Router>
+          <SiteHeader />
+          <StatusToggle />
+            <Switch>
+              <Route path="/UserManagement">
+                <UserManagement />
+              </Route>
+              <Route path="/ListingForm">
+                <ListingForm />
+              </Route>
+              <Route path="/ListingTable">
+                <ListingTable />
+              </Route>
+              <Route path="/ListingCategoryPage">
+                <ListingCategoryPage />
+              </Route> 
+              <Route path="/Archive">
+                <Archive />
+              </Route>
+              <Route path="/UserAccountSettings">
+                <UserAccountSettings />
+              </Route>
+              <Route path="/FriendsList">
+                <FriendsList />
+              </Route>
+              <Route path="/Messaging">
+                <Messaging />
+              </Route>
+              <Route path="/profile">
+                <UserProfile />
+              </Route>
+              <Route path="/ConfirmAccount">
+                <ConfirmAccount />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </Router>
+        </div>)
+
+    }
   
-  return (
-    <div className="box">
-    <Router>
-      {loggedIn ? <SiteHeader /> : null }
-      <StatusToggle />
-        <Switch>
-        {!loggedIn ? <Login /> : null}
-          <Route path="/UserManagement">
-            <UserManagement />
-          </Route>
-          <Route path="/ListingForm">
-            <ListingForm />
-          </Route>
-          <Route path="/ListingTable">
-            <ListingTable />
-          </Route>
-          <Route path="/ListingCategoryPage">
-            <ListingCategoryPage />
-          </Route> 
-          <Route path="/Archive">
-            <Archive />
-          </Route>
-          <Route path="/ForgotUsername">
-            <ForgotUsername />
-          </Route>
-          <Route path="/ForgotPasswordValidation">
-            <ForgotPasswordValidation />
-          </Route>
-          <Route path='/ForgotPasswordCodeInput'>
-            <ForgotPasswordCodeInput />
-          </Route>
-          <Route path="/ResetPassword">
-            <ResetPassword />
-          </Route>
-          <Route path="/Registration">
-            <Registration />
-          </Route>
-          <Route path="/ResendEmail">
-            <ResendEmail />
-          </Route>
-          <Route path="/UserAccountSettings">
-            <UserAccountSettings />
-          </Route>
-          <Route path="/FriendsList">
-            <FriendsList />
-          </Route>
-          <Route path="/Messaging">
-            <Messaging />
-          </Route>
-          <Route path="/profile">
-            <UserProfile />
-          </Route>
-
-          <Route path="/ConfirmAccount">
-            <ConfirmAccount />
-          </Route>
-          <Route path="/">
-          {console.log("logged in: " + loggedIn)}
-            {loggedIn ?<Home /> : <Login />}
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-  );
+  
 }
 
 export default App;

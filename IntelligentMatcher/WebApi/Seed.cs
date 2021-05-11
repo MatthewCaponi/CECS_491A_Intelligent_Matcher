@@ -145,7 +145,7 @@ namespace WebApi
                 UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
 
                 userAccountModel.Id = i;
-                userAccountModel.Username = "TestUser" + i;
+                userAccountModel.Username = "T" + i;
                 userAccountModel.Password = "" + i;
                 userAccountModel.Salt = "" + i;
                 userAccountModel.EmailAddress = "TestEmailAddress" + i;
@@ -167,7 +167,7 @@ namespace WebApi
                 userAccountSettingsModel.ThemeColor = "White";
            
                 await userAccountRepository.CreateAccount(userAccountModel);
-                await cryptographyService.newPasswordEncryptAsync("TestPassword" + i, i);
+                await cryptographyService.newPasswordEncryptAsync("T" + i, i);
                 await userProfileRepository.CreateUserProfile(userProfileModel);
                 await userAccountSettingsRepository.CreateUserAccountSettings(userAccountSettingsModel);
 

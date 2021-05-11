@@ -36,7 +36,14 @@ function ForgotUsername() {
     }
 
     return (
-        <Grid container>
+        <Grid container centered>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
         <Grid.Row>
             <h1>Forgot Username (Please Enter Your Information): </h1>
         </Grid.Row>

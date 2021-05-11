@@ -1,10 +1,12 @@
-import { React, useReducer, useState } from 'react';
+import { React, useReducer, useState, useContext } from 'react';
 import { Header, Segment, Icon, Menu, Input, Container, Grid, Label, Dropdown, Button} from 'semantic-ui-react';
 import './SiteHeader.css';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
+import {AuthnContext } from '../Context/AuthnContext';
 
 function SiteHeader() {
+    const authnContext = useContext(AuthnContext);
     const [cookies, setCookie, removeCookie] = useCookies(['IdToken']);
     const history = useHistory();
     const buttonStyles = {
@@ -20,6 +22,7 @@ function SiteHeader() {
 
     function logout() {
         removeCookie('IdToken');
+        authnContext.logout();
         history.push('/');
     }
 
