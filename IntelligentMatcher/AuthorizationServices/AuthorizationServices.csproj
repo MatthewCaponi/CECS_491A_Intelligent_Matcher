@@ -10,6 +10,8 @@
     <ProjectReference Include="..\Cross-Cutting Concerns\Cross-Cutting Concerns.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
+    <ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
 </Project>

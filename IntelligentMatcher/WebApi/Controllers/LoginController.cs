@@ -54,6 +54,7 @@ namespace WebApi.Controllers
             CookieOptions option = new CookieOptions();
             option.HttpOnly = false;
             Response.Cookies.Append("IdToken", loginResult.SuccessValue, option);
+            
             return Ok("Success");
             
             //catch (SqlCustomException)

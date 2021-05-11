@@ -29,10 +29,12 @@ namespace Login
         private readonly IUserProfileService _userProfileService;
         private readonly IAttributeAssignmentService _attributeAssignmentService;
         private readonly ITokenService _tokenService;
+        private readonly IValidationService _validationService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
             IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
-            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IAttributeAssignmentService attributeAssignmentService, ITokenService tokenService)
+            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IAttributeAssignmentService attributeAssignmentService, 
+            ITokenService tokenService, IValidationService validationService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
@@ -43,19 +45,16 @@ namespace Login
             _userProfileService = userProfileService;
             _attributeAssignmentService = attributeAssignmentService;
             _tokenService = tokenService;
+            _validationService = validationService;
         }
 
-        public async Task<Result<string>> Login(string username, string password, string ipAddress)
+        public async Task<Result<AuthnResponse>> Login(string username, string password, string ipAddress)
         {
             try
             {
-                var loginResult = new Result<string>();
-                if (username == null || password == null)
+                if (String.IsNullOrEmpty(password) || String.IsNullOrEmpty(username))
                 {
-                    loginResult.WasSuccessful = false;
-                    loginResult.ErrorMessage = ErrorMessage.Null;
-
-                    return loginResult;
+                    return Result<AuthnResponse>.Failure(ErrorMessage.Null);
                 }
 
                 var businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
@@ -70,10 +69,7 @@ namespace Login
                 {
                     if (DateTimeOffset.UtcNow < businessLoginAttemptsModel.SuspensionEndTime)
                     {
-                        loginResult.WasSuccessful = false;
-                        loginResult.ErrorMessage = ErrorMessage.TooManyAttempts;
-
-                        return loginResult;
+                        return Result<AuthnResponse>.Failure(ErrorMessage.TooManyAttempts);
                     }
                     await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
                 }
@@ -91,10 +87,7 @@ namespace Login
                         await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
                     }
 
-                    loginResult.WasSuccessful = false;
-                    loginResult.ErrorMessage = ErrorMessage.NoMatch;
-
-                    return loginResult;
+                    return Result<AuthnResponse>.Failure(ErrorMessage.NoMatch);
                 }
 
                 var authenticateUser = await _authenticationService.AuthenticatePasswordWithUsename(password, username);
@@ -109,15 +102,13 @@ namespace Login
                         await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
                     }
 
- 
-                    loginResult.WasSuccessful = false;
-                    loginResult.ErrorMessage = ErrorMessage.NoMatch;
-
-                    return loginResult;
+                    return Result<AuthnResponse>.Failure(ErrorMessage.NoMatch);
                 }
 
+                var idToken = _identityService.GetUserIdToken(account.Id);
+                var accessToken = _authorizationService.GetUserAccessToken(account.AccountType);
                 var scopes = _attributeAssignmentService.GetScopes(account.AccountType);
-                var profile = await _userProfileService.GetUserProfileByAccountId(account.Id);
+              
                 StringBuilder delimitedScopes = new StringBuilder();
                 foreach (var scope in scopes)
                 {
@@ -137,32 +128,15 @@ namespace Login
                             new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
                                 });
 
-                var idToken = _tokenService.CreateToken(new List<UserClaimModel>()
-                    {
-                        new UserClaimModel("id", account.Id.ToString()),
-                        new UserClaimModel("Scope", "id"),
-                            new UserClaimModel("iss", this.ToString()),
-                            new UserClaimModel("sub", account.Username),
-                            new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "1"),
-                            new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                            new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                            new UserClaimModel("firstName", profile.FirstName),
-                            new UserClaimModel("lastName", profile.Surname),
-                            new UserClaimModel("birthdate", profile.DateOfBirth.ToString()),
-                            new UserClaimModel("username", account.Username),
-                            new UserClaimModel("accountType", account.AccountType),
-                            new UserClaimModel("accountStatus", account.AccountStatus)
-                                });
+              
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
 
-                TokenStorage tokenStorage = new TokenStorage();
-                tokenStorage.IdToken = idToken;
-                tokenStorage.AccessToken = accessToken;
-                loginResult.WasSuccessful = true;
-                loginResult.SuccessValue = idToken;
+                AuthnResponse authnResponse = new AuthnResponse();
+                authnResponse.IdToken = idToken;
+                authnResponse.AccessToken = accessToken;
+                authnResponse.UserInfo = account;
 
-                return loginResult;
+                return Result<AuthnResponse>.Success(authnResponse);
             }
             catch (SqlCustomException e)
             {
