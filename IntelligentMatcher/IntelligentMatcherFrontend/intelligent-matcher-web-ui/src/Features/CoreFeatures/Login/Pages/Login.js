@@ -66,7 +66,7 @@ function Login() {
                 </label>
             </Grid.Row>
             <Grid.Row>
-                <a href="http://localhost:3000/ForgotUsername">Forgot Username</a>
+                <a href={global.urlRoute + "ForgotUsername"}>Forgot Username</a>
             </Grid.Row>
             <Grid.Row verticalAlign="middle">
                 <div class="ui input">
@@ -79,7 +79,7 @@ function Login() {
                 </label>
             </Grid.Row>
             <Grid.Row>
-                <a href="http://localhost:3000/ForgotPasswordValidation">Forgot Password</a>
+                <a href={global.urlRoute + "ForgotPasswordValidation"}>Forgot Password</a>
             </Grid.Row>
             <Grid.Row verticalAlign="middle">
                 <div class="ui input">
@@ -98,7 +98,7 @@ function Login() {
                 >
                 Login
                 </Button>
-                <Button href="http://localhost:3000/Registration" compact size="tiny" circular inverted color="blue">Register New User</Button>
+                <Button href={global.urlRoute + "Registration"} compact size="tiny" circular inverted color="blue">Register New User</Button>
             </Grid.Row>
             </Grid>
         </div>
