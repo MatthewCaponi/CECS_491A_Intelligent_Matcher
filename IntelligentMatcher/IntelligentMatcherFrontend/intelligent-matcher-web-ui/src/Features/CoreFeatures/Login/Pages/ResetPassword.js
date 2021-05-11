@@ -91,7 +91,7 @@ function ResetPassword() {
             >
             Submit
             </Button>
-            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
+            <Button href={global.urlRoute + "Login"} compact size="tiny" circular inverted color="blue">
                 Go Back to Login
             </Button>
         </Grid.Row>
