@@ -18,7 +18,7 @@
 
         cy.get(':nth-child(8) > tbody > :nth-child(2) > :nth-child(3) > a').click()
 
-        cy.get('.sortable').contains('TestUser11')
+        cy.get('.sortable').contains('TestUser10')
 
 
       })

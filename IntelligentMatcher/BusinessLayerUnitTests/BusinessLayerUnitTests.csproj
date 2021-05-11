@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Archiving\Archiving.csproj" />
     <ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\FriendList\FriendList.csproj" />
     <ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
 
@@ -38,13 +39,15 @@
 
     <ProjectReference Include="..\Security\Security.csproj" />
 
+    <ProjectReference Include="..\TraditionalListingSearch\TraditionalListingSearch.csproj" />
+
     <ProjectReference Include="..\TraditionalListings\TraditionalListings.csproj" />
 
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
 
-    <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
+    <ProjectReference Include="..\UserAnalysisManager\UserAnalysisManager.csproj" />
 
-    <ProjectReference Include="..\WebApi\WebApi.csproj" />
+    <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
   </ItemGroup>
 
   <ItemGroup>

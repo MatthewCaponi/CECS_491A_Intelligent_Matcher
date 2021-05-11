@@ -26,6 +26,7 @@ import { useHistory } from 'react-router-dom';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
+import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Components/AnalysisDashboard";
 
 function App() {
 
@@ -84,6 +85,9 @@ function App() {
           </Route>
           <Route path="/profile">
             <UserProfile />
+          </Route>
+          <Route path="/AnalysisDashboard">
+            <AnalysisDashboard />
           </Route>
 
           <Route path="/ConfirmAccount">
