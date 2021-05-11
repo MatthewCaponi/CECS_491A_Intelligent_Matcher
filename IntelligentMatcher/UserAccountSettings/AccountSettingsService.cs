@@ -66,11 +66,7 @@ namespace UserAccountSettings
             if (AuthenticationToken == true)
             {
                 int result = await _userAccountRepository.UpdateAccountEmail(UserID, email);
-                if(result != 1)
-                {
-                    return false;
-
-                }
+         
                 return true;
             }
             else
@@ -84,11 +80,7 @@ namespace UserAccountSettings
             if (AuthenticationToken == true)
             {
                 int result = await _userAccountRepository.UpdateAccountStatus(UserID, "Deleted");
-                if (result != 1)
-                {
-                    return false;
 
-                }
                 return true;
             }
             else
@@ -102,11 +94,7 @@ namespace UserAccountSettings
             try
             {
                 int result = await _userAccountSettingRepository.UpdateFontSize(UserID, FontSize);
-                if (result != 1)
-                {
-                    return false;
 
-                }
                 return true;
             }
             catch
@@ -120,11 +108,7 @@ namespace UserAccountSettings
             try
             {
                 int result = await _userAccountSettingRepository.UpdateThemeColor(UserID, ThemeColor);
-                if (result != 1)
-                {
-                    return false;
 
-                }
                 return true;
             }
             catch
@@ -138,11 +122,7 @@ namespace UserAccountSettings
             try
             {
                 int result = await _userAccountSettingRepository.UpdateFontStyle(UserID, FontStyle);
-                if (result != 1)
-                {
-                    return false;
 
-                }
                 return true;
             }
             catch
