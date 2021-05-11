@@ -9,7 +9,7 @@
       super(props);
       this.state = {};
       this.changeFontStyle = this.changeFontStyle.bind(this);
-      fetch(global.url + 'useraccountsettings/getFontStyle',
+      fetch(global.url + 'UserAccountSettings/GetFontStyle',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -34,7 +34,7 @@
     changeFontStyle() {
       var ChangeFontStyleModel = {id: 1, fontStyle: this.fontStyle.value};
   
-      fetch('useraccountsettings/changefontstyle',
+      fetch(global.url + 'UserAccountSettings/ChangeFontStyle',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},

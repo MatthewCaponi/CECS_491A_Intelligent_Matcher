@@ -36,14 +36,9 @@ namespace UserAccountSettings
 
         public async Task<bool> CreateDefaultUserAccountSettingsAsync(UserAccountSettingsModel model)
         {
-            try
-            {
+         
                 return await _userAccountSettingRepository.CreateUserAccountSettings(model);
-            }
-            catch
-            {
-                return false;
-            }
+     
 
         }
 

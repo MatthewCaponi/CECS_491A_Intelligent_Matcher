@@ -9,7 +9,7 @@ using UserAccountSettings;
 using Models;
 using System.Collections.Generic;
 
-namespace IntelligentMatcherUI.Controllers
+namespace WebApi.Controllers
 {
     public class SendMessageModel
     {

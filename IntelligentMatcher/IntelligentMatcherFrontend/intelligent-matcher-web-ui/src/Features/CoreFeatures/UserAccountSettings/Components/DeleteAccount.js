@@ -15,7 +15,7 @@ export class DeleteAccount extends Component {
   deleteAccount() {
     var DeleteModel = {id: 1, password: this.textInput.value};
 
-    fetch(global.url + 'useraccountsettings/delete',
+    fetch(global.url + 'UserAccountSettings/DeleteAccount',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},
