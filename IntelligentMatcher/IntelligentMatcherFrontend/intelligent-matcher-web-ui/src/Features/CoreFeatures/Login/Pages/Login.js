@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import '../.././../../App'
 
 import './Login.css';
 
@@ -27,7 +28,7 @@ function Login() {
         var LoginModel = e;
         // e.preventDefault();
         if(e.username != "" && e.password != "" ){
-            fetch('http://localhost:5000/Login/Login',
+            fetch(global.url + 'Login/Login',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},

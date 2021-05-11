@@ -12,7 +12,7 @@ describe('Testing Adding New Friend', () => {
       cy.get('.red').click()
 
       
-      cy.visit('http://localhost:3000/FriendsList')
+      cy.visit(global.urlRoute + 'FriendsList')
 
 
       cy.get(':nth-child(1) > input').type(`TestUser21`)

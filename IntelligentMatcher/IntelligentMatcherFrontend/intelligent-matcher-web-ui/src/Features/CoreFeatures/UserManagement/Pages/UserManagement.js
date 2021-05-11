@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import UserTable from '../Components/UserTable';
 import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
+import '../.././../../App'
 
 function UserManagement () {
     const [users, setUsers] = useState([]);
     useEffect( () => {
-        fetch('http://localhost:5000/UserManagement/GetAllUserAccounts')
+        fetch(global.url + 'UserManagement/GetAllUserAccounts')
         .then(response => response.json())
         .then(responseData => {
             setUsers(responseData);

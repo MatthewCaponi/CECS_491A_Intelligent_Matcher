@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
+import '../.././../../App'
 
 import './Login.css';
 
@@ -14,7 +15,7 @@ function ForgotPasswordValidation() {
         var ForgotInformationModel = e;
         // e.preventDefault();
         if(e.username != "" && e.emailAddress != "" && e.dateOfBirth != ""){
-            fetch('http://localhost:5000/Login/ForgotPasswordValidation',
+            fetch(global.url + 'Login/ForgotPasswordValidation',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
