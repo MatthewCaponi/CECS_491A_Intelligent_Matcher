@@ -24,7 +24,7 @@ namespace AuthorizationResolutionSystem
         public bool Authorize(string token, AccessPolicyModel accessPolicy)
         {
             var claims = _tokenService.ExtractClaims(token);
-            var scopes = claims.Where(a => a.Type == "scope").FirstOrDefault().Value.Split(',').ToList();
+            var scopes = claims.Where(a => a.Type == "scopes").FirstOrDefault().Value.Split(',').ToList();
             var claimsPrincipal = new ClaimsPrincipal()
             {
                 Claims = claims,

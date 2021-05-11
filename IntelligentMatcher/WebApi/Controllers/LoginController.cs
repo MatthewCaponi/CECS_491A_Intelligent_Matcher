@@ -51,9 +51,16 @@ namespace WebApi.Controllers
             //{
             //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
             //}
-            CookieOptions option = new CookieOptions();
-            option.HttpOnly = false;
-            Response.Cookies.Append("IdToken", loginResult.SuccessValue, option);
+            var idToken = loginResult.SuccessValue.IdToken;
+            var accessToken = loginResult.SuccessValue.AccessToken;
+            CookieOptions idOption = new CookieOptions();
+            idOption.HttpOnly = false;
+
+            CookieOptions accessOption = new CookieOptions();
+            accessOption.HttpOnly = false;
+
+            Response.Cookies.Append("IdToken", idToken, idOption);
+            Response.Cookies.Append("AccessToken", accessToken, accessOption);
             
             return Ok("Success");
             

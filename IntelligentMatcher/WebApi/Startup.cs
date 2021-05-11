@@ -60,6 +60,7 @@ namespace WebApi
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<IAssignmentPolicyService, AssignmentPolicyService>();
+            
             services.AddTransient<IAttributeAssignmentService, AttributeAssignmentService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
@@ -98,6 +99,7 @@ namespace WebApi
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+            services.AddTransient<IMapperService, MapperService>();
 
             services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<ILoginManager, LoginManager>();

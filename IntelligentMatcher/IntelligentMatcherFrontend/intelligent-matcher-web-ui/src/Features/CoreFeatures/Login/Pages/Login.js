@@ -44,10 +44,14 @@ function Login() {
             }).
             then(r => r.json()).then(res=>{
                 if(res){
-                    var cookie = getCookie('IdToken');
-                    const idToken = jwt(cookie);
+                    var idCookie = getCookie('IdToken');
+                    var accessCookie = getCookie('AccessToken');
+                    const idToken = jwt(idCookie);
+                    const accessToken = jwt(accessCookie);
                     setToken(idToken);
+                    console.log("role: " + accessToken.role);
                     authnContext.login();
+                    
                     history.push("/", { username: idToken.username, accountType: idToken.accountType, accountStatus: idToken.accountStatus });
                 }
                 else{

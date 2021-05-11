@@ -116,8 +116,30 @@ namespace AuthorizationPolicySystem
 
             return accessPolicy;
         }
+        public AccessPolicyModel ConfigureCustomPolicy(string scope, string role)
+        {
+            var scopes = new List<string>();
 
-        public AccessPolicyModel ConfigureCustomPolicy(string scope, string id)
+            scopes.Add(scope);
+
+            var accessPolicy = new AccessPolicyModel()
+            {
+
+                Scopes = scopes,
+                Claims = new List<UserClaimModel>()
+                {
+                    new UserClaimModel()
+                    {
+                        Type = nameof(role),
+                        Value = role
+                    }
+                }
+            };
+
+            return accessPolicy;
+        }
+
+        public AccessPolicyModel ConfigureCustomPolicy(string scope, int id)
         {
             var scopes = new List<string>();
 

@@ -42,7 +42,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<List<WebUserAccountModel>>> GetAllUserAccounts()
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_management.ToString(), Role.admin.ToString(), true, false, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("user_management:write", "admin");
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {

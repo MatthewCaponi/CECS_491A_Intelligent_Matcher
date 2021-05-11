@@ -13,6 +13,7 @@ using Exceptions;
 using AuthenticationSystem;
 using IdentityServices;
 using BusinessModels.UserAccessControl;
+using UserAccessControlServices;
 
 namespace Login
 {
@@ -30,11 +31,12 @@ namespace Login
         private readonly IAttributeAssignmentService _attributeAssignmentService;
         private readonly ITokenService _tokenService;
         private readonly IValidationService _validationService;
+        private readonly IMapperService _mapperService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
             IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
             IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IAttributeAssignmentService attributeAssignmentService, 
-            ITokenService tokenService, IValidationService validationService)
+            ITokenService tokenService, IValidationService validationService, IMapperService mapperService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
@@ -46,6 +48,7 @@ namespace Login
             _attributeAssignmentService = attributeAssignmentService;
             _tokenService = tokenService;
             _validationService = validationService;
+            _mapperService = mapperService;
         }
 
         public async Task<Result<AuthnResponse>> Login(string username, string password, string ipAddress)
@@ -105,29 +108,9 @@ namespace Login
                     return Result<AuthnResponse>.Failure(ErrorMessage.NoMatch);
                 }
 
-                var idToken = _identityService.GetUserIdToken(account.Id);
-                var accessToken = _authorizationService.GetUserAccessToken(account.AccountType);
-                var scopes = _attributeAssignmentService.GetScopes(account.AccountType);
-              
-                StringBuilder delimitedScopes = new StringBuilder();
-                foreach (var scope in scopes)
-                {
-                    delimitedScopes.Append(scope + ",");
-                }
-
-                var accessToken = _tokenService.CreateToken(new List<UserClaimModel>()
-                    {
-                          new UserClaimModel("scope", delimitedScopes.ToString()),
-                            new UserClaimModel("role", account.AccountType),
-                            new UserClaimModel("id", account.Id.ToString()),
-                            new UserClaimModel("iss", this.ToString()),
-                            new UserClaimModel("sub", account.Username),
-                            new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "30"),
-                            new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                            new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
-                                });
-
+                var idToken = await _mapperService.MapUserIdToken(account.Id);
+                var accessToken = await _mapperService.MapUserAccessToken(account.Id);
+                
               
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
 
