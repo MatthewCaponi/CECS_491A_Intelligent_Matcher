@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import { Image } from 'semantic-ui-react'
-
 import '../.././../../App'
-
-
+import Cookies from 'js-cookie';
 import _ from 'lodash'
 
 export class FriendsList extends Component {
@@ -14,19 +12,19 @@ export class FriendsList extends Component {
 
     super(props);
 
-    this.state = {  friends: [],
-                    requests: [],
-                    outgoing: [],
+    this.state = {  friends: [],    
+                    requests: [], 
+                    outgoing: [], 
                     blocks: [],
                     blocking: [],
 
                     userId: 1,
                     friendRequestMessage: ''
-
+           
                   };
 
 
-
+               
 
       this.sort = this.sort.bind(this)
 
@@ -45,13 +43,12 @@ export class FriendsList extends Component {
   await fetch(global.url + 'FriendList/GetAllFriends',
   {
       method: "POST",
-      headers: {'Content-type':'application/json',
-      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
+      headers: {'Content-type':'application/json'},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({friends: res});
-  }
-  );
+  }   
+  ); 
 
   await fetch(global.url + 'FriendList/GetAllRequets',
   {
@@ -61,8 +58,8 @@ export class FriendsList extends Component {
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({requests: res});
-  }
-  );
+  }   
+  ); 
 
   await fetch(global.url + 'FriendList/GetAllRequetsOutgoing',
   {
@@ -72,8 +69,8 @@ export class FriendsList extends Component {
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({outgoing: res});
-  }
-  );
+  }   
+  ); 
 
 
 
@@ -85,8 +82,8 @@ export class FriendsList extends Component {
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({blocks: res});
-  }
-  );
+  }   
+  ); 
 
 
   await fetch(global.url + 'FriendList/GetAllBlocking',
@@ -97,8 +94,8 @@ export class FriendsList extends Component {
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({blocking: res});
-  }
-  );
+  }   
+  ); 
 
 }
 
@@ -214,7 +211,7 @@ async createFriendRequest(){
   }else{
     this.setState({friendRequestMessage: this.friendusername.value + " has already requested to be friends with you, check you friend requests"})
   }
-
+       
   }else{
     this.setState({friendRequestMessage: "You are already requesting to be friends with " + this.friendusername.value})
   }
@@ -226,8 +223,8 @@ async createFriendRequest(){
 
 
 
-
-
+ 
+    
 }
 
 
@@ -286,7 +283,7 @@ sort(event, sortKey, functional){
     data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]))
     this.setState({friends: data.reverse()})
   }
-
+  
 }
 
 async search(){
@@ -314,7 +311,7 @@ async search(){
 
 
 
-
+    
   const friendstable = {
     display: 'block',
 
@@ -363,75 +360,75 @@ async search(){
                         </div>
 
 
-
+                        
 <Table sortable striped style={friendstable}>
 
                         <Table.Body>
-                            <Table.Row>
+                            <Table.Row>    
                             <Table.Cell >Friends</Table.Cell>
                             </Table.Row>
                             {this.state.friends.map(friend =>
-                            <Table.Row>
+                            <Table.Row>        
                                 <Table.Cell>
 
                                 {
 (friend.userProfileImage != null && friend.userProfileImage != "") ?
-                                    (
-
-
-
+                                    (                    
+                                      
+                         
+                                      
                                       <Image style={{'font-size':42}}  src= {filePath + friend.userProfileImage}  circular />
 
 
 
-
+                                  
                                       ) : (                                <Image avatar src='https://react.semantic-ui.com/images/wireframe/square-image.png' circular />
                                       )}
 
 
-                                </Table.Cell>
+                                </Table.Cell> 
 
                                 <Table.Cell>
 
                                 <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
 
                                 <br />
-                {
+                {   
                                     (friend.status == "Offline") ?
                                         ("🔴") : ("🟢")
-                                }
+                                } 
                         {friend.status}
-
-                            </Table.Cell>
+                            
+                            </Table.Cell> 
                             <Table.Cell>
                             <a onClick={() => {
                         this.removeFriend(friend.userId);
-                        }}
+                        }}  
                         style={{cursor: 'pointer'}}>
                           Remove Friend
                         </a>
-
+                            
                             </Table.Cell>
                             <Table.Cell>
                             <a onClick={() => {
                         this.blockFriend(friend.userId);
-                        }}
+                        }}  
                         style={{cursor: 'pointer'}}>
                           Block Friend
-                        </a>
+                        </a>                            
                             </Table.Cell>
                         </Table.Row>
                         )}
                     </Table.Body>
-                </Table>
+                </Table>        
 
                 <Table stackable striped style={friendrequests}>
                         <Table.Body>
-                            <Table.Row>
+                            <Table.Row>        
                                 <Table.Cell>Requests</Table.Cell>
                             </Table.Row>
                             {this.state.requests.map(friend =>
-                            <Table.Row>
+                            <Table.Row>  
                                                   <Table.Cell>
 
 {
@@ -442,47 +439,47 @@ async search(){
       )}
 
 
-</Table.Cell>
+</Table.Cell>       
                                 <Table.Cell>
-
+                                  
                                 <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
                                 <br />
-                {
+                {   
                                     (friend.status == "Offline") ?
                                         ("🔴") : ("🟢")
-                                }
+                                } 
                         {friend.status}
-
+                            
                             </Table.Cell>
                             <Table.Cell>
                             <a onClick={() => {
                         this.approveFriend(friend.userId);
-                        }}
+                        }}  
                         style={{cursor: 'pointer'}}>
                           Accept Request
                         </a>
-
+                            
                             </Table.Cell>
                             <Table.Cell>
                             <a onClick={() => {
                         this.blockFriend(friend.userId);
-                        }}
+                        }}  
                         style={{cursor: 'pointer'}}>
                           Block User
-                        </a>
+                        </a>                            
                             </Table.Cell>
                         </Table.Row>
                         )}
                     </Table.Body>
-                </Table >
+                </Table > 
 
                                <Table stackable striped style={pendingrequests} >
                         <Table.Body>
-                            <Table.Row>
+                            <Table.Row>        
                                 <Table.Cell>Pending</Table.Cell>
                             </Table.Row>
                             {this.state.outgoing.map(friend =>
-                            <Table.Row>
+                            <Table.Row> 
                                                   <Table.Cell>
 
 {
@@ -493,29 +490,29 @@ async search(){
       )}
 
 
-</Table.Cell>
+</Table.Cell>        
                                 <Table.Cell>
                                 <a href={"/profile?id=" + friend.userId} >{friend.username} </a>
                                 <br />
-                {
+                {   
                                     (friend.status == "Offline") ?
                                         ("🔴") : ("🟢")
-                                }
+                                } 
                         {friend.status}
-
+                            
                             </Table.Cell>
                             <Table.Cell>
                             <a onClick={() => {
                         this.cancelFriendRequest(friend.userId);
-                        }}
+                        }}  
                         style={{cursor: 'pointer'}}>
                           Cancel Request
-                        </a>
+                        </a>                            
                             </Table.Cell>
                         </Table.Row>
                         )}
                     </Table.Body>
-                </Table>
+                </Table>     
 
   </div>
     );

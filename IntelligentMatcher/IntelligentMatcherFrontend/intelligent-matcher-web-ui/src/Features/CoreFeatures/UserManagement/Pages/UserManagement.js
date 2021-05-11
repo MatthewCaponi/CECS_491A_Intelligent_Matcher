@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import UserTable from '../Components/UserTable';
 import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
-
+import { useCookies } from 'react-cookie';
+import { AuthnContext } from '../../../../Context/AuthnContext';
 import '../.././../../App'
 
 

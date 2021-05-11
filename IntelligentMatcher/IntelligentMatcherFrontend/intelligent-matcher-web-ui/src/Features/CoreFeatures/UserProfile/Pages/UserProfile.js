@@ -4,9 +4,8 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
 import UserListings from "../Components/UserListings";
-
 import '../.././../../App'
-
+import Cookies from 'js-cookie';
 
 import _ from 'lodash'
 

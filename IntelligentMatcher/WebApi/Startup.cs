@@ -36,7 +36,7 @@ using DataAccess.Repositories.LoginTrackerRepositories;
 using DataAccess.Repositories.PageVisitTrackerRepositories;
 using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
-
+using AuthenticationSystem;
 
 namespace WebApi
 {

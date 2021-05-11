@@ -27,6 +27,7 @@ import { useEffect, useRef, useState, useContext } from 'react';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
+import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Components/AnalysisDashboard";
 
 import {AuthnContext} from './Context/AuthnContext';
 
@@ -36,7 +37,9 @@ function App() {
   const [cookies, setCookie, removeCoookie] = useCookies(['IdToken']);
   const history = useHistory();
   const [loggedIn, setLoggedIn] = useState();
+
   global.url = "http://localhost:5000/";
+  global.urlRoute = "http://localhost:3000/";
   useEffect(() => {
     try {
       if (cookies['IdToken'] !== null) {
@@ -122,6 +125,9 @@ function App() {
               </Route>
               <Route path="/ConfirmAccount">
                 <ConfirmAccount />
+              </Route>
+              <Route path="/AnalysisDashboard">
+                 <AnalysisDashboard />
               </Route>
               <Route path="/">
                 <Home />
