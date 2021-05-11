@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
+import '../.././../../App'
 
 import './Registration.css';
 
@@ -11,7 +12,7 @@ function ResendEmail() {
     function submitHandler(e){
         var accountId = e;
         // e.preventDefault();
-        fetch('http://localhost:5000/Registration/ResendEmail',
+        fetch(global.url + 'Registration/ResendEmail',
         {
         method: "POST",
         headers: {'Content-type':'application/json'},
@@ -49,7 +50,7 @@ function ResendEmail() {
             >
             Resend Email
             </Button>
-            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
+            <Button href={global.urlRoute + "Login"} compact size="tiny" circular inverted color="blue">
                 Go Back to Login
             </Button>
         </Grid.Row>

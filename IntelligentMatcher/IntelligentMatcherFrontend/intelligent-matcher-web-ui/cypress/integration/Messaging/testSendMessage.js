@@ -2,7 +2,7 @@
   describe('Testing Message Send and Delete', () => {
     context('single value', () => {
       it('Send Test Message', () => {
-        cy.visit('http://localhost:3000/Messaging')
+        cy.visit(global.urlRoute + 'Messaging')
 
         cy.get('.search').select('1').contains('Jakes Group')
         cy.wait(5000)

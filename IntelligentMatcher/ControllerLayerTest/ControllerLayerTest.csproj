@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Archiving\Archiving.csproj" />
     <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
+    <ProjectReference Include="..\ControllerModels\ControllerModels.csproj" />
     <ProjectReference Include="..\Login\Login.csproj" />
     <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
     <ProjectReference Include="..\WebApi\WebApi.csproj" />

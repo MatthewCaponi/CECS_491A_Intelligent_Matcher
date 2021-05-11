@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Button } from 'semantic-ui-react'
+import '../.././../../App'
 
 import './Archive.css';
 
@@ -11,7 +12,7 @@ function Archive(){
     const [listState, setListState] = useState([]);
 
     useEffect( () => {
-        fetch('http://localhost:5000/Archive/GetCategories')
+        fetch(global.url + 'Archive/GetCategories')
         .then(response => response.json())
         .then(responseData => {
             setListState(responseData);
@@ -30,7 +31,7 @@ function Archive(){
     function archiveAllHandler(e){
         var ArchiveModel = e;
         if(e.startDate != "" && e.endDate != ""){
-            fetch('http://localhost:5000/Archive/ArchiveLogFiles',
+            fetch(global.url + 'Archive/ArchiveLogFiles',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -54,7 +55,7 @@ function Archive(){
     function archiveCategoryHandler(e){
         var ArchiveModel = e;
         if(e.startDate != "" && e.endDate != "" && e.category != "" && e.category != "none"){
-            fetch('http://localhost:5000/Archive/ArchiveLogFilesByCategory',
+            fetch(global.url + 'Archive/ArchiveLogFilesByCategory',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -78,7 +79,7 @@ function Archive(){
     function recoverAllHandler(e){
         var ArchiveModel = e;
         if(e.startDate != "" && e.endDate != ""){
-            fetch('http://localhost:5000/Archive/RecoverLogFiles',
+            fetch(global.url + 'Archive/RecoverLogFiles',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -102,7 +103,7 @@ function Archive(){
     function deleteAllHandler(e){
         var ArchiveModel = e;
         if(e.startDate != "" && e.endDate != ""){
-            fetch('http://localhost:5000/Archive/DeleteArchivedFiles',
+            fetch(global.url + 'Archive/DeleteArchivedFiles',
             {
             method: "DELETE",
             headers: {'Content-type':'application/json'},
@@ -216,7 +217,7 @@ function Archive(){
                 </Button>
             </Grid.Row>
             <Grid.Row>
-                <Button href="http://localhost:3000/" compact size="tiny" circular inverted color="purple">Return Home</Button>
+                <Button href={global.urlRoute} compact size="tiny" circular inverted color="purple">Return Home</Button>
             </Grid.Row>
             </Grid>
         </div>

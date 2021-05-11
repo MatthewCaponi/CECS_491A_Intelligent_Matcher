@@ -26,8 +26,7 @@ namespace UserAccountSettings
         {
             try
             {
-                await _userAccountSettingRepository.CreateUserAccountSettings(model);
-                return true;
+                return await _userAccountSettingRepository.CreateUserAccountSettings(model);
             }
             catch
             {
@@ -39,8 +38,7 @@ namespace UserAccountSettings
         {
             try
             {
-                await _userAccountSettingRepository.CreateUserAccountSettings(model);
-                return true;
+                return await _userAccountSettingRepository.CreateUserAccountSettings(model);
             }
             catch
             {
@@ -54,8 +52,7 @@ namespace UserAccountSettings
             bool AuthenticationToken = await _authenticationService.AuthenticatePasswordWithUserId(oldPassword, UserID);
             if (AuthenticationToken == true)
             {
-                await _cryptographyService.newPasswordEncryptAsync(newPassword, UserID);
-                return true;
+                return await _cryptographyService.newPasswordEncryptAsync(newPassword, UserID);
             }
             else
             {
@@ -68,7 +65,8 @@ namespace UserAccountSettings
             bool AuthenticationToken = await _authenticationService.AuthenticatePasswordWithUserId(oldPassword, UserID);
             if (AuthenticationToken == true)
             {
-                await _userAccountRepository.UpdateAccountEmail(UserID, email);
+                int result = await _userAccountRepository.UpdateAccountEmail(UserID, email);
+         
                 return true;
             }
             else
@@ -81,7 +79,8 @@ namespace UserAccountSettings
             bool AuthenticationToken = await _authenticationService.AuthenticatePasswordWithUserId(password, UserID);
             if (AuthenticationToken == true)
             {
-                await _userAccountRepository.UpdateAccountStatus(UserID, "Deleted");
+                int result = await _userAccountRepository.UpdateAccountStatus(UserID, "Deleted");
+
                 return true;
             }
             else
@@ -94,7 +93,8 @@ namespace UserAccountSettings
         {
             try
             {
-                await _userAccountSettingRepository.UpdateFontSize(UserID, FontSize);
+                int result = await _userAccountSettingRepository.UpdateFontSize(UserID, FontSize);
+
                 return true;
             }
             catch
@@ -107,7 +107,8 @@ namespace UserAccountSettings
         {
             try
             {
-                await _userAccountSettingRepository.UpdateThemeColor(UserID, ThemeColor);
+                int result = await _userAccountSettingRepository.UpdateThemeColor(UserID, ThemeColor);
+
                 return true;
             }
             catch
@@ -120,7 +121,8 @@ namespace UserAccountSettings
         {
             try
             {
-                await _userAccountSettingRepository.UpdateFontStyle(UserID, FontStyle);
+                int result = await _userAccountSettingRepository.UpdateFontStyle(UserID, FontStyle);
+
                 return true;
             }
             catch

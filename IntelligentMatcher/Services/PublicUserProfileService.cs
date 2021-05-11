@@ -61,7 +61,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateStatus(userId, "Online");
+                    int result = await _publicUserProfileRepo.UpdateStatus(userId, "Online");
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -80,7 +85,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateStatus(userId, "Offline");
+                    int result = await _publicUserProfileRepo.UpdateStatus(userId, "Offline");
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -101,7 +111,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdatePhoto(model.UserId, model.Photo);
+                    int result = await _publicUserProfileRepo.UpdatePhoto(model.UserId, model.Photo);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -122,7 +137,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateAge(model.UserId, model.Age);
+                    int result = await _publicUserProfileRepo.UpdateAge(model.UserId, model.Age);
+                    if(result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -141,7 +161,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateDescription(model.UserId, model.Description);
+                    int result = await _publicUserProfileRepo.UpdateDescription(model.UserId, model.Description);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -160,7 +185,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateEthnicity(model.UserId, model.Ethnicity);
+                    int result = await _publicUserProfileRepo.UpdateEthnicity(model.UserId, model.Ethnicity);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -179,7 +209,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateGender(model.UserId, model.Gender);
+                    int result = await _publicUserProfileRepo.UpdateGender(model.UserId, model.Gender);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -198,7 +233,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateGoals(model.UserId, model.Goals);
+                    int result = await _publicUserProfileRepo.UpdateGoals(model.UserId, model.Goals);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -217,7 +257,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateHobbies(model.UserId, model.Hobbies);
+                    int result = await _publicUserProfileRepo.UpdateHobbies(model.UserId, model.Hobbies);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -237,7 +282,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateIntrests(model.UserId, model.Intrests);
+                    int result = await _publicUserProfileRepo.UpdateIntrests(model.UserId, model.Intrests);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -256,7 +306,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Height);
+                    int result = await _publicUserProfileRepo.UpdateHeight(model.UserId, model.Height);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -276,7 +331,12 @@ namespace Services
                 try
                 {
 
-                    await _publicUserProfileRepo.UpdateJobs(model.UserId, model.Jobs);
+                    int result = await _publicUserProfileRepo.UpdateJobs(model.UserId, model.Jobs);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -295,7 +355,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateSexualOrientation(model.UserId, model.SexualOrientation);
+                    int result = await _publicUserProfileRepo.UpdateSexualOrientation(model.UserId, model.SexualOrientation);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch
@@ -314,7 +379,12 @@ namespace Services
 
                 try
                 {
-                    await _publicUserProfileRepo.UpdateVisibility(model.UserId, model.Visibility);
+                    int result = await _publicUserProfileRepo.UpdateVisibility(model.UserId, model.Visibility);
+                    if (result != 1)
+                    {
+                        return false;
+
+                    }
                     return true;
                 }
                 catch

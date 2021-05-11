@@ -25,10 +25,10 @@ function Home() {
                     <Search placeholder="Start smart search..." size="massive"></Search>
                 </Grid.Row>
                 <Grid.Row>
-                <Button href="http://localhost:3000/ListingForm"compact size="tiny" circular inverted color="violet">Create Listing
+                <Button href={global.urlRoute + "ListingForm"} compact size="tiny" circular inverted color="violet">Create Listing
                
                 </Button>
-                    <Button href="http://localhost:3000/ListingCategoryPage" compact size="tiny" circular inverted color="blue">Traditional Search</Button>
+                    <Button href={global.urlRoute + "ListingCategoryPage"} compact size="tiny" circular inverted color="blue">Traditional Search</Button>
 
                 </Grid.Row>
             </Grid> 

@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import UserTable from '../Components/UserTable';
 import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
-import { useCookies } from 'react-cookie';
-import { AuthnContext } from '../../../../Context/AuthnContext';
+
+import '../.././../../App'
 
 
 function UserManagement () {
@@ -10,7 +10,7 @@ function UserManagement () {
     const [cookies, setCookie, removeCoookie] = useCookies(['IdToken']);
     const [users, setUsers] = useState([]);
     useEffect( () => {
-        fetch('http://localhost:5000/UserManagement/GetAllUserAccounts', {
+        fetch(global.url + 'UserManagement/GetAllUserAccounts', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,14 +36,14 @@ function UserManagement () {
                 <Grid.Column>
                     <UserTable rows={users}/>
                 </Grid.Column>
-                
-            </Grid.Row>
-            <Grid.Row />    
-        </Grid>
-            
 
-            
- 
+            </Grid.Row>
+            <Grid.Row />
+        </Grid>
+
+
+
+
 
     )
 }

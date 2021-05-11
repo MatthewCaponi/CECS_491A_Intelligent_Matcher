@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import './Login.css';
 import { useHistory } from 'react-router-dom';
+import '../.././../../App'
 
 function ForgotPasswordCodeInput() {
     const history = useHistory();
@@ -13,7 +14,7 @@ function ForgotPasswordCodeInput() {
         var ForgotPasswordCodeInputModel = e;
         // e.preventDefault();
         if(e.code != ""){
-            fetch('http://localhost:5000/Login/ForgotPasswordCodeInput',
+            fetch(global.url + 'Login/ForgotPasswordCodeInput',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},
@@ -61,7 +62,7 @@ function ForgotPasswordCodeInput() {
             >
             Submit
             </Button>
-            <Button href="http://localhost:3000/Login" compact size="tiny" circular inverted color="blue">
+            <Button href={global.urlRoute + "Login"} compact size="tiny" circular inverted color="blue">
                 Go Back to Login
             </Button>
         </Grid.Row>

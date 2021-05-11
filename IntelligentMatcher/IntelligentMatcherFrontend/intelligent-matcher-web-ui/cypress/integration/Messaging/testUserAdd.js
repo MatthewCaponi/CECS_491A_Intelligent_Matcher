@@ -3,7 +3,7 @@
   describe('Testing User Add and Remove', () => {
     context('single value', () => {
       it('Add New user', () => {
-        cy.visit('http://localhost:3000/Messaging')
+        cy.visit(global.urlRoute + 'Messaging')
 
         cy.get('.search').select('1').contains('Jakes Group')
         cy.wait(5000)

@@ -81,6 +81,7 @@
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicyPairing" />
     <Folder Include="StoredProcedures\AccountVerification" />
     <Folder Include="Snapshots" />
+    <Folder Include="StoredProcedures\UserAnalysisDashboard" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -274,6 +275,18 @@
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Delete_ById.sql" />
     <Build Include="StoredProcedures\AccountVerification\AccountVerification_Create.sql" />
     <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllListingsByUserId.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\LoginTracker_Create.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\LoginTracker_DeletebyId.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\LoginTracker_GetAll.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\PageVisitTracker_Create.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\PageVisitTracker_DeletebyId.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\PageVisitTracker_GetAll.sql" />
+    <Build Include="ListingSearchTracker.sql" />
+    <Build Include="PageVisitTracker.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\SearchTracker_Create.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\SearchTracker_DeletebyId.sql" />
+    <Build Include="StoredProcedures\UserAnalysisDashboard\SearchTracker_GetAll.sql" />
+    <Build Include="LoginTracker.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="UserDatabase.refactorlog" />

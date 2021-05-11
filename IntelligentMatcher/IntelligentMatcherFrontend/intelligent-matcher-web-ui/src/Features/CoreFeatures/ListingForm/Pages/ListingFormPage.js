@@ -4,11 +4,12 @@ import { Grid, Header, Divider, Label, Search,Button,Message, Container } from '
 import { Router } from 'react-router';
 import ListingSearch from '../../TraditionalListingSearch/Pages/ListingSearch';
 
+import '../.././../../App'
 
 function ListingFormPage () {
     const [listings, setListings] = useState([]);
     useEffect( () => {
-        fetch('http://localhost:5000/ListingForm/GetForm')
+        fetch(global.url + 'ListingForm/GetForm')
         .then(response => response.json())
         .then(responseData => {
             setListings(responseData);

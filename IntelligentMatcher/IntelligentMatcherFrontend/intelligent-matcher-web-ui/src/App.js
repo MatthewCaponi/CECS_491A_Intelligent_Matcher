@@ -27,7 +27,9 @@ import { useEffect, useRef, useState, useContext } from 'react';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
+
 import {AuthnContext} from './Context/AuthnContext';
+
 
 function App() {
   const authnContext = useContext(AuthnContext);
@@ -42,7 +44,7 @@ function App() {
         const decodedIdToken = jwt(idToken).exp;
         var currentDateTime = Date.now()/1000;
         if (decodedIdToken > currentDateTime)
-        {  
+        {
             authnContext.login();
         } else {
           authnContext.logout();
@@ -102,7 +104,7 @@ function App() {
               </Route>
               <Route path="/ListingCategoryPage">
                 <ListingCategoryPage />
-              </Route> 
+              </Route>
               <Route path="/Archive">
                 <Archive />
               </Route>
@@ -129,8 +131,8 @@ function App() {
         </div>)
 
     }
-  
-  
+
+
 }
 
 export default App;

@@ -4,6 +4,8 @@ import './SiteHeader.css';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import {AuthnContext } from '../Context/AuthnContext';
+import '../App'
+
 
 function SiteHeader() {
     const authnContext = useContext(AuthnContext);
@@ -32,33 +34,38 @@ function SiteHeader() {
         <Segment inverted>
             <Grid columns={12}>
                 <Grid.Column mobile={2} tablet={2} container textAlign="left" verticalAlign="center" width={1}>
-                    <Header href="http://localhost:3000" inverted color="grey">                      
+                    <Header href={global.urlRoute} inverted color="grey">
                         <Icon name='moon' />
                         InfiniMuse
-                    </Header>  
+                    </Header>
                 </Grid.Column>
                 <Grid.Column container>
                 <Menu inverted pointing secondary>
-                    <Menu.Item href="http://localhost:3000" name='home' />
+                    <Menu.Item href={global.urlRoute} name='home' />
                     <Menu.Item link name='profile' />
-                    <Menu.Item href="http://localhost:3000/ListingTable" name='Listings' />
+                    <Menu.Item href={global.urlRoute + "ListingTable"} name='Listings' />
                     </Menu>
                 </Grid.Column>
                 <Grid.Column container>
-               
+
                 </Grid.Column>
                 <Grid.Column container />
                 <Grid.Column container>
-                    {/* <Button href="http://localhost:3000/Login" name='Login' circular inverted>
+                    <Button href={global.urlRoute + "Login"} name='Login' circular inverted>
                         Login
                     </Button> */}
                 </Grid.Column>
                 <Grid.Column container only="computer"/>
                 <Grid.Column container only="computer" />
                 <Grid.Column container only="computer" only="tablet"/>
-                <Grid.Column container floated="right" verticalAlign="center" width={2}>           
-                    <Button href="http://localhost:3000/UserManagement" className={true ? 'adminVisible' : 'adminHidden'}circular inverted>
+                <Grid.Column container floated="right" verticalAlign="center" width={2}>
+                    <Button href={global.urlRoute + "UserManagement"} className={true ? 'adminVisible' : 'adminHidden'}circular inverted>
                         Admin
+                    </Button>
+                </Grid.Column>
+                <Grid.Column container floated="right" verticalAlign="center" width={2}>
+                    <Button href={global.urlRoute + "AnalysisDashboard"} className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
+                        AnalysisDashboard
                     </Button>
                 </Grid.Column>
                 <Grid.Column container floated="right" width={2} widescreen={1} computer={2} tablet={2}>

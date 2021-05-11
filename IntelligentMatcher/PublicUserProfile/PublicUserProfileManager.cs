@@ -20,71 +20,113 @@ namespace PublicUserProfile
         }
         public async Task<bool> EditUserProfilePictureAsync(PublicUserProfileModel model)
         {
-            await _publicUserProfileService.ChangeProfilePictureAsync(model);
-            return true;
+            return await _publicUserProfileService.ChangeProfilePictureAsync(model);
 
         }
 
         public async Task<bool> SetUserOnlineAsync(int userId)
         {
-            await _publicUserProfileService.SetUserOnlineAsync(userId);
-            return true;
+            return await _publicUserProfileService.SetUserOnlineAsync(userId);
         }
 
         public async Task<bool> SetUserOfflineAsync(int userId)
         {
-            await _publicUserProfileService.SetUserOfflineAsync(userId);
-            return true;
+            return await _publicUserProfileService.SetUserOfflineAsync(userId);
         }
 
         public async Task<bool> EditPublicUserProfileAsync(PublicUserProfileModel model)
         {
+            bool finalResult = true;
             if(model.Age < 1000)
             {
-                await _publicUserProfileService.UpdateProfileAgeAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileAgeAsync(model);
+                if(result == false)
+                {
+                    finalResult = false;
+                }
             }
             if(model.Description.Length <= 1000)
             {
-                await _publicUserProfileService.UpdateProfileDescriptionAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileDescriptionAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Ethnicity.Length <= 100)
             {
-                await _publicUserProfileService.UpdateProfileEthnicityAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileEthnicityAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Gender == "Male" || model.Gender == "Female")
             {
-                await _publicUserProfileService.UpdateProfileGenderAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileGenderAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Goals.Length <= 1000)
             {
-                await _publicUserProfileService.UpdateProfileGoalsAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileGoalsAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Height.Length <= 1000)
             {
-                await _publicUserProfileService.UpdateProfileHeightAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileHeightAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Hobbies.Length <= 1000)
             {
-                await _publicUserProfileService.UpdateProfileHobbiesAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileHobbiesAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Intrests.Length <= 1000)
             {
-                await _publicUserProfileService.UpdateProfileIntrestsAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileIntrestsAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Jobs.Length <= 1000)
             {
-                await _publicUserProfileService.UpdateProfileJobsAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileJobsAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.SexualOrientation.Length <= 100)
             {
-                await _publicUserProfileService.UpdateProfileSexualOrientationAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileSexualOrientationAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
             if (model.Visibility == "Public" || model.Visibility == "Private" || model.Visibility == "Friends")
             {
-                await _publicUserProfileService.UpdateProfileVisibilityAsync(model);
+                bool result = await _publicUserProfileService.UpdateProfileVisibilityAsync(model);
+                if (result == false)
+                {
+                    finalResult = false;
+                }
             }
 
-            return true;
+            return finalResult;
         }
 
         public async Task<bool> CeatePublicUserProfileAsync(PublicUserProfileModel model)
@@ -92,8 +134,7 @@ namespace PublicUserProfile
             model.Status = "Offline";
             model.Visibility = "Public";
 
-            await _publicUserProfileService.CeatePublicUserProfileAsync(model);
-            return true;
+            return await _publicUserProfileService.CeatePublicUserProfileAsync(model);
 
 
         }

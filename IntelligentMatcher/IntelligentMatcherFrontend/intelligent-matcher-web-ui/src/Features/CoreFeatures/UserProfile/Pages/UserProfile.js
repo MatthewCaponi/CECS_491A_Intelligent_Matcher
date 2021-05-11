@@ -4,7 +4,9 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
 import UserListings from "../Components/UserListings";
-import Cookies from 'js-cookie';
+
+import '../.././../../App'
+
 
 import _ from 'lodash'
 
@@ -15,7 +17,7 @@ export class UserProfile extends Component {
 
     super(props);
 
-    this.state = {  
+    this.state = {
         userId: 1,
         viewingId: 0,
         otherData: [],
@@ -26,7 +28,7 @@ export class UserProfile extends Component {
         this.getViewStatus = this.getViewStatus.bind(this);
         let url = window.location.href;
         url = url.split("id=")
-        this.state.viewingId = parseInt(url[1]);   
+        this.state.viewingId = parseInt(url[1]);
         this.getViewStatus();
   }
 
@@ -35,7 +37,7 @@ export class UserProfile extends Component {
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetViewStatus',
+    await fetch(global.url + 'UserProfile/GetViewStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json',
@@ -44,10 +46,10 @@ export class UserProfile extends Component {
     }).then(r => r.json()).then(res=>{
         this.setState({visibility: res});
         console.log(this.state.visibility);
-    }   
-    ); 
+    }
+    );
 
-    await fetch('http://localhost:5000/UserProfile/GetOtherData',
+    await fetch(global.url + 'UserProfile/GetOtherData',
     {
         method: "POST",
         headers: {'Content-type':'application/json',
@@ -55,12 +57,12 @@ export class UserProfile extends Component {
         body: JSON.stringify(this.state.viewingId)
     }).then(r => r.json()).then(res=>{
         this.setState({otherData: res});
-    }   
-    ); 
+    }
+    );
 
     var IdsModel = {UserId: this.state.userId, FriendId: this.state.viewingId};
 
-    await fetch('http://localhost:5000/UserProfile/GetFriendStatus',
+    await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
         headers: {'Content-type':'application/json',
@@ -68,8 +70,8 @@ export class UserProfile extends Component {
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({friendStatus: res});
-    }   
-    ); 
+    }
+    );
 }
 
   render () {
@@ -102,7 +104,7 @@ export class UserProfile extends Component {
 (this.state.visibility == true || this.state.viewingId == this.state.userId) ?
                                     ( <ProfileData />
                                         ) : ("Private")}
-                            
+
 
   </div>
 </Grid.Column>
@@ -115,7 +117,7 @@ export class UserProfile extends Component {
     else{
 
 
-      return (      
+      return (
         <Grid className="segment centered">
                 User Not Found
         </Grid>

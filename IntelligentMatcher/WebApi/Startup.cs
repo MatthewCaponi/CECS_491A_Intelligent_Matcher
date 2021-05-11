@@ -31,7 +31,12 @@ using IdentityServices;
 using AuthorizationResolutionSystem;
 using UserAccessControlServices;
 using AuthorizationPolicySystem;
-using AuthenticationSystem;
+
+using DataAccess.Repositories.LoginTrackerRepositories;
+using DataAccess.Repositories.PageVisitTrackerRepositories;
+using DataAccess.Repositories.SearchTrackerRepositories;
+using UserAnalysisManager;
+
 
 namespace WebApi
 {
@@ -60,7 +65,7 @@ namespace WebApi
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<IAssignmentPolicyService, AssignmentPolicyService>();
-            
+
             services.AddTransient<IAttributeAssignmentService, AttributeAssignmentService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
@@ -75,6 +80,10 @@ namespace WebApi
             services.AddTransient<IFriendRequestListRepo, FriendRequestListRepo>();
             services.AddTransient<IPublicUserProfileRepo, PublicUserProfileRepo>();
             services.AddTransient<IUserAccountCodeRepository, UserAccountCodeRepository>();
+            services.AddTransient<ILoginTrackerRepo, LoginTrackerRepo>();
+            services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
+            services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
+            services.AddTransient<IListingRepository, ListingRepository>();
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
 
@@ -99,7 +108,11 @@ namespace WebApi
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+
             services.AddTransient<IMapperService, MapperService>();
+
+            services.AddTransient<IUserAnalysisService, UserAnalysisService>();
+
 
             services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<ILoginManager, LoginManager>();
@@ -111,8 +124,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
-            
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { AuthnContext } from '../../../../Context/AuthnContext';
 import jwt from 'jwt-decode';
 import { getCookie } from 'react-use-cookie';
-
+import '../.././../../App'
 import './Login.css';
 import { get } from 'http';
 
@@ -21,7 +21,7 @@ function Login() {
         }
     }
     catch{
-        
+
     }
 
     const [usernameState, setUsernameState] = useState("");
@@ -33,7 +33,7 @@ function Login() {
         var LoginModel = e;
         // e.preventDefault();
         if(e.username != "" && e.password != "" ){
-            fetch('http://localhost:5000/Login/Login',
+            fetch(global.url + 'Login/Login',
             {
             method: "POST",
             headers: {'Content-type':'application/json',
@@ -51,7 +51,7 @@ function Login() {
                     setToken(idToken);
                     console.log("role: " + accessToken.role);
                     authnContext.login();
-                    
+
                     history.push("/", { username: idToken.username, accountType: idToken.accountType, accountStatus: idToken.accountStatus });
                 }
                 else{
@@ -80,10 +80,26 @@ function Login() {
             <Grid.Row>
                 {confMessage}
             </Grid.Row>
+            <Grid.Row>
+                <label htmlFor="username">
+                    Username:
+                </label>
+            </Grid.Row>
+            <Grid.Row>
+                <a href={global.urlRoute + "ForgotUsername"}>Forgot Username</a>
+            </Grid.Row>
             <Grid.Row verticalAlign="middle">
                 <div class="ui input">
                     <input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
                 </div>
+            </Grid.Row>
+            <Grid.Row>
+                <label htmlFor="password">
+                    Password:
+                </label>
+            </Grid.Row>
+            <Grid.Row>
+                <a href={global.urlRoute + "ForgotPasswordValidation"}>Forgot Password</a>
             </Grid.Row>
             <Grid.Row verticalAlign="middle">
                 <div class="ui input">
@@ -114,7 +130,7 @@ function Login() {
             </Grid.Row>
             </Grid>
         </div>
-        
+
     )
 
 }

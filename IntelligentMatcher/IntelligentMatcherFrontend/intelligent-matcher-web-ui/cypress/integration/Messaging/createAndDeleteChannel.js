@@ -3,7 +3,7 @@
   describe('Testing Create Channel', () => {
     context('single value', () => {
       it('Create and Delete Channel', () => {
-        cy.visit('http://localhost:3000/Messaging')
+        cy.visit(global.urlRoute + 'Messaging')
 
 
         cy.get('.action > input').type(`Test Channel`)
