@@ -90,8 +90,7 @@ namespace FriendList
             await _userInteractionService.RemoveFriendRequestAsync(userId, blockedUserId);
             await RemoveFriendAsync(userId, blockedUserId);
             FriendsListJunctionModel model = new FriendsListJunctionModel();
-            await _userInteractionService.CreateBlockAsync(userId, blockedUserId);
-            return true;
+            return await _userInteractionService.CreateBlockAsync(userId, blockedUserId);
         }
 
         public async Task<bool> ConfirmFriendAsync(int requetUserId, int requestedUserId)
@@ -337,14 +336,12 @@ namespace FriendList
 
         public async Task<bool> RemoveFriendAsync(int userId, int removedUserId)
         {
-            await _userInteractionService.RemoveFriendAsync(userId, removedUserId);
-            return true;
+            return await _userInteractionService.RemoveFriendAsync(userId, removedUserId);
         }
 
         public async Task<bool> CancelFriendRequestAsync(int userId, int removedUserId)
         {
-            await _userInteractionService.RemoveFriendRequestAsync(userId, removedUserId);
-            return true;
+            return await _userInteractionService.RemoveFriendRequestAsync(userId, removedUserId);
         }
 
         public async Task<bool> RequestFriendAsync(int requestUserId, int requestedUserId)
@@ -355,13 +352,11 @@ namespace FriendList
             {
                 if (requestUserId == junction.User1Id && requestedUserId == junction.User2Id)
                 {
-                    await ConfirmFriendAsync(requestUserId, requestedUserId);
-                    return true;
+                    return await ConfirmFriendAsync(requestUserId, requestedUserId);
                 }
                 else if (requestUserId == junction.User2Id && requestedUserId == junction.User1Id)
                 {
-                    await ConfirmFriendAsync(requestUserId, requestedUserId);
-                    return true;
+                    return await ConfirmFriendAsync(requestUserId, requestedUserId);
                 }
             }
 
@@ -381,8 +376,7 @@ namespace FriendList
             FriendsListJunctionModel model = new FriendsListJunctionModel();
             model.User1Id = requestUserId;
             model.User2Id = requestedUserId;
-            await _userInteractionService.CreateFriendRequestAsync(requestUserId, requestedUserId);
-            return true;
+            return await _userInteractionService.CreateFriendRequestAsync(requestUserId, requestedUserId);
         }
     }
 }

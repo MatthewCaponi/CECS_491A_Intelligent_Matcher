@@ -49,7 +49,11 @@ namespace Messaging
 
                 if(model.Message.Length <= 1000)
                 {
-                    await _messagesRepo.CreateMessageAsync(model);
+                    int result = await _messagesRepo.CreateMessageAsync(model);
+                    if (result != 1)
+                    {
+                        return false;
+                    }
                     return true;
                 }
                 else
@@ -82,7 +86,11 @@ namespace Messaging
         {
             try
             {
-                await _userChannelsRepo.AddUserChannelAsync(model.OwnerId, await _channelsRepo.CreateChannelAsync(model));
+                int result = await _userChannelsRepo.AddUserChannelAsync(model.OwnerId, await _channelsRepo.CreateChannelAsync(model));
+                if (result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch
@@ -96,8 +104,16 @@ namespace Messaging
         {
             try
             {
-                await _channelsRepo.DeleteChannelbyIdAsync(id);
-                await _userChannelsRepo.RemoveChannelUsingChannelIdAsync(id);
+                int result = await _channelsRepo.DeleteChannelbyIdAsync(id);
+                if (result != 1)
+                {
+                    return false;
+                }
+                result = await _userChannelsRepo.RemoveChannelUsingChannelIdAsync(id);
+                if(result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch
@@ -110,7 +126,11 @@ namespace Messaging
         {
             try
             {
-                await _userChannelsRepo.RemoveUserIdChannelIdAsync(userId, channelId);
+                int result = await _userChannelsRepo.RemoveUserIdChannelIdAsync(userId, channelId);
+                if (result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch
@@ -123,7 +143,11 @@ namespace Messaging
         {
             try
             {
-                await _messagesRepo.DeleteMessageByIdAsync(messageId);
+                int result = await _messagesRepo.DeleteMessageByIdAsync(messageId);
+                if (result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch
@@ -136,7 +160,11 @@ namespace Messaging
         {
             try
             {
-                await _userChannelsRepo.AddUserChannelAsync(userId, channelId);
+                int result = await _userChannelsRepo.AddUserChannelAsync(userId, channelId);
+                if (result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch
@@ -213,7 +241,11 @@ namespace Messaging
         {
             try
             {
-                await _userChannelsRepo.UpdateStatus(id, "Online");
+                int result = await _userChannelsRepo.UpdateStatus(id, "Online");
+                if (result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch
@@ -225,7 +257,11 @@ namespace Messaging
         {
             try
             {
-                await _userChannelsRepo.UpdateStatus(id, "Offline");
+                int result = await _userChannelsRepo.UpdateStatus(id, "Offline");
+                if (result != 1)
+                {
+                    return false;
+                }
                 return true;
             }
             catch

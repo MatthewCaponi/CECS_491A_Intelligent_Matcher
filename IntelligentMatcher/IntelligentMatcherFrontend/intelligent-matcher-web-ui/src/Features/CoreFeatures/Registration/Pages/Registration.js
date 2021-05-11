@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
+import '../.././../../App'
 
 import './Registration.css';
 
@@ -20,7 +21,7 @@ function Registration() {
         e.dateOfBirth != "" && e.firstName.length <= 50 && e.surname.length <= 50 && e.username.length <= 50 &&
         e.emailAddress.length <= 50 && e.password.length <= 50 && e.password.length >= 8 && /\d/.test(e.password) &&
         /[A-Z]/.test(e.password) && /[a-z]/.test(e.password)){
-            fetch('http://localhost:5000/Registration/RegisterUser',
+            fetch(global.url + 'Registration/RegisterUser',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},

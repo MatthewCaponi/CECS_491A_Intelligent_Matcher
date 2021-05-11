@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import './Login.css';
 import { useHistory } from 'react-router-dom';
+import '../.././../../App'
 
 function ResetPassword() {
     const history = useHistory();
@@ -15,7 +16,7 @@ function ResetPassword() {
         // e.preventDefault();
         if(e.password != "" && e.password.length <= 50 && e.password.length >= 8 && /\d/.test(e.password) &&
         /[A-Z]/.test(e.password) && /[a-z]/.test(e.password)){
-            fetch('http://localhost:5000/Login/ResetPassword',
+            fetch(global.url + 'Login/ResetPassword',
             {
             method: "POST",
             headers: {'Content-type':'application/json'},

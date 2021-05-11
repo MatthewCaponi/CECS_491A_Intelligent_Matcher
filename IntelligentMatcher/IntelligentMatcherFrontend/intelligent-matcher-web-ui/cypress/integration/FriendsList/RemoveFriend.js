@@ -13,7 +13,7 @@
         cy.get('.red').click()
 
         
-        cy.visit('http://localhost:3000/FriendsList')
+        cy.visit(global.urlRoute + 'FriendsList')
 
 
         cy.get('.sortable > tbody > :nth-child(2) > :nth-child(3) > a').click()

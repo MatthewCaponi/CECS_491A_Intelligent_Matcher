@@ -3,7 +3,7 @@
   describe('Testing Leave Channel', () => {
     context('single value', () => {
       it('Leave Channel', () => {
-        cy.visit('http://localhost:3000/Messaging')
+        cy.visit(global.urlRoute + 'Messaging')
 
         cy.get('.search').select('2').contains('Richards Group')
         cy.wait(5000)
