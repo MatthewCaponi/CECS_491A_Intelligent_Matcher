@@ -30,6 +30,11 @@ namespace Archiving
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
                 string logDirectory = $"{projectDirectory}\\logs";
 
+                if (!Directory.Exists(logDirectory))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(logDirectory);
+                }
+
                 string[] allFiles = Directory.GetFiles(logDirectory, "*.*", SearchOption.AllDirectories);
                 List<string> validFiles = new List<string>();
 
@@ -103,6 +108,11 @@ namespace Archiving
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
                 string archiveDirectory = $"{projectDirectory}\\archivedLogs";
 
+                if (!Directory.Exists(archiveDirectory))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(archiveDirectory);
+                }
+
                 string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
                 List<string> validZipFiles = new List<string>();
 
@@ -136,6 +146,11 @@ namespace Archiving
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
                 string archiveDirectory = $"{projectDirectory}\\archivedLogs";
 
+                if (!Directory.Exists(archiveDirectory))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(archiveDirectory);
+                }
+
                 string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
                 List<string> validZipFiles = new List<string>();
 
@@ -163,6 +178,11 @@ namespace Archiving
                 string currentDirectory = Environment.CurrentDirectory;
                 string projectDirectory = Directory.GetParent(currentDirectory).FullName;
                 string logDirectory = $"{projectDirectory}\\logs";
+
+                if (!Directory.Exists(logDirectory))
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(logDirectory);
+                }
 
                 var categories = await _folderHandlerService.GetSubFolders(logDirectory);
 

@@ -77,25 +77,23 @@ namespace Services.Archiving
             }
             catch (IOException e)
             {
-                try
+                string currentDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(currentDirectory).FullName;
+                string archiveDirectory = $"{projectDirectory}\\archivedLogs";
+
+                if (!Directory.Exists(archiveDirectory))
                 {
-                    string currentDirectory = Environment.CurrentDirectory;
-                    string projectDirectory = Directory.GetParent(currentDirectory).FullName;
-                    string archiveDirectory = $"{projectDirectory}\\archivedLogs";
-
-                    string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
-                    List<string> validFiles = new List<string>();
-
-                    validFiles.Add(allZipFiles[oldArchive]);
-
-                    await DeleteArchivedFiles(validFiles);
-
-                    throw new IOException(e.Message, e.InnerException);
+                    DirectoryInfo di = Directory.CreateDirectory(archiveDirectory);
                 }
-                catch (IOException f)
-                {
-                    throw new IOException(f.Message, f.InnerException);
-                }
+
+                string[] allZipFiles = Directory.GetFiles(archiveDirectory, "*.*", SearchOption.AllDirectories);
+                List<string> validFiles = new List<string>();
+
+                validFiles.Add(allZipFiles[oldArchive]);
+
+                await DeleteArchivedFiles(validFiles);
+
+                throw new IOException(e.Message, e.InnerException);
             }
         }
 
