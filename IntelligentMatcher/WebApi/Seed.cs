@@ -163,7 +163,7 @@ namespace WebApi
                 userAccountSettingsModel.Id = i;
                 userAccountSettingsModel.UserId = userAccountModel.Id;
                 userAccountSettingsModel.FontSize = 12;
-                userAccountSettingsModel.FontStyle = "Time New Roman";
+                userAccountSettingsModel.FontStyle = "Default";
                 userAccountSettingsModel.ThemeColor = "Light";
            
                 await userAccountRepository.CreateAccount(userAccountModel);

@@ -63,8 +63,10 @@
           <option value="none" selected disabled hidden> 
           {this.state.fontstyle}
                 </option> 
+                <option value="Default">Default</option>
+
             <option value="Time-New Roman">Time-New Roman</option>
-            <option value="Serif">Serif</option>
+            <option value="Oxygen">Oxygen</option>
             <option value="Helvetica">Helvetica</option>
         </select>
 
