@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Button } from 'semantic-ui-react'
-import '../.././../../App'
+import '../.././../../index'
 
 import './Archive.css';
 

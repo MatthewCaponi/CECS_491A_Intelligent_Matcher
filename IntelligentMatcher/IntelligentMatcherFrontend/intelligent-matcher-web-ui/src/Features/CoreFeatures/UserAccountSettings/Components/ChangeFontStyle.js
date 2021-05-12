@@ -1,6 +1,6 @@
 
   import React, { Component } from 'react';
-  import '../.././../../App'
+  import '../.././../../index'
 
   export class ChangeFontStyle extends Component {
     static displayName = ChangeFontStyle.name;

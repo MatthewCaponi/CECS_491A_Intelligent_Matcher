@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../.././../../App'
+import '../.././../../index'
 
 export class ChangePassword extends Component {
   static displayName = ChangePassword.name;

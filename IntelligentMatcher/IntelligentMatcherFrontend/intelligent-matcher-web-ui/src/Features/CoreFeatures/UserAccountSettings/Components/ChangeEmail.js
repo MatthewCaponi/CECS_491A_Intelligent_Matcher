@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
-import '../.././../../App'
+import '../.././../../index'
 
 export class ChangeEmail extends Component {
   static displayName = ChangeEmail.name;

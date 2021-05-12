@@ -42,11 +42,12 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
+  
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -66,10 +67,13 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^6.1.2",
+    "@semantic-ui-react/craco-less": "^1.2.1",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "semantic-ui-less": "^2.4.1"
   }
 }

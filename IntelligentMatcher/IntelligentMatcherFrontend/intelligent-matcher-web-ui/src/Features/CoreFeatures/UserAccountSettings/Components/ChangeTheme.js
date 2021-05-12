@@ -1,6 +1,6 @@
 
   import React, { Component } from 'react';
-  import '../.././../../App'
+  import '../.././../../index'
 
   export class ChangeTheme extends Component {
     static displayName = ChangeTheme.name;
@@ -44,6 +44,8 @@
       .then(res=>{
         if(res){
           this.setState({message:'Theme has been changed'});
+          window.location.reload(false);
+
         }else{
           this.setState({message:'THeme change has failed'});
   
