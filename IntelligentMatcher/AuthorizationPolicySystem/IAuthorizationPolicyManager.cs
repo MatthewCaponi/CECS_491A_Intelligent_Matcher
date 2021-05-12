@@ -10,5 +10,6 @@ namespace AuthorizationPolicySystem
         AccessPolicyModel ConfigureDefaultPolicy(string resource, string role, string id, bool read, bool write, bool delete);
         AccessPolicyModel ConfigureCustomPolicy(string scope, int id);
         AccessPolicyModel ConfigureCustomPolicy(string scope, string role);
+        AccessPolicyModel ConfigureCustomPolicy(string scope, string role, string id);
     }
 }

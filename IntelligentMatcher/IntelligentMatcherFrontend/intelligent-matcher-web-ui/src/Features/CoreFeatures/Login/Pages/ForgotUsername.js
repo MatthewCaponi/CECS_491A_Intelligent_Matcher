@@ -80,7 +80,7 @@ function ForgotUsername() {
             >
             Submit
             </Button>
-            <Button href={global.urlRoute + "Login"} compact size="tiny" circular inverted color="blue">Go Back</Button>
+            <Button href={global.urlRoute} compact size="tiny" circular inverted color="blue">Go Back</Button>
         </Grid.Row>
         </Grid>
     )

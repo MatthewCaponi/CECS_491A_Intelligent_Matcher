@@ -8,23 +8,17 @@ export const AuthnContext = React.createContext({
 
 const AuthnContextProvider = props => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [role, setRole] = useState("");
 
-    const loginHandler = (r) => {
+    function loginHandler() {
         setIsLoggedIn(true);
-        console.log("rooeee" + r);
-        setRole(r);
     }
 
-    const logoutHandler = () => {
+    function logoutHandler() {
         setIsLoggedIn(false);
     }
 
-    const roleHandler = () => {
-        setRole("Hello");
-    }
     return (
-        <AuthnContext.Provider value={{login: loginHandler, logout: logoutHandler, changeRole: roleHandler, isLoggedIn: isLoggedIn, getRole: role}}>
+        <AuthnContext.Provider value={{login: loginHandler, logout: logoutHandler, isLoggedIn: isLoggedIn}}>
             {props.children}
         </AuthnContext.Provider>
     )

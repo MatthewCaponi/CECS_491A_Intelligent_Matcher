@@ -30,6 +30,7 @@ import React from "react";
 import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Components/AnalysisDashboard";
 
 import {AuthnContext} from './Context/AuthnContext';
+import ErrorSplash from "./Shared/ErrorScreens/ErrorSplash";
 
 
 function App() {
@@ -83,8 +84,11 @@ function App() {
             <Route path="/ResendEmail">
               <ResendEmail />
             </Route>
-            <Route path="/">
+            <Route path="/" exact>
               <Login />
+            </Route>
+            <Route>
+              <ErrorSplash />
             </Route>
           </Switch>
         </Router>
@@ -129,8 +133,11 @@ function App() {
               <Route path="/AnalysisDashboard">
                  <AnalysisDashboard />
               </Route>
-              <Route path="/">
+              <Route path="/" exact>
                 <Home />
+              </Route>
+              <Route>
+                <ErrorSplash />
               </Route>
             </Switch>
           </Router>

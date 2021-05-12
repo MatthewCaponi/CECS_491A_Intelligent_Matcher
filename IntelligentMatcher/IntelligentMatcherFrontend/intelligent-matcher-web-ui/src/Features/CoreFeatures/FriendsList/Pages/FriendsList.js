@@ -43,7 +43,8 @@ export class FriendsList extends Component {
   await fetch(global.url + 'FriendList/GetAllFriends',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
   }).then(r => r.json()).then(res=>{
       this.setState({friends: res});

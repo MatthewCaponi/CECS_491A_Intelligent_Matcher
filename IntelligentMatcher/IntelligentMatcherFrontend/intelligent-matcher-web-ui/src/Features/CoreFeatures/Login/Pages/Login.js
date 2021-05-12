@@ -49,7 +49,6 @@ function Login() {
                     const idToken = jwt(idCookie);
                     const accessToken = jwt(accessCookie);
                     setToken(idToken);
-                    console.log("role: " + accessToken.role);
                     authnContext.login();
                     
                     history.push("/", { username: idToken.username, accountType: idToken.accountType, accountStatus: idToken.accountStatus });

@@ -61,7 +61,7 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<PublicUserProfileModel>> GetUserProfile([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("user_profile:read", "user");
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -79,8 +79,6 @@ namespace IntelligentMatcherUI.Controllers
             }
 
         }
-
-
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<DALListingModel>>> GetUserListings([FromBody] int userId)

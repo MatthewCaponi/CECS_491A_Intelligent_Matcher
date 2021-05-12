@@ -68,7 +68,7 @@ export class ConfirmAccount extends Component {
 
 
 
-      return <Redirect to={{ pathname:"/Login", state: { message: "UserConfirmed"}}}      push={true} />
+      return <Redirect to={{ pathname:"/", state: { message: "UserConfirmed"}}}      push={true} />
     }
 
     return (

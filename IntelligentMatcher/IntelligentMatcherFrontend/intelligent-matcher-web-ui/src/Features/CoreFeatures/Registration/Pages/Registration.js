@@ -152,7 +152,7 @@ function Registration() {
             >
             Register
             </Button>
-            <Button href={global.urlRoute + "Login"} compact size="tiny" circular inverted color="blue">
+            <Button href={global.urlRoute} compact size="tiny" circular inverted color="blue">
                 Go Back to Login
             </Button>
         </Grid.Row>
