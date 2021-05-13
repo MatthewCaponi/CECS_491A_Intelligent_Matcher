@@ -68,8 +68,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
                 Models.User_Access_Control.ClaimModel claimModel = new Models.User_Access_Control.ClaimModel();
                 claimModel.Id = i;
-                claimModel.Name = "TestClaim" + i;
-                claimModel.Description = "TestDescription" + i;
+                claimModel.Type = "TestClaim" + i;
+                claimModel.Value = "TestDescription" + i;
                 claimModel.IsDefault = true;
 
                 await claimRepository.CreateClaim(claimModel);

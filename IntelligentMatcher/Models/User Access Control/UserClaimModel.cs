@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BusinessModels.UserAccessControl
+namespace Models.User_Access_Control
 {
-    public class ClaimModel
+    public class UserClaimModel
     {
         public int Id { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
-        public bool IsDefault { get; set; }
-        public List<ScopeModel> Scopes { get; set; }
+        public int UserAccountId { get; set; }
     }
 }

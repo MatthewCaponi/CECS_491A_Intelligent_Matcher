@@ -3,6 +3,7 @@
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [userAccountId] INT NOT NULL, 
     [scopeClaimId] INT NOT NULL, 
+    [role] NVARCHAR(50) NOT NULL, 
     CONSTRAINT [FK_UserScopeClaim_UserAccount] FOREIGN KEY ([userAccountId]) REFERENCES [UserAccount]([Id]), 
     CONSTRAINT [FK_UserScopeClaim_ScopeClaim] FOREIGN KEY ([scopeClaimId]) REFERENCES [ScopeClaim]([Id])
     ON DELETE CASCADE

@@ -68,8 +68,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
                 Models.User_Access_Control.ClaimModel claimModel = new Models.User_Access_Control.ClaimModel();
                 claimModel.Id = i;
-                claimModel.Name = "TestClaim" + i;
-                claimModel.Description = "TestDescription" + i;
+                claimModel.Type = "TestClaim" + i;
+                claimModel.Value = "TestDescription" + i;
                 claimModel.IsDefault = true;
 
                 await claimRepository.CreateClaim(claimModel);
@@ -143,7 +143,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             foreach (var userClaim in userClaimList)
             {
                 var claimModel = await claimsService.GetClaim(i);
-                if (userClaim.Type == claimModel.Name)
+                if (userClaim.Type == claimModel.Type)
                 {
                     ++i;
                     continue;
@@ -164,8 +164,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
             var expectedResult = new BusinessModels.UserAccessControl.ClaimModel();
 
             expectedResult.Id = id;
-            expectedResult.Name = name;
-            expectedResult.Description = description;
+            expectedResult.Type = name;
+            expectedResult.Value = description;
             expectedResult.IsDefault = isDefault;
 
             IClaimsService claimsService = new ClaimsService(claimRepository, scopeRepository,
@@ -176,8 +176,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(actualResult.Id == expectedResult.Id);
-            Assert.IsTrue(actualResult.Name == expectedResult.Name);
-            Assert.IsTrue(actualResult.Description == expectedResult.Description);
+            Assert.IsTrue(actualResult.Type == expectedResult.Type);
+            Assert.IsTrue(actualResult.Value == expectedResult.Value);
             Assert.IsTrue(actualResult.IsDefault == expectedResult.IsDefault);
         }
 
@@ -240,8 +240,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
             // Arrange
             var claimModel = new BusinessModels.UserAccessControl.ClaimModel();
 
-            claimModel.Name = name;
-            claimModel.Description = description;
+            claimModel.Type = name;
+            claimModel.Value = description;
             claimModel.IsDefault = isDefault;
 
             IClaimsService claimsService = new ClaimsService(claimRepository, scopeRepository,
@@ -288,8 +288,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
             // Arrange
             var claimModel = new BusinessModels.UserAccessControl.ClaimModel();
 
-            claimModel.Name = name;
-            claimModel.Description = description;
+            claimModel.Type = name;
+            claimModel.Value = description;
             claimModel.IsDefault = isDefault;
 
             IClaimsService claimsService = new ClaimsService(claimRepository, scopeRepository,
@@ -301,8 +301,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(newClaimModel.Id == id);
-            Assert.IsTrue(newClaimModel.Name == name);
-            Assert.IsTrue(newClaimModel.Description == description);
+            Assert.IsTrue(newClaimModel.Type == name);
+            Assert.IsTrue(newClaimModel.Value == description);
             Assert.IsTrue(newClaimModel.IsDefault == isDefault);
         }
 
@@ -314,8 +314,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
             var claimModel = new BusinessModels.UserAccessControl.ClaimModel();
 
             claimModel.Id = id;
-            claimModel.Name = name;
-            claimModel.Description = description;
+            claimModel.Type = name;
+            claimModel.Value = description;
             claimModel.IsDefault = isDefault;
 
             IClaimsService claimsService = new ClaimsService(claimRepository, scopeRepository,
@@ -336,8 +336,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
             var claimModel = new BusinessModels.UserAccessControl.ClaimModel();
 
             claimModel.Id = id;
-            claimModel.Name = name;
-            claimModel.Description = description;
+            claimModel.Type = name;
+            claimModel.Value = description;
             claimModel.IsDefault = isDefault;
 
             IClaimsService claimsService = new ClaimsService(claimRepository, scopeRepository,
@@ -349,8 +349,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(newClaimModel.Id == id);
-            Assert.IsTrue(newClaimModel.Name == name);
-            Assert.IsTrue(newClaimModel.Description == description);
+            Assert.IsTrue(newClaimModel.Type == name);
+            Assert.IsTrue(newClaimModel.Value == description);
             Assert.IsTrue(newClaimModel.IsDefault == isDefault);
         }
 

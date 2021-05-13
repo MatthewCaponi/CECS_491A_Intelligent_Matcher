@@ -83,7 +83,7 @@ namespace UserAccessControlServices
 
                     var claimModel = await _claimRepository.GetClaimById(scopeClaimModel.ClaimId);
 
-                    var userClaim = new BusinessModels.UserAccessControl.UserClaimModel(claimModel.Name, null);
+                    var userClaim = new BusinessModels.UserAccessControl.UserClaimModel(claimModel.Type, null);
 
                     userClaimList.Add(userClaim);
                 }

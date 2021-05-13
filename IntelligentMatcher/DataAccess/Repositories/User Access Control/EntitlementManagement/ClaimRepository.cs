@@ -49,8 +49,8 @@ namespace DataAccess.Repositories
 
             DynamicParameters p = new DynamicParameters();
 
-            p.Add("name", model.Name);
-            p.Add("description", model.Description);
+            p.Add("type", model.Type);
+            p.Add("value", model.Value);
             p.Add("isDefault", model.IsDefault);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
@@ -67,8 +67,8 @@ namespace DataAccess.Repositories
                                          new
                                          {
                                              Id = model.Id,
-                                             name = model.Name,
-                                             description = model.Description,
+                                             type = model.Type,
+                                             value = model.Value,
                                              isDefault = model.IsDefault
                                          },
                                          _connectionString.SqlConnectionString);

@@ -5,7 +5,7 @@ begin
 
 	set nocount on
 
-	SELECT [Id], [userAccountId], [scopeClaimId]
+	SELECT [Id], [userAccountId], [scopeClaimId], [role]
 	from dbo.[UserScopeClaim]
 	where Id = @Id;
 end

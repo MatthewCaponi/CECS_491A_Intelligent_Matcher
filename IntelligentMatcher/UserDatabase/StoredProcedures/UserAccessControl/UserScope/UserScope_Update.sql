@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[Claim_Update]
+﻿CREATE PROCEDURE [dbo].[UserScope_Update]
 	@Id int,
 	@type nvarchar(50),
 	@value nvarchar(200),

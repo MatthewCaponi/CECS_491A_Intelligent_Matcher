@@ -29,6 +29,31 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
                                                                           _connectionString.SqlConnectionString);
         }
 
+        public async Task<IEnumerable<UserScopeClaimModel>> GetAllUserScopeClaimsByAccountId(int id)
+        {
+            string storedProcedure = "dbo.UserScopeClaim_Get_All_ByAccountId";
+
+            return await _dataGateway.LoadData<UserScopeClaimModel, dynamic>(storedProcedure,
+                                                                          new 
+                                                                          {
+                                                                              userAccountId = id
+                                                                          },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
+        public async Task<IEnumerable<UserScopeClaimModel>> GetAllUserScopeClaimsByAccountIdAndRole(int id, string role)
+        {
+            string storedProcedure = "dbo.UserScopeClaim_Get_All_ByAccountIdAndRole";
+
+            return await _dataGateway.LoadData<UserScopeClaimModel, dynamic>(storedProcedure,
+                                                                          new
+                                                                          {
+                                                                              userAccountId = id,
+                                                                              role = role
+                                                                          },
+                                                                          _connectionString.SqlConnectionString);
+        }
+
         public async Task<UserScopeClaimModel> GetUserScopeClaimById(int id)
         {
             string storedProcedure = "dbo.UserScopeClaim_Get_ById";
@@ -51,6 +76,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
 
             p.Add("userAccountId", model.UserAccountId);
             p.Add("scopeClaimId", model.ScopeClaimId);
+            p.Add("role", model.Role);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
             await _dataGateway.Execute(storedProcedure, p, _connectionString.SqlConnectionString);
@@ -67,7 +93,8 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
                                          {
                                              Id = model.Id,
                                              userAccountId = model.UserAccountId,
-                                             scopeClaimId = model.ScopeClaimId
+                                             scopeClaimId = model.ScopeClaimId,
+                                             role = model.Role
                                          },
                                          _connectionString.SqlConnectionString);
         }

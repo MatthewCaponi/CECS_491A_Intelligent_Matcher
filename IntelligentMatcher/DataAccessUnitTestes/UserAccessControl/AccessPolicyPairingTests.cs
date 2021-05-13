@@ -44,8 +44,8 @@ namespace DataAccessUnitTestes.UserAccessControl
 
                 ClaimModel claimModel = new ClaimModel();
                 claimModel.Id = i;
-                claimModel.Name = "TestClaim" + i;
-                claimModel.Description = "TestDescription" + i;
+                claimModel.Type = "TestClaim" + i;
+                claimModel.Value = "TestDescription" + i;
                 claimModel.IsDefault = true;
 
                 var resourceId = await resourceRepository.CreateResource(resourceModel);

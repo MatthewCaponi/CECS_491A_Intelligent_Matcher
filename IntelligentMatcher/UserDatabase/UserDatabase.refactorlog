@@ -56,4 +56,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="isDefault" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="56be2796-94df-41f7-b8c2-c35a2f83ff3c" ChangeDateTime="05/13/2021 15:36:11">
+    <Property Name="ElementName" Value="[dbo].[UserScopeClaim].[accountType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserScopeClaim]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="role" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c00e5dd1-329d-4195-a8fe-dacd41516f7b" ChangeDateTime="05/13/2021 16:13:26">
+    <Property Name="ElementName" Value="[dbo].[Claim].[name]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Claim]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="type" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="91c66f69-de4b-49f4-90a2-5086f7a7c61f" ChangeDateTime="05/13/2021 16:13:36">
+    <Property Name="ElementName" Value="[dbo].[Claim].[description]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Claim]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="value" />
+  </Operation>
 </Operations>
