@@ -9,6 +9,8 @@ namespace BusinessModels.UserAccessControl
         public int Id { get; set; }
         public List<UserClaimModel> Claims { get; set; }
         public List<string> Scopes { get; set; }
+        public int UserId { get; set; }
+        public string Role { get; set; }
     }
 }
 

@@ -40,13 +40,14 @@ function UserManagement () {
     }, [])
     
     if (error) {
-        if (error.message === "403"){
+        if (error.status === "403"){
             return (
                 <UnauthorizedSplash />
             )
         } else {
+            {console.log(error.status)}
             return (
-               <ErrorSplash />
+               <UnauthorizedSplash /> 
             )
         }
     }

@@ -5,6 +5,7 @@ import Picker from 'emoji-picker-react';
 import Gifs from 'react-giphy-picker'
 import '../.././../../App'
 import Cookies from 'js-cookie';
+import {AuthnContext } from '../../../../Context/AuthnContext'
 
 export class Messaging extends Component {
 
@@ -27,7 +28,7 @@ export class Messaging extends Component {
                     currentmessagecount: 0, 
                     currentEmoji: null, 
                     userErrorMessage: "", 
-                    channelError: ""
+                    channelError: "",
                 };
 
     this.addUser = this.addUser.bind(this);
@@ -121,23 +122,25 @@ changeUser(){
 
     this.setState({channelId: Number(this.currentchannelselect.value)});
 
-    await fetch(global.url + 'Messaging/GetChannelOwner',
-    {
-        method: "POST",
-        headers: {'Content-type':'application/json',
-        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(Number(this.currentchannelselect.value))
-    }).then(r => r.json()) .then(res=>{
-        this.setState({currentGroupOwner: res});
+    if (Cookies.get("IdToken")) {
+        await fetch(global.url + 'Messaging/GetChannelOwner',
+        {
+            method: "POST",
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
+            body: JSON.stringify(Number(this.currentchannelselect.value))
+        }).then(r => r.json()) .then(res=>{
+            this.setState({currentGroupOwner: res});
+        }
+        );
+
+        await this.getGroupData();
+        await this.render();
+    
+        this.currentchannelselect.value = String(this.state.channelId);
+    
+        await this.scrollToBottom();
     }
-    );
-
-    await this.getGroupData();
-    await this.render();
-
-    this.currentchannelselect.value = String(this.state.channelId);
-
-    await this.scrollToBottom();
 }
 
 scrollToBottom() {

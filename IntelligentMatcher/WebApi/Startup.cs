@@ -37,6 +37,7 @@ using DataAccess.Repositories.PageVisitTrackerRepositories;
 using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
 using AuthenticationSystem;
+using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
 
 namespace WebApi
 {
@@ -72,6 +73,7 @@ namespace WebApi
             services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
+            services.AddTransient<IUserScopeClaimRepository, UserScopeClaimRepository>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();

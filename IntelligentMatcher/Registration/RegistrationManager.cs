@@ -126,6 +126,9 @@ namespace Registration
                 resultModel.WasSuccessful = false;
                 resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
 
+                // Create a new claims principal
+
+
                 return resultModel;
             }
             catch (SqlCustomException e)

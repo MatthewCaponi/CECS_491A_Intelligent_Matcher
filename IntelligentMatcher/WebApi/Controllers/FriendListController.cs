@@ -117,7 +117,7 @@ namespace IntelligentMatcherUI.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
 
@@ -142,7 +142,7 @@ namespace IntelligentMatcherUI.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
 
@@ -166,7 +166,7 @@ namespace IntelligentMatcherUI.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
 
@@ -189,7 +189,7 @@ namespace IntelligentMatcherUI.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
         }
@@ -281,7 +281,7 @@ namespace IntelligentMatcherUI.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
             }
 
         }

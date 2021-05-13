@@ -105,7 +105,7 @@ function Login() {
                         ipAddress:"127.0.0.1"
                     })}
                     compact size="large"
-                    circular inverted color="red"
+                    circular inverted color="violet"
                 >
                 Login
                 </Button>

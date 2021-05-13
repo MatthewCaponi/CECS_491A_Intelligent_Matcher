@@ -24,56 +24,64 @@ namespace UserAccessControlServices
             _tokenService = tokenService;
             _assignmentPolicyService = assignmentPolicyService;
         }
-        public async Task<string> MapUserIdToken(int id)
+        public async Task<string> MapUserIdToken(ClaimsPrincipal claimsPrincipal)
         {
-            var profile = await _userProfileService.GetUserProfileByAccountId(id);
-            var account = await _userAccountService.GetUserAccount(id);
-            var idToken = _tokenService.CreateToken(new List<UserClaimModel>()
-                    {
-                        new UserClaimModel("id", id.ToString()),
-                        new UserClaimModel("Scope", "id"),
-                            new UserClaimModel("iss", this.ToString()),
-                            new UserClaimModel("sub", account.Username ),
-                            new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "20"),
-                            new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                            new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                            new UserClaimModel("firstName", profile.FirstName),
-                            new UserClaimModel("lastName", profile.Surname),
-                            new UserClaimModel("birthdate", profile.DateOfBirth.ToString()),
-                            new UserClaimModel("username", account.Username),
-                            new UserClaimModel("accountType", account.AccountType),
-                            new UserClaimModel("accountStatus", account.AccountStatus)
-                                });
+            var claims = claimsPrincipal.Claims;
+
+            var idToken = _tokenService.CreateToken(claims);
+            var accessToken = _tokenService.CreateToken(claims);
+
+            //var profile = await _userProfileService.GetUserProfileByAccountId(id);
+            //var account = await _userAccountService.GetUserAccount(id);
+            //var idToken = _tokenService.CreateToken(new List<UserClaimModel>()
+            //        {
+            //            new UserClaimModel("id", id.ToString()),
+            //            new UserClaimModel("Scope", "id"),
+            //                new UserClaimModel("iss", this.ToString()),
+            //                new UserClaimModel("sub", account.Username ),
+            //                new UserClaimModel("aud", account.Username),
+            //                new UserClaimModel("exp", "20"),
+            //                new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
+            //                new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
+            //                new UserClaimModel("firstName", profile.FirstName),
+            //                new UserClaimModel("lastName", profile.Surname),
+            //                new UserClaimModel("birthdate", profile.DateOfBirth.ToString()),
+            //                new UserClaimModel("username", account.Username),
+            //                new UserClaimModel("accountType", account.AccountType),
+            //                new UserClaimModel("accountStatus", account.AccountStatus)
+            //                    });
 
             return idToken;
         }
-
-        public async Task<string> MapUserAccessToken(int id)
-        {
-            var account = await _userAccountService.GetUserAccount(id);
-            var scopes = _assignmentPolicyService.ConfigureAssignmentPolicy(account.AccountType);
-
-            StringBuilder delimitedScopes = new StringBuilder();
-            foreach (var scope in scopes)
-            {
-                delimitedScopes.Append(scope + ",");
-            }
-
-            var accessToken = _tokenService.CreateToken(new List<UserClaimModel>()
-                    {
-                          new UserClaimModel("scopes", delimitedScopes.ToString()),
-                            new UserClaimModel("role", account.AccountType),
-                            new UserClaimModel("id", account.Id.ToString()),
-                            new UserClaimModel("iss", this.ToString()),
-                            new UserClaimModel("sub", account.Username),
-                            new UserClaimModel("aud", account.Username),
-                            new UserClaimModel("exp", "20"),
-                            new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                            new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
-                                });
-
-            return accessToken;
-        }
     }
 }
+
+    //    public async Task<string> MapUserAccessToken(ClaimsPrincipal claimsPrincipal)
+    //    {
+    //        var scopes = claimsPrincipal.Scopes;
+    //        var accessToken =_tokenSerive.CreateToken
+    //        //var account = await _userAccountService.GetUserAccount(id);
+    //        //var scopes = _assignmentPolicyService.ConfigureAssignmentPolicy(account.AccountType);
+
+    //        //StringBuilder delimitedScopes = new StringBuilder();
+    //        //foreach (var scope in scopes)
+    //        //{
+    //        //    delimitedScopes.Append(scope + ",");
+    //        //}
+
+    //        //var accessToken = _tokenService.CreateToken(new List<UserClaimModel>()
+    //        //        {
+    //        //              new UserClaimModel("scopes", delimitedScopes.ToString()),
+    //        //                new UserClaimModel("role", account.AccountType),
+    //        //                new UserClaimModel("id", account.Id.ToString()),
+    //        //                new UserClaimModel("iss", this.ToString()),
+    //        //                new UserClaimModel("sub", account.Username),
+    //        //                new UserClaimModel("aud", account.Username),
+    //        //                new UserClaimModel("exp", "20"),
+    //        //                new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
+    //        //                new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
+    //        //                    });
+
+    //        return accessToken;
+    //    }
+    //}

@@ -8,6 +8,9 @@ using Messaging;
 using UserAccountSettings;
 using Models;
 using System.Collections.Generic;
+using WebApi.Controllers;
+using AuthorizationPolicySystem;
+using AuthorizationResolutionSystem;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -36,18 +39,23 @@ namespace IntelligentMatcherUI.Controllers
     }
     [Route("[controller]/[action]")]
     [ApiController]
-    public class MessagingController : ControllerBase
+    public class MessagingController : ApiBaseController
     {
 
 
 
         private readonly IMessagingService _messagingService;
         private readonly IUserAccountRepository _userAccountRepository;
+        private readonly IAuthorizationPolicyManager _authorizationPolicyManager;
+        private readonly IAuthorizationResolutionManager _authorizationResolutionManager;
 
-        public MessagingController(IMessagingService messagingService, IUserAccountRepository userAccountRepository)
+        public MessagingController(IMessagingService messagingService, IUserAccountRepository userAccountRepository, 
+            IAuthorizationPolicyManager authorizationPolicyManager, IAuthorizationResolutionManager authorizationResolutionManager)
         {
             _messagingService = messagingService;
             _userAccountRepository = userAccountRepository;
+            _authorizationPolicyManager = authorizationPolicyManager;
+            _authorizationResolutionManager = authorizationResolutionManager;
         }
 
 
@@ -56,17 +64,25 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:write", "user", messageModel.UserId.ToString());
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+
                 MessageModel model = new MessageModel();
                 model.ChannelId = messageModel.ChannelId;
                 model.UserId = messageModel.UserId;
                 model.Message = messageModel.Message;
 
                 await _messagingService.SendMessageAsync(model);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return StatusCode(404);
             }
 
         }
@@ -76,17 +92,31 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
-                IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(channelId);
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:read", "user");
 
-                return Ok(models);
-            }
-            catch
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+
+                try
+                {
+                    IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(channelId);
+
+                    return Ok(models);
+                }
+                catch
+                {
+                    return StatusCode(404);
+
+                }
+
+                
+            } catch
             {
                 return StatusCode(404);
-
             }
-
-
         }
 
         [HttpPost]
@@ -94,6 +124,13 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging.channel:read", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 IEnumerable<UserIdModel> models = await _messagingService.GetAllUsersInChannelAsync(channelId);
 
                 return Ok(models);
@@ -106,21 +143,27 @@ namespace IntelligentMatcherUI.Controllers
 
         }
 
-
         [HttpPost]
         public async Task<ActionResult<bool>> AddUserChannel([FromBody] UsernameChannelAdd model)
         {
             try
-            {
+            {             
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging.channel:write", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 UserAccountModel userAccountModel = await _userAccountRepository.GetAccountByUsername(model.Username);
 
                 await _messagingService.AddUserToChannelAsync(userAccountModel.Id, model.ChannelId);
 
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return StatusCode(404);
             }
 
         }
@@ -130,14 +173,20 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging.channel:delete", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _messagingService.RemoveUserFromChannelAsync(model.ChannelId, model.UserId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return StatusCode(404);
             }
-
         }
 
         [HttpPost]
@@ -146,15 +195,20 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:read", "user", userId.ToString());
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 return Ok(await _messagingService.GetAllUserChannelsAsync(userId));
 
             }
             catch
             {
                 return StatusCode(404);
-
             }
-
         }
 
         [HttpPost]
@@ -162,45 +216,52 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:write", "user", channelModel.OwnerId.ToString());
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 ChannelModel channel = new ChannelModel();
                 channel.Name = channelModel.Name;
                 channel.OwnerId = channelModel.OwnerId;
 
 
                 await _messagingService.CreateChannelAsync(channel);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return StatusCode(404);
             }
-
         }
-
 
         [HttpPost]
         public async Task<ActionResult<int>> GetChannelOwner([FromBody] int channelid)
         {
-
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging.channel:read", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 int ownerId = await _messagingService.GetChannelOwnerAsync(channelid);
                 if (ownerId == 0)
                 {
 
-                    return -1;
+                    return StatusCode(404);
                 }
 
-                return ownerId;
+                return Ok(ownerId);
             }
             catch
             {
-                return -1;
+                return StatusCode(404);
             }
-
-
-
-
         }
 
         [HttpPost]
@@ -208,27 +269,40 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:delete", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _messagingService.DeleteChannelAsync(channelid);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
-
         }
 
         [HttpPost]
         public async Task<ActionResult<bool>> DeleteMessage([FromBody] int messageId)
         {
             try
-            {
+        {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:delete", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _messagingService.DeleteMessageAsync(messageId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
         }
@@ -236,14 +310,21 @@ namespace IntelligentMatcherUI.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> SetOnline([FromBody] int userId)
         {
-            try
-            {
+            try 
+            { 
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:read", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _messagingService.SetUserOnlineAsync(userId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
         }
 
@@ -252,12 +333,19 @@ namespace IntelligentMatcherUI.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("messaging:read", "user");
+
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
                 await _messagingService.SetUserOfflineAsync(userId);
-                return true;
+                return Ok(true);
             }
             catch
             {
-                return false;
+                return Ok(false);
             }
 
         }

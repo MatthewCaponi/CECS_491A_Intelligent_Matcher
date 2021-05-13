@@ -29,9 +29,11 @@ namespace UserAccessControlServices
                 scopes.Add("user_profile.owner:write");
                 scopes.Add("listing:read");
                 scopes.Add("llisting.owner.write");
+                scopes.Add("messaging:read");
                 scopes.Add("messaging.channel:read");
+                scopes.Add("messaging:write");
                 scopes.Add("messaging.channel:write");
-                scopes.Add("messaging.channel.owner:delete");
+                scopes.Add("messaging.channel:delete");
                 scopes.Add("friends_list:read");
                 scopes.Add("friends_list:write");
                 scopes.Add("friends_list:delete");
