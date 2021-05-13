@@ -6,6 +6,6 @@ namespace DataAccess
 {
     public class ConnectionStringData : IConnectionStringData
     {
-        public string SqlConnectionString { get; set; } = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=IntelligentMatcherUserDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        public string SqlConnectionString { get; set; } = "Server=tcp:infinimuse-sql-server.database.windows.net,1433;Initial Catalog=InfiniMuseSqlServer;Persist Security Info=False;User ID=Sql491;Password={your_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
     }
 }
