@@ -30,7 +30,7 @@ import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Com
 
 function App() {
 
-  global.url = "52.229.24.12/";
+  global.url = "52.229.24.12:5000/";
   global.urlRoute = "52.229.24.12/";
 
 
