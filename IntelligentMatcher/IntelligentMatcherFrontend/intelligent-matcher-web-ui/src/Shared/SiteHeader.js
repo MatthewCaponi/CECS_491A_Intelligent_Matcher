@@ -73,7 +73,7 @@ function SiteHeader() {
                                     <Dropdown.Menu>
                                     <Dropdown.Item icon='user' content='Account' />
                                     <Dropdown.Item icon='privacy' text='Privacy' />
-                                    <Dropdown.Item icon='help' text='Help' />
+                                    <Dropdown.Item href={global.urlRoute + "Help"} icon='help' text='Help' />
                                     <Dropdown.Item icon='logout' text='Logout' />
                                     </Dropdown.Menu>
                                 </Dropdown>
