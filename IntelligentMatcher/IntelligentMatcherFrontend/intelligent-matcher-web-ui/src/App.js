@@ -5,6 +5,7 @@ import Home from "./Features/CoreFeatures/Home/Pages/Home";
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
+import Help from "./Features/CoreFeatures/Help/Pages/Help";
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import ListingForm from "./Features/CoreFeatures/ListingForm/Pages/ListingFormPage"
 import Archive from "./Features/CoreFeatures/Archive/Pages/Archive";
@@ -40,6 +41,9 @@ function App() {
       <StatusToggle />
       <Router>
         <Switch>
+        <Route path="/Help">
+            <Help />
+          </Route>
           <Route path="/UserManagement">
             <UserManagement />
           </Route>

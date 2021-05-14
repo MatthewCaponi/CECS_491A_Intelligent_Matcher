@@ -36,6 +36,7 @@ using DataAccess.Repositories.PageVisitTrackerRepositories;
 using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
 using UserAccountSettings;
+using Help;
 
 namespace WebApi
 {
@@ -108,6 +109,7 @@ namespace WebApi
             services.AddTransient<IAccountSettingsService, AccountSettingsService>();
 
             services.AddScoped<IArchiveManager, ArchiveManager>();
+            services.AddScoped<IHelpManager, HelpManager>();
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
