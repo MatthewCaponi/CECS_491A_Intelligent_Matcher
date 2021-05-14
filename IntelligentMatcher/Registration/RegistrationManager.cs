@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using Exceptions;
 using AuthorizationServices;
+using BusinessModels.UserAccessControl;
 
 namespace Registration
 {
@@ -130,7 +131,10 @@ namespace Registration
                 resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
 
                 // Create a new claims principal
-                
+                await _claimsPrincipalService.CreateClaimsPrincipal(new ClaimsPrincipal()
+                {
+
+                });
 
 
                 return resultModel;
