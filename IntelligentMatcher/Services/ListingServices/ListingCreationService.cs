@@ -5,7 +5,7 @@ using BusinessModels.ListingModels;
 using Services;
 using TraditionalListings.Services;
 
-namespace TraditionalListings
+namespace Services.ListingServices
 {
     public class ListingCreationService : IListingCreationService
     {

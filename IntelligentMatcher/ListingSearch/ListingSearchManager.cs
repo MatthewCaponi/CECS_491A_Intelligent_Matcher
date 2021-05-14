@@ -1,14 +1,12 @@
 ﻿using BusinessModels;
 using BusinessModels.ListingModels;
-using DataAccess;
+using Services.ListingServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TraditionalListings;
 
-
-namespace TraditionalListingSearch
+namespace ListingSearch
 {
     public class ListingSearchManager : IListingSearchManager
     {
@@ -22,7 +20,7 @@ namespace TraditionalListingSearch
 
         public async Task<Result<List<BusinessListingModel>>> GetAllListings()
         {
-         
+
             var result = new Result<List<BusinessListingModel>>();
             result.WasSuccessful = true;
             result.SuccessValue = await _listingGetterService.GetAllListing();

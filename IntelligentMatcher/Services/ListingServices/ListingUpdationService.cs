@@ -6,7 +6,7 @@ using Models.DALListingModels;
 
 using System.Threading.Tasks;
 
-namespace TraditionalListings
+namespace Services.ListingServices
 {
     public class ListingUpdationService : IListingUpdationService
     {

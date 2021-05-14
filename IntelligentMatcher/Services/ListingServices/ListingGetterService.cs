@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 
 
-namespace TraditionalListings
+namespace Services.ListingServices
 {
     public class ListingGetterService : IListingGetterService
     {
