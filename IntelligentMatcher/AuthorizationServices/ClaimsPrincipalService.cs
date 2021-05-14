@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserAccessControlServices;
 using ClaimModel = Models.User_Access_Control.ClaimModel;
-using ScopeModel = BusinessModels.UserAccessControl.ScopeModel;
+using ScopeModel = Models.User_Access_Control.ScopeModel;
 using UserClaimModel = BusinessModels.UserAccessControl.UserClaimModel;
 using UserScopeModel = BusinessModels.UserAccessControl.UserScopeModel;
 using DALUserScopeModel = Models.User_Access_Control.UserScopeModel;
@@ -19,7 +19,7 @@ using DALUserClaimModel = Models.User_Access_Control.UserClaimModel;
 
 namespace AuthorizationServices
 {
-    public class ClaimsPrincipalService
+    public class ClaimsPrincipalService : IClaimsPrincipalService
     {
         private readonly IUserScopeClaimRepository _userScopeClaimRepository;
         private readonly IScopeClaimRepository _scopeClaimRepository;
@@ -49,7 +49,7 @@ namespace AuthorizationServices
             List<UserScopeModel> blScopes = new List<UserScopeModel>();
             List<UserClaimModel> blClaims = new List<UserClaimModel>();
 
-            foreach(var userScopeClaim in userScopeClaims)
+            foreach (var userScopeClaim in userScopeClaims)
             {
                 var dalScope = await _userScopeRepository.GetUserScopeByScopeId(userScopeClaim.UserScopeId);
                 var dalClaim = await _userClaimRepository.GetUserClaimByUserClaimId(userScopeClaim.UserClaimId);
@@ -79,12 +79,6 @@ namespace AuthorizationServices
             };
 
             return Result<ClaimsPrincipal>.Success(claimsPrincipal);
-
-        }
-
-        public async Task<Result<List<ClaimsPrincipal>>> GetAllUserClaimsPrincipals(int id)
-        {
-
         }
 
         public async Task<Result<bool>> CreateClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
@@ -136,24 +130,80 @@ namespace AuthorizationServices
             return Result<bool>.Success(true);
         }
 
-        public async Task<Result<bool>> AddClaim(UserClaimModel userClaimModel, string scope)
+        public async Task<Result<bool>> AddUserClaim(UserClaimModel userClaimModel, string scope, string description)
         {
+            // check to see if the desired scope exists
+            var dalUserClaims = await _userClaimRepository.GetAllUserClaimsByUserAccountId(userClaimModel.UseraAccountId);
+            var claimMatch = (dalUserClaims.Where(x => x.Type == userClaimModel.Type).FirstOrDefault());
+
+            if (claimMatch != null)
+            {
+                return Result<bool>.Failure(ErrorMessage.UserAlreadyContainsClaim);
+            }
+
+            var dalScopes = (await _scopeRepository.GetAllScopes()).ToList();
+            var scopeMatch = dalScopes.Where(x => x.Name == scope).FirstOrDefault();
+            int scopeId = -1;
+            if (scopeMatch == null)
+            {
+                scopeId = await _scopeRepository.CreateScope(new ScopeModel()
+                {
+                    Name = scope,
+                    Description = description,
+                    IsDefault = false
+                });
+            }
+            else
+            {
+                scopeId = scopeMatch.Id;
+            }
+
+            var claimId = await _userClaimRepository.CreateUserClaim(ModelConverterService.ConvertTo(userClaimModel, new DALUserClaimModel()));
+
+            await _scopeClaimRepository.CreateScopeClaim(new ScopeClaimModel()
+            {
+                ScopeId = scopeId,
+                ClaimId = claimId
+            });
+
+            return Result<bool>.Success(true);
 
         }
 
-        public async Task<Result<bool>> AddScope(string scope)
+        public async Task<Result<bool>> AddScope(string scope, int accountId)
         {
+            var dalUserScopes = await _userScopeRepository.GetAllUserScopesByUserAccountId(accountId);
+            var userScopeMatch = dalUserScopes.Where(x => x.Type == scope).FirstOrDefault();
 
+            if (userScopeMatch != null)
+            {
+                return Result<bool>.Failure(ErrorMessage.UserAlreadyContainsScope);
+            }
+
+            await _userScopeRepository.CreateScope(new DALUserScopeModel()
+            {
+                Type = scope,
+                UserAccountId = accountId
+            });
+
+            return Result<bool>.Success(true);
         }
 
         public async Task<Result<bool>> UpdateClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
         {
+            await DeleteClaimsPrincipal(claimsPrincipal);
+            var newAccountId = await CreateClaimsPrincipal(claimsPrincipal);
 
+            return Result<bool>.Success(true);
         }
 
-        public async Task<Result<bool>> DeleteClaimsPrincipal(int claimsPrincipalId)
+        public async Task<Result<bool>> DeleteClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
         {
+            var userScopeClaims = (await _userScopeClaimRepository.GetAllUserScopeClaimsByAccountIdAndRole(claimsPrincipal.UserAccountId, claimsPrincipal.Role)).ToList();
 
+            userScopeClaims.ForEach(async x => await _userScopeClaimRepository.DeleteUserScopeClaim(x.Id));
+
+            return Result<bool>.Success(true);
         }
 
 

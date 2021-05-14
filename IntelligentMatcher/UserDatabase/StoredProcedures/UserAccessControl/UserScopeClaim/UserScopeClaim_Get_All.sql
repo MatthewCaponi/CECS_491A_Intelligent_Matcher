@@ -2,6 +2,6 @@
 AS
 begin
 	set nocount on;
-	SELECT [Id], [userAccountId], [scopeClaimId], [role]
+	SELECT [Id], [userAccountId], [userScopeId], [userClaimId] [role]
 	from dbo.[UserScopeClaim];
 end

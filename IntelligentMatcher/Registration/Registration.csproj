@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
     <ProjectReference Include="..\BusinessModels\BusinessModels.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
     <ProjectReference Include="..\Security\Security.csproj" />

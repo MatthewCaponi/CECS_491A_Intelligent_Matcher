@@ -20,6 +20,8 @@ namespace BusinessModels
         CodeExpired,
         InvalidPassword,
         NoSuchFilesExist,
-        Forbidden
+        Forbidden,
+        UserAlreadyContainsClaim,
+        UserAlreadyContainsScope
     }
 }

@@ -24,6 +24,12 @@ namespace UserAccessControlServices
             _tokenService = tokenService;
             _assignmentPolicyService = assignmentPolicyService;
         }
+
+        public Task<string> MapUserAccessToken(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<string> MapUserIdToken(ClaimsPrincipal claimsPrincipal)
         {
             var claims = claimsPrincipal.Claims;
@@ -52,6 +58,11 @@ namespace UserAccessControlServices
             //                    });
 
             return idToken;
+        }
+
+        public Task<string> MapUserIdToken(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

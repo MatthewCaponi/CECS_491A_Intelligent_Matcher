@@ -7,7 +7,7 @@ AS
 begin
 	set nocount on;
 
-	insert into dbo.[UserScopeClaim]([userAccountId], [scopeClaimId], [role])
+	insert into dbo.[UserScopeClaim]([userAccountId], [userScopeId], [userClaimId], [role])
 		values (@userAccountId, @scopeClaimId, @role);
 
 	set @Id = SCOPE_IDENTITY();

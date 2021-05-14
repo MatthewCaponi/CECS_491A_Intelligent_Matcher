@@ -18,6 +18,7 @@ using WebApi.Models;
 using System.IO;
 using System.Linq;
 using Exceptions;
+using AuthorizationServices;
 
 namespace Registration
 {
@@ -25,6 +26,7 @@ namespace Registration
     {
 
         private readonly ILogService _logger;
+        private readonly IClaimsPrincipalService _claimsPrincipalService;
         private IEmailService _emailService;
         private IUserAccountService _userAccountService;
         private IUserProfileService _userProfileService;
@@ -37,7 +39,7 @@ namespace Registration
 
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
-            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger)
+            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger, IClaimsPrincipalService claimsPrincipalService)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
@@ -45,6 +47,7 @@ namespace Registration
             _validationService = validationService;
             _cryptographyService = cryptographyService;
             _logger = logger;
+            _claimsPrincipalService = claimsPrincipalService;
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -127,6 +130,7 @@ namespace Registration
                 resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
 
                 // Create a new claims principal
+                
 
 
                 return resultModel;

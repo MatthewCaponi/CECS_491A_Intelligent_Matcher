@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[UserScopeClaim_Update]
 	@Id int,
 	@userAccountId int,
-	@scopeClaimId int,
+	@userScopeId int,
+	@userClaimId int,
 	@role nvarchar(50)
 AS
 begin
@@ -9,7 +10,8 @@ begin
 
 	update dbo.[UserScopeClaim]
 	set userAccountId = @userAccountId,
-	scopeClaimId = @scopeClaimId,
+	userScopeId = @userScopeId,
+	userClaimId = @userClaimId,
 	role = @role
 	where Id = @Id;
 end
