@@ -132,7 +132,7 @@ namespace WebApi
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
             services.AddScoped<IListingManager, ListingManager>();
-            //services.AddScoped<IListingSearchManager, ListingSearchManager>();
+            services.AddScoped<IListingSearchManager, ListingSearchManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

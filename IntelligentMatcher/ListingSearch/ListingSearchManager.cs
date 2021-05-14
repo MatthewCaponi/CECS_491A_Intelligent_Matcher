@@ -10,10 +10,10 @@ namespace ListingSearch
 {
     public class ListingSearchManager : IListingSearchManager
     {
-        private ListingGetterService _listingGetterService;
+        private readonly IListingGetterService _listingGetterService;
 
 
-        public ListingSearchManager(ListingGetterService listingGetterService)
+        public ListingSearchManager(IListingGetterService listingGetterService)
         {
             _listingGetterService = listingGetterService;
         }
