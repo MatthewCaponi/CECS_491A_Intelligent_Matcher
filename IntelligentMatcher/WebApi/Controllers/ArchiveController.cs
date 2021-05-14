@@ -26,35 +26,33 @@ namespace WebApi.Controllers
         {
             var archiveResultModel = new ArchiveResultModel();
 
-            try
-            {
-                if (archiveModel.StartDate == null || archiveModel.EndDate == null)
-                {
-                    archiveResultModel.Success = false;
-                    archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
-
-                    return archiveResultModel;
-                }
-
-                var archiveSuccess = await _archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(archiveModel.StartDate),
-                    DateTimeOffset.Parse(archiveModel.EndDate));
-
-                archiveResultModel.Success = archiveSuccess;
-
-                if (!archiveResultModel.Success)
-                {
-                    archiveResultModel.ErrorMessage = ErrorMessage.NoSuchFilesExist.ToString();
-                }
-
-                return archiveResultModel;
-            }
-            catch (IOException)
+            if (archiveModel == null)
             {
                 archiveResultModel.Success = false;
-                archiveResultModel.ErrorMessage = "Archive Failed! Storage might not have enough memory.";
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                return archiveResultModel;
+                return BadRequest(archiveResultModel);
             }
+
+            if (archiveModel.StartDate == null || archiveModel.EndDate == null)
+            {
+                archiveResultModel.Success = false;
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            var archiveResult = await _archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(archiveModel.StartDate),
+                DateTimeOffset.Parse(archiveModel.EndDate));
+
+            archiveResultModel.Success = archiveResult.WasSuccessful;
+
+            if (!archiveResult.WasSuccessful)
+            {
+                archiveResultModel.ErrorMessage = archiveResult.ErrorMessage.ToString();
+            }
+
+            return Ok(archiveResultModel);
         }
 
         [HttpPost]
@@ -62,35 +60,35 @@ namespace WebApi.Controllers
         {
             var archiveResultModel = new ArchiveResultModel();
 
-            try
-            {
-                if (archiveModel.StartDate == null || archiveModel.EndDate == null || archiveModel.Category == null)
-                {
-                    archiveResultModel.Success = false;
-                    archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
-
-                    return archiveResultModel;
-                }
-
-                var archiveSuccess = await _archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(archiveModel.StartDate),
-                    DateTimeOffset.Parse(archiveModel.EndDate), archiveModel.Category);
-
-                archiveResultModel.Success = archiveSuccess;
-
-                if (!archiveResultModel.Success)
-                {
-                    archiveResultModel.ErrorMessage = ErrorMessage.NoSuchFilesExist.ToString();
-                }
-
-                return archiveResultModel;
-            }
-            catch (IOException)
+            if (archiveModel == null)
             {
                 archiveResultModel.Success = false;
-                archiveResultModel.ErrorMessage = "Archive Failed! Storage might not have enough memory.";
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                return archiveResultModel;
+                return BadRequest(archiveResultModel);
             }
+
+            if (archiveModel.StartDate == null || archiveModel.EndDate == null || archiveModel.Category == null)
+            {
+                archiveResultModel.Success = false;
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            var archiveResult = await _archiveManager.ArchiveLogFilesByCategory(DateTimeOffset.Parse(archiveModel.StartDate),
+                DateTimeOffset.Parse(archiveModel.EndDate), archiveModel.Category);
+
+            archiveResultModel.Success = archiveResult.WasSuccessful;
+
+            if (!archiveResult.WasSuccessful)
+            {
+                archiveResultModel.ErrorMessage = archiveResult.ErrorMessage.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            return Ok(archiveResultModel);
         }
 
         [HttpDelete]
@@ -98,35 +96,35 @@ namespace WebApi.Controllers
         {
             var archiveResultModel = new ArchiveResultModel();
 
-            try
-            {
-                if (archiveModel.StartDate == null || archiveModel.EndDate == null)
-                {
-                    archiveResultModel.Success = false;
-                    archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
-
-                    return archiveResultModel;
-                }
-
-                var deleteSuccess = await _archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(archiveModel.StartDate),
-                    DateTimeOffset.Parse(archiveModel.EndDate));
-
-                archiveResultModel.Success = deleteSuccess;
-
-                if (!archiveResultModel.Success)
-                {
-                    archiveResultModel.ErrorMessage = ErrorMessage.NoSuchFilesExist.ToString();
-                }
-
-                return archiveResultModel;
-            }
-            catch (IOException)
+            if (archiveModel == null)
             {
                 archiveResultModel.Success = false;
-                archiveResultModel.ErrorMessage = "Deletion Failed! Attempt to delete a file went wrong.";
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                return archiveResultModel;
+                return BadRequest(archiveResultModel);
             }
+
+            if (archiveModel.StartDate == null || archiveModel.EndDate == null)
+            {
+                archiveResultModel.Success = false;
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            var deleteResult = await _archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(archiveModel.StartDate),
+                DateTimeOffset.Parse(archiveModel.EndDate));
+
+            archiveResultModel.Success = deleteResult.WasSuccessful;
+
+            if (!deleteResult.WasSuccessful)
+            {
+                archiveResultModel.ErrorMessage = deleteResult.ErrorMessage.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            return Ok(archiveResultModel);
         }
 
         [HttpPost]
@@ -134,48 +132,43 @@ namespace WebApi.Controllers
         {
             var archiveResultModel = new ArchiveResultModel();
 
-            try
-            {
-                if (archiveModel.StartDate == null || archiveModel.EndDate == null)
-                {
-                    archiveResultModel.Success = false;
-                    archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
-
-                    return archiveResultModel;
-                }
-
-                var recoverSuccess = await _archiveManager.RecoverLogFiles(DateTimeOffset.Parse(archiveModel.StartDate),
-                    DateTimeOffset.Parse(archiveModel.EndDate));
-
-                archiveResultModel.Success = recoverSuccess;
-
-                if (!archiveResultModel.Success)
-                {
-                    archiveResultModel.ErrorMessage = ErrorMessage.NoSuchFilesExist.ToString();
-                }
-
-                return archiveResultModel;
-            }
-            catch (IOException)
+            if (archiveModel == null)
             {
                 archiveResultModel.Success = false;
-                archiveResultModel.ErrorMessage = "Recovery Failed! Storage might not have enough memory.";
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                return archiveResultModel;
+                return BadRequest(archiveResultModel);
             }
+
+            if (archiveModel.StartDate == null || archiveModel.EndDate == null)
+            {
+                archiveResultModel.Success = false;
+                archiveResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            var recoverResult = await _archiveManager.RecoverLogFiles(DateTimeOffset.Parse(archiveModel.StartDate),
+                DateTimeOffset.Parse(archiveModel.EndDate));
+
+            archiveResultModel.Success = recoverResult.WasSuccessful;
+
+            if (!recoverResult.WasSuccessful)
+            {
+                archiveResultModel.ErrorMessage = recoverResult.ErrorMessage.ToString();
+
+                return BadRequest(archiveResultModel);
+            }
+
+            return Ok(archiveResultModel);
         }
 
         [HttpGet]
         public async Task<ActionResult<List<string>>> GetCategories()
         {
-            try
-            {
-                return await _archiveManager.GetCategories();
-            }
-            catch (IOException)
-            {
-                return BadRequest();
-            }
+            var categories = await _archiveManager.GetCategories();
+
+            return Ok(categories.SuccessValue);
         }
     }
 }

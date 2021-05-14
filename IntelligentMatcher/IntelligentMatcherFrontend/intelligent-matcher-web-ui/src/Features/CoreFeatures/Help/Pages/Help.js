@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Header, Segment, Icon, Menu, Input, Container, Grid, Label, Dropdown, Button} from 'semantic-ui-react';
+import '../.././../../index'
+
 import './Help.css';
 
 function Help() {

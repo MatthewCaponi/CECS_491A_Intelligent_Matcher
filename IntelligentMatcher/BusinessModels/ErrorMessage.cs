@@ -20,6 +20,9 @@ namespace BusinessModels
         CodeExpired,
         InvalidPassword,
         NoSuchFilesExist,
-        Forbidden
+        Forbidden,
+        FolderPathTooLong,
+        DataNotSupported,
+        FileError
     }
 }
