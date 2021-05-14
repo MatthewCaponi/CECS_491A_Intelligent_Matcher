@@ -131,6 +131,10 @@ function Archive(){
                 <h1>Archive</h1>
             </Grid.Row>
             <Grid.Row>
+                <p>* The dates chosen will be converted to UTC time the creation date of the logs or archive are
+                    determined in UTC time *</p>
+            </Grid.Row>
+            <Grid.Row>
                 <label htmlFor="startDate">
                     Start Date By Creation Date of the Log (Creation Date Is Different when the log is recovered):
                 </label>

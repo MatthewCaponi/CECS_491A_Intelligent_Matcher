@@ -1,4 +1,5 @@
-﻿using Services.Archiving;
+﻿using BusinessModels;
+using Services.Archiving;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,13 +18,13 @@ namespace Archiving
             _archiveService = archiveService;
             _folderHandlerService = folderHandlerService;
         }
-        public async Task<bool> ArchiveLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<Result<bool>> ArchiveLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
                 if(startTime == null || endTime == null)
                 {
-                    return false;
+                    return Result<bool>.Failure(ErrorMessage.Null);
                 }
 
                 string currentDirectory = Environment.CurrentDirectory;
@@ -41,27 +42,52 @@ namespace Archiving
                 foreach (var file in allFiles)
                 {
                     DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
-                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    if (creationTime.Date >= startTime.ToUniversalTime().Date && creationTime.Date <= endTime.ToUniversalTime().Date)
                     {
                         validFiles.Add(file);
                     }
                 }
 
-                return await _archiveService.ArchiveLogFiles(validFiles);
+                var isSuccessful = await _archiveService.ArchiveLogFiles(validFiles);
+
+                if (isSuccessful)
+                {
+                    return Result<bool>.Success(isSuccessful);
+                }
+                else
+                {
+                    return Result<bool>.Failure(ErrorMessage.NoSuchFilesExist);
+                }
             }
-            catch (IOException e)
+            catch (NotSupportedException)
             {
-                throw new IOException(e.Message, e.InnerException);
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
+            }
+            catch (PathTooLongException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FolderPathTooLong);
+            }
+            catch (IOException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FileError);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Result<bool>.Failure(ErrorMessage.Forbidden);
+            }
+            catch (InvalidDataException)
+            {
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
             }
         }
 
-        public async Task<bool> ArchiveLogFilesByCategory(DateTimeOffset startTime, DateTimeOffset endTime, string category)
+        public async Task<Result<bool>> ArchiveLogFilesByCategory(DateTimeOffset startTime, DateTimeOffset endTime, string category)
         {
             try
             {
                 if (startTime == null || endTime == null || category == null)
                 {
-                    return false;
+                    return Result<bool>.Failure(ErrorMessage.Null);
                 }
 
                 string currentDirectory = Environment.CurrentDirectory;
@@ -72,7 +98,7 @@ namespace Archiving
                 // if not, return false
                 if (!Directory.Exists(categoryDirectory))
                 {
-                    return false;
+                    return Result<bool>.Failure(ErrorMessage.NoSuchFilesExist);
                 }
 
                 string[] allFiles = Directory.GetFiles(categoryDirectory, "*.*", SearchOption.AllDirectories);
@@ -81,27 +107,52 @@ namespace Archiving
                 foreach (var file in allFiles)
                 {
                     DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
-                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    if (creationTime.Date >= startTime.ToUniversalTime().Date && creationTime.Date <= endTime.ToUniversalTime().Date)
                     {
                         validFiles.Add(file);
                     }
                 }
 
-                return await _archiveService.ArchiveLogFiles(validFiles);
+                var isSuccessful = await _archiveService.ArchiveLogFiles(validFiles);
+
+                if (isSuccessful)
+                {
+                    return Result<bool>.Success(isSuccessful);
+                }
+                else
+                {
+                    return Result<bool>.Failure(ErrorMessage.NoSuchFilesExist);
+                }
             }
-            catch (IOException e)
+            catch (NotSupportedException)
             {
-                throw new IOException(e.Message, e.InnerException);
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
+            }
+            catch (PathTooLongException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FolderPathTooLong);
+            }
+            catch (IOException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FileError);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Result<bool>.Failure(ErrorMessage.Forbidden);
+            }
+            catch (InvalidDataException)
+            {
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
             }
         }
 
-        public async Task<bool> DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<Result<bool>> DeleteArchivedFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
                 if (startTime == null || endTime == null)
                 {
-                    return false;
+                    return Result<bool>.Failure(ErrorMessage.Null);
                 }
 
                 string currentDirectory = Environment.CurrentDirectory;
@@ -119,27 +170,48 @@ namespace Archiving
                 foreach (var file in allZipFiles)
                 {
                     DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
-                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    if (creationTime.Date >= startTime.ToUniversalTime().Date && creationTime.Date <= endTime.ToUniversalTime().Date)
                     {
                         validZipFiles.Add(file);
                     }
                 }
 
-                return await _archiveService.DeleteArchivedFiles(validZipFiles);
+                var isSuccessful = await _archiveService.DeleteArchivedFiles(validZipFiles);
+
+                if (isSuccessful)
+                {
+                    return Result<bool>.Success(isSuccessful);
+                }
+                else
+                {
+                    return Result<bool>.Failure(ErrorMessage.NoSuchFilesExist);
+                }
             }
-            catch (IOException e)
+            catch (NotSupportedException)
             {
-                throw new IOException(e.Message, e.InnerException);
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
+            }
+            catch (PathTooLongException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FolderPathTooLong);
+            }
+            catch (IOException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FileError);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Result<bool>.Failure(ErrorMessage.Forbidden);
             }
         }
 
-        public async Task<bool> RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
+        public async Task<Result<bool>> RecoverLogFiles(DateTimeOffset startTime, DateTimeOffset endTime)
         {
             try
             {
                 if (startTime == null || endTime == null)
                 {
-                    return false;
+                    return Result<bool>.Failure(ErrorMessage.Null);
                 }
 
                 string currentDirectory = Environment.CurrentDirectory;
@@ -157,21 +229,46 @@ namespace Archiving
                 foreach (var file in allZipFiles)
                 {
                     DateTimeOffset creationTime = File.GetCreationTimeUtc(file);
-                    if (creationTime.Date >= startTime.Date && creationTime.Date <= endTime.Date)
+                    if (creationTime.Date >= startTime.ToUniversalTime().Date && creationTime.Date <= endTime.ToUniversalTime().Date)
                     {
                         validZipFiles.Add(file);
                     }
                 }
 
-                return await _archiveService.RecoverLogFiles(validZipFiles);
+                var isSuccessful = await _archiveService.RecoverLogFiles(validZipFiles);
+
+                if (isSuccessful)
+                {
+                    return Result<bool>.Success(isSuccessful);
+                }
+                else
+                {
+                    return Result<bool>.Failure(ErrorMessage.NoSuchFilesExist);
+                }
             }
-            catch (IOException e)
+            catch (NotSupportedException)
             {
-                throw new IOException(e.Message, e.InnerException);
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
+            }
+            catch (PathTooLongException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FolderPathTooLong);
+            }
+            catch (IOException)
+            {
+                return Result<bool>.Failure(ErrorMessage.FileError);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Result<bool>.Failure(ErrorMessage.Forbidden);
+            }
+            catch (InvalidDataException)
+            {
+                return Result<bool>.Failure(ErrorMessage.DataNotSupported);
             }
         }
 
-        public async Task<List<string>> GetCategories()
+        public async Task<Result<List<string>>> GetCategories()
         {
             try
             {
@@ -186,11 +283,19 @@ namespace Archiving
 
                 var categories = await _folderHandlerService.GetSubFolders(logDirectory);
 
-                return categories;
+                return Result<List<string>>.Success(categories);
             }
-            catch (IOException e)
+            catch (PathTooLongException)
             {
-                throw new IOException(e.Message, e.InnerException);
+                return Result<List<string>>.Success(new List<string>());
+            }
+            catch (IOException)
+            {
+                return Result<List<string>>.Success(new List<string>());
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Result<List<string>>.Success(new List<string>());
             }
         }
     }
