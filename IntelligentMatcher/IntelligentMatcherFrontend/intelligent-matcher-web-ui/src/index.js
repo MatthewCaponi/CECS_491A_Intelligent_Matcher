@@ -4,11 +4,19 @@ import App from './App';
 import './index.css'
 import 'semantic-ui-css/semantic.min.css'
 
+if (process.env.NODE_ENV === "development") {
+  global.url = "http://localhost:5000/";
+  global.urlRoute = "http://localhost:3000/";
+  console.log("WE Are IN DEV");
 
-global.url = "http://localhost:5000/";
-global.urlRoute = "http://localhost:3000/";
+}
+else{
+  console.log("WE Are IN build");
 
-
+  global.url = "http://52.229.24.12:5000/";
+  global.urlRoute = "http://infinimuse.com/";
+}
+console.log(process.env.NODE_ENV);
 
 
 fetch(global.url + 'UserAccountSettings/GetFontStyle',
