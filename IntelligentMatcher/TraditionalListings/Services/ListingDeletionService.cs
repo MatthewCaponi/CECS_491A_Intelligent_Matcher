@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TraditionalListings.Services
+namespace TraditionalListings
 {
-    public class ListingDeletionService
+    public class ListingDeletionService : IListingDeletionService
     {
         private IListingRepository _listingRepository;
 

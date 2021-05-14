@@ -3,14 +3,12 @@ using BusinessModels.ListingModels;
 using DataAccess;
 using DataAccess.Repositories;
 using Models.DALListingModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using System.Threading.Tasks;
 
-namespace TraditionalListings.Services
+namespace TraditionalListings
 {
-    public class ListingUpdationService
+    public class ListingUpdationService : IListingUpdationService
     {
         private IListingRepository _listingRepository;
 
@@ -21,8 +19,9 @@ namespace TraditionalListings.Services
 
         public async Task<int> UpdateListing(DALListingModel dalListingModel)
         {
+
             int returnValue = await _listingRepository.UpdateListing(dalListingModel);
-           
+
             return returnValue;
 
         }
@@ -30,4 +29,3 @@ namespace TraditionalListings.Services
 
     }
 }
-

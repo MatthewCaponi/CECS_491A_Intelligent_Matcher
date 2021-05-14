@@ -54,22 +54,24 @@ namespace DataAccess.Repositories
                                          },
                                          _connectionString.SqlConnectionString);
         }
-        // combine into one update.. UpdateListing(DALListingModel dalListingModel)... multiple queries.
-        // UpdateCollaborationListing(CollaborationModel collaborationmodel) ...multiple queries
-        // ditto for the rest. 
+       
         public async Task<int> UpdateListing(DALListingModel dalListingModel)
         {
         
-            var query = "update Listing set Title = @Title , Details = @Details  where Id= @Id";
+            var query = "dbo.EditParentListing";
 
 
             return await _dataGateway.Execute(query,
                                           new
                                           {
                                               Title = dalListingModel.Title,
-                                              Details = dalListingModel.Details
+                                              Details = dalListingModel.Details,
+                                              City = dalListingModel.City,
+                                              State= dalListingModel.State,
+                                              NumberOfParticipants = dalListingModel.NumberOfParticipants,
+                                              InPersonOrRemote = dalListingModel.InPersonOrRemote
                                           },
-                                          _connectionString.SqlConnectionString) ; ;
+                                          _connectionString.SqlConnectionString) ; 
             ;
 
            

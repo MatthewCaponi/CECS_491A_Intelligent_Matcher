@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 
 
-namespace TraditionalListings.Services
+namespace TraditionalListings
 {
-    public class ListingGetterService
+    public class ListingGetterService : IListingGetterService
     {
 
         private ITraditionalListingSearchRepository _traditionalListingSearchRepository;
