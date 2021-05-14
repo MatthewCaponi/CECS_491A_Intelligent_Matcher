@@ -8,6 +8,7 @@ namespace BusinessModels.UserAccessControl
     {
         public string Type { get; set; }
         public string Value { get; set; }
+        public int UseraAccountId { get; set; }
 
         public UserClaimModel()
         {

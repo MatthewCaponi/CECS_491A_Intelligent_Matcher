@@ -1,6 +1,13 @@
 ﻿CREATE PROCEDURE [dbo].[UserScope_Create]
-	@param1 int = 0,
-	@param2 int
+	@Type nvarchar(50),
+	@UserAccountId int,
+	@ID int output
 AS
-	SELECT @param1, @param2
-RETURN 0
+begin
+	set nocount on;
+
+	insert into dbo.[UserScope]([Type], [UserAccountId])
+		values (@Type, @UserAccountId);
+
+	set @Id = SCOPE_IDENTITY();
+end

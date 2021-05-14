@@ -43,7 +43,7 @@ namespace TestHelper
             var scopeClaims = await scopeClaimRepository.GetAllScopeClaims();
             var assignmentPolicies = await assignmentPolicyRepository.GetAllAssignmentPolicies();
             var assignmentPolicyPairings = await assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings();
-            var userScopeClaims = await userScopeClaimRepository.GetAllUserUserScopeClaims();
+            var userScopeClaims = await userScopeClaimRepository.GetAllUserScopeClaims();
             var accessPolicies = await accessPolicyRepository.GetAllAccessPolicies();
             var accesssPolicyPairings = await accessPolicyPairingRepository.GetAllAccessPoliciesPairings();
 

@@ -77,4 +77,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="value" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="32b311da-92f8-4bf9-bf74-6eba665eeef1" ChangeDateTime="05/13/2021 23:59:49">
+    <Property Name="ElementName" Value="[dbo].[UserScopeClaim].[scopeClaimId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserScopeClaim]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="userScopeId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f89e95a0-9945-44f3-9dd2-f05d1edd5ed0" ChangeDateTime="05/13/2021 23:59:52">
+    <Property Name="ElementName" Value="[dbo].[UserScopeClaim].[role]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserScopeClaim]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="userClaimId" />
+  </Operation>
 </Operations>

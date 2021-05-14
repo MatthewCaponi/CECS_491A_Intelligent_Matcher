@@ -20,7 +20,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
             _connectionString = connectionString;
         }
 
-        public async Task<IEnumerable<UserScopeClaimModel>> GetAllUserUserScopeClaims()
+        public async Task<IEnumerable<UserScopeClaimModel>> GetAllUserScopeClaims()
         {
             string storedProcedure = "dbo.UserScopeClaim_Get_All";
 
@@ -75,7 +75,8 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
             DynamicParameters p = new DynamicParameters();
 
             p.Add("userAccountId", model.UserAccountId);
-            p.Add("scopeClaimId", model.ScopeClaimId);
+            p.Add("userScopeId", model.UserScopeId);
+            p.Add("userClaimId", model.UserClaimId);
             p.Add("role", model.Role);
             p.Add("Id", DbType.Int32, direction: ParameterDirection.Output);
 
@@ -93,7 +94,8 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
                                          {
                                              Id = model.Id,
                                              userAccountId = model.UserAccountId,
-                                             scopeClaimId = model.ScopeClaimId,
+                                             userScopeId = model.UserScopeId,
+                                             userClaimId = model.UserClaimId,
                                              role = model.Role
                                          },
                                          _connectionString.SqlConnectionString);

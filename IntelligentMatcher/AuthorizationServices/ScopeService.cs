@@ -73,7 +73,7 @@ namespace UserAccessControlServices
         {
             try
             {
-                var userScopeClaims = await _userScopeClaimRepository.GetAllUserUserScopeClaims();
+                var userScopeClaims = await _userScopeClaimRepository.GetAllUserScopeClaims();
 
                 List<BusinessModels.UserAccessControl.UserClaimModel> userScopeList =
                     new List<BusinessModels.UserAccessControl.UserClaimModel>();

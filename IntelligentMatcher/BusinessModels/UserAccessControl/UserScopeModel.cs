@@ -4,12 +4,10 @@ using System.Text;
 
 namespace BusinessModels.UserAccessControl
 {
-    public class ScopeModel
+    public class UserScopeModel
     {
         public int Id { get; set; }
         public string Type { get; set; }
-        public string Description { get; set; }
-        public bool IsDefault { get; set; }
-        public List<ClaimModel> Claims { get; set; }
+        public int UserAccountId { get; set; }
     }
 }

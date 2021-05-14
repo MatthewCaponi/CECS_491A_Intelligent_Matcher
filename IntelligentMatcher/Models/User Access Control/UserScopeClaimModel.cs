@@ -8,7 +8,8 @@ namespace Models.User_Access_Control
     {
         public int Id { get; set; }
         public int UserAccountId { get; set; }
-        public int ScopeClaimId { get; set; }
+        public int UserScopeId { get; set; }
+        public int UserClaimId { get; set; }
         public string Role { get; set; }
 
         public UserScopeClaimModel()
@@ -16,11 +17,12 @@ namespace Models.User_Access_Control
 
         }
 
-        public UserScopeClaimModel(int id, int userAccountId, int scopeClaimId, string role)
+        public UserScopeClaimModel(int id, int userAccountId, int userScopeId, int userClaimId, string role)
         {
             Id = id;
             UserAccountId = userAccountId;
-            ScopeClaimId = scopeClaimId;
+            UserScopeId = userScopeId;
+            UserClaimId = userClaimId;
             Role = role;
         }
     }

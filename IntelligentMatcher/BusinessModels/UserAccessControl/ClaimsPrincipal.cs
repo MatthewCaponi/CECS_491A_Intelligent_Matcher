@@ -6,11 +6,10 @@ namespace BusinessModels.UserAccessControl
 {
     public class ClaimsPrincipal
     {
-        public int Id { get; set; }
-        public List<UserClaimModel> Claims { get; set; }
-        public List<string> Scopes { get; set; }
-        public int UserId { get; set; }
         public string Role { get; set; }
+        public List<UserScopeModel> Scopes { get; set; }
+        public List<UserClaimModel> Claims { get; set; }
+        public int UserAccountId { get; set; }
+
     }
 }
-

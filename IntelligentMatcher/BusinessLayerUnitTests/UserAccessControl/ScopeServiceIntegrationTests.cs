@@ -143,7 +143,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             foreach (var userScope in userScopeList)
             {
                 var scopeModel = await scopeService.GetScope(i);
-                if (userScope.Type == scopeModel.Name)
+                if (userScope.Type == scopeModel.Type)
                 {
                     ++i;
                     continue;
@@ -164,7 +164,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             var expectedResult = new BusinessModels.UserAccessControl.ScopeModel();
 
             expectedResult.Id = id;
-            expectedResult.Name = name;
+            expectedResult.Type = name;
             expectedResult.Description = description;
             expectedResult.IsDefault = isDefault;
 
@@ -176,7 +176,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(actualResult.Id == expectedResult.Id);
-            Assert.IsTrue(actualResult.Name == expectedResult.Name);
+            Assert.IsTrue(actualResult.Type == expectedResult.Type);
             Assert.IsTrue(actualResult.Description == expectedResult.Description);
             Assert.IsTrue(actualResult.IsDefault == expectedResult.IsDefault);
         }
@@ -240,7 +240,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             // Arrange
             var scopeModel = new BusinessModels.UserAccessControl.ScopeModel();
 
-            scopeModel.Name = name;
+            scopeModel.Type = name;
             scopeModel.Description = description;
             scopeModel.IsDefault = isDefault;
 
@@ -288,7 +288,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             // Arrange
             var scopeModel = new BusinessModels.UserAccessControl.ScopeModel();
 
-            scopeModel.Name = name;
+            scopeModel.Type = name;
             scopeModel.Description = description;
             scopeModel.IsDefault = isDefault;
 
@@ -301,7 +301,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(newScopeModel.Id == id);
-            Assert.IsTrue(newScopeModel.Name == name);
+            Assert.IsTrue(newScopeModel.Type == name);
             Assert.IsTrue(newScopeModel.Description == description);
             Assert.IsTrue(newScopeModel.IsDefault == isDefault);
         }
@@ -314,7 +314,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             var scopeModel = new BusinessModels.UserAccessControl.ScopeModel();
 
             scopeModel.Id = id;
-            scopeModel.Name = name;
+            scopeModel.Type = name;
             scopeModel.Description = description;
             scopeModel.IsDefault = isDefault;
 
@@ -336,7 +336,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
             var scopeModel = new BusinessModels.UserAccessControl.ScopeModel();
 
             scopeModel.Id = id;
-            scopeModel.Name = name;
+            scopeModel.Type = name;
             scopeModel.Description = description;
             scopeModel.IsDefault = isDefault;
 
@@ -349,7 +349,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             // Assert
             Assert.IsTrue(newScopeModel.Id == id);
-            Assert.IsTrue(newScopeModel.Name == name);
+            Assert.IsTrue(newScopeModel.Type == name);
             Assert.IsTrue(newScopeModel.Description == description);
             Assert.IsTrue(newScopeModel.IsDefault == isDefault);
         }

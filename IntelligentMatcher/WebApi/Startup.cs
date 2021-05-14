@@ -73,6 +73,8 @@ namespace WebApi
             services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
+            services.AddTransient<IUserScopeRepository, UserScopeRepository>();
+            services.AddTransient<IUserClaimRepository, UserClaimRepository>();
             services.AddTransient<IUserScopeClaimRepository, UserScopeClaimRepository>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
