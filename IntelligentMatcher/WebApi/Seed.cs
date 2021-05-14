@@ -163,8 +163,8 @@ namespace WebApi
                 userAccountSettingsModel.Id = i;
                 userAccountSettingsModel.UserId = userAccountModel.Id;
                 userAccountSettingsModel.FontSize = 12;
-                userAccountSettingsModel.FontStyle = "Time New Roman";
-                userAccountSettingsModel.ThemeColor = "White";
+                userAccountSettingsModel.FontStyle = "Default";
+                userAccountSettingsModel.ThemeColor = "Light";
            
                 await userAccountRepository.CreateAccount(userAccountModel);
                 await cryptographyService.newPasswordEncryptAsync("TestPassword" + i, i);

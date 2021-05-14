@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table, Grid, Image } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import FriendsList from "../../FriendsList/Pages/FriendsList";
-import '../.././../../App'
+import '../.././../../index'
 
 import _ from 'lodash'
 

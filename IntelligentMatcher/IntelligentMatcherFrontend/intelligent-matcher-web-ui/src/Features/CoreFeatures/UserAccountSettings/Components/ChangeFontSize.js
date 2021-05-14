@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../.././../../App'
+import '../.././../../index'
 
 export class ChangeFontSize extends Component {
   static displayName = ChangeFontSize.name;

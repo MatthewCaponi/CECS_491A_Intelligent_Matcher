@@ -3,7 +3,7 @@ import { Table, Grid } from 'semantic-ui-react'
 import { animateScroll } from "react-scroll";
 import Picker from 'emoji-picker-react';
 import Gifs from 'react-giphy-picker'
-import '../.././../../App'
+import '../.././../../index'
 
 export class Messaging extends Component {
 

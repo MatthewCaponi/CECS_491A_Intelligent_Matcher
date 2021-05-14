@@ -4,7 +4,7 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import { Image } from 'semantic-ui-react'
 import ImageUpload from "../Components/ImageUpload";
-import '../.././../../App'
+import '../.././../../index'
 import { Redirect } from 'react-router'
 import _ from 'lodash'
 import Messaging from '../../Messaging/Pages/Messaging';

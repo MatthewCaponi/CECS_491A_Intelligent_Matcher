@@ -4,7 +4,7 @@ import ReactDataGrid from 'react-data-grid';
 import ProfileData from "../Components/ProfileData";
 import TopBar from "../Components/TopBar";
 import UserListings from "../Components/UserListings";
-import '../.././../../App'
+import '../.././../../index'
 
 import _ from 'lodash'
 

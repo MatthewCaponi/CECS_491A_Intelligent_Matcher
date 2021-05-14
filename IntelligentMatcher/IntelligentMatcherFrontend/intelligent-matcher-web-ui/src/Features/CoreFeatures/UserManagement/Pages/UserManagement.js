@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import UserTable from '../Components/UserTable';
 import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
-import '../.././../../App'
+import '../.././../../index'
 
 function UserManagement () {
     const [users, setUsers] = useState([]);

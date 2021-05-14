@@ -31,10 +31,6 @@ import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Com
 
 function App() {
 
-  global.url = "http://localhost:5000/";
-  global.urlRoute = "http://localhost:3000/";
-
-
   return (
     <div className="box">
       <SiteHeader/>
