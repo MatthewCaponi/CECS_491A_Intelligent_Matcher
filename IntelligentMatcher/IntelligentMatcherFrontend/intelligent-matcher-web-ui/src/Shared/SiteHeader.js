@@ -47,13 +47,8 @@ function SiteHeader() {
                 <Grid.Column container only="computer" />
                 <Grid.Column container only="computer" only="tablet"/>
                 <Grid.Column container floated="right" verticalAlign="center" width={2}>           
-                    <Button href={global.urlRoute + "UserManagement"} className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
-                        Admin
-                    </Button>
-                </Grid.Column>
-                <Grid.Column container floated="right" verticalAlign="center" width={2}>           
-                    <Button href={global.urlRoute + "AnalysisDashboard"} className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
-                        AnalysisDashboard
+                    <Button href={global.urlRoute + "AdminDashboard"} className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
+                        Admin Dashboard
                     </Button>
                 </Grid.Column>
                 <Grid.Column container floated="right" width={2} widescreen={1} computer={2} tablet={2}>

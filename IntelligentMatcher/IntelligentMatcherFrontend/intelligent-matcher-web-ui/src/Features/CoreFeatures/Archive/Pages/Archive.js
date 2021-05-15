@@ -221,7 +221,9 @@ function Archive(){
                 </Button>
             </Grid.Row>
             <Grid.Row>
-                <Button href={global.urlRoute} compact size="tiny" circular inverted color="purple">Return Home</Button>
+                <Button href={global.urlRoute + "AdminDashboard"} compact size="tiny" circular inverted color="purple">
+                    Return to Admin Dashboard
+                </Button>
             </Grid.Row>
             </Grid>
         </div>
