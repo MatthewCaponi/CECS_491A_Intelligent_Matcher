@@ -288,6 +288,7 @@
     <Build Include="StoredProcedures\UserAnalysisDashboard\SearchTracker_DeletebyId.sql" />
     <Build Include="StoredProcedures\UserAnalysisDashboard\SearchTracker_GetAll.sql" />
     <Build Include="LoginTracker.sql" />
+    <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllTeamListing.sql" />
     <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Get_All_ByAccountIdAndRole.sql" />
     <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Get_All_ByAccountId.sql" />
     <Build Include="StoredProcedures\UserAccessControl\ScopeClaim\ScopeClaim_Get_AllByScopeId.sql" />

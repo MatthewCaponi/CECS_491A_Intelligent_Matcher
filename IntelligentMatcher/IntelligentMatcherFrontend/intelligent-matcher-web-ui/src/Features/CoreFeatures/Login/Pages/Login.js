@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button} from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox} from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { AuthnContext } from '../../../../Context/AuthnContext';
@@ -14,6 +14,7 @@ function Login() {
     const history = useHistory();
     const authnContext = useContext(AuthnContext);
     let location = useLocation()
+    const [passwordShown, showPassword] = useState(true);
     let confMessage = "";
 
     try{
@@ -25,10 +26,19 @@ function Login() {
         
     }
 
+    const userstyle = {
+        position: 'absolute',
+        margin: '10px'
+
+      };
+
     const [usernameState, setUsernameState] = useState("");
     const [passwordState, setPasswordState] = useState("");
     const [token, setToken] = useState('');
 
+    function showPasswordHandler(){
+        showPassword(!passwordShown);
+    };
 
     function submitHandler(e){
         var LoginModel = e;
@@ -86,9 +96,12 @@ function Login() {
                 </div>
             </Grid.Row>
             <Grid.Row verticalAlign="middle">
-                <div class="ui input">
-                    <input type="password" name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
-                </div>
+            <div class="ui input">
+                            <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
+                        </div>
+                        <div>
+                        <Checkbox color="violet" style={userstyle} size='mini' onClick={showPasswordHandler} label="Show Password"></Checkbox>
+            </div>
             </Grid.Row>
             <Grid.Row>
                 <Grid.Column width={2}>
