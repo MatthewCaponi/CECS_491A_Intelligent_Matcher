@@ -7,6 +7,7 @@ using BusinessModels.ListingModels;
 using UserManagement.Services;
 
 using Services.ListingServices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Listings
 {
@@ -37,8 +38,6 @@ namespace Listings
             result.WasSuccessful = true;
           
             return result;
-
-
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id)
