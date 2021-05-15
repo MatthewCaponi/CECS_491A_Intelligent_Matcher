@@ -18,7 +18,8 @@ function ForgotPasswordValidation() {
             fetch(global.url + 'Login/ForgotPasswordValidation',
             {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Scope': 'id'},
             body: JSON.stringify(ForgotInformationModel)
             }).
             then(r => r.json()).then(res=>{

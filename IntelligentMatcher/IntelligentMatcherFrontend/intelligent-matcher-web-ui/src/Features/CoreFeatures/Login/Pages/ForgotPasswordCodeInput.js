@@ -23,7 +23,8 @@ function ForgotPasswordCodeInput() {
             fetch(global.url + 'Login/ForgotPasswordCodeInput',
             {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Scope': 'id'},
             body: JSON.stringify(ForgotPasswordCodeInputModel)
             }).
             then(r => r.json()).then(res=>{

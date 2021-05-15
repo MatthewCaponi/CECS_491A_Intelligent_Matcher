@@ -12,7 +12,7 @@ function Registration() {
     const [passwordState, setPasswordState] = useState("");
     const [emailState, setEmailState] = useState("");
     const [dateOfBirthState, setDateOfBirthState] = useState("");
-    const [passwordShown, showPassword] = useState(false);
+    const [passwordShown, showPassword] = useState(true);
     const history = useHistory();
 
     function showPasswordHandler(){
