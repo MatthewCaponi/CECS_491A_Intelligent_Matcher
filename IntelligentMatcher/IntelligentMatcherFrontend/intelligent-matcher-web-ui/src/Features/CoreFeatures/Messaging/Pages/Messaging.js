@@ -4,9 +4,10 @@ import { animateScroll } from "react-scroll";
 import Picker from 'emoji-picker-react';
 import Gifs from 'react-giphy-picker'
 import '../.././../../App'
-import Cookies from 'js-cookie';
 import {AuthnContext } from '../../../../Context/AuthnContext'
 import '../.././../../index'
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 export class Messaging extends Component {
 
@@ -17,13 +18,17 @@ export class Messaging extends Component {
 
     super(props);
 
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
+
     this.state = {  channel: [], 
                     currentUsername: "", 
                     channelUsers: [],
                     usersgroups: [], 
                     channelId: 0, 
                     selectedUser: 0, 
-                    userId: 1, 
+                    userId: parseInt(userId), 
                     userRemoveSelect: 0, 
                     currentGroupOwner: 0, 
                     currentmessagecount: 0, 
@@ -123,13 +128,17 @@ changeUser(){
 
     this.setState({channelId: Number(this.currentchannelselect.value)});
 
+    
     if (Cookies.get("IdToken")) {
+
+        var UserChannelModel = {ChannelID: Number(this.currentchannelselect.value),  UserId: this.state.userId};
+
         await fetch(global.url + 'Messaging/GetChannelOwner',
         {
             method: "POST",
             headers: {'Content-type':'application/json',
             'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-            body: JSON.stringify(Number(this.currentchannelselect.value))
+            body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()) .then(res=>{
             this.setState({currentGroupOwner: res});
         }
@@ -151,13 +160,14 @@ scrollToBottom() {
 }
 
 async deletChannel(){
+    var UserChannelModel = {ChannelID: Number(this.currentchannelselect.value),  UserId: this.state.userId};
 
     await fetch(global.url + 'Messaging/DeleteChannel',
     {
         method: "POST",
         headers: {'Content-type':'application/json',
         'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(Number(this.currentchannelselect.value))
+        body: JSON.stringify(UserChannelModel)
     });
 
     this.setState({channelId: 0});
@@ -167,13 +177,14 @@ async deletChannel(){
 
 
 async removeMessage(id){
-  
+    var UserChannelModel = {ChannelID: Number(id),  UserId: this.state.userId};
+
     await fetch(global.url + 'Messaging/DeleteMessage',
       {
           method: "POST",
           headers: {'Content-type':'application/json',
           'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-          body: JSON.stringify(Number(id))
+          body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
       }
     );
@@ -243,13 +254,16 @@ async leaveChannel(){
 
 async getGroupData(){
 
+    var UserChannelModel = {ChannelID: this.state.channelId,  UserId: this.state.userId};
+
+
     if(this.state.channelId != 0){
     await fetch(global.url + 'Messaging/GetChannelOwner',
         {
         method: "POST",
         headers: {'Content-type':'application/json',
         'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(this.state.channelId)
+        body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
             this.setState({currentGroupOwner: res});
         }
@@ -262,7 +276,7 @@ async getGroupData(){
             method: "POST",
             headers: {'Content-type':'application/json',
             'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-            body: JSON.stringify(this.state.channelId)
+            body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
             this.setState({channelUsers: res});
         }   
@@ -274,7 +288,7 @@ async getGroupData(){
         method: "POST",
         headers: {'Content-type':'application/json',
         'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(this.state.channelId)
+        body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
             this.setState({channel: res});
         }
@@ -786,7 +800,6 @@ async createChannel() {
 
     return(
         <div>
-            <input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
 
                 <Grid columns={2} divided width={10}  container centered>
 

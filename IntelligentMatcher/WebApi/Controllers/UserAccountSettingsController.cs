@@ -6,7 +6,12 @@ using DataAccess;
 using DataAccess.Repositories;
 
 using UserAccountSettings;
+using System.Collections.Generic;
+using WebApi.Controllers;
+using AuthorizationPolicySystem;
+using AuthorizationResolutionSystem;
 
+using Models;
 namespace WebApi.Controllers
 {
     public class DeleteModel
@@ -61,16 +66,21 @@ namespace WebApi.Controllers
     }
     [ApiController]
     [Route("[controller]/[action]")]
-    public class UserAccountSettingsController : ControllerBase
+    public class UserAccountSettingsController : ApiBaseController
     {
 
         private readonly IAccountSettingsService _userAccountSettingsService;
         private readonly IUserAccountSettingsRepository _userAccountSettingsRepository;
+        private readonly IAuthorizationPolicyManager _authorizationPolicyManager;
+        private readonly IAuthorizationResolutionManager _authorizationResolutionManager;
 
-        public UserAccountSettingsController(IAccountSettingsService accountSettingsService, IUserAccountSettingsRepository userAccountSettingsRepository)
+        public UserAccountSettingsController(IAccountSettingsService accountSettingsService, IUserAccountSettingsRepository userAccountSettingsRepository,
+             IAuthorizationPolicyManager authorizationPolicyManager, IAuthorizationResolutionManager authorizationResolutionManager)
         {
             _userAccountSettingsService = accountSettingsService;
             _userAccountSettingsRepository = userAccountSettingsRepository;
+            _authorizationPolicyManager = authorizationPolicyManager;
+            _authorizationResolutionManager = authorizationResolutionManager;
         }
 
         /*
@@ -93,6 +103,14 @@ namespace WebApi.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", deleteModel.id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account:delete"
+                    }, claims);
                 return await _userAccountSettingsService.DeleteAccountByUserIDAsync(deleteModel.id, deleteModel.password);
 
             }
@@ -107,6 +125,14 @@ namespace WebApi.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", passwordModel.id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account:passwordchange"
+                    }, claims);
                 return await _userAccountSettingsService.ChangePasswordAsync(passwordModel.oldPassword, passwordModel.newPassword, passwordModel.id);
 
             }
@@ -122,6 +148,14 @@ namespace WebApi.Controllers
 
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", fontSize.id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.fontszie:change"
+                    }, claims);
                 return await _userAccountSettingsService.ChangeFontSizeAsync(fontSize.id, Int32.Parse(fontSize.fontSize));
 
             }
@@ -137,6 +171,14 @@ namespace WebApi.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", email.id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.email:change"
+                    }, claims);
                 return await _userAccountSettingsService.ChangeEmailAsync(email.password, email.email, email.id);
 
             }
@@ -154,6 +196,14 @@ namespace WebApi.Controllers
 
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.fontSize:get"
+                    }, claims);
                 return await _userAccountSettingsRepository.GetFontSizeByID(Int32.Parse(id));
 
             }
@@ -168,6 +218,14 @@ namespace WebApi.Controllers
 
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", fontStyle.id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.fontstyle:change"
+                    }, claims);
                 return await _userAccountSettingsService.ChangeFontStyleAsync(fontStyle.id, fontStyle.fontStyle);
 
             }
@@ -181,6 +239,14 @@ namespace WebApi.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.fontstyle:get"
+                    }, claims);
                 FontStyleModel fontStyle = new FontStyleModel();
                 fontStyle.fontStyle = await _userAccountSettingsRepository.GetFontStyleByID(Int32.Parse(id));
                 return fontStyle;
@@ -199,6 +265,14 @@ namespace WebApi.Controllers
 
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", theme.id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.theme:change"
+                    }, claims);
                 return await _userAccountSettingsService.ChangeThemeColorAsync(theme.id, theme.theme);
 
             }
@@ -212,6 +286,14 @@ namespace WebApi.Controllers
         {
             try
             {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", id.ToString()));
+
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+                    {
+                        "account.theme:get"
+                    }, claims);
                 ThemeModel themeModel = new ThemeModel();
                 themeModel.theme = await _userAccountSettingsRepository.GetThemeColorByID(Int32.Parse(id));
                 return themeModel;
