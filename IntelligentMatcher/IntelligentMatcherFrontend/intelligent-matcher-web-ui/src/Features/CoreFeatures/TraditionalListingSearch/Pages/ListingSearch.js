@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react';
+
+import { Grid, Header, Divider, Label, Search,Table,TableBody } from 'semantic-ui-react'
 import ListingTable from '../Components/ListingTable';
-import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
-import '../.././../../App'
+
+import '../.././../../index'
 
 function ListingSearch () {
     const [listings, setListings] = useState([]);
     useEffect( () => {
-        fetch(global.url + 'ListingSearch/GetAllListings')
+        fetch(global.url + 'ListingTable/GetAllParentListing')
         .then(response => response.json())
         .then(responseData => {
             setListings(responseData);
@@ -14,21 +16,29 @@ function ListingSearch () {
         });
     }, [])
 
+    const userStyle = {
+        display: 'block',
+        height: '40vh',
+        overflowY: "auto",
+    
+      };
     return (
         <Grid container centered>
-            <Grid.Row>
-                <Divider horizontal centered>Listings</Divider>
-            </Grid.Row>
-            <Grid.Row>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid.Column>
-                    <ListingTable rows={listings}/>
-                </Grid.Column>
-                
-            </Grid.Row>
-            <Grid.Row />    
-        </Grid>
+    <Grid.Row>
+        <Divider horizontal centered>Listings</Divider>
+    </Grid.Row>
+    <Grid.Row>
+    </Grid.Row>
+    <Grid.Row>
+        <Grid.Column>
+        <Grid container centered>
+        <ListingTable listings={listings}/> 
+    </Grid>
+        </Grid.Column>
+        
+    </Grid.Row>
+    <Grid.Row />    
+</Grid>
             
 
             

@@ -22,6 +22,10 @@ using UserAccessControlServices;
 using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
 using AuthorizationServices;
 using BusinessModels.UserAccessControl;
+using Services.ListingServices;
+using TraditionalListings.Services;
+using DataAccess.Repositories.ListingRepositories;
+using BusinessModels.ListingModels;
 
 namespace WebApi
 {
@@ -32,6 +36,10 @@ namespace WebApi
             await TestCleaner.CleanDatabase();
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ICollaborationRepository listingCollaborationRepository = new CollaborationRepository(dataGateway, connectionString);
+            IRelationshipRepository listingRelationshipRepository = new RelationshipRepository(dataGateway, connectionString);
+            ITeamModelRepository listingTeamModelRepository = new TeamModelRepository(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
@@ -45,6 +53,8 @@ namespace WebApi
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
             IAssignmentPolicyService assignmentPolicyService = new AssignmentPolicyService(assignmentPolicyRepository, assignmentPolicyPairingRepository, scopeRepsitory, scopeService);
             IClaimsService claimService = new ClaimsService(claimRepository, scopeRepsitory, scopeClaimRepository, userScopeClaimRepository);
+            IListingCreationService listingCreationService = new ListingCreationService(listingRepository, listingCollaborationRepository, listingRelationshipRepository,
+                listingTeamModelRepository);
 
             var accounts = await userAccountRepository.GetAllAccounts();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
@@ -222,8 +232,8 @@ namespace WebApi
                 userAccountSettingsModel.Id = i;
                 userAccountSettingsModel.UserId = userAccountModel.Id;
                 userAccountSettingsModel.FontSize = 12;
-                userAccountSettingsModel.FontStyle = "Time New Roman";
-                userAccountSettingsModel.ThemeColor = "White";
+                userAccountSettingsModel.FontStyle = "Default";
+                userAccountSettingsModel.ThemeColor = "Light";
            
                 await userAccountRepository.CreateAccount(userAccountModel);
                 await cryptographyService.newPasswordEncryptAsync("T" + i, i);
@@ -289,6 +299,26 @@ namespace WebApi
             }
 
             await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
+
+           for(int i = 0; i < seedAmount; i++)
+            {
+                BusinessCollaborationModel newBusinessCollaborationModel = new BusinessCollaborationModel();
+                BusinessListingModel newBusinessListingModel = new BusinessListingModel();
+
+                newBusinessCollaborationModel.Title = "TestTitle"+i;
+                newBusinessCollaborationModel.Details = "TestDetails" + i;
+                newBusinessCollaborationModel.City = "TestCity" + i;
+                newBusinessCollaborationModel.State = "TestState" + i;
+                newBusinessCollaborationModel.NumberOfParticipants = i;
+                newBusinessCollaborationModel.InPersonOrRemote = "InpersonOrRemoteTest" +i;
+                newBusinessCollaborationModel.UserAccountId = i;
+                newBusinessCollaborationModel.CollaborationType = "TestcollaborationType" +i;
+                newBusinessCollaborationModel.InvolvementType = "InvolvementType" +i;
+                newBusinessCollaborationModel.Experience = "Testexperience"+i;
+
+
+                await listingCreationService.CreateListing(newBusinessCollaborationModel);
+            }
 
             IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);

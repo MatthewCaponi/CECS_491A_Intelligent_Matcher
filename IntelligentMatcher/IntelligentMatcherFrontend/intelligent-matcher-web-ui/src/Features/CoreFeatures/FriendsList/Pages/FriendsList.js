@@ -4,6 +4,7 @@ import ReactDataGrid from 'react-data-grid';
 import { Image } from 'semantic-ui-react'
 import '../.././../../App'
 import Cookies from 'js-cookie';
+import '../.././../../index'
 import _ from 'lodash'
 
 export class FriendsList extends Component {

@@ -23,5 +23,8 @@ namespace BusinessModels
         Forbidden,
         UserAlreadyContainsClaim,
         UserAlreadyContainsScope
+        FolderPathTooLong,
+        DataNotSupported,
+        FileError
     }
 }

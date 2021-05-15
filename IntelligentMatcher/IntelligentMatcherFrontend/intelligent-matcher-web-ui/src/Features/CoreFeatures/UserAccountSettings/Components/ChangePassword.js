@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../.././../../App'
+import '../.././../../index'
 
 export class ChangePassword extends Component {
   static displayName = ChangePassword.name;
@@ -13,7 +13,7 @@ export class ChangePassword extends Component {
   changePassword() {
     var ChangePasswordModel = {id: 1, oldPassword: this.oldPassword.value, newPassword: this.newPassword.value};
 
-    fetch(global.url + 'useraccountsettings/changepassword',
+    fetch(global.url + 'UserAccountSettings/PasswordChange',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},

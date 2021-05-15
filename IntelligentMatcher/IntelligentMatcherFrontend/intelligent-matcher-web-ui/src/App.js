@@ -1,10 +1,11 @@
 import UserManagement from "./Features/CoreFeatures/UserManagement/Pages/UserManagement";
-import ListingTable from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
 import ListingCategoryPage from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingCategoryPage"
 import Home from "./Features/CoreFeatures/Home/Pages/Home";
 import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
+import AdminDashboard from "./Features/CoreFeatures/AdminDashboard/Pages/AdminDashboard";
+import Help from "./Features/CoreFeatures/Help/Pages/Help";
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import ListingForm from "./Features/CoreFeatures/ListingForm/Pages/ListingFormPage"
 import Archive from "./Features/CoreFeatures/Archive/Pages/Archive";
@@ -24,6 +25,9 @@ import { getCookie } from 'react-use-cookie';
 import jwt from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { useEffect, useRef, useState, useContext } from 'react';
+import ListingSearch from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
+
+import { useHistory } from 'react-router-dom';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
@@ -106,8 +110,17 @@ function App() {
               <Route path="/UserManagement">
                 <UserManagement />
               </Route>
+              <Route path="/Help">
+                <Help />
+              </Route>
+              <Route path="/AdminDashboard">
+                <AdminDashboard />
+              </Route>
               <Route path="/ListingForm">
                 <ListingForm />
+              </Route>
+              <Route path="/ListingSearch">
+                <ListingSearch />
               </Route>
               <Route path="/ListingTable">
                 <ListingTable />
@@ -144,8 +157,6 @@ function App() {
         </div>)
 
     }
-
-
 }
 
 export default App;

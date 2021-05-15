@@ -6,6 +6,7 @@ import TopBar from "../Components/TopBar";
 import UserListings from "../Components/UserListings";
 import '../.././../../App'
 import Cookies from 'js-cookie';
+import '../.././../../index'
 
 import _ from 'lodash'
 

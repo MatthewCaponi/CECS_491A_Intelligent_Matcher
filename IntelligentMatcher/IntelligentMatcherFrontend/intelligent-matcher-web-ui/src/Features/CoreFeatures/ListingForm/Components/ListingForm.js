@@ -2,7 +2,7 @@ import React, {createRef, useState} from 'react'
 import { ButtonToolbar } from 'react-bootstrap';
 import { Form,Input,Select,TextArea,Button,Grid,href,color} from 'semantic-ui-react'
 import './ListingForm.css'
-import '../.././../../App'
+import '../.././../../index'
 
 
 
@@ -55,7 +55,7 @@ function ListingForm(props) {
         
         </Form.Group>
         <Button href={global.urlRoute + "ListingCategoryPage"} content="Pick your Categories" color="blue"/>
-        <Button href={global.urlRoute + "ListingTable"} content="Confirm" color="black"/>
+        <Button href={global.urlRoute + "ListingSearch"} content="Confirm" color="black"/>
         
       </Form>
       

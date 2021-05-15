@@ -7,7 +7,7 @@ using DataAccess.Repositories;
 
 using UserAccountSettings;
 
-namespace IntelligentMatcherUI.Controllers
+namespace WebApi.Controllers
 {
     public class DeleteModel
     {
@@ -64,7 +64,14 @@ namespace IntelligentMatcherUI.Controllers
     public class UserAccountSettingsController : ControllerBase
     {
 
+        private readonly IAccountSettingsService _userAccountSettingsService;
+        private readonly IUserAccountSettingsRepository _userAccountSettingsRepository;
 
+        public UserAccountSettingsController(IAccountSettingsService accountSettingsService, IUserAccountSettingsRepository userAccountSettingsRepository)
+        {
+            _userAccountSettingsService = accountSettingsService;
+            _userAccountSettingsRepository = userAccountSettingsRepository;
+        }
 
         /*
         [HttpGet]
@@ -81,140 +88,141 @@ namespace IntelligentMatcherUI.Controllers
         }*/
 
 
-        [HttpPost("delete")]
-        public async Task<bool> DeleteAccountAsync([FromBody] DeleteModel deleteModel)
+        [HttpPost]
+        public async Task<ActionResult<bool>> DeleteAccountAsync([FromBody] DeleteModel deleteModel)
         {
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            try
+            {
+                return await _userAccountSettingsService.DeleteAccountByUserIDAsync(deleteModel.id, deleteModel.password);
 
-            bool result = await userAccountSettingsManager.DeleteAccountByUserIDAsync(deleteModel.id, deleteModel.password);
+            }
+            catch
+            {
+                return false;
+            }
 
-            Console.WriteLine("Account Deleted");
-            return result;
         }
-        [HttpPost("changepassword")]
-        public async Task<bool> PasswordChangeAsync([FromBody] PasswordModel passwordModel)
+        [HttpPost]
+        public async Task<ActionResult<bool>> PasswordChangeAsync([FromBody] PasswordModel passwordModel)
         {
+            try
+            {
+                return await _userAccountSettingsService.ChangePasswordAsync(passwordModel.oldPassword, passwordModel.newPassword, passwordModel.id);
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
-
-            bool result = await userAccountSettingsManager.ChangePasswordAsync(passwordModel.oldPassword, passwordModel.newPassword, passwordModel.id);
-            Console.WriteLine("Password Changed");
-            return result;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        [HttpPost("changefontsize")]
-        public async Task<bool> ChangeFontSizeAsync([FromBody] FontSizeModel fontSize)
+        [HttpPost]
+        public async Task<ActionResult<bool>> ChangeFontSizeAsync([FromBody] FontSizeModel fontSize)
         {
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            try
+            {
+                return await _userAccountSettingsService.ChangeFontSizeAsync(fontSize.id, Int32.Parse(fontSize.fontSize));
 
-            bool result = await userAccountSettingsManager.ChangeFontSizeAsync(fontSize.id, Int32.Parse(fontSize.fontSize));
-            Console.WriteLine("Font Size Changed");
-            return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 
-        [HttpPost("changeemail")]
-        public async Task<bool> ChangeEmailAsync([FromBody] EmailModel email)
+        [HttpPost]
+        public async Task<ActionResult<bool>> ChangeEmailAsync([FromBody] EmailModel email)
         {
+            try
+            {
+                return await _userAccountSettingsService.ChangeEmailAsync(email.password, email.email, email.id);
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            }
+            catch
+            {
+                return false;
+            }
 
-            bool result = await userAccountSettingsManager.ChangeEmailAsync(email.password, email.email, email.id);
-            Console.WriteLine("Email Changed");
-            return true;
+
         }
 
-        [HttpPost("getFontSize")]
-        public async Task<string> GetFontSizeAsync([FromBody] string id)
+        [HttpPost]
+        public async Task<ActionResult<string>> GetFontSizeAsync([FromBody] string id)
         {
-            Console.WriteLine("Fethcing Font Size" + id);
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
 
+            try
+            {
+                return await _userAccountSettingsRepository.GetFontSizeByID(Int32.Parse(id));
 
-            return await userAccountSettingsRepository.GetFontSizeByID(Int32.Parse(id));
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
         }
-        [HttpPost("changefontstyle")]
-        public async Task<bool> ChangeFontStyleAsync([FromBody] FontStyleModel fontStyle)
+        [HttpPost]
+        public async Task<ActionResult<bool>> ChangeFontStyleAsync([FromBody] FontStyleModel fontStyle)
         {
-            Console.WriteLine("Font Style Changed");
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            try
+            {
+                return await _userAccountSettingsService.ChangeFontStyleAsync(fontStyle.id, fontStyle.fontStyle);
 
-            bool result = await userAccountSettingsManager.ChangeFontStyleAsync(fontStyle.id, fontStyle.fontStyle);
-            return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        [HttpPost("getFontStyle")]
-        public async Task<FontStyleModel> GetFontStyleAsync([FromBody] string id)
+        [HttpPost]
+        public async Task<ActionResult<FontStyleModel>> GetFontStyleAsync([FromBody] string id)
         {
-            Console.WriteLine("Fethcing Font Style" + id);
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            FontStyleModel fontStyle = new FontStyleModel();
-            fontStyle.fontStyle = await userAccountSettingsRepository.GetFontStyleByID(Int32.Parse(id));
-            return fontStyle;
+            try
+            {
+                FontStyleModel fontStyle = new FontStyleModel();
+                fontStyle.fontStyle = await _userAccountSettingsRepository.GetFontStyleByID(Int32.Parse(id));
+                return fontStyle;
+            }
+            catch
+            {
+                return StatusCode(404);
+
+            }
         }
 
 
-        [HttpPost("changetheme")]
-        public async Task<bool> ChangeThemeAsync([FromBody] ThemeModel theme)
+        [HttpPost]
+        public async Task<ActionResult<bool>> ChangeTheme([FromBody] ThemeModel theme)
         {
-            Console.WriteLine("Font Style Changed");
 
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
-            IAuthenticationService authenticationService = new AuthenticationService(userAccountRepository);
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(userAccountRepository, userAccountSettingsRepository, cryptographyService, authenticationService);
+            try
+            {
+                return await _userAccountSettingsService.ChangeThemeColorAsync(theme.id, theme.theme);
 
-            bool result = await userAccountSettingsManager.ChangeThemeColorAsync(theme.id, theme.theme);
-            return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
-        [HttpPost("getTheme")]
-        public async Task<ThemeModel> GetThemeAsync([FromBody] string id)
+        [HttpPost]
+        public async Task<ActionResult<ThemeModel>> GetTheme([FromBody] string id)
         {
-            Console.WriteLine("Fethcing Font Style" + id);
-            IDataGateway dataGateway = new SQLServerGateway();
-            IConnectionStringData connectionString = new ConnectionStringData();
-            IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
-            ThemeModel themeModel = new ThemeModel();
-            themeModel.theme = await userAccountSettingsRepository.GetThemeColorByID(Int32.Parse(id));
-            return themeModel;
+            try
+            {
+                ThemeModel themeModel = new ThemeModel();
+                themeModel.theme = await _userAccountSettingsRepository.GetThemeColorByID(Int32.Parse(id));
+                return themeModel;
+            }
+
+
+            catch
+            {
+                return StatusCode(404);
+
+            }
         }
     }
 }

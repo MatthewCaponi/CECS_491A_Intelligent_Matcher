@@ -8,6 +8,7 @@ import OopsSplash from '../../../../Shared/ErrorScreens/OopsSplash';
 import UnauthorizedSplash from '../../../../Shared/ErrorScreens/UnauthorizedSplash';
 import ErrorSplash from '../../../../Shared/ErrorScreens/ErrorSplash';
 
+import '../.././../../index'
 
 function UserManagement () {
     const authnContext = useContext(AuthnContext);

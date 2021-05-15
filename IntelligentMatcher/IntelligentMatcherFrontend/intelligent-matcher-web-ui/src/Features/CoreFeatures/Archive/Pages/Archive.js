@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Grid, Button } from 'semantic-ui-react'
-import '../.././../../App'
+import '../.././../../index'
 
 import './Archive.css';
 
@@ -131,6 +131,10 @@ function Archive(){
                 <h1>Archive</h1>
             </Grid.Row>
             <Grid.Row>
+                <p>* The dates chosen will be converted to UTC time the creation date of the logs or archive are
+                    determined in UTC time *</p>
+            </Grid.Row>
+            <Grid.Row>
                 <label htmlFor="startDate">
                     Start Date By Creation Date of the Log (Creation Date Is Different when the log is recovered):
                 </label>
@@ -217,7 +221,9 @@ function Archive(){
                 </Button>
             </Grid.Row>
             <Grid.Row>
-                <Button href={global.urlRoute} compact size="tiny" circular inverted color="purple">Return Home</Button>
+                <Button href={global.urlRoute + "AdminDashboard"} compact size="tiny" circular inverted color="purple">
+                    Return to Admin Dashboard
+                </Button>
             </Grid.Row>
             </Grid>
         </div>

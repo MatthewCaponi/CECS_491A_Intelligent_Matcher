@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { AuthnContext } from '../../../../Context/AuthnContext';
 import jwt from 'jwt-decode';
 import { getCookie } from 'react-use-cookie';
+import '../.././../../index'
 
 import './Login.css';
 import { get } from 'http';

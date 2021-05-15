@@ -1,4 +1,5 @@
 ﻿using Archiving;
+using BusinessModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Services.Archiving;
@@ -31,7 +32,7 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsTrue(archiveResult);
+            Assert.IsTrue(archiveResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -48,36 +49,24 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsFalse(archiveResult);
+            Assert.IsFalse(archiveResult.WasSuccessful);
         }
 
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public async Task ArchiveLogFiles_IOException_ReturnException(string startTime, string endTime)
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.FileError)]
+        public async Task ArchiveLogFiles_IOException_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             mockArchiveService.Setup(x => x.ArchiveLogFiles(new List<string>())).Throws(new IOException());
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
-            var actualResult = false;
-
             // Act
-            try
-            {
-                var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime),
-                DateTimeOffset.Parse(endTime));
-            }
-            catch (IOException)
-            {
-                actualResult = true;
-            }
-            finally
-            {
-                // Assert
-                Assert.IsTrue(actualResult);
-            }
+            var archiveResult = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime));
 
+            // Assert
+            Assert.IsFalse(archiveResult.WasSuccessful);
+            Assert.IsTrue(archiveResult.ErrorMessage == error);
         }
 
         [DataTestMethod]
@@ -94,7 +83,7 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsTrue(deleteResult);
+            Assert.IsTrue(deleteResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -111,35 +100,25 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsFalse(deleteResult);
+            Assert.IsFalse(deleteResult.WasSuccessful);
         }
 
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public async Task DeleteArchivedFiles_IOException_ReturnException(string startTime, string endTime)
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.FileError)]
+        public async Task DeleteArchivedFiles_IOException_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             mockArchiveService.Setup(x => x.DeleteArchivedFiles(new List<string>())).Throws(new IOException());
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
-            var actualResult = false;
-
             // Act
-            try
-            {
-                var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
+            var deleteResult = await archiveManager.DeleteArchivedFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
-            }
-            catch (IOException)
-            {
-                actualResult = true;
-            }
-            finally
-            {
-                // Assert
-                Assert.IsTrue(actualResult);
-            }
+
+            // Assert
+            Assert.IsFalse(deleteResult.WasSuccessful);
+            Assert.IsTrue(deleteResult.ErrorMessage == error);
 
         }
 
@@ -157,7 +136,7 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsTrue(recoverResult);
+            Assert.IsTrue(recoverResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -174,12 +153,12 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsFalse(recoverResult);
+            Assert.IsFalse(recoverResult.WasSuccessful);
         }
 
         [DataTestMethod]
-        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00")]
-        public async Task RecoverLogFiles_IOException_ReturnException(string startTime, string endTime)
+        [DataRow("3/28/2007 7:13:50 PM +00:00", "3/28/2008 7:13:50 PM +00:00", ErrorMessage.FileError)]
+        public async Task RecoverLogFiles_IOException_ReturnFalse(string startTime, string endTime, ErrorMessage error)
         {
             // Arrange
             mockArchiveService.Setup(x => x.RecoverLogFiles(new List<string>())).Throws(new IOException());
@@ -189,20 +168,12 @@ namespace BusinessLayerUnitTests.Archiving
             var actualResult = false;
 
             // Act
-            try
-            {
-                var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
+            var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime),
                 DateTimeOffset.Parse(endTime));
-            }
-            catch (IOException)
-            {
-                actualResult = true;
-            }
-            finally
-            {
-                // Assert
-                Assert.IsTrue(actualResult);
-            }
+
+            // Assert
+            Assert.IsFalse(recoverResult.WasSuccessful);
+            Assert.IsTrue(recoverResult.ErrorMessage == error);
 
         }
 
@@ -229,13 +200,15 @@ namespace BusinessLayerUnitTests.Archiving
             var actualResult = await archiveManager.GetCategories();
 
             // Assert
-            Assert.IsTrue(actualResult.Count == expectedResult.Count);
+            Assert.IsTrue(actualResult.SuccessValue.Count == expectedResult.Count);
         }
 
         [TestMethod]
-        public async Task GetCategories_IOException_ReturnException()
+        public async Task GetCategories_IOException_ReturnEmptyList()
         {
             // Arrange
+            List<string> expectedResult = new List<string>();
+
             string currentDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(currentDirectory).FullName;
             string targetPath = $"{projectDirectory}\\logs";
@@ -244,22 +217,11 @@ namespace BusinessLayerUnitTests.Archiving
 
             IArchiveManager archiveManager = new ArchiveManager(mockArchiveService.Object, mockFolderHandlerService.Object);
 
-            var catchResult = false;
-
             // Act
-            try
-            {
-                var actualResult = await archiveManager.GetCategories();
-            }
-            catch (IOException)
-            {
-                catchResult = true;
-            }
-            finally
-            {
-                // Assert
-                Assert.IsTrue(catchResult);
-            }
+            var actualResult = await archiveManager.GetCategories();
+
+            // Assert
+            Assert.IsTrue(actualResult.SuccessValue.Count == expectedResult.Count);
         }
         #endregion
     }

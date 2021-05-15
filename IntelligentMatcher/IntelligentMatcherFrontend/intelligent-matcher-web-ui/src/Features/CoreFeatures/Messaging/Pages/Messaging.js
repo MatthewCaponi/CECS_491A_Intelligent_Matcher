@@ -6,6 +6,7 @@ import Gifs from 'react-giphy-picker'
 import '../.././../../App'
 import Cookies from 'js-cookie';
 import {AuthnContext } from '../../../../Context/AuthnContext'
+import '../.././../../index'
 
 export class Messaging extends Component {
 

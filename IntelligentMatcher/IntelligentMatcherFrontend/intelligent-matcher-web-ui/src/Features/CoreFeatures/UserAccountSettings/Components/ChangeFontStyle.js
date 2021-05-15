@@ -1,6 +1,6 @@
 
   import React, { Component } from 'react';
-  import '../.././../../App'
+  import '../.././../../index'
 
   export class ChangeFontStyle extends Component {
     static displayName = ChangeFontStyle.name;
@@ -9,7 +9,7 @@
       super(props);
       this.state = {};
       this.changeFontStyle = this.changeFontStyle.bind(this);
-      fetch(global.url + 'useraccountsettings/getFontStyle',
+      fetch(global.url + 'UserAccountSettings/GetFontStyle',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -34,7 +34,7 @@
     changeFontStyle() {
       var ChangeFontStyleModel = {id: 1, fontStyle: this.fontStyle.value};
   
-      fetch('useraccountsettings/changefontstyle',
+      fetch(global.url + 'UserAccountSettings/ChangeFontStyle',
       {
           method: "POST",
           headers: {'Content-type':'application/json'},
@@ -63,8 +63,10 @@
           <option value="none" selected disabled hidden> 
           {this.state.fontstyle}
                 </option> 
+                <option value="Default">Default</option>
+
             <option value="Time-New Roman">Time-New Roman</option>
-            <option value="Serif">Serif</option>
+            <option value="Oxygen">Oxygen</option>
             <option value="Helvetica">Helvetica</option>
         </select>
 

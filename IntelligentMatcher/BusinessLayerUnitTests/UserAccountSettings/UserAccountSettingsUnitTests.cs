@@ -17,34 +17,6 @@ namespace BusinessLayerUnitTests.UserAccountSettings
 
 
 
-        [DataTestMethod]
-        [DataRow(2, 12, "White", "Times-New-Roman")]
-        public async Task CreateDefaultUserAccountSettings_DefaultUserIsCreated_DefaultUserIsSuccessfulyCreated(int UserId, int FontSize, string ThemeColor, string FontStyle)
-        {
-            UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
-
-            Mock<IUserAccountRepository> mockUserAccountRepository = new Mock<IUserAccountRepository>();
-            Mock<IUserAccountSettingsRepository> mockUserAccountSettingsRepository = new Mock<IUserAccountSettingsRepository>();
-            Mock<IAuthenticationService> mockAuthenticationService = new Mock<IAuthenticationService>();
-            Mock<ICryptographyService> mockCryptographyService = new Mock<ICryptographyService>();
-            IAccountSettingsService userAccountSettingsManager = new AccountSettingsService(mockUserAccountRepository.Object, mockUserAccountSettingsRepository.Object, mockCryptographyService.Object, mockAuthenticationService.Object);
-            UserAccountSettingsModel model = new UserAccountSettingsModel();
-            userAccountSettingsModel.Id = 0;
-            userAccountSettingsModel.UserId = UserId;
-            userAccountSettingsModel.FontSize = FontSize;
-            userAccountSettingsModel.FontStyle = FontStyle;
-            userAccountSettingsModel.ThemeColor = ThemeColor;
-            bool result = await userAccountSettingsManager.CreateDefaultUserAccountSettingsAsync(userAccountSettingsModel);
-
-            if (result == true)
-            {
-                Assert.IsTrue(true);
-            }
-            else
-            {
-                Assert.IsTrue(false);
-            }
-        }
 
         [DataTestMethod]
         [DataRow(1, 15)]

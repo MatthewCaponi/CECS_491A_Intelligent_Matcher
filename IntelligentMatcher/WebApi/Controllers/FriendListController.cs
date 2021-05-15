@@ -19,7 +19,7 @@ using BusinessModels.UserAccessControl;
 using WebApi.Models;
 using UserClaimModel = BusinessModels.UserAccessControl.UserClaimModel;
 
-namespace IntelligentMatcherUI.Controllers
+namespace WebApi.Controllers
 {
 
     [Route("[controller]/[action]")]

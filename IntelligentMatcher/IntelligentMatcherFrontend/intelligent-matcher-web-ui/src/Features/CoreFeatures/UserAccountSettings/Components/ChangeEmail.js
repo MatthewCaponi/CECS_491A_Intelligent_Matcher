@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
-import '../.././../../App'
+import '../.././../../index'
 
 export class ChangeEmail extends Component {
   static displayName = ChangeEmail.name;
@@ -14,7 +14,7 @@ export class ChangeEmail extends Component {
   changeEmail() {
     var ChangeEmailModel = {id: 1, oldPassword: this.email.value, password: this.password.value};
 
-    fetch(global.url + 'useraccountsettings/changeemail',
+    fetch(global.url + 'UserAccountSettings/ChangeEmail',
     {
         method: "POST",
         headers: {'Content-type':'application/json'},

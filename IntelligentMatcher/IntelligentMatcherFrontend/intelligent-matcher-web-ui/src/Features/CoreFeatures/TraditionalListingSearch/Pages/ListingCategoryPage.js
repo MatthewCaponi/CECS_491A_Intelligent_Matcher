@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import ListingCategories from '../Components/ListingCategories';
 import { Grid, Header, Divider, Label, Search,Button,Message, Container, Visibility,color } from 'semantic-ui-react'
 import { Router } from 'react-router';
-import '../.././../../App'
+import '../.././../../index'
 
 
 function ListingCategoryPage () {
