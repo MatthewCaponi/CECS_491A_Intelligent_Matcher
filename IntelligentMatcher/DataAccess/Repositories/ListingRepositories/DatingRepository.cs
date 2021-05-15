@@ -9,6 +9,15 @@ namespace DataAccess.Repositories.ListingRepositories
 {
     public class DatingRepository : IDatingRepository
     {
+
+        private readonly IDataGateway _dataGateway;
+        private readonly IConnectionStringData _connectionString;
+
+        public DatingRepository(IDataGateway dataGateway, IConnectionStringData connectionString)
+        {
+            _dataGateway = dataGateway;
+            _connectionString = connectionString;
+        }
         public Task<int> CreateListing(DALDatingModel dalDatingModel)
         {
             throw new NotImplementedException();

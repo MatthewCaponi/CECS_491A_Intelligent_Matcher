@@ -1,27 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using System;
+
 using System.Threading.Tasks;
 using BusinessModels;
-using DataAccess.Repositories;
-using TraditionalListings.Services;
-using Models;
+
 using UserManagement.Models;
 
-using Services;
 using BusinessModels.ListingModels;
 
-namespace TraditionalListings.Managers
+using UserManagement.Services;
+
+using Services.ListingServices;
+
+namespace TraditionalListings
 {
-    public class ListingsManager : IListingsManager
+    public class ListingManager : IListingManager
     {
-        private ListingCreationService _listingCreationService;
-        private ListingDeletionService _listingDeletionService;
-        private ListingUpdationService _listUpdationService;
+        private IListingCreationService _listingCreationService;
+        private IListingDeletionService _listingDeletionService;
+        private IListingUpdationService _listUpdationService;
+        private IUserProfileService _userProfileService;
 
 
-        public ListingsManager(ListingCreationService listingCreationService, ListingDeletionService listingDeletionService,
-           ListingUpdationService listingUpdationService)
+
+        public ListingManager(IListingCreationService listingCreationService, IListingDeletionService listingDeletionService,
+           IListingUpdationService listingUpdationService)
         {
             _listingCreationService = listingCreationService;
             _listingDeletionService = listingDeletionService;
@@ -29,9 +32,18 @@ namespace TraditionalListings.Managers
 
         }
 
-        public Task<bool> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels)
+        public async Task<Result<int>> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels)
         {
-            throw new NotImplementedException();
+            var result = new Result<int>();
+            result.WasSuccessful = false;
+            var userProfileId = await _userProfileService.CreateUserProfile(webUserProfileModel);
+            businessListingModels.UserAccountId = userProfileId;
+            await _listingCreationService.CreateListing(businessListingModels);
+            result.WasSuccessful = true;
+            result.SuccessValue = userProfileId;
+            return result;
+
+
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id)
@@ -44,7 +56,10 @@ namespace TraditionalListings.Managers
 
         public Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel)
         {
+            //var listingModel = ModelConverterService.ConvertTo(dalListingModel, new DALListingModel());
+            //return await _listUpdationService.UpdateListing(businessListingModel);
             throw new NotImplementedException();
+
         }
 
         public Task<bool> GetListing(int Id)

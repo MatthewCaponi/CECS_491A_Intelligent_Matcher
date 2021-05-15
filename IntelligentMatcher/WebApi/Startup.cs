@@ -36,6 +36,11 @@ using DataAccess.Repositories.PageVisitTrackerRepositories;
 using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
 using UserAccountSettings;
+using TraditionalListings.Services;
+using DataAccess.Repositories.ListingRepositories;
+using Listings;
+using Services.ListingServices;
+using ListingSearch;
 using Help;
 
 namespace WebApi
@@ -80,7 +85,14 @@ namespace WebApi
             services.AddTransient<IPageVisitTrackerRepo, PageVisitTrackerRepo>();
             services.AddTransient<ISearchTrackerRepo, SearchTrackerRepo>();
             services.AddTransient<IListingRepository, ListingRepository>();
+            services.AddTransient<ICollaborationRepository, CollaborationRepository>();
+            services.AddTransient<IRelationshipRepository, RelationshipRepository>();
+            services.AddTransient<ITeamModelRepository, TeamModelRepository>();
+            services.AddTransient<IDatingRepository, DatingRepository>();
+
             services.AddTransient<IUserAccountSettingsRepository, UserAccountSettingRepository>();
+           
+
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
 
@@ -108,12 +120,21 @@ namespace WebApi
             services.AddTransient<IUserAnalysisService, UserAnalysisService>();
             services.AddTransient<IAccountSettingsService, AccountSettingsService>();
 
+            services.AddTransient<IListingCreationService, ListingCreationService>();
+            services.AddTransient<IListingDeletionService, ListingDeletionService>();
+            services.AddTransient<IListingGetterService, ListingGetterService>();
+            services.AddTransient<IListingUpdationService, ListingUpdationService>();
+
+
+           
             services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<IHelpManager, HelpManager>();
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IMessagingService, MessagingService>();
+            services.AddScoped<IListingManager, ListingManager>();
+            services.AddScoped<IListingSearchManager, ListingSearchManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -55,7 +55,7 @@ function ListingForm(props) {
         
         </Form.Group>
         <Button href={global.urlRoute + "ListingCategoryPage"} content="Pick your Categories" color="blue"/>
-        <Button href={global.urlRoute + "ListingTable"} content="Confirm" color="black"/>
+        <Button href={global.urlRoute + "ListingSearch"} content="Confirm" color="black"/>
         
       </Form>
       

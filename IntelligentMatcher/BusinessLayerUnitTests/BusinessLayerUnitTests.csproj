@@ -39,10 +39,6 @@
 
     <ProjectReference Include="..\Security\Security.csproj" />
 
-    <ProjectReference Include="..\TraditionalListingSearch\TraditionalListingSearch.csproj" />
-
-    <ProjectReference Include="..\TraditionalListings\TraditionalListings.csproj" />
-
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
 
     <ProjectReference Include="..\UserAnalysisManager\UserAnalysisManager.csproj" />

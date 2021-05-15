@@ -1,13 +1,11 @@
 ﻿
 using DataAccess.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using System.Threading.Tasks;
 
-namespace TraditionalListings.Services
+namespace Services.ListingServices
 {
-    public class ListingDeletionService
+    public class ListingDeletionService : IListingDeletionService
     {
         private IListingRepository _listingRepository;
 

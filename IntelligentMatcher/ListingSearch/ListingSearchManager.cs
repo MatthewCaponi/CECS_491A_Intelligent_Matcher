@@ -1,27 +1,26 @@
 ﻿using BusinessModels;
 using BusinessModels.ListingModels;
-using DataAccess;
+using Services.ListingServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TraditionalListings.Services;
 
-namespace TraditionalListingSearch
+namespace ListingSearch
 {
     public class ListingSearchManager : IListingSearchManager
     {
-        private ListingGetterService _listingGetterService;
+        private readonly IListingGetterService _listingGetterService;
 
 
-        public ListingSearchManager(ListingGetterService listingGetterService)
+        public ListingSearchManager(IListingGetterService listingGetterService)
         {
             _listingGetterService = listingGetterService;
         }
 
         public async Task<Result<List<BusinessListingModel>>> GetAllListings()
         {
-         
+
             var result = new Result<List<BusinessListingModel>>();
             result.WasSuccessful = true;
             result.SuccessValue = await _listingGetterService.GetAllListing();

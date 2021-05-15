@@ -31,6 +31,8 @@ namespace TestHelper
             IUserScopeClaimRepository userScopeClaimRepository = new UserScopeClaimRepository(dataGateway, connectionString);
             IAccessPolicyRepository accessPolicyRepository = new AccessPolicyRepository(dataGateway, connectionString);
             IAccessPolicyPairingRepository accessPolicyPairingRepository = new AccessPolicyPairingRepository(dataGateway, connectionString);
+            ITraditionalListingSearchRepository traditionalListingSearchRepository = new TraditionalListingSearchRepository(dataGateway, connectionString);
+
 
             var accounts = await userAccountRepository.GetAllAccounts();
             var profiles = await userProfileRepository.GetAllUserProfiles();
@@ -46,6 +48,7 @@ namespace TestHelper
             var userScopeClaims = await userScopeClaimRepository.GetAllUserUserScopeClaims();
             var accessPolicies = await accessPolicyRepository.GetAllAccessPolicies();
             var accesssPolicyPairings = await accessPolicyPairingRepository.GetAllAccessPoliciesPairings();
+            var listings = await traditionalListingSearchRepository.GetAllListings();
 
             if (resources != null)
             {
@@ -117,6 +120,12 @@ namespace TestHelper
                 await ReseedAsync("UserProfile", 0, connectionString, dataGateway);
                 await ReseedAsync("UserAccountCode", 0, connectionString, dataGateway);
                 await ReseedAsync("UserAccountSettings", 0, connectionString, dataGateway);
+
+            }
+            if(listings != null)
+            {
+                await DeleteAllFromTable("Listing");
+                await ReseedAsync("Listing", 0, connectionString, dataGateway);
 
             }
         }

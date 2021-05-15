@@ -2,9 +2,10 @@
 using BusinessModels.ListingModels;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace TraditionalListingSearch
+namespace ListingSearch
 {
     public interface IListingSearchManager
     {
@@ -12,8 +13,6 @@ namespace TraditionalListingSearch
         Task<Result<List<BusinessCollaborationModel>>> GetAllCollaborationListings();
         Task<Result<List<BusinessRelationshipModel>>> GetAllRelationshipListings();
         Task<Result<List<BusinessTeamModel>>> GetAllTeamListings();
-
-
 
     }
 }

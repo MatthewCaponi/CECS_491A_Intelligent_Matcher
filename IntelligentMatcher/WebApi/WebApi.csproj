@@ -24,6 +24,8 @@
 	<ProjectReference Include="..\FriendList\FriendList.csproj" />
 	<ProjectReference Include="..\Help\Help.csproj" />
 	<ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
+	<ProjectReference Include="..\ListingSearch\ListingSearch.csproj" />
+	<ProjectReference Include="..\Listings\Listings.csproj" />
 
 	<ProjectReference Include="..\Login\Login.csproj" />
 
@@ -34,6 +36,7 @@
 
     <ProjectReference Include="..\Security\Security.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
+   
     <ProjectReference Include="..\UserAccountSettings\UserAccountSettings.csproj" />
     <ProjectReference Include="..\UserAnalysisManager\UserAnalysisManager.csproj" />
     <ProjectReference Include="..\UserManagement\UserManagement.csproj" />
