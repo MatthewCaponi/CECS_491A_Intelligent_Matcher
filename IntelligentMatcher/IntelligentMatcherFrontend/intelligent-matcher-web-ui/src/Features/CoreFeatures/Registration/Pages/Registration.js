@@ -64,12 +64,8 @@ function Registration() {
             <Grid.Row></Grid.Row>
             <Grid.Row></Grid.Row>
             <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row centered verticalAlign size="massive"><Header>Registration</Header></Grid.Row>
-           
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
+            <Grid.Row centered verticalAlign><h1>Registration</h1></Grid.Row>
+
             <Grid.Row></Grid.Row>
             <Grid.Row></Grid.Row>
             <Grid.Row></Grid.Row>
