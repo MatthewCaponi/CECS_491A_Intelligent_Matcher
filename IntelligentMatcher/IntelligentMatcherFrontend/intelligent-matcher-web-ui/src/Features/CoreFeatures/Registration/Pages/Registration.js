@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import '../.././../../index'
 
@@ -56,112 +56,97 @@ function Registration() {
         }
     }
     return (
-        <Grid container>
-        <Grid.Row>
-            <h1>Registering A New User (Please Enter Your Information): </h1>
-        </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="firstName">
-                First Name:
-            </label>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="text" name="firstname" placeholder="First Name" onChange={e => setFirstNameState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="surname">
-                Last Name:
-            </label>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="text" name="surname" placeholder="Last Name" onChange={e => setSurnameState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="username">
-                Username:
-            </label>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="password">
-                Password:
-            </label>
-        </Grid.Row>
-        <Grid.Row>
-            <p>
-                - Password Must Be At Least 8 Characters Long   
-            </p>
-        </Grid.Row>
-        <Grid.Row>
-            <p>
-                - Password Must Countain At Least 1 Number
-            </p>
-        </Grid.Row>
-        <Grid.Row>
-            <p>
-                - Password Must Contain At Least 1 Capital Letter  
-            </p>
-        </Grid.Row>
-        <Grid.Row>
-            <p>
-                - Password Must Countain At Least 1 Lowercase Letter
-            </p>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
-            </div>
-            <Button color="violet" compact circular size='mini' onClick={showPasswordHandler}>Show Password</Button>
-        </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="emailAddress">
-                Email Address:
-            </label>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="dateOfBirth">
-                Date Of Birth:
-            </label>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY"
-                onChange={e => setDateOfBirthState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <Button
-                onClick={()=>submitHandler({
-                    firstName:firstNameState,
-                    surname:surnameState,
-                    username:usernameState,
-                    password:passwordState,
-                    emailAddress:emailState,
-                    dateOfBirth:dateOfBirthState,
-                    ipAddress:"127.0.0.1"
-                })}
-                compact size="tiny"
-                circular inverted color="red"
-            >
-            Register
-            </Button>
-            <Button href={global.urlRoute} compact size="tiny" circular inverted color="blue">
-                Go Back to Login
-            </Button>
-        </Grid.Row>
+        <Grid relaxed stackable columns={3} container centered>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row centered verticalAlign size="massive"><Header>Registration</Header></Grid.Row>
+           
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row></Grid.Row>
+            <Grid.Row>
+            
+                <Grid.Column width={4}>
+                    <Grid.Row>
+                        <div class="ui input">
+                            <input type="text" name="firstname" placeholder="First Name" onChange={e => setFirstNameState(e.target.value)}/>
+                        </div>
+                    </Grid.Row>
+                    <Grid.Row><Divider /></Grid.Row>
+                    <Grid.Row verticalAlign="middle">
+                        <div class="ui input">
+                            <input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
+                        </div>
+                    </Grid.Row>
+                    <Grid.Row><Divider /></Grid.Row>
+                    <Grid.Row verticalAlign="middle">
+                        <div class="ui input">
+                            <input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
+                        </div>
+                    </Grid.Row>
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    <Grid.Row verticalAlign="middle">
+                        <div class="ui input">
+                            <input type="text" name="surname" placeholder="Last Name" onChange={e => setSurnameState(e.target.value)}/>
+                        </div>
+                    </Grid.Row>
+                    <Grid.Row><Divider /></Grid.Row>
+                    <Grid.Row verticalAlign="middle" centered>
+                        <div class="ui input">
+                            <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
+                        </div>
+                        <div>
+                        <Checkbox color="violet" size='mini' onClick={showPasswordHandler} label="Show Password"></Checkbox>
+                        </div>
+                    </Grid.Row>
+                    <Grid.Row><Divider /></Grid.Row>
+                    <Grid.Row verticalAlign="middle">
+                        <div class="ui input">
+                            <input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY"
+                            onChange={e => setDateOfBirthState(e.target.value)}/>
+                        </div>
+                </Grid.Row>
+                </Grid.Column>
+            </Grid.Row>
+            <Grid.Column></Grid.Column>
+            <Grid.Column>
+            <Grid.Row><Divider /></Grid.Row>
+            <Grid.Column centered width={9}>
+            <Grid.Row>
+                <Button
+                    onClick={()=>submitHandler({
+                        firstName:firstNameState,
+                        surname:surnameState,
+                        username:usernameState,
+                        password:passwordState,
+                        emailAddress:emailState,
+                        dateOfBirth:dateOfBirthState,
+                        ipAddress:"127.0.0.1"
+                    })}
+                     size="large"
+                    circular inverted color="red"
+                >
+                Register
+                </Button>
+                <Button href={global.urlRoute}  size="large" circular inverted color="blue">
+                    Go Back to Login
+                </Button>
+            </Grid.Row>
+            </Grid.Column>
+           
+            </Grid.Column>
+        <Grid.Column></Grid.Column>
+        
         </Grid>
     )
 }
