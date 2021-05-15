@@ -92,12 +92,14 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<MessageModel>>> GetChannelMessages([FromBody] int channelId)
+        public async Task<ActionResult<IEnumerable<MessageModel>>> GetChannelMessages([FromBody] UserChannelModel model)
         {
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+
                 var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
                     {
                         "messaging:get"
@@ -110,7 +112,7 @@ namespace IntelligentMatcherUI.Controllers
 
                 try
                 {
-                    IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(channelId);
+                    IEnumerable<MessageModel> models = await _messagingService.GetAllChannelMessagesAsync(model.ChannelId);
 
                     return Ok(models);
                 }
@@ -129,12 +131,14 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<UserIdModel>>> GetAllUsersInGroup([FromBody] int channelId)
+        public async Task<ActionResult<IEnumerable<UserIdModel>>> GetAllUsersInGroup([FromBody] UserChannelModel model)
         {
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+
                 var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
                     {
                         "messaging.users:get"
@@ -144,7 +148,7 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
-                IEnumerable<UserIdModel> models = await _messagingService.GetAllUsersInChannelAsync(channelId);
+                IEnumerable<UserIdModel> models = await _messagingService.GetAllUsersInChannelAsync(model.ChannelId);
 
                 return Ok(models);
             }
@@ -271,12 +275,13 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> GetChannelOwner([FromBody] int channelid)
+        public async Task<ActionResult<int>> GetChannelOwner([FromBody] UserChannelModel model)
         {
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
 
                 var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
                     {
@@ -286,7 +291,7 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
-                int ownerId = await _messagingService.GetChannelOwnerAsync(channelid);
+                int ownerId = await _messagingService.GetChannelOwnerAsync(model.ChannelId);
                 if (ownerId == 0)
                 {
 
@@ -302,12 +307,13 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> DeleteChannel([FromBody] int channelid)
+        public async Task<ActionResult<bool>> DeleteChannel([FromBody] UserChannelModel model)
         {
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
 
                 var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
                     {
@@ -318,7 +324,7 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
-                await _messagingService.DeleteChannelAsync(channelid);
+                await _messagingService.DeleteChannelAsync(model.ChannelId);
                 return Ok(true);
             }
             catch
@@ -328,12 +334,14 @@ namespace IntelligentMatcherUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> DeleteMessage([FromBody] int messageId)
+        public async Task<ActionResult<bool>> DeleteMessage([FromBody] UserChannelModel model)
         {
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
                 var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+
 
                 var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
                     {
@@ -344,7 +352,7 @@ namespace IntelligentMatcherUI.Controllers
                 {
                     return StatusCode(403);
                 }
-                await _messagingService.DeleteMessageAsync(messageId);
+                await _messagingService.DeleteMessageAsync(model.ChannelId);
                 return Ok(true);
             }
             catch

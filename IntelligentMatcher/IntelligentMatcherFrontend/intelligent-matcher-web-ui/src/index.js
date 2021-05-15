@@ -6,10 +6,28 @@ import 'semantic-ui-css/semantic.min.css'
 import 'react-toastify/dist/ReactToastify.min.css';
 import AuthnContextProvider from './Context/AuthnContext';
 import ErrorBoundary from './Shared/ErrorBoundrary';
-
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 var idToken = "";
 var decodedIdToken = "";
 var userId = 0;
+
+
+if (process.env.NODE_ENV === "development") {
+  global.url = "http://localhost:5000/";
+  global.urlRoute = "http://localhost:3000/";
+  console.log("WE Are IN DEV");
+
+}
+else{
+  console.log("WE Are IN build");
+
+  global.url = "http://52.229.24.12:5000/";
+  global.urlRoute = "http://infinimuse.com/";
+}
+
+
+
 if (Cookies.get('IdToken') != null){
   idToken = Cookies.get('IdToken');
   decodedIdToken = jwt(idToken);
@@ -18,7 +36,8 @@ if (Cookies.get('IdToken') != null){
   fetch(global.url + 'UserAccountSettings/GetFontStyle',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(userId)
   }).
   then(r => r.json())
@@ -38,7 +57,8 @@ if (Cookies.get('IdToken') != null){
   fetch(global.url + 'UserAccountSettings/GetTheme',
   {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(userId)
   }).
   then(r => r.json())
@@ -54,18 +74,6 @@ if (Cookies.get('IdToken') != null){
 
 
 
-if (process.env.NODE_ENV === "development") {
-  global.url = "http://localhost:5000/";
-  global.urlRoute = "http://localhost:3000/";
-  console.log("WE Are IN DEV");
-
-}
-else{
-  console.log("WE Are IN build");
-
-  global.url = "http://52.229.24.12:5000/";
-  global.urlRoute = "http://infinimuse.com/";
-}
 console.log(process.env.NODE_ENV);
 
 

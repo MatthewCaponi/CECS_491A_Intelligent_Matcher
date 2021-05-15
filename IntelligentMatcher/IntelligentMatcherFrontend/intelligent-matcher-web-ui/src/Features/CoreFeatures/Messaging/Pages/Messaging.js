@@ -128,13 +128,17 @@ changeUser(){
 
     this.setState({channelId: Number(this.currentchannelselect.value)});
 
+    
     if (Cookies.get("IdToken")) {
+
+        var UserChannelModel = {ChannelID: Number(this.currentchannelselect.value),  UserId: this.state.userId};
+
         await fetch(global.url + 'Messaging/GetChannelOwner',
         {
             method: "POST",
             headers: {'Content-type':'application/json',
             'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-            body: JSON.stringify(Number(this.currentchannelselect.value))
+            body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()) .then(res=>{
             this.setState({currentGroupOwner: res});
         }
@@ -156,13 +160,14 @@ scrollToBottom() {
 }
 
 async deletChannel(){
+    var UserChannelModel = {ChannelID: Number(this.currentchannelselect.value),  UserId: this.state.userId};
 
     await fetch(global.url + 'Messaging/DeleteChannel',
     {
         method: "POST",
         headers: {'Content-type':'application/json',
         'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(Number(this.currentchannelselect.value))
+        body: JSON.stringify(UserChannelModel)
     });
 
     this.setState({channelId: 0});
@@ -172,13 +177,14 @@ async deletChannel(){
 
 
 async removeMessage(id){
-  
+    var UserChannelModel = {ChannelID: Number(id),  UserId: this.state.userId};
+
     await fetch(global.url + 'Messaging/DeleteMessage',
       {
           method: "POST",
           headers: {'Content-type':'application/json',
           'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-          body: JSON.stringify(Number(id))
+          body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
       }
     );
@@ -248,13 +254,16 @@ async leaveChannel(){
 
 async getGroupData(){
 
+    var UserChannelModel = {ChannelID: this.state.channelId,  UserId: this.state.userId};
+
+
     if(this.state.channelId != 0){
     await fetch(global.url + 'Messaging/GetChannelOwner',
         {
         method: "POST",
         headers: {'Content-type':'application/json',
         'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(this.state.channelId)
+        body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
             this.setState({currentGroupOwner: res});
         }
@@ -267,7 +276,7 @@ async getGroupData(){
             method: "POST",
             headers: {'Content-type':'application/json',
             'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-            body: JSON.stringify(this.state.channelId)
+            body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
             this.setState({channelUsers: res});
         }   
@@ -279,7 +288,7 @@ async getGroupData(){
         method: "POST",
         headers: {'Content-type':'application/json',
         'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
-        body: JSON.stringify(this.state.channelId)
+        body: JSON.stringify(UserChannelModel)
         }).then(r => r.json()).then(res=>{
             this.setState({channel: res});
         }
