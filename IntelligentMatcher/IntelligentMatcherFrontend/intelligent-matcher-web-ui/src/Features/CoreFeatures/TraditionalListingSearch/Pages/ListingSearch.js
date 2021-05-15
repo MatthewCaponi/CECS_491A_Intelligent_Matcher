@@ -2,7 +2,8 @@ import React, {useState, useEffect} from 'react';
 
 import { Grid, Header, Divider, Label, Search,Table,TableBody } from 'semantic-ui-react'
 import '../../../../App'
-import ListingTable from "../Components/ListingTable"
+import ListingTable from '../Components/ListingTable';
+
 
 
 function ListingSearch () {
@@ -16,7 +17,6 @@ function ListingSearch () {
         });
     }, [])
 
-    console.log(listings.successValue);
     const userStyle = {
         display: 'block',
         height: '40vh',
