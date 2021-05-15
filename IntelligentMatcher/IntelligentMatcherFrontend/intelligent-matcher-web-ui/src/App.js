@@ -1,7 +1,7 @@
 import UserManagement from "./Features/CoreFeatures/UserManagement/Pages/UserManagement";
 import ListingCategoryPage from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingCategoryPage"
 import Home from "./Features/CoreFeatures/Home/Pages/Home";
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
 import AdminDashboard from "./Features/CoreFeatures/AdminDashboard/Pages/AdminDashboard";
@@ -21,92 +21,137 @@ import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 import UserProfile from "./Features/CoreFeatures/UserProfile/Pages/UserProfile";
 import StatusToggle from "./Features/CoreFeatures/UserProfile/Pages/StatusToggle";
 import ConfirmAccount from "./Features/CoreFeatures/Registration/Pages/ConfirmAccount";
+import { getCookie } from 'react-use-cookie';
+import jwt from 'jwt-decode';
+import { useCookies } from 'react-cookie';
+import { useEffect, useRef, useState, useContext } from 'react';
 import ListingSearch from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
-
-import { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
 import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Components/AnalysisDashboard";
 
+import {AuthnContext} from './Context/AuthnContext';
+import ErrorSplash from "./Shared/ErrorScreens/ErrorSplash";
+
+
 function App() {
+  const authnContext = useContext(AuthnContext);
+  const [cookies, setCookie, removeCoookie] = useCookies(['IdToken']);
+  const history = useHistory();
+  const [loggedIn, setLoggedIn] = useState();
 
-  return (
-    <div className="box">
-      <SiteHeader/>
-      <StatusToggle />
-      <Router>
-        <Switch>
-          <Route path="/AdminDashboard">
-            <AdminDashboard />
-          </Route>
-          <Route path="/Help">
-            <Help />
-          </Route>
-          <Route path="/UserManagement">
-            <UserManagement />
-          </Route>
-          <Route path="/ListingForm">
-            <ListingForm />
-          </Route>
-          <Route path="/ListingSearch">
-            <ListingSearch />
-          </Route>
-          <Route path="/ListingCategoryPage">
-            <ListingCategoryPage />
-          </Route> 
-          <Route path="/Archive">
-            <Archive />
-          </Route>
-          <Route path="/Login">
-            <Login />
-          </Route>
-          <Route path="/ForgotUsername">
-            <ForgotUsername />
-          </Route>
-          <Route path="/ForgotPasswordValidation">
-            <ForgotPasswordValidation />
-          </Route>
-          <Route path='/ForgotPasswordCodeInput'>
-            <ForgotPasswordCodeInput />
-          </Route>
-          <Route path="/ResetPassword">
-            <ResetPassword />
-          </Route>
-          <Route path="/Registration">
-            <Registration />
-          </Route>
-          <Route path="/ResendEmail">
-            <ResendEmail />
-          </Route>
-          <Route path="/UserAccountSettings">
-            <UserAccountSettings />
-          </Route>
-          <Route path="/FriendsList">
-            <FriendsList />
-          </Route>
-          <Route path="/Messaging">
-            <Messaging />
-          </Route>
-          <Route path="/profile">
-            <UserProfile />
-          </Route>
-          <Route path="/AnalysisDashboard">
-            <AnalysisDashboard />
-          </Route>
+  global.url = "http://localhost:5000/";
+  global.urlRoute = "http://localhost:3000/";
+  useEffect(() => {
+    try {
+      if (cookies['IdToken'] !== null) {
+        const idToken = cookies['IdToken'];
+        const decodedIdToken = jwt(idToken).exp;
+        var currentDateTime = Date.now()/1000;
+        if (decodedIdToken > currentDateTime)
+        {
+            authnContext.login();
+        } else {
+          authnContext.logout();
+        }
+      } else {
+        authnContext.logout();
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+    }, [])
 
-          <Route path="/ConfirmAccount">
-            <ConfirmAccount />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-      
-  );
+    if (!authnContext.isLoggedIn) {
+      return (
+      <div className="box">
+        <Router>
+          <Switch>
+            <Route path="/ForgotUsername">
+               <ForgotUsername />
+            </Route>
+            <Route path="/ForgotPasswordValidation">
+              <ForgotPasswordValidation />
+            </Route>
+            <Route path='/ForgotPasswordCodeInput'>
+              <ForgotPasswordCodeInput />
+            </Route>
+            <Route path="/ResetPassword">
+              <ResetPassword />
+            </Route>
+            <Route path="/Registration">
+              <Registration />
+            </Route>
+            <Route path="/ResendEmail">
+              <ResendEmail />
+            </Route>
+            <Route path="/ConfirmAccount">
+                <ConfirmAccount />
+            </Route>
+            <Route path="/" exact>
+              <Login />
+            </Route>
+            <Route>
+              <ErrorSplash />
+            </Route>
+          </Switch>
+        </Router>
+      </div>)
+    } else {
+      return (
+        <div className="box">
+        <Router>
+          <SiteHeader />
+          <StatusToggle />
+            <Switch>
+              <Route path="/UserManagement">
+                <UserManagement />
+              </Route>
+              <Route path="/Help">
+                <Help />
+              </Route>
+              <Route path="/AdminDashboard">
+                <AdminDashboard />
+              </Route>
+              <Route path="/ListingForm">
+                <ListingForm />
+              </Route>
+              <Route path="/ListingSearch">
+                <ListingSearch />
+              </Route>
+              <Route path="/ListingCategoryPage">
+                <ListingCategoryPage />
+              </Route>
+              <Route path="/Archive">
+                <Archive />
+              </Route>
+              <Route path="/UserAccountSettings">
+                <UserAccountSettings />
+              </Route>
+              <Route path="/FriendsList">
+                <FriendsList />
+              </Route>
+              <Route path="/Messaging">
+                <Messaging />
+              </Route>
+              <Route path="/profile">
+                <UserProfile />
+              </Route>
+              <Route path="/AnalysisDashboard">
+                 <AnalysisDashboard />
+              </Route>
+              <Route path="/" exact>
+                <Home />
+              </Route>
+              <Route>
+                <ErrorSplash />
+              </Route>
+            </Switch>
+          </Router>
+        </div>)
+
+    }
 }
 
 export default App;

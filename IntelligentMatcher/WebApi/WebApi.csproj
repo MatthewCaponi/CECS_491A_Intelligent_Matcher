@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,9 +17,7 @@
 	<ProjectReference Include="..\Archiving\Archiving.csproj" />
 	<ProjectReference Include="..\AuthorizationPolicySystem\AuthorizationPolicySystem.csproj" />
 	<ProjectReference Include="..\AuthorizationResolutionSystem\AuthorizationResolutionSystem.csproj" />
-	<ProjectReference Include="..\AuthorizationServices\AuthorizationServices.csproj" />
 	<ProjectReference Include="..\ControllerModels\ControllerModels.csproj" />
-	<ProjectReference Include="..\Cross-Cutting Concerns\Cross-Cutting Concerns.csproj" />
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
 	<ProjectReference Include="..\FriendList\FriendList.csproj" />

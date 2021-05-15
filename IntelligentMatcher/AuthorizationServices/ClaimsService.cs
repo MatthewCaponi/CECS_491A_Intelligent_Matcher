@@ -1,9 +1,9 @@
 ﻿using AuthorizationServices;
 using BusinessModels.UserAccessControl;
+using Cross_Cutting_Concerns;
 using DataAccess.Repositories;
 using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
 using Exceptions;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,29 +35,9 @@ namespace UserAccessControlServices
                 List<BusinessModels.UserAccessControl.ClaimModel> claimList =
                     new List<BusinessModels.UserAccessControl.ClaimModel>();
 
-                foreach (var dataClaimModel in claims)
+                foreach (var claim in claims)
                 {
-                    var claimModel = ModelConverterService.ConvertTo(dataClaimModel,
-                        new BusinessModels.UserAccessControl.ClaimModel());
-
-                    claimModel.Scopes = new List<BusinessModels.UserAccessControl.ScopeModel>();
-
-                    var scopeClaims = await _scopeClaimRepository.GetAllScopeClaims();
-
-                    foreach (var dataScopeClaimModel in scopeClaims)
-                    {
-                        if(claimModel.Id == dataScopeClaimModel.ClaimId)
-                        {
-                            var dataScopeModel = await _scopeRepository.GetScopeById(dataScopeClaimModel.ScopeId);
-
-                            var scopeModel = ModelConverterService.ConvertTo(dataScopeModel,
-                                new BusinessModels.UserAccessControl.ScopeModel());
-
-                            claimModel.Scopes.Add(scopeModel);
-                        }
-                    }
-
-                    claimList.Add(claimModel);
+                    claimList.Add(ModelConverterService.ConvertTo(claim, new BusinessModels.UserAccessControl.ClaimModel()));
                 }
 
                 return claimList;
@@ -72,18 +52,18 @@ namespace UserAccessControlServices
         {
             try
             {
-                var userScopeClaims = await _userScopeClaimRepository.GetAllUserUserScopeClaims();
+                var userScopeClaims = await _userScopeClaimRepository.GetAllUserScopeClaims();
 
                 List<BusinessModels.UserAccessControl.UserClaimModel> userClaimList =
                     new List<BusinessModels.UserAccessControl.UserClaimModel>();
 
                 foreach (var userScopeClaimModel in userScopeClaims)
                 {
-                    var scopeClaimModel = await _scopeClaimRepository.GetScopeClaimById(userScopeClaimModel.ScopeClaimId);
+                    var scopeClaimModel = await _scopeClaimRepository.GetScopeClaimById(userScopeClaimModel.Id);
 
                     var claimModel = await _claimRepository.GetClaimById(scopeClaimModel.ClaimId);
 
-                    var userClaim = new BusinessModels.UserAccessControl.UserClaimModel(claimModel.Name, null);
+                    var userClaim = new BusinessModels.UserAccessControl.UserClaimModel(claimModel.Type, null);
 
                     userClaimList.Add(userClaim);
                 }
@@ -102,22 +82,6 @@ namespace UserAccessControlServices
             {
                 var dataClaim = await _claimRepository.GetClaimById(id);
                 var claim = ModelConverterService.ConvertTo(dataClaim, new BusinessModels.UserAccessControl.ClaimModel());
-                claim.Scopes = new List<BusinessModels.UserAccessControl.ScopeModel>();
-
-                var scopeClaims = await _scopeClaimRepository.GetAllScopeClaims();
-
-                foreach (var dataScopeClaimModel in scopeClaims)
-                {
-                    if (claim.Id == dataScopeClaimModel.ClaimId)
-                    {
-                        var dataScopeModel = await _scopeRepository.GetScopeById(dataScopeClaimModel.ScopeId);
-
-                        var scopeModel = ModelConverterService.ConvertTo(dataScopeModel,
-                            new BusinessModels.UserAccessControl.ScopeModel());
-
-                        claim.Scopes.Add(scopeModel);
-                    }
-                }
 
                 return claim;
             }

@@ -37,7 +37,14 @@ function ForgotUsername() {
     }
 
     return (
-        <Grid container>
+        <Grid container centered>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
         <Grid.Row>
             <h1>Forgot Username (Please Enter Your Information): </h1>
         </Grid.Row>
@@ -73,7 +80,7 @@ function ForgotUsername() {
             >
             Submit
             </Button>
-            <Button href={global.urlRoute + "Login"} compact size="tiny" circular inverted color="blue">Go Back</Button>
+            <Button href={global.urlRoute} compact size="tiny" circular inverted color="blue">Go Back</Button>
         </Grid.Row>
         </Grid>
     )

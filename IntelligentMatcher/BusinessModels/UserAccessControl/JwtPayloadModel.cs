@@ -6,18 +6,18 @@ namespace BusinessModels.UserAccessControl
 {
     public class JwtPayloadModel
     {
-        public List<UserClaimModel> PublicClaims { get; set; }
-        public UserClaimModel Issuer { get; set; }
-        public UserClaimModel Subject { get; set; }
-        public UserClaimModel Audience { get; set; }
-        public UserClaimModel ExpirationTime { get; set; }
-        public UserClaimModel NotBefore { get; set; }
-        public UserClaimModel IssuedAt { get; set; }
+        public List<TokenClaimModel> PublicClaims { get; set; }
+        public TokenClaimModel Issuer { get; set; }
+        public TokenClaimModel Subject { get; set; }
+        public TokenClaimModel Audience { get; set; }
+        public TokenClaimModel ExpirationTime { get; set; }
+        public TokenClaimModel NotBefore { get; set; }
+        public TokenClaimModel IssuedAt { get; set; }
 
         public JwtPayloadModel()
         {
             {
-                PublicClaims = new List<UserClaimModel>();
+                PublicClaims = new List<TokenClaimModel>();
             }
         }
     }

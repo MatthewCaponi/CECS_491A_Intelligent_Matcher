@@ -32,8 +32,8 @@ namespace DataAccessUnitTestes.UserAccessControl
             {
                 ClaimModel claimModel = new ClaimModel();
                 claimModel.Id = i;
-                claimModel.Name = "TestClaim" + i;
-                claimModel.Description = "TestDescription" + i;
+                claimModel.Type = "TestClaim" + i;
+                claimModel.Value = "TestDescription" + i;
                 claimModel.IsDefault = true;
 
                 await claimRepository.CreateClaim(claimModel);
@@ -58,16 +58,16 @@ namespace DataAccessUnitTestes.UserAccessControl
             IClaimRepository claimRepository = new ClaimRepository(new SQLServerGateway(), new ConnectionStringData());
             ClaimModel claimModel = new ClaimModel();
             claimModel.Id = id;
-            claimModel.Name = expectedUpdatedName;
-            claimModel.Description = expectedDescriptionName;
+            claimModel.Type = expectedUpdatedName;
+            claimModel.Value = expectedDescriptionName;
             claimModel.IsDefault = expectedDefaultValue;
 
             // Act
             await claimRepository.UpdateClaim(claimModel);
             var actual = await claimRepository.GetClaimById(id);
 
-            var actualName = actual.Name;
-            var actualDescriptionName = actual.Description;
+            var actualName = actual.Type;
+            var actualDescriptionName = actual.Value;
             var actualDefaultValue = actual.IsDefault;
 
 

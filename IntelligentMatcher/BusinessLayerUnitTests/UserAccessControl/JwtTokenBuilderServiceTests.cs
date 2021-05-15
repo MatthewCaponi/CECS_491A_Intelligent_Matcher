@@ -23,7 +23,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
         private static IConfiguration configuration;
         private static ITokenBuilderService tokenBuilderService;
         private static JwtPayloadModel jwtPayloadIDModel;
-        private static List<UserClaimModel> publicIDClaims;
+        private static List<TokenClaimModel> publicIDClaims;
 
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -37,24 +37,24 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
             tokenBuilderService = new JwtTokenBuilderService(configuration);
 
-            publicIDClaims = new List<UserClaimModel>
+            publicIDClaims = new List<TokenClaimModel>
         {
-            new UserClaimModel("Username", "TestUsername1"),
-            new UserClaimModel("EmailAddress", "TestEmailAddress1"),
-            new UserClaimModel("FirstName", "TestFirstName1"),
-            new UserClaimModel("LastName", "TestLastName1"),
-            new UserClaimModel("Birthdate", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
+            new TokenClaimModel("Username", "TestUsername1"),
+            new TokenClaimModel("EmailAddress", "TestEmailAddress1"),
+            new TokenClaimModel("FirstName", "TestFirstName1"),
+            new TokenClaimModel("LastName", "TestLastName1"),
+            new TokenClaimModel("Birthdate", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
         };
 
             jwtPayloadIDModel = new JwtPayloadModel
             {
                 PublicClaims = publicIDClaims,
-                Issuer = new UserClaimModel("iss", "TestIssuer1"),
-                Subject = new UserClaimModel("sub", "TestSubject1"),
-                Audience = new UserClaimModel("aud", "TestAudience1"),
-                ExpirationTime = new UserClaimModel("exp", "30"),
-                NotBefore = new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                IssuedAt = new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
+                Issuer = new TokenClaimModel("iss", "TestIssuer1"),
+                Subject = new TokenClaimModel("sub", "TestSubject1"),
+                Audience = new TokenClaimModel("aud", "TestAudience1"),
+                ExpirationTime = new TokenClaimModel("exp", "30"),
+                NotBefore = new TokenClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
+                IssuedAt = new TokenClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
             };
         }
 

@@ -1,15 +1,15 @@
 ﻿CREATE PROCEDURE [dbo].[Claim_Update]
 	@Id int,
-	@name nvarchar(50),
-	@description nvarchar(200),
+	@type nvarchar(50),
+	@value nvarchar(200),
 	@isDefault bit
 AS
 begin
 	set nocount on;
 
 	update dbo.[Claim]
-	set name = @name,
-	description = @description,
+	set type = @type,
+	value = @value,
 	isDefault = @isDefault
 	where Id = @Id;
 end

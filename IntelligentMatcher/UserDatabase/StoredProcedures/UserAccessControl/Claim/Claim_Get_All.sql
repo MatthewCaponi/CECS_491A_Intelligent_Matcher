@@ -2,6 +2,6 @@
 AS
 begin
 	set nocount on;
-	SELECT [Id], [name], [description], [isDefault]
+	SELECT [Id], [type], [value], [isDefault]
 	from dbo.[Claim];
 end

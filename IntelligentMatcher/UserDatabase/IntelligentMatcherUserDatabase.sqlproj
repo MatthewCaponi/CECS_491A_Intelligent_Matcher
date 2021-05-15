@@ -80,8 +80,9 @@
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicy" />
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicyPairing" />
     <Folder Include="StoredProcedures\AccountVerification" />
-    <Folder Include="Snapshots" />
     <Folder Include="StoredProcedures\UserAnalysisDashboard" />
+    <Folder Include="StoredProcedures\UserAccessControl\UserScope" />
+    <Folder Include="StoredProcedures\UserAccessControl\UserClaim" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="UserAccount.sql" />
@@ -288,11 +289,25 @@
     <Build Include="StoredProcedures\UserAnalysisDashboard\SearchTracker_GetAll.sql" />
     <Build Include="LoginTracker.sql" />
     <Build Include="StoredProcedures\ListingSearch\ListingSearch_GetAllTeamListing.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Get_All_ByAccountIdAndRole.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScopeClaim\UserScopeClaim_Get_All_ByAccountId.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\ScopeClaim\ScopeClaim_Get_AllByScopeId.sql" />
+    <Build Include="UserScope.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScope\UserScope_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScope\UserScope_Get_All_ByUserAccountId.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScope\UserScope_Get_ByScopeId.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScope\UserScope_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScope\UserScope_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserScope\UserScope_Delete_ByScopeId.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserClaim\UserClaim_Get_All.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserClaim\UserClaim_Get_All_ByUserAccountId.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserClaim\UserClaim_Get_ByUserClaimId.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserClaim\UserClaim_Create.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserClaim\UserClaim_Update.sql" />
+    <Build Include="StoredProcedures\UserAccessControl\UserClaim\UserClaim_Delete_ByUserClaimId.sql" />
+    <Build Include="UserClaim.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="UserDatabase.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Snapshots\IntelligentMatcherUserDatabase_20210424_20-48-38.dacpac" />
+    <RefactorLog Include="IntelligentMatcherUserDatabase.refactorlog" />
   </ItemGroup>
 </Project>

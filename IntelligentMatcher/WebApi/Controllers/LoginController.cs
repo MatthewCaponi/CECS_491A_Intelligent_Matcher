@@ -3,6 +3,7 @@ using ControllerModels;
 using ControllerModels.LoginModels;
 using Exceptions;
 using Login;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -24,55 +25,63 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<LoginResultModel> Login([FromBody] LoginModel loginModel)
+        public async Task<ActionResult<Result<LoginResultModel>>> Login([FromBody] LoginModel loginModel)
         {
-            try
-            {
                 var loginResultModel = new LoginResultModel();
+            
+                //if (loginModel.username == null || loginModel.password == null)
+                //{
+                //    loginResultModel.Success = false;
+                //    loginResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                if (loginModel.username == null || loginModel.password == null)
-                {
-                    loginResultModel.Success = false;
-                    loginResultModel.ErrorMessage = ErrorMessage.Null.ToString();
-
-                    return loginResultModel;
-                }
+                //    return loginResultModel;
+                //}
 
                 var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
 
                 loginResultModel.Success = loginResult.WasSuccessful;
 
-                if (loginResultModel.Success)
-                {
-                    loginResultModel.Username = loginResult.SuccessValue.Username;
-                    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
-                    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
-                }
-                else
-                {
-                    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
-                }
+            //if (loginResultModel.Success)
+            //{
+            //    loginResultModel.Username = loginResult.SuccessValue.Username;
+            //    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
+            //    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
+            //}
+            //else
+            //{
+            //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
+            //}
+            var idToken = loginResult.SuccessValue.IdToken;
+            var accessToken = loginResult.SuccessValue.AccessToken;
+            CookieOptions idOption = new CookieOptions();
+            idOption.HttpOnly = false;
 
-                return loginResultModel;
-            }
-            catch (SqlCustomException)
-            {
-                var loginResultModel = new LoginResultModel();
+            CookieOptions accessOption = new CookieOptions();
+            accessOption.HttpOnly = false;
 
-                loginResultModel.Success = false;
-                loginResultModel.ErrorMessage = "Could not verify the information given. Try again.";
+            Response.Cookies.Append("IdToken", idToken, idOption);
+            Response.Cookies.Append("AccessToken", accessToken, accessOption);
+            
+            return Ok("Success");
+            
+            //catch (SqlCustomException)
+            //{
+            //    var loginResultModel = new LoginResultModel();
 
-                return loginResultModel;
-            }
-            catch (NullReferenceException)
-            {
-                var loginResultModel = new LoginResultModel();
+            //    loginResultModel.Success = false;
+            //    loginResultModel.ErrorMessage = "Could not verify the information given. Try again.";
 
-                loginResultModel.Success = false;
-                loginResultModel.ErrorMessage = "A null was returned when checking the inputs.";
+            //    return loginResultModel;
+            //}
+            //catch (NullReferenceException)
+            //{
+            //    var loginResultModel = new LoginResultModel();
 
-                return loginResultModel;
-            }
+            //    loginResultModel.Success = false;
+            //    loginResultModel.ErrorMessage = "A null was returned when checking the inputs.";
+
+            //    return loginResultModel;
+            //}
         }
 
         [HttpPost]

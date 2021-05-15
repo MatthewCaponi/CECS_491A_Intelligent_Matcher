@@ -1,9 +1,9 @@
 ﻿using AuthorizationServices;
 using BusinessModels.UserAccessControl;
+using Cross_Cutting_Concerns;
 using DataAccess.Repositories;
 using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
 using Exceptions;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -69,33 +69,6 @@ namespace UserAccessControlServices
             }
         }
 
-        public async Task<List<UserClaimModel>> GetAllUserScopes()
-        {
-            try
-            {
-                var userScopeClaims = await _userScopeClaimRepository.GetAllUserUserScopeClaims();
-
-                List<BusinessModels.UserAccessControl.UserClaimModel> userScopeList =
-                    new List<BusinessModels.UserAccessControl.UserClaimModel>();
-
-                foreach (var userScopeClaimModel in userScopeClaims)
-                {
-                    var scopeClaimModel = await _scopeClaimRepository.GetScopeClaimById(userScopeClaimModel.ScopeClaimId);
-
-                    var scopeModel = await _scopeRepository.GetScopeById(scopeClaimModel.ScopeId);
-
-                    var userScope = new BusinessModels.UserAccessControl.UserClaimModel(scopeModel.Name, null);
-
-                    userScopeList.Add(userScope);
-                }
-
-                return userScopeList;
-            }
-            catch (SqlCustomException e)
-            {
-                throw new SqlCustomException("No User Scopes Found.", e.InnerException);
-            }
-        }
 
         public async Task<ScopeModel> GetScope(int id)
         {
@@ -138,12 +111,20 @@ namespace UserAccessControlServices
             {
                 var dataScope = ModelConverterService.ConvertTo(scopeModel, new Models.User_Access_Control.ScopeModel());
                 var scopeId = await _scopeRepository.CreateScope(dataScope);
+                foreach(var claim in scopeModel.Claims)
+                {
+                    await _scopeClaimRepository.CreateScopeClaim(new Models.User_Access_Control.ScopeClaimModel()
+                    {
+                        ScopeId = scopeId,
+                        ClaimId = claim.Id
+                    });
+                }
 
                 return scopeId;
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException("Scope could not be created.", e.InnerException);
+                throw new SqlCustomException(e.InnerException.Message,e.InnerException);
             }
         }
 

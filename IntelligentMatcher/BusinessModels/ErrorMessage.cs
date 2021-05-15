@@ -21,6 +21,8 @@ namespace BusinessModels
         InvalidPassword,
         NoSuchFilesExist,
         Forbidden,
+        UserAlreadyContainsClaim,
+        UserAlreadyContainsScope,
         FolderPathTooLong,
         DataNotSupported,
         FileError

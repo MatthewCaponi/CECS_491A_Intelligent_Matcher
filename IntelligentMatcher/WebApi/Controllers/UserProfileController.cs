@@ -61,7 +61,11 @@ namespace WebApi.Controllers
         public async Task<ActionResult<PublicUserProfileModel>> GetUserProfile([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:read"
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -77,17 +81,17 @@ namespace WebApi.Controllers
                 return StatusCode(404);
 
             }
-
         }
-
-
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<DALListingModel>>> GetUserListings([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            //var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:read"
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -112,8 +116,12 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
-
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:write"
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -125,8 +133,6 @@ namespace WebApi.Controllers
             {
                 return Ok(false);
             }
-
-
         }
 
         [HttpPost]
@@ -135,8 +141,12 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.ReportingId.ToString(), true, false, false);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
 
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:report"
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -148,18 +158,20 @@ namespace WebApi.Controllers
             {
                 return Ok(false);
             }
-
         }
-
 
         [HttpPost]
         public async Task<ActionResult<bool>> GetViewStatus([FromBody] DualIdModel model)
         {
             try
             {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile.visibility:read"
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -182,17 +194,19 @@ namespace WebApi.Controllers
             {
                 return Ok(false);
             }
-
-
         }
-
 
         [HttpPost]
         public async Task<ActionResult<FriendStatus>> GetFriendStatus([FromBody] DualIdModel model)
         {
-            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), model.UserId.ToString(), true, false, false);
 
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile.friends_list.status:read"
+            }, claims);
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
@@ -209,9 +223,6 @@ namespace WebApi.Controllers
                 return StatusCode(404);
 
             }
-
-
-
         }
 
         [HttpPost]
@@ -220,7 +231,11 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "application:read",
+            }, claims);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -233,8 +248,6 @@ namespace WebApi.Controllers
             {
                 return Ok(false);
             }
-
-
         }
 
         [HttpPost]
@@ -243,8 +256,11 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
-
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "application:read",
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -257,22 +273,23 @@ namespace WebApi.Controllers
             {
                 return Ok(false);
             }
-
-
         }
 
         [HttpPost]
         public async Task<ActionResult<NonUserProfileData>> GetOtherData([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), true, false, false);
-
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "application:read",
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
             }
-            try 
+            try
             {
                 NonUserProfileData model = new NonUserProfileData();
                 UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
@@ -285,15 +302,11 @@ namespace WebApi.Controllers
             {
                 return StatusCode(404);
             }
-
         }
 
         [HttpPost]
         public async Task<ActionResult<bool>> UploadPhoto()
         {
-
-
-
             try
             {
                 int userId = 0;
@@ -305,8 +318,12 @@ namespace WebApi.Controllers
                     }
                 }
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.user_profile.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
-
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", userId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile.photo:upload",
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -336,7 +353,6 @@ namespace WebApi.Controllers
                     {
                         return Ok(false);
                     }
-
                 }
                 else
                 {
@@ -348,10 +364,6 @@ namespace WebApi.Controllers
             {
                 return Ok(false);
             }
-
-
-
-
         }
 
     }

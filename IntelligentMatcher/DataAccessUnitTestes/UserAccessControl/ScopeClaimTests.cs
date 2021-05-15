@@ -37,14 +37,14 @@ namespace DataAccessUnitTestes.UserAccessControl
 
                 ScopeModel scopeModel = new ScopeModel();
                 scopeModel.Id = i;
-                scopeModel.Name = "TestScope" + i;
+                scopeModel.Type = "TestScope" + i;
                 scopeModel.Description = "TestDescription" + i;
                 scopeModel.IsDefault = true;
 
                 ClaimModel claimModel = new ClaimModel();
                 claimModel.Id = i;
-                claimModel.Name = "TestClaim" + i;
-                claimModel.Description = "TestDescription" + i;
+                claimModel.Type = "TestClaim" + i;
+                claimModel.Value = "TestDescription" + i;
                 claimModel.IsDefault = true;
 
                 await scopeRepository.CreateScope(scopeModel);

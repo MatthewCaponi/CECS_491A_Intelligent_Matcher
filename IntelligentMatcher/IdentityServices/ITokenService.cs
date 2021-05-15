@@ -6,7 +6,7 @@ namespace IdentityServices
 {
     public interface ITokenService
     {
-        string CreateToken(List<UserClaimModel> userClaims);
+        string CreateToken(List<TokenClaimModel> userClaims);
         bool ValidateToken(string token);
         List<UserClaimModel> ExtractClaims(string token);
     }
