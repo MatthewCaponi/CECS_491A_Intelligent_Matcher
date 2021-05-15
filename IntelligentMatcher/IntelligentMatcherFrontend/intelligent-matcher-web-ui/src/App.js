@@ -41,8 +41,7 @@ function App() {
   const history = useHistory();
   const [loggedIn, setLoggedIn] = useState();
 
-  global.url = "http://localhost:5000/";
-  global.urlRoute = "http://localhost:3000/";
+
   useEffect(() => {
     try {
       if (cookies['IdToken'] !== null) {
