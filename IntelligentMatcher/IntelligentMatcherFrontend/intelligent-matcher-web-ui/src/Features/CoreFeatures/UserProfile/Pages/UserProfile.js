@@ -30,8 +30,18 @@ export class UserProfile extends Component {
         this.getViewStatus = this.getViewStatus.bind(this);
         let url = window.location.href;
         url = url.split("id=")
-        this.state.viewingId = parseInt(url[1]);
+        if(url.length > 1){
+          this.state.viewingId = parseInt(url[1]);   
+  
+      }else{
+          this.state.viewingId = this.state.userId;
+  
+      }
         this.getViewStatus();
+
+        
+  
+
   }
 
 
@@ -47,7 +57,7 @@ export class UserProfile extends Component {
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({visibility: res});
-        console.log(this.state.visibility);
+        console.log("Vsibility: " + this.state.visibility);
     }
     );
 
@@ -79,7 +89,9 @@ export class UserProfile extends Component {
   render () {
 
 
-    if(this.state.otherData.username != null && this.state.friendStatus.status != "Blocked"){
+
+
+    if(this.state.friendStatus.status != "Blocked"){
 
     return (
 

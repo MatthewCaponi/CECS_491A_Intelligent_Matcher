@@ -25,7 +25,13 @@ export class UserListings extends Component {
 
     let url = window.location.href;
     url = url.split("id=")
-    this.state.viewingId = parseInt(url[1]);   
+    if(url.length > 1){
+        this.state.viewingId = parseInt(url[1]);   
+
+    }else{
+        this.state.viewingId = this.state.userId;
+
+    }
 
     this.getUserListings = this.getUserListings.bind(this);
 

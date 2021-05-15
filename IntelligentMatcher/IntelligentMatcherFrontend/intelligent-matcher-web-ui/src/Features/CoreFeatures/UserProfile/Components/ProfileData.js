@@ -29,7 +29,13 @@ export class ProfileData extends Component {
 
     let url = window.location.href;
     url = url.split("id=")
-    this.state.viewingId = parseInt(url[1]);   
+    if(url.length > 1){
+        this.state.viewingId = parseInt(url[1]);   
+
+    }else{
+        this.state.viewingId = this.state.userId;
+
+    }
     this.saveData = this.saveData.bind(this);
 
     this.getAccountData = this.getAccountData.bind(this);
@@ -407,7 +413,15 @@ async getAccountData(){
                       
                     
                      </Table.Body>
-                     <button class="ui button" onClick={() => {        this.setState({edit: "edit"})}}>Edit</button>
+                     {
+                        (this.state.userId == this.state.viewingId && this.state.edit != "edit" ) ?
+                        (<div>  
+                                                 <button class="ui button" onClick={() => {        this.setState({edit: "edit"})}}>Edit</button>
+
+                        </div>
+                        ) : 
+                        ("")
+                    }
 
                 </Table>
 

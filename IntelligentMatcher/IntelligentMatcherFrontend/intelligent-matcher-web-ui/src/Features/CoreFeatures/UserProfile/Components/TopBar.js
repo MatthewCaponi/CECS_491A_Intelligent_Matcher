@@ -19,7 +19,6 @@ export class TopBar extends Component {
     const userId = decodedIdToken.id;
     super(props);
 
-    super(props);
 
     this.state = 
     {  
@@ -37,8 +36,13 @@ export class TopBar extends Component {
 
     let url = window.location.href;
     url = url.split("id=")
-    this.state.viewingId = parseInt(url[1]);   
+    if(url.length > 1){
+        this.state.viewingId = parseInt(url[1]);   
 
+    }else{
+        this.state.viewingId = this.state.userId;
+
+    }
     this.getFriendStatus = this.getFriendStatus.bind(this);
     this.saveData = this.saveData.bind(this);
     this.removeFriend = this.removeFriend.bind(this);
