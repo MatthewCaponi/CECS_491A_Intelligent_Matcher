@@ -28,6 +28,19 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
                                                                           new { },
                                                                           _connectionString.SqlConnectionString);
         }
+        
+        public async Task<IEnumerable<ScopeClaimModel>> GetAllScopeClaimsByScopeId(int scopeId)
+        {
+            string storedProcedure = "dbo.ScopeClaim_Get_AllByScopeId";
+
+            return await _dataGateway.LoadData<ScopeClaimModel, dynamic>(storedProcedure,
+                                                                          new
+                                                                          {
+                                                                              scopeId = scopeId
+
+                                                                          },
+                                                                          _connectionString.SqlConnectionString);
+        }
 
         public async Task<ScopeClaimModel> GetScopeClaimById(int id)
         {

@@ -7,13 +7,17 @@ using System.Collections.Generic;
 using FriendList;
 using DataAccess;
 using DataAccess.Repositories;
-using WebApi.Models;
+
 using WebApi.Controllers;
 using IdentityServices;
 using AuthorizationResolutionSystem;
 using AuthorizationPolicySystem;
 using WebApi;
 using WebApi.Access_Information;
+using Cross_Cutting_Concerns;
+using BusinessModels.UserAccessControl;
+using WebApi.Models;
+using UserClaimModel = BusinessModels.UserAccessControl.UserClaimModel;
 
 namespace WebApi.Controllers
 {
@@ -43,7 +47,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllFriends([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+            var claims = new List<UserClaimModel>();
+            claims.Add(new UserClaimModel("Id", userId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -53,7 +62,6 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(await _friendListManager.GetAllFriendAsync(userId));
-
             }
             catch
             {
@@ -65,7 +73,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequets([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+            var claims = new List<UserClaimModel>();
+            claims.Add(new UserClaimModel("Id", userId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -80,15 +93,18 @@ namespace WebApi.Controllers
             {
                 return StatusCode(404);
             }
-
-
         }
 
-        [HttpPost]
+        //[HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), userId.ToString(), true, false, false);
+            var claims = new List<UserClaimModel>();
+            claims.Add(new UserClaimModel("Id", userId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -102,17 +118,20 @@ namespace WebApi.Controllers
             {
                 return StatusCode(404);
             }
-
-
         }
 
-        [HttpPost]
+        //[HttpPost]
         public async Task<ActionResult<bool>> RemoveFriend([FromBody] DualIdModel ids)
         {
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+                var claims = new List<UserClaimModel>();
+                claims.Add(new UserClaimModel("Id", ids.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:delete",
+            }, claims);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -123,13 +142,11 @@ namespace WebApi.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
 
         }
-
-
 
         [HttpPost]
         public async Task<ActionResult<bool>> BlockFriend([FromBody] DualIdModel ids)
@@ -137,7 +154,12 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+                var claims = new List<UserClaimModel>();
+                claims.Add(new UserClaimModel("Id", ids.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:block",
+            }, claims);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -148,7 +170,7 @@ namespace WebApi.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
 
@@ -161,8 +183,12 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
-
+                var claims = new List<UserClaimModel>();
+                claims.Add(new UserClaimModel("Id", ids.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:approve",
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -172,7 +198,7 @@ namespace WebApi.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
 
@@ -184,7 +210,12 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
+                var claims = new List<UserClaimModel>();
+                claims.Add(new UserClaimModel("Id", ids.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:write",
+            }, claims);
 
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
@@ -195,17 +226,20 @@ namespace WebApi.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
 
             }
-
         }
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetMutualFriends([FromBody] DualIdModel ids)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(),  true, false, false);
+            var claims = new List<UserClaimModel>();
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -223,13 +257,16 @@ namespace WebApi.Controllers
 
         }
 
-
         [HttpPost]
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocking([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
-
+            var claims = new List<UserClaimModel>();
+            claims.Add(new UserClaimModel("Id", userId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
@@ -250,7 +287,12 @@ namespace WebApi.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), true, false, false);
+            var claims = new List<UserClaimModel>();
+            claims.Add(new UserClaimModel("Id", userId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
 
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
@@ -266,7 +308,6 @@ namespace WebApi.Controllers
             {
                 return StatusCode(404);
             }
-
         }
 
         [HttpPost]
@@ -275,8 +316,12 @@ namespace WebApi.Controllers
             try
             {
                 var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureDefaultPolicy(Resources.friend_list.ToString(), Role.user.ToString(), ids.UserId.ToString(), true, false, false);
-
+                var claims = new List<UserClaimModel>();
+                claims.Add(new UserClaimModel("Id", ids.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:write",
+            }, claims);
                 if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
                 {
                     return StatusCode(403);
@@ -288,9 +333,8 @@ namespace WebApi.Controllers
             }
             catch
             {
-                return Ok(false);
+                return StatusCode(404);
             }
-
         }
 
 

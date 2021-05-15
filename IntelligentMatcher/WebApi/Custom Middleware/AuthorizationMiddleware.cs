@@ -33,56 +33,38 @@ namespace WebApi.Custom_Middleware
         public Task Invoke(HttpContext httpContext)
         {
             var headers = httpContext.Request.Headers;
-            string token = String.Empty;
-            if (!headers.ContainsKey("Authorization"))
-            {
-                httpContext.Response.StatusCode = 403;
-                return Task.CompletedTask;
-            }
-            string createdToken = String.Empty;
             if (headers["Scope"].ToString().Contains("id"))
             {
-                var userClaims = new List<UserClaimModel>
-            {
-                new UserClaimModel("scope", "friend_list,read"),
-                new UserClaimModel("role", "user"),
-                new UserClaimModel("id", "1"),
-                new UserClaimModel("username", "TestUsername1"),
-                new UserClaimModel("emailAddress", "TestEmailAddress1"),
-                new UserClaimModel("firstName", "TestFirstName1"),
-                new UserClaimModel("lastName", "TestLastName1"),
-                new UserClaimModel("birthdate", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                new UserClaimModel("iss", "TestIssuer1"),
-                new UserClaimModel("sub", "TestSubject1"),
-                new UserClaimModel("aud", "TestAudience1"),
-                new UserClaimModel("exp", "30"),
-                new UserClaimModel("nbf", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")),
-                new UserClaimModel("iat", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"))
-            };
-
-                createdToken = _tokenService.CreateToken(userClaims);
-                Console.WriteLine("--------------\nToken\n--------------\n" + createdToken);
-                _logService.Log(createdToken, LogTarget.All, LogLevel.info, this.ToString(), "API_Dev_Logs");
+                return _next(httpContext);
             }
-
-
-            if (headers["Authorization"].ToString().Contains("Bearer"))
+            else
             {
-                var value = headers["Authorization"].ToString().Split(' ')[1];
-                
-                var validated = _tokenService.ValidateToken(value);
-                
-                if (!validated)
+                string token = String.Empty;
+                if (!headers.ContainsKey("Authorization"))
                 {
                     httpContext.Response.StatusCode = 403;
                     return Task.CompletedTask;
                 }
+                string createdToken = String.Empty;
 
-                _logService.Log(validated.ToString(), LogTarget.All, LogLevel.info, this.ToString(), "API_Dev_Logs");
+
+                if (headers["Authorization"].ToString().Contains("Bearer"))
+                {
+                    var value = headers["Authorization"].ToString().Split(' ')[1];
+
+                    var validated = _tokenService.ValidateToken(value);
+
+                    if (!validated)
+                    {
+                        httpContext.Response.StatusCode = 403;
+                        return Task.CompletedTask;
+                    }
+                }
+
+                return _next(httpContext);
             }
-
-            return _next(httpContext);
         }
+
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.

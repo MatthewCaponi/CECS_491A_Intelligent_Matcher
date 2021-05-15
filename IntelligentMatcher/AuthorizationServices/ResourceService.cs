@@ -1,7 +1,7 @@
-﻿using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+﻿using Cross_Cutting_Concerns;
+using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
 using Exceptions;
 using Microsoft.Data.SqlClient;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Text;

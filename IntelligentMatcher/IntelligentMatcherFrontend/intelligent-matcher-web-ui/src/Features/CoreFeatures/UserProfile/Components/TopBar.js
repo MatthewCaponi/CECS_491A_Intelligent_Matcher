@@ -8,17 +8,21 @@ import '../.././../../index'
 import { Redirect } from 'react-router'
 import _ from 'lodash'
 import Messaging from '../../Messaging/Pages/Messaging';
-
+import Cookies from 'js-cookie';
+import jwt from 'jwt-decode';
 export class TopBar extends Component {
   static displayName = TopBar.name;
 
   constructor(props) {
-
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
     super(props);
+
 
     this.state = 
     {  
-        userId: 1,
+        userId: parseInt(userId),
         viewingId: 0,
         friendStatus: "",
         accountProfileData: [],
@@ -32,8 +36,13 @@ export class TopBar extends Component {
 
     let url = window.location.href;
     url = url.split("id=")
-    this.state.viewingId = parseInt(url[1]);   
+    if(url.length > 1){
+        this.state.viewingId = parseInt(url[1]);   
 
+    }else{
+        this.state.viewingId = this.state.userId;
+
+    }
     this.getFriendStatus = this.getFriendStatus.bind(this);
     this.saveData = this.saveData.bind(this);
     this.removeFriend = this.removeFriend.bind(this);
@@ -65,7 +74,8 @@ async reportUser(){
         await fetch(global.url + 'UserProfile/ReportUser',
         {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
             body: JSON.stringify(IdsModel)
         }).
         then(r => r.json()).then(res=>{
@@ -96,7 +106,8 @@ async reportUser(){
     await fetch(global.url + 'FriendList/CancelFriendRequest',
     {
     method: "POST",
-    headers: {'Content-type':'application/json'},
+    headers: {'Content-type':'application/json',
+    'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
     body: JSON.stringify(IdsModel)
     }).
     then(r => r.json()).then(res=>{});
@@ -113,7 +124,8 @@ async createFriendRequest(){
       await fetch(global.url + 'FriendList/CreateFriendRequest',
       {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(IdsModel)
       }).
       then(r => r.json()).then(res=>{ });
@@ -138,7 +150,8 @@ async createFriendRequest(){
     await fetch(global.url + 'FriendList/RemoveFriend',
     {
     method: "POST",
-    headers: {'Content-type':'application/json'},
+    headers: {'Content-type':'application/json',
+    'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
     body: JSON.stringify(IdsModel)
     }).
     then(r => r.json()).then(res=>{ });
@@ -154,7 +167,8 @@ async createFriendRequest(){
     await fetch(global.url + 'UserProfile/SaveUserProfile',
     {
     method: "POST",
-    headers: {'Content-type':'application/json'},
+    headers: {'Content-type':'application/json',
+    'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
     body: JSON.stringify(userProfileModel)
     }).
     then(r => r.json()).then(res=>{
@@ -175,7 +189,8 @@ async createFriendRequest(){
     await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({friendStatus: res});
@@ -187,7 +202,8 @@ async getAccountData(){
     await fetch(global.url + 'UserProfile/GetUserProfile',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.viewingId)
     }).then(r => r.json()).then(res=>{
         this.setState({accountProfileData: res});
@@ -197,7 +213,8 @@ async getAccountData(){
     await fetch(global.url + 'UserProfile/GetOtherData',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.viewingId)
     }).then(r => r.json()).then(res=>{
         this.setState({otherData: res});

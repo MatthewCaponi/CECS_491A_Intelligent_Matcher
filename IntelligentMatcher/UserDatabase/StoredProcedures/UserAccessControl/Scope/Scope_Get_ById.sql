@@ -5,7 +5,7 @@ begin
 
 	set nocount on
 
-	SELECT [Id], [name], [description], [isDefault]
+	SELECT [Id], [type], [description], [isDefault]
 	from dbo.[Scope]
 	where Id = @Id;
 end

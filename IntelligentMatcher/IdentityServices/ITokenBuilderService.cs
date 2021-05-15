@@ -1,5 +1,4 @@
 ﻿using BusinessModels.UserAccessControl;
-using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServices
 {

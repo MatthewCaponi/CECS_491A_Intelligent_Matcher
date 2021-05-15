@@ -18,6 +18,10 @@ using Registration.Services;
 using IntelligentMatcher.Services;
 using Services;
 using UserManagement.Services;
+using UserAccessControlServices;
+using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+using AuthorizationServices;
+using BusinessModels.UserAccessControl;
 using Services.ListingServices;
 using TraditionalListings.Services;
 using DataAccess.Repositories.ListingRepositories;
@@ -29,10 +33,7 @@ namespace WebApi
     {
         public async Task SeedUsers(int seedAmount)
         {
-
-
-
-          
+            await TestCleaner.CleanDatabase();
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
             IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
@@ -42,11 +43,20 @@ namespace WebApi
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
+            IAssignmentPolicyRepository assignmentPolicyRepository = new AssignmentPolicyRepository(dataGateway, connectionString);
+            IAssignmentPolicyPairingRepository assignmentPolicyPairingRepository = new AssignmentPolicyPairingRepository(dataGateway, connectionString);
+            IScopeRepository scopeRepsitory = new ScopeRepository(dataGateway, connectionString);
+            IClaimRepository claimRepository = new ClaimRepository(dataGateway, connectionString);
+            IScopeClaimRepository scopeClaimRepository = new ScopeClaimRepository(dataGateway, connectionString);
+            IUserScopeClaimRepository userScopeClaimRepository = new UserScopeClaimRepository(dataGateway, connectionString);
+            IScopeService scopeService = new ScopeService(claimRepository, scopeRepsitory, scopeClaimRepository, userScopeClaimRepository);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IAssignmentPolicyService assignmentPolicyService = new AssignmentPolicyService(assignmentPolicyRepository, assignmentPolicyPairingRepository, scopeRepsitory, scopeService);
+            IClaimsService claimService = new ClaimsService(claimRepository, scopeRepsitory, scopeClaimRepository, userScopeClaimRepository);
             IListingCreationService listingCreationService = new ListingCreationService(listingRepository, listingCollaborationRepository, listingRelationshipRepository,
                 listingTeamModelRepository);
 
-            var accounts = await userAccountRepository.GetAllAccounts();            
+            var accounts = await userAccountRepository.GetAllAccounts();
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
 
             IUserChannelsRepo userChannelsRepo = new UserChannelsRepo(dataGateway, connectionString);
@@ -115,15 +125,71 @@ namespace WebApi
             IUserAccountService userAccountService = new UserAccountService(userAccountRepository);
             IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
 
+            var assignedScopes = new List<ScopeModel>();
+            var namedScopes = new List<string>() {"friends_list:read,", "friends_list:write,", "friends_list:delete,", "friends_list:block,", 
+                "friends_list:approve,", "user_profile:read,", "user_profile:report,", "user_profile:write,","user_profile.friends_list.status:read,",
+            "application:read,", "user_profile.visibility:read,", "user_profile.photo:upload,"};
+            var claims = new List<ClaimModel>();
+            claims.Add(new ClaimModel()
+            {
+                Type = "channel_owner",
+                Value = "false",
+                IsDefault = true
+            });
+            claims.Add(new ClaimModel()
+            {
+                Type = "Moderator",
+                Value = "false",
+                IsDefault = true
+            });
+
+            var currentClaims = await claimService.GetAllClaims();
+            foreach (var claim in claims)
+            {
+                foreach(var currentClaim in currentClaims)
+                {
+                    if (claim.Type == currentClaim.Type)
+                    {
+                        continue;
+                    }
+                }
+
+                await claimService.CreateClaim(claim);
+            }
+
+            var databaseClaims = await claimService.GetAllClaims();
+            foreach (var scope in namedScopes)
+            {
+                assignedScopes.Add(new ScopeModel()
+                {
+                    Type = scope,
+                    Claims = databaseClaims,
+                    Description = null,
+                    IsDefault = true
+                });
+            }
+            
+            assignedScopes.ForEach(async x => await scopeService.CreateScope(x));
+            var scopes = (await scopeService.GetAllScopes()).ToList();
+            var assignmentPolicies = await assignmentPolicyService.CreateAssignmentPolicy(new BusinessModels.UserAccessControl.AssignmentPolicyModel()
+            {
+                Default = true,
+                Name = "DefaultAccessPolicy",
+                AssignedScopes = scopes,
+                Priority = 1,
+                RequiredAccountType = "user"
+            });
+
+            var adminPolicies = await assignmentPolicyService.CreateAssignmentPolicy(new BusinessModels.UserAccessControl.AssignmentPolicyModel()
+            {
+                Default = true,
+                Name = "DefaultAdminPolicy",
+                AssignedScopes = scopes,
+                Priority = 1,
+                RequiredAccountType = "admin"
+            });
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo, new ValidationService(userAccountService, userProfileService)));
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
-
-
-
-
-
-
-
 
             IDictionary<string, string> _testConfigKeys = new Dictionary<string, string>();
 
@@ -143,10 +209,6 @@ namespace WebApi
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
                  (new SQLServerGateway(), new ConnectionStringData())), configuration);
 
-
-
-
-
             for (int i = 1; i < seedAmount; ++i)
             {
                 UserAccountModel userAccountModel = new UserAccountModel();
@@ -154,11 +216,11 @@ namespace WebApi
                 UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
 
                 userAccountModel.Id = i;
-                userAccountModel.Username = "TestUser" + i;
+                userAccountModel.Username = "T" + i;
                 userAccountModel.Password = "" + i;
                 userAccountModel.Salt = "" + i;
                 userAccountModel.EmailAddress = "TestEmailAddress" + i;
-                userAccountModel.AccountType = "TestAccountType" + i;
+                userAccountModel.AccountType = "user";
                 userAccountModel.AccountStatus = "TestAccountStatus" + i;
                 userAccountModel.CreationDate = DateTimeOffset.UtcNow;
                 userAccountModel.UpdationDate = DateTimeOffset.UtcNow;
@@ -176,7 +238,7 @@ namespace WebApi
                 userAccountSettingsModel.ThemeColor = "Light";
            
                 await userAccountRepository.CreateAccount(userAccountModel);
-                await cryptographyService.newPasswordEncryptAsync("TestPassword" + i, i);
+                await cryptographyService.newPasswordEncryptAsync("T" + i, i);
                 await userProfileRepository.CreateUserProfile(userProfileModel);
                 await userAccountSettingsRepository.CreateUserAccountSettings(userAccountSettingsModel);
 
@@ -192,10 +254,7 @@ namespace WebApi
                 await publicUserProfileManager.CeatePublicUserProfileAsync(publicUserProfileModel);
 
                 await emailService.CreateVerificationToken(publicUserProfileModel.UserId);
-
-
             }
-
 
             IMessagingService messagingService = new MessagingService(messagesRepo, channelsRepo, userChannelsRepo, userAccountRepository);
 
@@ -216,10 +275,6 @@ namespace WebApi
 
             IFriendBlockListRepo friendBlockListRepo = new FriendBlockListRepo(dataGateway, connectionString);
 
-
-
-
-
             IEnumerable<FriendsListJunctionModel> friends = await friendListRepo.GetAllFriends();
             foreach (var friend in friends)
             {
@@ -229,8 +284,6 @@ namespace WebApi
 
             await DataAccessTestHelper.ReseedAsync("FriendsList", 0, connectionString, dataGateway);
 
-
-
             IEnumerable<FriendsListJunctionModel> requets = await friendRequestListRepo.GetAllFriendRequests();
             foreach (var request in requets)
             {
@@ -239,8 +292,6 @@ namespace WebApi
             }
 
             await DataAccessTestHelper.ReseedAsync("FriendRequestList", 0, connectionString, dataGateway);
-
-
 
             IEnumerable<FriendsListJunctionModel> blocks = await friendBlockListRepo.GetAllFriendBlocks();
             foreach (var block in blocks)

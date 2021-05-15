@@ -31,10 +31,14 @@ using IdentityServices;
 using AuthorizationResolutionSystem;
 using UserAccessControlServices;
 using AuthorizationPolicySystem;
+
 using DataAccess.Repositories.LoginTrackerRepositories;
 using DataAccess.Repositories.PageVisitTrackerRepositories;
 using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
+using AuthenticationSystem;
+using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+using AuthorizationServices;
 using UserAccountSettings;
 using TraditionalListings.Services;
 using DataAccess.Repositories.ListingRepositories;
@@ -69,10 +73,24 @@ namespace WebApi
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<IAssignmentPolicyRepository, AssignmentPolicyRepository>();
+            services.AddTransient<IAssignmentPolicyPairingRepository, AssignmentPolicyPairingRepository>();
+            
+           // services.AddTransient<IAttributeAssignmentService, AttributeAssignmentService>();
+            services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();
             services.AddTransient<IDataGateway, SQLServerGateway>();
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
+            services.AddTransient<IUserScopeRepository, UserScopeRepository>();
+            services.AddTransient<IUserClaimRepository, UserClaimRepository>();
+            services.AddTransient<IScopeClaimRepository, ScopeClaimRepository>();
+            services.AddTransient<IUserScopeClaimRepository, UserScopeClaimRepository>();
+            services.AddTransient<IClaimRepository, ClaimRepository>();
+            services.AddTransient<IScopeRepository, ScopeRepository>();
+            services.AddTransient<IClaimsService, ClaimsService>();
+            services.AddTransient<IScopeService, ScopeService>();
+            services.AddTransient<IAssignmentPolicyService, AssignmentPolicyService>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
@@ -95,7 +113,7 @@ namespace WebApi
 
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
-
+            services.AddTransient<IClaimsPrincipalService, ClaimsPrincipalService>();
 
             services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
@@ -117,6 +135,9 @@ namespace WebApi
             services.AddTransient<IUserAccountCodeService, UserAccountCodeService>();
             services.AddTransient<IValidationService, ValidationService>();
             services.AddTransient<IUserAccessService, UserAccessService>();
+
+            services.AddTransient<IMapperService, MapperService>();
+
             services.AddTransient<IUserAnalysisService, UserAnalysisService>();
             services.AddTransient<IAccountSettingsService, AccountSettingsService>();
 
@@ -125,8 +146,6 @@ namespace WebApi
             services.AddTransient<IListingGetterService, ListingGetterService>();
             services.AddTransient<IListingUpdationService, ListingUpdationService>();
 
-
-           
             services.AddScoped<IArchiveManager, ArchiveManager>();
             services.AddScoped<IHelpManager, HelpManager>();
             services.AddScoped<ILoginManager, LoginManager>();
@@ -140,7 +159,6 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseAuthorizationMiddleware();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -150,7 +168,9 @@ namespace WebApi
 
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(x => x.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+            app.UseAuthorizationMiddleware();
+            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //app.UseCors(x => x.WithOrigin("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthorization();

@@ -16,8 +16,8 @@ namespace Registration.Services
 {
     public class EmailService : IEmailService
     {
-		//private const string API_KEY = "7e3947d6-ad88-41aa-91ae-8166ae128b21";
-		private const string API_KEY = "POSTMARK_API_TEST";
+		private const string API_KEY = "7e3947d6-ad88-41aa-91ae-8166ae128b21";
+		//private const string API_KEY = "POSTMARK_API_TEST";
 		private readonly IConfiguration _configuration;
 		private const int TOKEN_LENGTH = 200;
 

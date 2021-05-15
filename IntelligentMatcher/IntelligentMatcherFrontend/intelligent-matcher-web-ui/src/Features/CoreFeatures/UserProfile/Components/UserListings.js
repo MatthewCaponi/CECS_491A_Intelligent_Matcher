@@ -3,25 +3,35 @@ import { Table, Grid, Image } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import FriendsList from "../../FriendsList/Pages/FriendsList";
 import '../.././../../index'
+import Cookies from 'js-cookie';
+import jwt from 'jwt-decode';
 
 import _ from 'lodash'
 
 export class UserListings extends Component {
   static displayName = UserListings.name;
   constructor(props) {
-
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
     super(props);
 
     this.state = {  
         viewingId: 0  ,
         userListings: [],
-        userId: 1,
+        userId: parseInt(userId),
         };
 
 
     let url = window.location.href;
     url = url.split("id=")
-    this.state.viewingId = parseInt(url[1]);   
+    if(url.length > 1){
+        this.state.viewingId = parseInt(url[1]);   
+
+    }else{
+        this.state.viewingId = this.state.userId;
+
+    }
 
     this.getUserListings = this.getUserListings.bind(this);
 
@@ -34,7 +44,8 @@ async getUserListings(){
     await fetch(global.url + 'UserProfile/GetUserListings',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.viewingId)
     }).then(r => r.json()).then(res=>{
         this.setState({userListings: res});

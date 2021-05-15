@@ -10,6 +10,11 @@ using UserManagement.Services;
 using Services;
 using System.Linq;
 using Exceptions;
+using AuthenticationSystem;
+using IdentityServices;
+using BusinessModels.UserAccessControl;
+using UserAccessControlServices;
+using AuthorizationServices;
 
 namespace Login
 {
@@ -24,10 +29,13 @@ namespace Login
         private readonly IUserAccountService _userAccountService;
         private readonly IUserAccountCodeService _userAccountCodeService;
         private readonly IUserProfileService _userProfileService;
+        private readonly IMapperService _mapperService;
+        private readonly IClaimsPrincipalService _claimsPrincipalService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
             IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
-            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService)
+            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IMapperService mapperService,
+            IClaimsPrincipalService claimsPrincipalService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
@@ -36,19 +44,17 @@ namespace Login
             _userAccountService = userAccountService;
             _userAccountCodeService = userAccountCodeService;
             _userProfileService = userProfileService;
+            _mapperService = mapperService;
+            _claimsPrincipalService = claimsPrincipalService;
         }
 
-        public async Task<Result<WebUserAccountModel>> Login(string username, string password, string ipAddress)
+        public async Task<Result<AuthnResponse>> Login(string username, string password, string ipAddress)
         {
             try
             {
-                var loginResult = new Result<WebUserAccountModel>();
-                if (username == null || password == null)
+                if (String.IsNullOrEmpty(password) || String.IsNullOrEmpty(username))
                 {
-                    loginResult.WasSuccessful = false;
-                    loginResult.ErrorMessage = ErrorMessage.Null;
-
-                    return loginResult;
+                    return Result<AuthnResponse>.Failure(ErrorMessage.Null);
                 }
 
                 var businessLoginAttemptsModel = await _loginAttemptService.GetLoginAttemptsByIpAddress(ipAddress);
@@ -63,10 +69,7 @@ namespace Login
                 {
                     if (DateTimeOffset.UtcNow < businessLoginAttemptsModel.SuspensionEndTime)
                     {
-                        loginResult.WasSuccessful = false;
-                        loginResult.ErrorMessage = ErrorMessage.TooManyAttempts;
-
-                        return loginResult;
+                        return Result<AuthnResponse>.Failure(ErrorMessage.TooManyAttempts);
                     }
                     await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
                 }
@@ -84,10 +87,7 @@ namespace Login
                         await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
                     }
 
-                    loginResult.WasSuccessful = false;
-                    loginResult.ErrorMessage = ErrorMessage.NoMatch;
-
-                    return loginResult;
+                    return Result<AuthnResponse>.Failure(ErrorMessage.NoMatch);
                 }
 
                 var authenticateUser = await _authenticationService.AuthenticatePasswordWithUsename(password, username);
@@ -102,17 +102,23 @@ namespace Login
                         await _loginAttemptService.SetSuspensionEndTimeByIpAddress(ipAddress, suspensionHours);
                     }
 
-                    loginResult.WasSuccessful = false;
-                    loginResult.ErrorMessage = ErrorMessage.NoMatch;
-
-                    return loginResult;
+                    return Result<AuthnResponse>.Failure(ErrorMessage.NoMatch);
                 }
+
+                var claimsPrincipal = await _claimsPrincipalService.GetUserClaimsPrincipal(account.Id, account.AccountType);
+
+                var idToken = await _mapperService.MapUserIdToken(claimsPrincipal.SuccessValue);
+                var accessToken = await _mapperService.MapUserAccessToken(claimsPrincipal.SuccessValue);
+                
+              
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);
 
-                loginResult.WasSuccessful = true;
-                loginResult.SuccessValue = account;
+                AuthnResponse authnResponse = new AuthnResponse();
+                authnResponse.IdToken = idToken;
+                authnResponse.AccessToken = accessToken;
+                authnResponse.UserInfo = account;
 
-                return loginResult;
+                return Result<AuthnResponse>.Success(authnResponse);
             }
             catch (SqlCustomException e)
             {

@@ -3,6 +3,9 @@ import { Table, Grid } from 'semantic-ui-react'
 import { animateScroll } from "react-scroll";
 import Picker from 'emoji-picker-react';
 import Gifs from 'react-giphy-picker'
+import '../.././../../App'
+import Cookies from 'js-cookie';
+import {AuthnContext } from '../../../../Context/AuthnContext'
 import '../.././../../index'
 
 export class Messaging extends Component {
@@ -26,7 +29,7 @@ export class Messaging extends Component {
                     currentmessagecount: 0, 
                     currentEmoji: null, 
                     userErrorMessage: "", 
-                    channelError: ""
+                    channelError: "",
                 };
 
     this.addUser = this.addUser.bind(this);
@@ -61,7 +64,8 @@ export class Messaging extends Component {
     await fetch(global.url + 'Messaging/SendMessage',
     {
     method: "POST",
-    headers: {'Content-type':'application/json'},
+    headers: {'Content-type':'application/json',
+    'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
     body: JSON.stringify(MessageModel)
     }).
     then(r => r.json()).then(res=>{
@@ -87,7 +91,8 @@ export class Messaging extends Component {
     fetch(global.url + 'Messaging/SetOffline',
    {
      method: "POST",
-     headers: {'Content-type':'application/json'},
+     headers: {'Content-type':'application/json',
+     'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
      body: JSON.stringify(this.state.userId)
    }).then(r => r.json()).then(res=>{
      })
@@ -103,7 +108,8 @@ changeUser(){
     await fetch(global.url + 'Messaging/SetOnline',
     {
       method: "POST",
-      headers: {'Content-type':'application/json'},
+      headers: {'Content-type':'application/json',
+      'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
       body: JSON.stringify(this.state.userId)
     }).then(r => r.json()).then(res=>{
       }
@@ -117,22 +123,25 @@ changeUser(){
 
     this.setState({channelId: Number(this.currentchannelselect.value)});
 
-    await fetch(global.url + 'Messaging/GetChannelOwner',
-    {
-        method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify(Number(this.currentchannelselect.value))
-    }).then(r => r.json()) .then(res=>{
-        this.setState({currentGroupOwner: res});
+    if (Cookies.get("IdToken")) {
+        await fetch(global.url + 'Messaging/GetChannelOwner',
+        {
+            method: "POST",
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
+            body: JSON.stringify(Number(this.currentchannelselect.value))
+        }).then(r => r.json()) .then(res=>{
+            this.setState({currentGroupOwner: res});
+        }
+        );
+
+        await this.getGroupData();
+        await this.render();
+    
+        this.currentchannelselect.value = String(this.state.channelId);
+    
+        await this.scrollToBottom();
     }
-    );
-
-    await this.getGroupData();
-    await this.render();
-
-    this.currentchannelselect.value = String(this.state.channelId);
-
-    await this.scrollToBottom();
 }
 
 scrollToBottom() {
@@ -146,7 +155,8 @@ async deletChannel(){
     await fetch(global.url + 'Messaging/DeleteChannel',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(Number(this.currentchannelselect.value))
     });
 
@@ -161,7 +171,8 @@ async removeMessage(id){
     await fetch(global.url + 'Messaging/DeleteMessage',
       {
           method: "POST",
-          headers: {'Content-type':'application/json'},
+          headers: {'Content-type':'application/json',
+          'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
           body: JSON.stringify(Number(id))
         }).then(r => r.json()).then(res=>{
       }
@@ -177,7 +188,8 @@ async removeUser(id, username){
   await fetch(global.url + 'Messaging/RemoveUserChannel',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(removeUserModel)
     }).then(r => r.json()).then(res=>{
         var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: username + " was removed from the channel by " + this.state.currentUsername};
@@ -185,7 +197,8 @@ async removeUser(id, username){
         fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(MessageModel)
         }).
         then(r => r.json()).then(res=>{
@@ -205,7 +218,8 @@ async leaveChannel(){
     await fetch(global.url + 'Messaging/RemoveUserChannel',
       {
           method: "POST",
-          headers: {'Content-type':'application/json'},
+          headers: {'Content-type':'application/json',
+          'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
           body: JSON.stringify(removeUserModel)
       }).then(r => r.json()).then(res=>{
         var MessageModel = {ChannelId: this.state.channelId, UserId: 0, Message: this.state.currentUsername + " left the channel"};
@@ -213,7 +227,8 @@ async leaveChannel(){
         fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(MessageModel)
         }).
         then(r => r.json()).then(res=>{
@@ -232,7 +247,8 @@ async getGroupData(){
     await fetch(global.url + 'Messaging/GetChannelOwner',
         {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.channelId)
         }).then(r => r.json()).then(res=>{
             this.setState({currentGroupOwner: res});
@@ -244,7 +260,8 @@ async getGroupData(){
         await fetch(global.url + 'Messaging/GetAllUsersInGroup',
         {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
             body: JSON.stringify(this.state.channelId)
         }).then(r => r.json()).then(res=>{
             this.setState({channelUsers: res});
@@ -255,7 +272,8 @@ async getGroupData(){
         await fetch(global.url + 'Messaging/GetChannelMessages',
         {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.channelId)
         }).then(r => r.json()).then(res=>{
             this.setState({channel: res});
@@ -275,7 +293,8 @@ async getGroupData(){
     await fetch(global.url + 'Messaging/GetUserChannels',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.userId)
     }).then(r => r.json()).then(res=>{
         this.setState({usersgroups: res});
@@ -331,7 +350,8 @@ async addUser() {
         await fetch(global.url + 'Messaging/AddUserChannel',
         {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
             body: JSON.stringify(AddUserModel)
         }).then(r => r.json()).then(res=>{
 
@@ -342,7 +362,8 @@ async addUser() {
             fetch(global.url + 'Messaging/SendMessage',
             {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
             body: JSON.stringify(MessageModel)
             }).
             then(r => r.json()).then(res=>{
@@ -378,7 +399,8 @@ async createChannel() {
         await fetch(global.url + 'Messaging/CreateChannel',
         {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
             body: JSON.stringify(ChannelModel)
         }).
         then(r => r.json())
@@ -406,7 +428,8 @@ async createChannel() {
         await fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(MessageModel)
         }).
         then(r => r.json()).then(res=>{
@@ -435,7 +458,8 @@ async createChannel() {
         await fetch(global.url + 'Messaging/SendMessage',
         {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(MessageModel)
         }).
         then(r => r.json()).then(res=>{
