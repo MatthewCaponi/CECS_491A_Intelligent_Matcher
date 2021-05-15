@@ -167,11 +167,12 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors(x => x.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowCredentials().AllowAnyHeader());
-            app.UseAuthorizationMiddleware();
-            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            //app.UseCors(x => x.WithOrigins("http://52.229.24.12/").AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //app.UseCors(x => x.WithOrigin("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
+
+            app.UseAuthorizationMiddleware();
+
 
             app.UseAuthorization();
 
