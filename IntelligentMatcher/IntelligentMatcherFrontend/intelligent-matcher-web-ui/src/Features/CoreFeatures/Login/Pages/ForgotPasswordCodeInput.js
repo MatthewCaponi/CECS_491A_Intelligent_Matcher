@@ -6,9 +6,14 @@ import '../.././../../index'
 
 function ForgotPasswordCodeInput() {
     const history = useHistory();
-    const [accountState, setAccountState] = useState(history.location.state.accountId);
+    const [accountState, setAccountState] = useState(0);
     const [codeState, setCodeState] = useState("");
-
+    if(history.location.state == undefined){
+        history.push("/");
+    }
+    else{
+        setAccountState(history.location.state.accountId);
+    }
     //history.location.state.accountId
 
     function submitHandler(e){
@@ -40,13 +45,6 @@ function ForgotPasswordCodeInput() {
 
     return (
         <Grid container centered>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
         <Grid.Row>
             <h1>Forgot Password (Please Enter The Code Emailed To You): </h1>
         </Grid.Row>
