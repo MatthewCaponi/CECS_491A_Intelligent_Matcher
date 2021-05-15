@@ -21,6 +21,7 @@ class ImageUpload extends React.Component {
             let url = window.location.href;
             url = url.split("id=")
             this.state.viewingId = parseInt(userId);  
+            
         }    
 
         async submit(e) {                   

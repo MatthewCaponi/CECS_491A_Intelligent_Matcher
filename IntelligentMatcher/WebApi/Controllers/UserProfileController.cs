@@ -83,288 +83,288 @@ namespace WebApi.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult<IEnumerable<DALListingModel>>> GetUserListings([FromBody] int userId)
-        //{
-        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //    var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "user_profile:read"
-        //    }, claims);
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<DALListingModel>>> GetUserListings([FromBody] int userId)
+        {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:read"
+            }, claims);
 
-        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //    {
-        //        return StatusCode(403);
-        //    }
-        //    try
-        //    {
-        //        return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+            try
+            {
+                return Ok(await _traditionalListingSearchRepository.GetAllListingsByUserId(userId));
 
-        //    }
-        //    catch
-        //    {
-        //        return StatusCode(404);
+            }
+            catch
+            {
+                return StatusCode(404);
 
-        //    }
-        //}
+            }
+        }
 
 
-        //[HttpPost]
-        //public async Task<ActionResult<bool>> SaveUserProfile([FromBody] PublicUserProfileModel model)
-        //{
-        //    try
-        //    {
-        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //        var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //        claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
-        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "user_profile:write"
-        //    }, claims);
-        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //        {
-        //            return StatusCode(403);
-        //        }
-        //        await _publicUserProfileManager.EditPublicUserProfileAsync(model);
-        //        return Ok(true);
-        //    }
-        //    catch
-        //    {
-        //        return Ok(false);
-        //    }
-        //}
+        [HttpPost]
+        public async Task<ActionResult<bool>> SaveUserProfile([FromBody] PublicUserProfileModel model)
+        {
+            try
+            {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:write"
+            }, claims);
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+                await _publicUserProfileManager.EditPublicUserProfileAsync(model);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<bool>> ReportUser([FromBody] UserReportsModel model)
-        //{
-        //    try
-        //    {
-        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //        var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+        [HttpPost]
+        public async Task<ActionResult<bool>> ReportUser([FromBody] UserReportsModel model)
+        {
+            try
+            {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
 
-        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "user_profile:report"
-        //    }, claims);
-        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //        {
-        //            return StatusCode(403);
-        //        }
-        //        await _userInteractionService.CreateReportAsync(model);
-        //        return Ok(true);
-        //    }
-        //    catch
-        //    {
-        //        return Ok(false);
-        //    }
-        //}
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile:report"
+            }, claims);
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+                await _userInteractionService.CreateReportAsync(model);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<bool>> GetViewStatus([FromBody] DualIdModel model)
-        //{
-        //    try
-        //    {
+        [HttpPost]
+        public async Task<ActionResult<bool>> GetViewStatus([FromBody] DualIdModel model)
+        {
+            try
+            {
 
-        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //        var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "user_profile.visibility:read"
-        //    }, claims);
-        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //        {
-        //            return StatusCode(403);
-        //        }
-        //        string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
-        //        var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
-        //        if (status == "Friends" && profileModel.Visibility == "Friends")
-        //        {
-        //            return Ok(true);
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile.visibility:read"
+            }, claims);
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+                string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+                var profileModel = await _publicUserProfileManager.GetUserProfileAsync(model.FriendId);
+                if (status == "Friends" && profileModel.Visibility == "Friends")
+                {
+                    return Ok(true);
 
-        //        }
-        //        if (profileModel.Visibility == "Public")
-        //        {
-        //            return Ok(true);
+                }
+                if (profileModel.Visibility == "Public")
+                {
+                    return Ok(true);
 
-        //        }
-        //        return Ok(false);
-        //    }
-        //    catch
-        //    {
-        //        return Ok(false);
-        //    }
-        //}
+                }
+                return Ok(false);
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<FriendStatus>> GetFriendStatus([FromBody] DualIdModel model)
-        //{
+        [HttpPost]
+        public async Task<ActionResult<FriendStatus>> GetFriendStatus([FromBody] DualIdModel model)
+        {
 
-        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //    var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //    claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
-        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "user_profile.friends_list.status:read"
-        //    }, claims);
-        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //    {
-        //        return StatusCode(403);
-        //    }
-        //    try
-        //    {
-        //        string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
-        //        FriendStatus friendStatus = new FriendStatus();
-        //        friendStatus.Status = status;
-        //        return Ok(friendStatus);
-        //    }
-        //    catch
-        //    {
-        //        return StatusCode(404);
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", model.UserId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile.friends_list.status:read"
+            }, claims);
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+            try
+            {
+                string status = await _friendListManager.GetFriendStatusUserIdAsync(model.UserId, model.FriendId);
+                FriendStatus friendStatus = new FriendStatus();
+                friendStatus.Status = status;
+                return Ok(friendStatus);
+            }
+            catch
+            {
+                return StatusCode(404);
 
-        //    }
-        //}
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<bool>> SetOnline([FromBody] int userId)
-        //{
-        //    try
-        //    {
-        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //        var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "application:read",
-        //    }, claims);
+        [HttpPost]
+        public async Task<ActionResult<bool>> SetOnline([FromBody] int userId)
+        {
+            try
+            {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "application:read",
+            }, claims);
 
-        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //        {
-        //            return StatusCode(403);
-        //        }
-        //        await _publicUserProfileManager.SetUserOnlineAsync(userId);
-        //        return Ok(true);
-        //    }
-        //    catch
-        //    {
-        //        return Ok(false);
-        //    }
-        //}
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+                await _publicUserProfileManager.SetUserOnlineAsync(userId);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<bool>> SetOffline([FromBody] int userId)
-        //{
-        //    try
-        //    {
-        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //        var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "application:read",
-        //    }, claims);
-        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //        {
-        //            return StatusCode(403);
-        //        }
+        [HttpPost]
+        public async Task<ActionResult<bool>> SetOffline([FromBody] int userId)
+        {
+            try
+            {
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "application:read",
+            }, claims);
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
 
-        //        await _publicUserProfileManager.SetUserOfflineAsync(userId);
-        //        return Ok(true);
-        //    }
-        //    catch
-        //    {
-        //        return Ok(false);
-        //    }
-        //}
+                await _publicUserProfileManager.SetUserOfflineAsync(userId);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<NonUserProfileData>> GetOtherData([FromBody] int userId)
-        //{
-        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //    var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "application:read",
-        //    }, claims);
+        [HttpPost]
+        public async Task<ActionResult<NonUserProfileData>> GetOtherData([FromBody] int userId)
+        {
+            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+            var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "application:read",
+            }, claims);
 
-        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //    {
-        //        return StatusCode(403);
-        //    }
-        //    try
-        //    {
-        //        NonUserProfileData model = new NonUserProfileData();
-        //        UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
-        //        model.Username = userAccountModel.Username;
-        //        string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
-        //        model.JoinDate = dates[0];
-        //        return Ok(model);
-        //    }
-        //    catch
-        //    {
-        //        return StatusCode(404);
-        //    }
-        //}
+            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+            {
+                return StatusCode(403);
+            }
+            try
+            {
+                NonUserProfileData model = new NonUserProfileData();
+                UserAccountModel userAccountModel = await _userAccountRepository.GetAccountById(userId);
+                model.Username = userAccountModel.Username;
+                string[] dates = userAccountModel.CreationDate.ToString().Split(" ");
+                model.JoinDate = dates[0];
+                return Ok(model);
+            }
+            catch
+            {
+                return StatusCode(404);
+            }
+        }
 
-        //[HttpPost]
-        //public async Task<ActionResult<bool>> UploadPhoto()
-        //{
-        //    try
-        //    {
-        //        int userId = 0;
-        //        foreach (string key in Request.Form.Keys)
-        //        {
-        //            if (key.StartsWith("userId"))
-        //            {
-        //                userId = Convert.ToInt32(Request.Form[key]);
-        //            }
-        //        }
-        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-        //        var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-        //        claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", userId.ToString()));
-        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-        //    {
-        //        "user_profile.photo:upload",
-        //    }, claims);
-        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-        //        {
-        //            return StatusCode(403);
-        //        }
-        //        var postedFile = Request.Form.Files[0];
-        //        var uploadFolder = Path.Combine("..\\IntelligentMatcherFrontend\\intelligent-matcher-web-ui\\public\\uploaded");
-        //        if (postedFile.Length > 0)
-        //        {
-        //            var fileName = ContentDispositionHeaderValue.Parse(postedFile.ContentDisposition)
-        //                .FileName.Trim('"');
-        //            string[] filetype = fileName.Split(".");
-        //            if (filetype[filetype.Length - 1].ToLower() == "png" || filetype[filetype.Length - 1].ToLower() == "jpg" || filetype[filetype.Length - 1].ToLower() == "jpeg")
-        //            {
-        //                string newFileName = userId.ToString() + "profileImage." + filetype[filetype.Length - 1];
-        //                var finalPath = Path.Combine(uploadFolder, newFileName);
-        //                using (var fileStream = new FileStream(finalPath, FileMode.Create))
-        //                {
-        //                    postedFile.CopyTo(fileStream);
-        //                }
-        //                PublicUserProfileModel model = new PublicUserProfileModel();
-        //                model.UserId = userId;
-        //                model.Photo = newFileName;
-        //                await _publicUserProfileManager.EditUserProfilePictureAsync(model);
-        //                return Ok(true);
-        //            }
-        //            else
-        //            {
-        //                return Ok(false);
-        //            }
-        //        }
-        //        else
-        //        {
+        [HttpPost]
+        public async Task<ActionResult<bool>> UploadPhoto()
+        {
+            try
+            {
+                int userId = 0;
+                foreach (string key in Request.Form.Keys)
+                {
+                    if (key.StartsWith("userId"))
+                    {
+                        userId = Convert.ToInt32(Request.Form[key]);
+                    }
+                }
+                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
+                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", userId.ToString()));
+                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "user_profile.photo:upload",
+            }, claims);
+                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+                {
+                    return StatusCode(403);
+                }
+                var postedFile = Request.Form.Files[0];
+                var uploadFolder = Path.Combine("..\\IntelligentMatcherFrontend\\intelligent-matcher-web-ui\\public\\uploaded");
+                if (postedFile.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(postedFile.ContentDisposition)
+                        .FileName.Trim('"');
+                    string[] filetype = fileName.Split(".");
+                    if (filetype[filetype.Length - 1].ToLower() == "png" || filetype[filetype.Length - 1].ToLower() == "jpg" || filetype[filetype.Length - 1].ToLower() == "jpeg")
+                    {
+                        string newFileName = userId.ToString() + "profileImage." + filetype[filetype.Length - 1];
+                        var finalPath = Path.Combine(uploadFolder, newFileName);
+                        using (var fileStream = new FileStream(finalPath, FileMode.Create))
+                        {
+                            postedFile.CopyTo(fileStream);
+                        }
+                        PublicUserProfileModel model = new PublicUserProfileModel();
+                        model.UserId = userId;
+                        model.Photo = newFileName;
+                        await _publicUserProfileManager.EditUserProfilePictureAsync(model);
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        return Ok(false);
+                    }
+                }
+                else
+                {
 
-        //            return Ok(false);
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return Ok(false);
-        //    }
-        //}
+                    return Ok(false);
+                }
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
 
     }
 }

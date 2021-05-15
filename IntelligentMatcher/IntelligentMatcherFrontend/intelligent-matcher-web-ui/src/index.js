@@ -6,6 +6,14 @@ import 'semantic-ui-css/semantic.min.css'
 import 'react-toastify/dist/ReactToastify.min.css';
 import AuthnContextProvider from './Context/AuthnContext';
 import ErrorBoundary from './Shared/ErrorBoundrary';
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
+
+
+const idToken = Cookies.get('IdToken');
+const decodedIdToken = jwt(idToken);
+const userId = decodedIdToken.id;
+
 
 if (process.env.NODE_ENV === "development") {
   global.url = "http://localhost:5000/";
@@ -26,7 +34,7 @@ fetch(global.url + 'UserAccountSettings/GetFontStyle',
 {
     method: "POST",
     headers: {'Content-type':'application/json'},
-    body: JSON.stringify("1")
+    body: JSON.stringify(userId)
 }).
 then(r => r.json())
 .then(res=>{
@@ -46,7 +54,7 @@ fetch(global.url + 'UserAccountSettings/GetTheme',
 {
     method: "POST",
     headers: {'Content-type':'application/json'},
-    body: JSON.stringify("1")
+    body: JSON.stringify(userId)
 }).
 then(r => r.json())
 .then(res=>{
