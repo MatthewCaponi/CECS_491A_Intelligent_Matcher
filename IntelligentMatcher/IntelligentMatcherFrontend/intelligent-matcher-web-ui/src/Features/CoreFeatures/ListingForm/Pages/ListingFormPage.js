@@ -9,7 +9,7 @@ import '../.././../../index'
 function ListingFormPage () {
     const [listings, setListings] = useState([]);
     useEffect( () => {
-        fetch(global.url + 'ListingForm/FilloutForm')
+        fetch(global.url + 'ListingForm/GetForm')
         .then(response => response.json())
         .then(responseData => {
             setListings(responseData);

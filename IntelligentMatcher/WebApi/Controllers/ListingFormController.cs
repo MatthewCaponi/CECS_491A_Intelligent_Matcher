@@ -1,6 +1,4 @@
-﻿using AuthorizationPolicySystem;
-using AuthorizationResolutionSystem;
-using BusinessModels.ListingModels;
+﻿using BusinessModels.ListingModels;
 using ControllerModels.ListingModel;
 using ControllerModels.RegistrationModels;
 using IntelligentMatcher.UserManagement;
@@ -16,52 +14,43 @@ namespace WebApi.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class ListingFormController : ApiBaseController
+    public class ListingFormController : ControllerBase
     {
         private readonly IListingManager _listingManager;
-        private readonly IAuthorizationPolicyManager _authorizationPolicyManager;
-        private readonly IAuthorizationResolutionManager _authorizationResolutionManager;
-
-        public ListingFormController(IListingManager listingmanager, IAuthorizationPolicyManager authorizationPolicyManager, IAuthorizationResolutionManager authorizationResolutionManager)
+   
+        public ListingFormController(IListingManager listingmanager)
         {
             _listingManager = listingmanager;
-            _authorizationPolicyManager = authorizationPolicyManager;
-            _authorizationResolutionManager = authorizationResolutionManager;
+            
         }
-
         [HttpPost]
-        public async Task<ActionResult<int>> FilloutForm([FromBody] ParentListingModel parentListingModel)
+        public async Task<ActionResult<bool>> FilloutForm([FromBody] ParentListingModel parentListingModel)
         {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var claims = new List<BusinessModels.UserAccessControl.UserClaimModel>();
-                claims.Add(new BusinessModels.UserAccessControl.UserClaimModel("Id", parentListingModel.UserAccountId.ToString()));
-                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
-                    {
-                        "listings:write"
-                    }, claims);
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
-
+            try
+            {
+               
                 var listingForm = new BusinessListingModel();
+                var webprofilemodel = new WebUserProfileModel();
+
                 listingForm.Title = parentListingModel.Title;
                 listingForm.Details = parentListingModel.Details;
                 listingForm.City = parentListingModel.City;
                 listingForm.State = parentListingModel.State;
                 listingForm.InPersonOrRemote = parentListingModel.InPersonOrRemote;
                 listingForm.NumberOfParticipants = parentListingModel.NumberOfParticipants;
-                listingForm.UserAccountId = parentListingModel.UserAccountId;
-               
-            try
-            {
-                var fillOutResult = await _listingManager.CreateListing(listingForm);
-                return Ok(fillOutResult);
+                webprofilemodel.UserAccountId = parentListingModel.UserAccountId;
+
+
+                var fillOutResult = await _listingManager.CreateListing(webprofilemodel,listingForm);
+
+             
+                return true;
             }
             catch
             {
                 return StatusCode(404);
             }
+           
         }
     }
 }

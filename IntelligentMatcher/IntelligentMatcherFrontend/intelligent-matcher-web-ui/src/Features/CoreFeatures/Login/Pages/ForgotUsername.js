@@ -17,14 +17,13 @@ function ForgotUsername() {
             fetch(global.url + 'Login/ForgotUsername',
             {
             method: "POST",
-            headers: {'Content-type':'application/json',
-            'Scope': 'id'},
+            headers: {'Content-type':'application/json'},
             body: JSON.stringify(ForgotInformationModel)
             }).
             then(r => r.json()).then(res=>{
                 if(res.success){
                     alert("Here is your username: " + res.username);
-                    history.push("/");
+                    history.push("/Login");
                 }
                 else{
                     alert(res.errorMessage);

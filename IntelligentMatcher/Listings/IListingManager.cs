@@ -14,7 +14,7 @@ namespace Listings
 
         Task<Tuple<bool, ResultModel<int>>> EditListing(BusinessListingModel businessListingModel);
         Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id);
-        Task<Result<int>> CreateListing(BusinessListingModel businessListingModels);
+        Task<Result<int>> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels);
         Task<bool> GetListing(int Id);
         Task<bool> UpdateListing(BusinessListingModel businessListingModel);
 

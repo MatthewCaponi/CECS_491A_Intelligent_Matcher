@@ -7,7 +7,6 @@ using BusinessModels.ListingModels;
 using UserManagement.Services;
 
 using Services.ListingServices;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Listings
 {
@@ -29,15 +28,18 @@ namespace Listings
 
         }
 
-        public async Task<Result<int>> CreateListing(BusinessListingModel businessListingModels)
+        public async Task<Result<int>> CreateListing(WebUserProfileModel webUserProfileModel, BusinessListingModel businessListingModels)
         {
             var result = new Result<int>();
             result.WasSuccessful = false;
-           
+            var userProfileId = await _userProfileService.CreateUserProfile(webUserProfileModel);
+            businessListingModels.UserAccountId = userProfileId;
             await _listingCreationService.CreateListing(businessListingModels);
             result.WasSuccessful = true;
-          
+            result.SuccessValue = userProfileId;
             return result;
+
+
         }
 
         public async Task<Tuple<bool, ResultModel<int>>> DeleteListing(int Id)

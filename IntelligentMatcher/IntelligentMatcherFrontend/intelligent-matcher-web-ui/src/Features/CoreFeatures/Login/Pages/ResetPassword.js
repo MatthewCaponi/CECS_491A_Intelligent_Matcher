@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox } from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import './Login.css';
 import { useHistory } from 'react-router-dom';
 import '../.././../../index'
@@ -15,19 +15,8 @@ function ResetPassword() {
         setAccountState(history.location.state.accountId);
     }
     //history.location.state.accountId
-    const [passwordShown, showPassword] = useState(true);
 
-    function showPasswordHandler(){
-        showPassword(!passwordShown);
-    };
 
-    
-    const userstyle = {
-        position: 'absolute',
-        margin: '10px'
-
-      };
-      
     function submitHandler(e){
         var ResetPasswordModel = e;
         // e.preventDefault();
@@ -36,14 +25,13 @@ function ResetPassword() {
             fetch(global.url + 'Login/ResetPassword',
             {
             method: "POST",
-            headers: {'Content-type':'application/json',
-            'Scope': 'id'},
+            headers: {'Content-type':'application/json'},
             body: JSON.stringify(ResetPasswordModel)
             }).
             then(r => r.json()).then(res=>{
                 if(res.success){
                     alert("Password Changed Successfully! Return to Login Page!");
-                    history.push("/");
+                    history.push("/Login");
 
                 }
                 else{
@@ -94,11 +82,8 @@ function ResetPassword() {
             </p>
         </Grid.Row>
         <Grid.Row verticalAlign="middle">
-               <div class="ui input">
-                            <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
-                        </div>
-                        <div>
-                        <Checkbox  style={userstyle} color="violet" size='mini' onClick={showPasswordHandler} label="Show Password"></Checkbox>
+            <div class="ui input">
+                <input type="password" name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
             </div>
         </Grid.Row>
         <Grid.Row>
@@ -112,7 +97,7 @@ function ResetPassword() {
             >
             Submit
             </Button>
-            <Button href={global.urlRoute + ""} compact size="tiny" circular inverted color="blue">
+            <Button href={global.urlRoute + "/"} compact size="tiny" circular inverted color="blue">
                 Go Back to Login
             </Button>
         </Grid.Row>

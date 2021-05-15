@@ -126,16 +126,6 @@ namespace Services.ListingServices
 
                 BusinessTeamModel newBusinessTeamModel = (BusinessTeamModel)businessListingmodel;
                 BusinessListingModel newBusinessListingModel = new BusinessListingModel();
-                newBusinessListingModel.Title = newBusinessTeamModel.Title;
-                newBusinessListingModel.Details = newBusinessTeamModel.Details;
-                newBusinessListingModel.City = newBusinessTeamModel.City;
-                newBusinessListingModel.State = newBusinessTeamModel.State;
-                newBusinessListingModel.NumberOfParticipants = newBusinessTeamModel.NumberOfParticipants;
-                newBusinessListingModel.InPersonOrRemote = newBusinessTeamModel.InPersonOrRemote;
-                newBusinessListingModel.UserAccountId = newBusinessTeamModel.UserAccountId;
-
-
-
                 DALListingModel dALListingModel = new DALListingModel();
                 DALTeamModel dALTeamModel = new DALTeamModel();
 

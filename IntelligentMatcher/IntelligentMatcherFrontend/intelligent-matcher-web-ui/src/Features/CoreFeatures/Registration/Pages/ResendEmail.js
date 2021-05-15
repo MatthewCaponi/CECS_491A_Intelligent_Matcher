@@ -15,8 +15,7 @@ function ResendEmail() {
         fetch(global.url + 'Registration/ResendEmail',
         {
         method: "POST",
-        headers: {'Content-type':'application/json',
-        'Scope': 'id'},
+        headers: {'Content-type':'application/json'},
         body: JSON.stringify(accountId)
         }).
         then(r => r.json()).then(res=>{
