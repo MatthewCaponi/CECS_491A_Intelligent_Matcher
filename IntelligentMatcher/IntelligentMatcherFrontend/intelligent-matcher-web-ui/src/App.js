@@ -84,6 +84,9 @@ function App() {
             <Route path="/ResendEmail">
               <ResendEmail />
             </Route>
+            <Route path="/ConfirmAccount">
+                <ConfirmAccount />
+            </Route>
             <Route path="/" exact>
               <Login />
             </Route>
@@ -126,9 +129,6 @@ function App() {
               </Route>
               <Route path="/profile">
                 <UserProfile />
-              </Route>
-              <Route path="/ConfirmAccount">
-                <ConfirmAccount />
               </Route>
               <Route path="/AnalysisDashboard">
                  <AnalysisDashboard />

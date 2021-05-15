@@ -41,20 +41,22 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<bool> ConfirmUser([FromBody] TokenIdModel tokenIds)
+        public async Task<ActionResult<bool>> ConfirmUser([FromBody] TokenIdModel tokenIds)
         {
             try
             {
-                return await _emailService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
+                var status = await _emailService.ValidateStatusToken(tokenIds.UserId, tokenIds.Token);
+                return Ok(status);
             }
-            catch (SqlCustomException)
+            catch (SqlCustomException e)
             {
-                return false;
+                Console.WriteLine("Confirm user failed: " + e.InnerException.Message);
+                return StatusCode(404);
             }
         }
 
         [HttpPost]
-        public async Task<RegistrationResultModel> RegisterUser([FromBody] RegistrationModel registrationModel)
+        public async Task<ActionResult<RegistrationResultModel>> RegisterUser([FromBody] RegistrationModel registrationModel)
         {
             try
             {
@@ -66,7 +68,8 @@ namespace WebApi.Controllers
                     registrationResultModel.Success = false;
                     registrationResultModel.ErrorMessage = ErrorMessage.Null.ToString();
 
-                    return registrationResultModel;
+                    Console.WriteLine("Register user failed: " + registrationResultModel.ErrorMessage.ToString());
+                    return StatusCode(404, registrationResultModel);
                 }
 
                 var userAccount = new WebUserAccountModel();
@@ -88,57 +91,61 @@ namespace WebApi.Controllers
                     registrationModel.password, registrationModel.ipAddress);
 
                 registrationResultModel.Success = registrationResult.WasSuccessful;
-
+                Console.WriteLine("Registration successful");
                 if (registrationResult.WasSuccessful)
                 {
                     registrationResultModel.AccountId = registrationResult.SuccessValue;
                     registrationResultModel.ErrorMessage = ErrorMessage.None.ToString();
 
-                    return registrationResultModel;
+                    Console.WriteLine("register user succeeded: " + registrationResultModel.ErrorMessage.ToString());
+
+                    return Ok(registrationResultModel);
                 }
                 else
                 {
                     registrationResultModel.ErrorMessage = registrationResult.ErrorMessage.ToString();
-
-                    return registrationResultModel;
+                    Console.WriteLine("register user failed: " + registrationResultModel.ErrorMessage.ToString());
+                    return StatusCode(404, registrationResultModel);
                 }
             }
-            catch (SqlCustomException)
+            catch (SqlCustomException e)
             {
                 var registrationResultModel = new RegistrationResultModel();
-
+                Console.WriteLine("Register user failed" + e.Message);
                 registrationResultModel.Success = false;
                 registrationResultModel.ErrorMessage = "You could not be registered. Try again.";
 
-                return registrationResultModel;
+                return StatusCode(404, registrationResultModel);
             }
-            catch (NullReferenceException)
+            catch (NullReferenceException e)
             {
                 var registrationResultModel = new RegistrationResultModel();
-
+                Console.WriteLine("Register user failed" + e.Message);
                 registrationResultModel.Success = false;
                 registrationResultModel.ErrorMessage = "A null was returned when registering";
 
-                return registrationResultModel;
+                return StatusCode(404, registrationResultModel);
             }
         }
 
         [HttpPost]
-        public async Task<bool> ResendEmail([FromBody] int accountId)
+        public async Task<ActionResult<bool>> ResendEmail([FromBody] int accountId)
         {
             try
             {
                 var emailResult = await _registrationManager.SendVerificationEmail(accountId);
-
-                return emailResult;
+                Console.WriteLine("Email sent successfully");
+                return Ok(emailResult);
             }
-            catch (SqlCustomException)
+            catch (SqlCustomException e)
             {
-                return false;
+                Console.WriteLine("Resend email failed" + e.Message);
+                return StatusCode(404, false);
             }
-            catch (NullReferenceException)
+            catch (NullReferenceException e)
             {
-                return false;
+                Console.WriteLine("Resend email failed" + e.Message);
+                return StatusCode(404, false);
             }
         }
     }

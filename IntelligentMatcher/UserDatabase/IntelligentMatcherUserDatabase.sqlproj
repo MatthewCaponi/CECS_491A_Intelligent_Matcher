@@ -80,7 +80,6 @@
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicy" />
     <Folder Include="StoredProcedures\UserAccessControl\AccessPolicyPairing" />
     <Folder Include="StoredProcedures\AccountVerification" />
-    <Folder Include="Snapshots" />
     <Folder Include="StoredProcedures\UserAnalysisDashboard" />
     <Folder Include="StoredProcedures\UserAccessControl\UserScope" />
     <Folder Include="StoredProcedures\UserAccessControl\UserClaim" />
@@ -308,9 +307,6 @@
     <Build Include="UserClaim.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="UserDatabase.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Snapshots\IntelligentMatcherUserDatabase_20210424_20-48-38.dacpac" />
+    <RefactorLog Include="IntelligentMatcherUserDatabase.refactorlog" />
   </ItemGroup>
 </Project>

@@ -26,6 +26,8 @@ namespace TestHelper
             IClaimRepository claimRepository = new ClaimRepository(dataGateway, connectionString);
             IScopeRepository scopeRepository = new ScopeRepository(dataGateway, connectionString);
             IScopeClaimRepository scopeClaimRepository = new ScopeClaimRepository(dataGateway, connectionString);
+            IUserScopeRepository userScopeRepository = new UserScopeRepository(dataGateway, connectionString);
+            IUserClaimRepository userClaimRepository = new UserClaimRepository(dataGateway, connectionString);
             IAssignmentPolicyRepository assignmentPolicyRepository = new AssignmentPolicyRepository(dataGateway, connectionString);
             IAssignmentPolicyPairingRepository assignmentPolicyPairingRepository = new AssignmentPolicyPairingRepository(dataGateway, connectionString);
             IUserScopeClaimRepository userScopeClaimRepository = new UserScopeClaimRepository(dataGateway, connectionString);
@@ -41,6 +43,8 @@ namespace TestHelper
             var claims = await claimRepository.GetAllClaims();
             var scopes = await scopeRepository.GetAllScopes();
             var scopeClaims = await scopeClaimRepository.GetAllScopeClaims();
+            var userClaims = await userClaimRepository.GetAllUserClaims();
+            var userScopes = await userScopeRepository.GetAllUserScopes();
             var assignmentPolicies = await assignmentPolicyRepository.GetAllAssignmentPolicies();
             var assignmentPolicyPairings = await assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings();
             var userScopeClaims = await userScopeClaimRepository.GetAllUserScopeClaims();
@@ -85,6 +89,18 @@ namespace TestHelper
             {
                 await DeleteAllFromTable("UserScopeClaim");
                 await ReseedAsync("UserScopeClaim", 0, connectionString, dataGateway);
+            }
+
+            if (userScopes != null)
+            {
+                await DeleteAllFromTable("UserScope");
+                await ReseedAsync("UserScope", 0, connectionString, dataGateway);
+            }
+
+            if (userClaims != null)
+            {
+                await DeleteAllFromTable("UserClaim");
+                await ReseedAsync("UserClaim", 0, connectionString, dataGateway);
             }
 
             if (accessPolicies != null)

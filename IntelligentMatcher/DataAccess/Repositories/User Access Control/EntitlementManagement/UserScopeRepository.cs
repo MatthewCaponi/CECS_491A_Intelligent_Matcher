@@ -49,7 +49,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
             var row = await _dataGateway.LoadData<UserScopeModel, dynamic>(storedProcedure,
                 new
                 {
-                    Id = scopeId
+                    scopeId = scopeId
                 },
                 _connectionString.SqlConnectionString);
 
@@ -74,7 +74,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException("UserScope could not be created.", e.InnerException);
+                throw new SqlCustomException(e.InnerException.Message, e.InnerException);
             }
         }
 

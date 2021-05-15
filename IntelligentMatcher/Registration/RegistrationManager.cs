@@ -20,6 +20,8 @@ using System.Linq;
 using Exceptions;
 using AuthorizationServices;
 using BusinessModels.UserAccessControl;
+using UserAccessControlServices;
+using System.Collections.Generic;
 
 namespace Registration
 {
@@ -28,6 +30,7 @@ namespace Registration
 
         private readonly ILogService _logger;
         private readonly IClaimsPrincipalService _claimsPrincipalService;
+        private readonly IAssignmentPolicyService _assignmentPolicyService;
         private IEmailService _emailService;
         private IUserAccountService _userAccountService;
         private IUserProfileService _userProfileService;
@@ -40,7 +43,8 @@ namespace Registration
 
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
-            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger, IClaimsPrincipalService claimsPrincipalService)
+            IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger, IClaimsPrincipalService claimsPrincipalService,
+            IAssignmentPolicyService assignmentPolicyService)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
@@ -49,6 +53,7 @@ namespace Registration
             _cryptographyService = cryptographyService;
             _logger = logger;
             _claimsPrincipalService = claimsPrincipalService;
+            _assignmentPolicyService = assignmentPolicyService;
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -63,7 +68,7 @@ namespace Registration
                 {
                     resultModel.WasSuccessful = false;
                     resultModel.ErrorMessage = ErrorMessage.Null;
-
+                    Console.WriteLine("Register user failed: " + resultModel.ErrorMessage.ToString());
                     return resultModel;
                 }
                 else if (password.Length >= 8 && password.Any(char.IsDigit)
@@ -77,7 +82,7 @@ namespace Registration
                         _logger.Log(ErrorMessage.UsernameExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
                         resultModel.WasSuccessful = false;
                         resultModel.ErrorMessage = ErrorMessage.UsernameExists;
-
+                        Console.WriteLine("Register user failed: " + resultModel.ErrorMessage.ToString());
                         return resultModel;
                     }
 
@@ -89,7 +94,7 @@ namespace Registration
                         _logger.Log(ErrorMessage.EmailExists.ToString(), LogTarget.All, LogLevel.error, this.ToString(), "User_Logging");
                         resultModel.WasSuccessful = false;
                         resultModel.ErrorMessage = ErrorMessage.EmailExists;
-
+                        Console.WriteLine("Register user failed: " + resultModel.ErrorMessage.ToString());
                         return resultModel;
                     }
 
@@ -104,6 +109,55 @@ namespace Registration
 
                     // Create User Profile with the Passed on Account ID
                     var userProfileId = await _userProfileService.CreateUserProfile(userModel);
+
+                    var assignmentPolicy = await _assignmentPolicyService.GetAssignmentPolicyByRole(accountModel.AccountType, 1);
+                    var scopes = assignmentPolicy.SuccessValue.AssignedScopes;
+                    var userScopes = new List<UserScopeModel>();
+                    var userClaims = new List<UserClaimModel>();
+
+                    foreach (var scope in scopes)
+                    {
+                        var userScope = new UserScopeModel()
+                        {
+                            Type = scope.Type,
+                            UserAccountId = accountID
+                        };
+
+                        userScopes.Add(userScope);
+                        foreach (var claim in scope.Claims)
+                        {
+                            var repeat = false;
+                            foreach (var userClaim in userClaims)
+                            {
+                                if (userClaim.Type == claim.Type)
+                                {
+                                    repeat = true;
+                                }
+                            }
+                            if (repeat)
+                            {
+                                continue;
+                            }
+
+                            var userClaimModel = new UserClaimModel()
+                            {
+                                Type = claim.Type,
+                                Value = claim.Value,
+                                UseraAccountId = accountID
+                            };
+
+                            userClaims.Add(userClaimModel);
+                        }
+                    }
+
+                    // Create a new claims principal
+                    await _claimsPrincipalService.CreateClaimsPrincipal(new ClaimsPrincipal()
+                    {
+                        Scopes = userScopes,
+                        Claims = userClaims,
+                        Role = accountModel.AccountType,
+                        UserAccountId = accountID
+                    });
 
                     //Log and Return result
                     _logger.Log("User: " + accountModel.Username + " was registered", LogTarget.All, LogLevel.info, this.ToString(), "User_Logging");
@@ -129,22 +183,17 @@ namespace Registration
 
                 resultModel.WasSuccessful = false;
                 resultModel.ErrorMessage = ErrorMessage.InvalidPassword;
-
-                // Create a new claims principal
-                await _claimsPrincipalService.CreateClaimsPrincipal(new ClaimsPrincipal()
-                {
-
-                });
-
-
+                Console.WriteLine("Register user failed: " + resultModel.ErrorMessage.ToString());
                 return resultModel;
             }
             catch (SqlCustomException e)
             {
+                Console.WriteLine("Register user failed" + e.Message);
                 throw new SqlCustomException(e.Message, e.InnerException);
             }
             catch (NullReferenceException e)
             {
+                Console.WriteLine("Register user failed" + e.InnerException.Message);
                 throw new NullReferenceException(e.Message, e.InnerException);
             }
         }

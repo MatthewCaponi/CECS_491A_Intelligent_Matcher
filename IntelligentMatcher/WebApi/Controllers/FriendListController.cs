@@ -7,13 +7,17 @@ using System.Collections.Generic;
 using FriendList;
 using DataAccess;
 using DataAccess.Repositories;
-using WebApi.Models;
+
 using WebApi.Controllers;
 using IdentityServices;
 using AuthorizationResolutionSystem;
 using AuthorizationPolicySystem;
 using WebApi;
 using WebApi.Access_Information;
+using Cross_Cutting_Concerns;
+using BusinessModels.UserAccessControl;
+using WebApi.Models;
+using UserClaimModel = BusinessModels.UserAccessControl.UserClaimModel;
 
 namespace IntelligentMatcherUI.Controllers
 {
@@ -43,7 +47,13 @@ namespace IntelligentMatcherUI.Controllers
         public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllFriends([FromBody] int userId)
         {
             var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user");
+            var claims = new List<UserClaimModel>();
+            claims.Add(new UserClaimModel("Id", userId.ToString()));
+            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy(new List<string>()
+            {
+                "friends_list:read",
+            }, claims);
+
             if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
             {
                 return StatusCode(403);
@@ -59,232 +69,232 @@ namespace IntelligentMatcherUI.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequets([FromBody] int userId)
-        {
-            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequets([FromBody] int userId)
+        //{
+        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
+        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //    {
+        //        return StatusCode(403);
+        //    }
 
-            try
-            {
-                return Ok(await _friendListManager.GetAllRequestsAsync(userId));
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
-        }
+        //    try
+        //    {
+        //        return Ok(await _friendListManager.GetAllRequestsAsync(userId));
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
+        //    }
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
-        {
-            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllRequetsOutgoing([FromBody] int userId)
+        //{
+        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
-            try
-            {
-                return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
-        }
+        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //    {
+        //        return StatusCode(403);
+        //    }
+        //    try
+        //    {
+        //        return Ok(await _friendListManager.GetAllRequestsOutgoingAsync(userId));
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
+        //    }
+        //}
 
-        [HttpPost]
-        public async Task<ActionResult<bool>> RemoveFriend([FromBody] DualIdModel ids)
-        {
-            try
-            {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:delete", "user", ids.UserId.ToString());
+        //[HttpPost]
+        //public async Task<ActionResult<bool>> RemoveFriend([FromBody] DualIdModel ids)
+        //{
+        //    try
+        //    {
+        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:delete", "user", ids.UserId.ToString());
 
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
-                await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
-                return Ok(true);
-            }
-            catch
-            {
-                return StatusCode(404);
+        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //        {
+        //            return StatusCode(403);
+        //        }
+        //        await _friendListManager.RemoveFriendAsync(ids.UserId, ids.FriendId);
+        //        return Ok(true);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
 
-            }
+        //    }
 
-        }
-
-
-
-        [HttpPost]
-        public async Task<ActionResult<bool>> BlockFriend([FromBody] DualIdModel ids)
-        {
-            try
-            {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:delete", "user", ids.UserId.ToString());
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
-                await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
-                return Ok(true);
-            }
-            catch
-            {
-                return StatusCode(404);
-
-            }
-
-        }
+        //}
 
 
-        [HttpPost]
-        public async Task<ActionResult<bool>> ApproveFriend([FromBody] DualIdModel ids)
-        {
-            try
-            {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:write", "user", ids.UserId.ToString());
 
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
-                await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
-                return Ok(true);
-            }
-            catch
-            {
-                return StatusCode(404);
+        //[HttpPost]
+        //public async Task<ActionResult<bool>> BlockFriend([FromBody] DualIdModel ids)
+        //{
+        //    try
+        //    {
+        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:delete", "user", ids.UserId.ToString());
 
-            }
+        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //        {
+        //            return StatusCode(403);
+        //        }
+        //        await _friendListManager.BlockFriendAsync(ids.UserId, ids.FriendId);
+        //        return Ok(true);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
 
-        }
+        //    }
 
-        [HttpPost]
-        public async Task<ActionResult<bool>> CancelFriendRequest([FromBody] DualIdModel ids)
-        {
-            try
-            {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:write", "user", ids.UserId.ToString());
-
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
-                await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
-                return Ok(true);
-            }
-            catch
-            {
-                return StatusCode(404);
-
-            }
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetMutualFriends([FromBody] DualIdModel ids)
-        {
-            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user");
-
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
-            try
-            {
-                return Ok(await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId));
-
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
-
-        }
+        //}
 
 
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocking([FromBody] int userId)
-        {
-            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
+        //[HttpPost]
+        //public async Task<ActionResult<bool>> ApproveFriend([FromBody] DualIdModel ids)
+        //{
+        //    try
+        //    {
+        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:write", "user", ids.UserId.ToString());
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
+        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //        {
+        //            return StatusCode(403);
+        //        }
+        //        await _friendListManager.ConfirmFriendAsync(ids.UserId, ids.FriendId);
+        //        return Ok(true);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
 
-            try
-            {
-                return Ok(await _friendListManager.GetAllBlockingUserAsync(userId));
+        //    }
 
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
+        //}
 
-        }
-        [HttpPost]
-        public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
-        {
-            var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-            var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
+        //[HttpPost]
+        //public async Task<ActionResult<bool>> CancelFriendRequest([FromBody] DualIdModel ids)
+        //{
+        //    try
+        //    {
+        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:write", "user", ids.UserId.ToString());
 
-            if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-            {
-                return StatusCode(403);
-            }
+        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //        {
+        //            return StatusCode(403);
+        //        }
+        //        await _friendListManager.CancelFriendRequestAsync(ids.UserId, ids.FriendId);
+        //        return Ok(true);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
 
-            try
-            {
-                return Ok(await _friendListManager.GetAllBlocksAsync(userId));
+        //    }
+        //}
 
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<FriendListModel>>> GetMutualFriends([FromBody] DualIdModel ids)
+        //{
+        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user");
 
-        }
+        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //    {
+        //        return StatusCode(403);
+        //    }
+        //    try
+        //    {
+        //        return Ok(await _friendListManager.GetMutualFriends(ids.UserId, ids.FriendId));
 
-        [HttpPost]
-        public async Task<ActionResult<bool>> CreateFriendRequest([FromBody] IdUsernameModel ids)
-        {
-            try
-            {
-                var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
-                var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:write", "user", ids.UserId.ToString());
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
+        //    }
 
-                if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
-                {
-                    return StatusCode(403);
-                }
-                UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
-                int friendId = model.Id;
-                await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
-                return Ok(true);
-            }
-            catch
-            {
-                return StatusCode(404);
-            }
+        //}
 
-        }
+
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocking([FromBody] int userId)
+        //{
+        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
+
+        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //    {
+        //        return StatusCode(403);
+        //    }
+
+        //    try
+        //    {
+        //        return Ok(await _friendListManager.GetAllBlockingUserAsync(userId));
+
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
+        //    }
+
+        //}
+        //[HttpPost]
+        //public async Task<ActionResult<IEnumerable<FriendListModel>>> GetAllBlocks([FromBody] int userId)
+        //{
+        //    var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //    var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:read", "user", userId.ToString());
+
+        //    if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //    {
+        //        return StatusCode(403);
+        //    }
+
+        //    try
+        //    {
+        //        return Ok(await _friendListManager.GetAllBlocksAsync(userId));
+
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
+        //    }
+
+        //}
+
+        //[HttpPost]
+        //public async Task<ActionResult<bool>> CreateFriendRequest([FromBody] IdUsernameModel ids)
+        //{
+        //    try
+        //    {
+        //        var token = ExtractHeader(HttpContext, "Authorization", ',', 1);
+        //        var accessPolicy = _authorizationPolicyManager.ConfigureCustomPolicy("friends_list:write", "user", ids.UserId.ToString());
+
+        //        if (!_authorizationResolutionManager.Authorize(token, accessPolicy))
+        //        {
+        //            return StatusCode(403);
+        //        }
+        //        UserAccountModel model = await _userAccountRepository.GetAccountByUsername(ids.FriendUsername);
+        //        int friendId = model.Id;
+        //        await _friendListManager.RequestFriendAsync(friendId, ids.UserId);
+        //        return Ok(true);
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(404);
+        //    }
+
+        //}
 
 
 

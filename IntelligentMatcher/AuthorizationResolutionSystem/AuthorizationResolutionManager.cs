@@ -25,10 +25,19 @@ namespace AuthorizationResolutionSystem
         {
             var claims = _tokenService.ExtractClaims(token);
             var scopes = claims.Where(a => a.Type == "scopes").FirstOrDefault().Value.Split(',').ToList();
+            var userScopes = new List<UserScopeModel>();
+            foreach (var scope in scopes)
+            {
+                userScopes.Add(new UserScopeModel()
+                {
+                    Type = scope,
+                    UserAccountId = -1
+                });
+            }
             var claimsPrincipal = new ClaimsPrincipal()
             {
                 Claims = claims,
-                Scopes = scopes
+                Scopes = userScopes
             };
 
             return _authorizationService.ValidateAccessPolicy(claimsPrincipal, accessPolicy);

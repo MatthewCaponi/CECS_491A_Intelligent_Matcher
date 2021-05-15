@@ -38,6 +38,7 @@ using DataAccess.Repositories.SearchTrackerRepositories;
 using UserAnalysisManager;
 using AuthenticationSystem;
 using DataAccess.Repositories.User_Access_Control.EntitlementManagement;
+using AuthorizationServices;
 
 namespace WebApi
 {
@@ -65,9 +66,10 @@ namespace WebApi
             services.AddTransient<ITokenBuilderService, JwtTokenBuilderService>();
             services.AddTransient<IAuthorizationPolicyManager, AuthorizationPolicyManager>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
-            services.AddTransient<IAssignmentPolicyService, AssignmentPolicyService>();
-
-            services.AddTransient<IAttributeAssignmentService, AttributeAssignmentService>();
+            services.AddTransient<IAssignmentPolicyRepository, AssignmentPolicyRepository>();
+            services.AddTransient<IAssignmentPolicyPairingRepository, AssignmentPolicyPairingRepository>();
+            
+           // services.AddTransient<IAttributeAssignmentService, AttributeAssignmentService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAuthorizationResolutionManager, AuthorizationResolutionManager>();
@@ -75,7 +77,13 @@ namespace WebApi
             services.AddSingleton<IConnectionStringData, ConnectionStringData>();
             services.AddTransient<IUserScopeRepository, UserScopeRepository>();
             services.AddTransient<IUserClaimRepository, UserClaimRepository>();
+            services.AddTransient<IScopeClaimRepository, ScopeClaimRepository>();
             services.AddTransient<IUserScopeClaimRepository, UserScopeClaimRepository>();
+            services.AddTransient<IClaimRepository, ClaimRepository>();
+            services.AddTransient<IScopeRepository, ScopeRepository>();
+            services.AddTransient<IClaimsService, ClaimsService>();
+            services.AddTransient<IScopeService, ScopeService>();
+            services.AddTransient<IAssignmentPolicyService, AssignmentPolicyService>();
             services.AddTransient<ILoginAttemptsRepository, LoginAttemptsRepository>();
             services.AddTransient<IUserProfileRepository, UserProfileRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
@@ -90,7 +98,7 @@ namespace WebApi
             services.AddTransient<IListingRepository, ListingRepository>();
 
             services.AddTransient<IUserReportsRepo, UserReportsRepo>();
-
+            services.AddTransient<IClaimsPrincipalService, ClaimsPrincipalService>();
 
             services.AddTransient<IAccountVerificationRepo, AccountVerificationRepo>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();

@@ -29,7 +29,7 @@ namespace DataAccessUnitTestes.UserAccessControl
             {
                 ScopeModel scopeModel = new ScopeModel();
                 scopeModel.Id = i;
-                scopeModel.Name = "TestScope" + i;
+                scopeModel.Type = "TestScope" + i;
                 scopeModel.Description = "TestDescription" + i;
                 scopeModel.IsDefault = true;
 
@@ -80,7 +80,7 @@ namespace DataAccessUnitTestes.UserAccessControl
             IScopeRepository scopeRepository = new ScopeRepository(new SQLServerGateway(), new ConnectionStringData());
             ScopeModel scopeModel = new ScopeModel();
             scopeModel.Id = id;
-            scopeModel.Name = expectedUpdatedName;
+            scopeModel.Type = expectedUpdatedName;
             scopeModel.Description = expectedDescriptionName;
             scopeModel.IsDefault = expectedDefaultValue;
 
@@ -88,7 +88,7 @@ namespace DataAccessUnitTestes.UserAccessControl
             await scopeRepository.UpdateScope(scopeModel);
             var actual = await scopeRepository.GetScopeById(id);
 
-            var actualName = actual.Name;
+            var actualName = actual.Type;
             var actualDescriptionName = actual.Description;
             var actualDefaultValue = actual.IsDefault;
 

@@ -39,7 +39,7 @@ namespace DataAccessUnitTestes.UserAccessControl
 
                 ScopeModel scopeModel = new ScopeModel();
                 scopeModel.Id = i;
-                scopeModel.Name = "TestScope" + i;
+                scopeModel.Type = "TestScope" + i;
                 scopeModel.Description = "TestDescription" + i;
 
                 ClaimModel claimModel = new ClaimModel();

@@ -111,12 +111,20 @@ namespace UserAccessControlServices
             {
                 var dataScope = ModelConverterService.ConvertTo(scopeModel, new Models.User_Access_Control.ScopeModel());
                 var scopeId = await _scopeRepository.CreateScope(dataScope);
+                foreach(var claim in scopeModel.Claims)
+                {
+                    await _scopeClaimRepository.CreateScopeClaim(new Models.User_Access_Control.ScopeClaimModel()
+                    {
+                        ScopeId = scopeId,
+                        ClaimId = claim.Id
+                    });
+                }
 
                 return scopeId;
             }
             catch (SqlCustomException e)
             {
-                throw new SqlCustomException("Scope could not be created.", e.InnerException);
+                throw new SqlCustomException(e.InnerException.Message,e.InnerException);
             }
         }
 

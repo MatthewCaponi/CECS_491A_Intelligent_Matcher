@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../../../../App'
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { Redirect } from 'react-router'
+import Cookies from 'js-cookie';
 
 import './Registration.css';
 
@@ -41,7 +42,8 @@ export class ConfirmAccount extends Component {
         await fetch(global.url + 'Registration/ConfirmUser',
         {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Scope': 'id'},
             body: JSON.stringify(tokenIdModel)
         }).then(r => r.json()) .then(res=>{
             this.setState({confirmStatus: res});

@@ -48,7 +48,7 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
             return await _dataGateway.LoadData<UserScopeClaimModel, dynamic>(storedProcedure,
                                                                           new
                                                                           {
-                                                                              userAccountId = id,
+                                                                              accountId = id,
                                                                               role = role
                                                                           },
                                                                           _connectionString.SqlConnectionString);

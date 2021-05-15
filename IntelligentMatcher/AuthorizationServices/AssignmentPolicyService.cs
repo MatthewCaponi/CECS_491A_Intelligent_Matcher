@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AssignmentPolicyModel = BusinessModels.UserAccessControl.AssignmentPolicyModel;
+using ScopeModel = BusinessModels.UserAccessControl.ScopeModel;
 
 namespace UserAccessControlServices
 {
@@ -27,46 +28,11 @@ namespace UserAccessControlServices
             _scopeRepository = scopeRepository;
             _scopeService = scopeService;
         }
-        public List<string> ConfigureAssignmentPolicy(string accountType)
-        {
-            var scopes = new List<string>();
-            if (accountType == "admin")
-            {
-                scopes.Add("user_management:write");
-                scopes.Add("user_management:delete");
-                scopes.Add("user_profile:write");
-                scopes.Add("listing:write");
-                scopes.Add("messaging.channel:read");
-                scopes.Add("messaging.channel:write");
-                scopes.Add("messaging.channel.owner:delete");
-                scopes.Add("archiving:write");
-                scopes.Add("friends_list:read");
-                scopes.Add("friends_list:write");
-                scopes.Add("friends_list:delete");
-            }
-            if (accountType == "user")
-            {
-                scopes.Add("user_profile:read");
-                scopes.Add("user_profile.owner:write");
-                scopes.Add("listing:read");
-                scopes.Add("llisting.owner.write");
-                scopes.Add("messaging:read");
-                scopes.Add("messaging.channel:read");
-                scopes.Add("messaging:write");
-                scopes.Add("messaging.channel:write");
-                scopes.Add("messaging.channel:delete");
-                scopes.Add("friends_list:read");
-                scopes.Add("friends_list:write");
-                scopes.Add("friends_list:delete");
-            }
-
-            return scopes;
-        }
 
         public async Task<Result<AssignmentPolicyModel>> GetAssignmentPolicyByRole(string role, int priority)
         {
             var assignmentPolices = (await _assignmentPolicyRepository.GetAllAssignmentPolicies()).ToList();
-            var roledAssignmentPolicies = assignmentPolices.Where(x => x.RequiredAccountType == role);
+            var roledAssignmentPolicies = assignmentPolices.Where(x => x.RequiredAccountType.ToUpper() == role.ToUpper());
             var assignmentPolicy = roledAssignmentPolicies.Where(x => (x.Priority == (priority)) ||(x.Priority) == 1).FirstOrDefault();
 
             var assignmentPairingPolicies = (await _assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings()).ToList();
@@ -74,7 +40,18 @@ namespace UserAccessControlServices
 
             var blScopes = (await _scopeService.GetAllScopes()).ToList();
 
-            var blScopePairings = blScopes.Where(x => x.Id == (assignmentPairingPolicies.Where(y => y.ScopeId == x.Id).FirstOrDefault().ScopeId)).ToList();
+            var blScopePairings = new List<ScopeModel>();
+
+            foreach(var blScope in blScopes)
+            {
+                foreach(var policy in assignmentPairingPolicies)
+                {
+                    if (blScope.Id == policy.ScopeId)
+                    {
+                        blScopePairings.Add(blScope);
+                    }
+                }
+            }
 
             var assignmentPolicyModel = new AssignmentPolicyModel()
             {
@@ -90,7 +67,7 @@ namespace UserAccessControlServices
 
         public async Task<Result<int>> CreateAssignmentPolicy(AssignmentPolicyModel assignmentPolicyModel)
         {
-            var assignmentPolicy = _assignmentPolicyRepository.CreateAssignmentPolicy(new Models.User_Access_Control.AssignmentPolicyModel()
+            var assignmentPolicyId = await _assignmentPolicyRepository.CreateAssignmentPolicy(new Models.User_Access_Control.AssignmentPolicyModel()
             {
                 Name = assignmentPolicyModel.Name,
                 RequiredAccountType = assignmentPolicyModel.RequiredAccountType,
@@ -99,28 +76,19 @@ namespace UserAccessControlServices
             });
 
             var blScopes = await _scopeService.GetAllScopes();
-            var assignmentPolicyId = -1;
             foreach (var scope in assignmentPolicyModel.AssignedScopes)
             {
+                var scopeId = scope.Id;
                 if (blScopes.Where(x => x.Id == scope.Id).FirstOrDefault() == null)
                 {
-                    await _scopeService.CreateScope(scope);
+                    scopeId = await _scopeService.CreateScope(scope);
                 }
 
-                assignmentPolicyId = await _assignmentPolicyRepository.CreateAssignmentPolicy(new Models.User_Access_Control.AssignmentPolicyModel()
-                {
-                    Name = assignmentPolicyModel.Name,
-                    RequiredAccountType = assignmentPolicyModel.RequiredAccountType,
-                    IsDefault = assignmentPolicyModel.Default,
-                    Priority = assignmentPolicyModel.Priority
-                });
-
-                blScopes.ForEach(x => new AssignmentPolicyPairingModel
+                await _assignmentPolicyPairingRepository.CreateAssignmentPolicyPairing(new AssignmentPolicyPairingModel()
                 {
                     PolicyId = assignmentPolicyId,
-                    ScopeId = x.Id
+                    ScopeId = scope.Id
                 });
-
             }
 
             return Result<int>.Success(assignmentPolicyId);

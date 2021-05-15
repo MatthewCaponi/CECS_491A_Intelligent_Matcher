@@ -14,6 +14,7 @@ using AuthenticationSystem;
 using IdentityServices;
 using BusinessModels.UserAccessControl;
 using UserAccessControlServices;
+using AuthorizationServices;
 
 namespace Login
 {
@@ -28,15 +29,13 @@ namespace Login
         private readonly IUserAccountService _userAccountService;
         private readonly IUserAccountCodeService _userAccountCodeService;
         private readonly IUserProfileService _userProfileService;
-        private readonly IAttributeAssignmentService _attributeAssignmentService;
-        private readonly ITokenService _tokenService;
-        private readonly IValidationService _validationService;
         private readonly IMapperService _mapperService;
+        private readonly IClaimsPrincipalService _claimsPrincipalService;
 
         public LoginManager(IAuthenticationService authenticationService, ICryptographyService cryptographyService,
             IEmailService emailService, ILoginAttemptsService loginAttemptsService, IUserAccountService userAccountService,
-            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IAttributeAssignmentService attributeAssignmentService, 
-            ITokenService tokenService, IValidationService validationService, IMapperService mapperService)
+            IUserAccountCodeService userAccountCodeService, IUserProfileService userProfileService, IMapperService mapperService,
+            IClaimsPrincipalService claimsPrincipalService)
         {
             _authenticationService = authenticationService;
             _cryptographyService = cryptographyService;
@@ -45,10 +44,8 @@ namespace Login
             _userAccountService = userAccountService;
             _userAccountCodeService = userAccountCodeService;
             _userProfileService = userProfileService;
-            _attributeAssignmentService = attributeAssignmentService;
-            _tokenService = tokenService;
-            _validationService = validationService;
             _mapperService = mapperService;
+            _claimsPrincipalService = claimsPrincipalService;
         }
 
         public async Task<Result<AuthnResponse>> Login(string username, string password, string ipAddress)
@@ -108,8 +105,10 @@ namespace Login
                     return Result<AuthnResponse>.Failure(ErrorMessage.NoMatch);
                 }
 
-                var idToken = await _mapperService.MapUserIdToken(account.Id);
-                var accessToken = await _mapperService.MapUserAccessToken(account.Id);
+                var claimsPrincipal = await _claimsPrincipalService.GetUserClaimsPrincipal(account.Id, account.AccountType);
+
+                var idToken = await _mapperService.MapUserIdToken(claimsPrincipal.SuccessValue);
+                var accessToken = await _mapperService.MapUserAccessToken(claimsPrincipal.SuccessValue);
                 
               
                 await _loginAttemptService.ResetLoginCounterByIpAddress(ipAddress);

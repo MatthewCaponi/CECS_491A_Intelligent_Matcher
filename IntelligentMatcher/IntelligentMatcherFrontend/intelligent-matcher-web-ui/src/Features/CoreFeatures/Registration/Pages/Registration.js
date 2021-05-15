@@ -24,7 +24,8 @@ function Registration() {
             fetch(global.url + 'Registration/RegisterUser',
             {
             method: "POST",
-            headers: {'Content-type':'application/json'},
+            headers: {'Content-type':'application/json',
+            'Scope': 'id'},
             body: JSON.stringify(RegistrationModel)
             }).
             then(r => r.json()).then(res=>{

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BusinessModels.UserAccessControl;
+using System;
 using System.Threading.Tasks;
 
 namespace UserAccessControlServices
 {
     public interface IMapperService
     {
-        Task<String> MapUserAccessToken(int id);
-        Task<String> MapUserIdToken(int id);
+        Task<string> MapUserAccessToken(ClaimsPrincipal claimsPrincipal);
+        Task<string> MapUserIdToken(ClaimsPrincipal claimsPrincipal);
     }
 }

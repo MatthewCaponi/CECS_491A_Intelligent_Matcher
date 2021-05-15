@@ -42,14 +42,14 @@ namespace DataAccess.Repositories.User_Access_Control.EntitlementManagement
                                                                           _connectionString.SqlConnectionString);
         }
 
-        public async Task<UserClaimModel> GetUserClaimByUserClaimId(int userClaim)
+        public async Task<UserClaimModel> GetUserClaimByUserClaimId(int id)
         {
             string storedProcedure = "dbo.UserClaim_Get_ByUserClaimId";
 
             var row = await _dataGateway.LoadData<UserClaimModel, dynamic>(storedProcedure,
                 new
                 {
-                    Id = userClaim
+                    claimId = id
                 },
                 _connectionString.SqlConnectionString);
 

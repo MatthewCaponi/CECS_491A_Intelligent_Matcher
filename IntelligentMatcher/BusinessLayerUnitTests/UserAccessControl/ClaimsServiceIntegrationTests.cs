@@ -60,7 +60,7 @@ namespace BusinessLayerUnitTests.UserAccessControl
 
                 Models.User_Access_Control.ScopeModel scopeModel = new Models.User_Access_Control.ScopeModel();
                 scopeModel.Id = i;
-                scopeModel.Name = "TestScope" + i;
+                scopeModel.Type = "TestScope" + i;
                 scopeModel.Description = "TestDescription" + i;
                 scopeModel.IsDefault = true;
 
@@ -86,7 +86,8 @@ namespace BusinessLayerUnitTests.UserAccessControl
                     new Models.User_Access_Control.UserScopeClaimModel();
                 userScopeClaimModel.Id = i;
                 userScopeClaimModel.UserAccountId = i;
-                userScopeClaimModel.ScopeClaimId = i;
+                userScopeClaimModel.UserScopeId = i;
+                userScopeClaimModel.UserClaimId = i;
 
                 await userScopeClaimRepository.CreateUserScopeClaim(userScopeClaimModel);
             }
@@ -179,34 +180,6 @@ namespace BusinessLayerUnitTests.UserAccessControl
             Assert.IsTrue(actualResult.Type == expectedResult.Type);
             Assert.IsTrue(actualResult.Value == expectedResult.Value);
             Assert.IsTrue(actualResult.IsDefault == expectedResult.IsDefault);
-        }
-
-        [DataTestMethod]
-        [DataRow(1)]
-        public async Task GetClaim_ClaimIdExists_NumberOfScopesIsAccurate(int id)
-        {
-            // Arrange
-            IClaimsService claimsService = new ClaimsService(claimRepository, scopeRepository,
-                scopeClaimRepository, userScopeClaimRepository);
-
-            // Act
-            var actualResult = await claimsService.GetClaim(id);
-
-            // Assert
-            int i = 1;
-            foreach (var scope in actualResult.Scopes)
-            {
-                if (scope.Id == i)
-                {
-                    ++i;
-                    continue;
-                }
-
-                Assert.IsTrue(false);
-                return;
-            }
-
-            Assert.IsTrue(true);
         }
 
         [DataTestMethod]

@@ -10,6 +10,5 @@ namespace BusinessModels.UserAccessControl
         public string Type { get; set; }
         public string Value { get; set; }
         public bool IsDefault { get; set; }
-        public List<ScopeModel> Scopes { get; set; }
     }
 }

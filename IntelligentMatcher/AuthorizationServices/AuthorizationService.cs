@@ -1,5 +1,6 @@
 ﻿using BusinessModels.UserAccessControl;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace UserAccessControlServices
                 string[] tempSubScopes = tempSubScope[0].Split('.');
                 List<string> policySubScopes = tempSubScopes.ToList();
 
-                var userScopes = scopes.Where(a => a.Contains(policySubScopes[0]));
+                var userScopes = scopes.Where(a => a.Type.Contains(policySubScopes[0]));
 
                 if (userScopes.Count() == 0)
                 {
@@ -30,29 +31,29 @@ namespace UserAccessControlServices
                 var validScope = false;
                 foreach (var userScope in userScopes)
                 {
-                    string[] tempUserSubScope = userScope.Split(':');
+                    string[] tempUserSubScope = userScope.Type.Split(':');
                     string userOperation = tempUserSubScope[1];
                     string[] tempUserSubScopes = tempUserSubScope[0].Split('.');
                     List<string> userSubScopes = tempSubScopes.ToList();
 
-                    if (policyOperation == "read")
+                    if (policyOperation.ToUpper() == "READ")
                     {
-                        if (userOperation != "read" && userOperation != "write")
+                        if (userOperation.ToUpper() != "READ" && userOperation != "WRITE")
                         {
                             Console.WriteLine("User Operation: " + userOperation);
                             continue;
                         }
                     }
-                    else if (policyOperation == "write")
+                    else if (policyOperation.ToUpper() == "WRITE")
                     {
-                        if (userOperation != "write")
+                        if (userOperation.ToUpper() != "WRITE")
                         {
                             continue;
                         }
                     }
-                    else if (policyOperation == "delete")
+                    else if (policyOperation.ToUpper() == "DELETE")
                     {
-                        if (userOperation != "delete")
+                        if (userOperation.ToUpper() != "DELETE")
                         {
                             continue;
                         }
@@ -99,14 +100,14 @@ namespace UserAccessControlServices
 
             foreach (var claim in accessPolicy.Claims)
             {
-                var key = claims.Where(a => a.Type == claim.Type).FirstOrDefault();
+                var key = claims.Where(a => a.Type.ToUpper() == claim.Type.ToUpper()).FirstOrDefault();
 
                 if (key == null)
                 {
                     return false;
                 }
 
-                if (key.Value.Contains(claim.Value))
+                if (key.Value.ToUpper().Contains(claim.Value.ToUpper()))
                 {
                     Console.WriteLine("comparing" + key.Value + " with " + claim.Value + " on the type of " + key.Type);
 

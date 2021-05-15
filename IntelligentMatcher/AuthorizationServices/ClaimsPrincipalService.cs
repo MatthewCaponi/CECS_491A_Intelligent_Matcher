@@ -102,8 +102,31 @@ namespace AuthorizationServices
             var allDalScopes = await _scopeRepository.GetAllScopes();
             var allDalClaims = await _claimRepository.GetAllClaims();
 
-            var dalScopes = allDalScopes.Where(x => x.Name == (scopes.Where(y => y.Type == x.Name).FirstOrDefault().Type)).ToList();
-            var dalClaims = allDalClaims.Where(x => x.Type == (claims.Where(y => y.Type == x.Type).FirstOrDefault().Type)).ToList();
+            var dalScopes = new List<ScopeModel>();
+
+            foreach (var dalScope in allDalScopes)
+            {
+                foreach(var scope in scopes)
+                {
+                    if (dalScope.Type.ToUpper() == scope.Type.ToUpper())
+                    {
+                        dalScopes.Add(dalScope);
+                    }
+                }
+            }
+
+            var dalClaims = new List<ClaimModel>();
+
+            foreach (var dalClaim in allDalClaims)
+            {
+                foreach (var claim in claims)
+                {
+                    if (dalClaim.Type.ToUpper() == claim.Type.ToUpper())
+                    {
+                        dalClaims.Add(dalClaim);
+                    }
+                }
+            }
 
             var dalUserScopes = await _userScopeRepository.GetAllUserScopesByUserAccountId(claimsPrincipal.UserAccountId);
             var dalUserClaims = await _userClaimRepository.GetAllUserClaimsByUserAccountId(claimsPrincipal.UserAccountId);
@@ -111,13 +134,45 @@ namespace AuthorizationServices
             var allBlScopes = await _scopeService.GetAllScopes();
             var allBlClaims = await _claimService.GetAllClaims();
 
-            var blScopes = allBlScopes.Where(x => x.Type == (scopes.Where(y => y.Type == x.Type).FirstOrDefault().Type)).ToList();
-            var blClaims = allBlClaims.Where(x => x.Type == (claims.Where(y => y.Type == x.Type).FirstOrDefault().Type)).ToList();
+            var blScopes = new List<BusinessModels.UserAccessControl.ScopeModel>();
+            foreach (var blScope in allBlScopes)
+            {
+                foreach (var dalScope in dalUserScopes)
+                {
+                    if (blScope.Type.ToUpper() == dalScope.Type.ToUpper())
+                    {
+                        blScopes.Add(blScope);
+                    }
+                }
+            }
+            var blClaims = new List<BusinessModels.UserAccessControl.ClaimModel>();
+            foreach (var blClaim in allBlClaims)
+            {
+                foreach (var dalClaim in dalClaims)
+                {
+                    if (blClaim.Type.ToUpper() == dalClaim.Type.ToUpper())
+                    {
+                        blClaims.Add(blClaim);
+                    }
+                }
+            }
 
             foreach (var dalUserScope in dalUserScopes)
             {
                 var requiredClaims = blScopes.Where(x => x.Type == dalUserScope.Type).FirstOrDefault().Claims;
                 var requiredDALClaims = dalUserClaims.Where(x => x.Type == (requiredClaims.Where(y => y.Type == x.Type).FirstOrDefault().Type)).ToList();
+
+                foreach (var dalUserClaim in dalUserClaims)
+                {
+                    foreach (var requiredClaim in requiredClaims)
+                    {
+                        if (requiredClaim.Type.ToUpper() == dalUserClaim.Type.ToUpper())
+                        {
+                            requiredDALClaims.Add(dalUserClaim);
+                        }
+                    }
+                }
+
                 requiredDALClaims.ForEach(async x => await _userScopeClaimRepository.CreateUserScopeClaim(new UserScopeClaimModel
                 {
                     UserAccountId = claimsPrincipal.UserAccountId,
@@ -142,13 +197,13 @@ namespace AuthorizationServices
             }
 
             var dalScopes = (await _scopeRepository.GetAllScopes()).ToList();
-            var scopeMatch = dalScopes.Where(x => x.Name == scope).FirstOrDefault();
+            var scopeMatch = dalScopes.Where(x => x.Type == scope).FirstOrDefault();
             int scopeId = -1;
             if (scopeMatch == null)
             {
                 scopeId = await _scopeRepository.CreateScope(new ScopeModel()
                 {
-                    Name = scope,
+                    Type = scope,
                     Description = description,
                     IsDefault = false
                 });
