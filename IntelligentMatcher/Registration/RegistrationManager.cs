@@ -21,6 +21,7 @@ using Exceptions;
 using AuthorizationServices;
 using BusinessModels.UserAccessControl;
 using UserAccessControlServices;
+using UserAccountSettings;
 using System.Collections.Generic;
 
 namespace Registration
@@ -37,12 +38,13 @@ namespace Registration
         private IUserProfileService _userProfileService;
         private readonly IValidationService _validationService;
         private readonly ICryptographyService _cryptographyService;
+        private readonly IAccountSettingsService _accountSettingsService;
 
         private static System.Timers.Timer _timer;
 
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
             IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger, IClaimsPrincipalService claimsPrincipalService,
-            IAssignmentPolicyService assignmentPolicyService, IPublicUserProfileService publicUserProfileService)
+            IAssignmentPolicyService assignmentPolicyService, IPublicUserProfileService publicUserProfileService, IAccountSettingsService accountSettingsService)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
@@ -53,6 +55,7 @@ namespace Registration
             _claimsPrincipalService = claimsPrincipalService;
             _assignmentPolicyService = assignmentPolicyService;
             _publicUserProfileService = publicUserProfileService;
+            _accountSettingsService = accountSettingsService;
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -112,6 +115,12 @@ namespace Registration
 
                     // Create User Profile with the Passed on Account ID
                     var userProfileId = await _userProfileService.CreateUserProfile(userModel);
+                    UserAccountSettingsModel userAccountSettingsModel = new UserAccountSettingsModel();
+                    userAccountSettingsModel.FontSize = 12;
+                    userAccountSettingsModel.FontStyle = "Default";
+                    userAccountSettingsModel.ThemeColor = "Light";
+                    userAccountSettingsModel.UserId = accountID;
+                    await _accountSettingsService.CreateUserAccountSettingsAsync(userAccountSettingsModel);
 
                     var assignmentPolicy = await _assignmentPolicyService.GetAssignmentPolicyByRole(accountModel.AccountType, 1);
                     var scopes = assignmentPolicy.SuccessValue.AssignedScopes;

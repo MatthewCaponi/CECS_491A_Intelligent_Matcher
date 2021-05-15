@@ -1,7 +1,8 @@
 
-  import React, { Component } from 'react';
+  import React, { Component, useImperativeHandle } from 'react';
   import '../.././../../index'
-
+  import jwt from 'jwt-decode';
+  import Cookies from 'js-cookie';
   export class ChangeFontStyle extends Component {
     static displayName = ChangeFontStyle.name;
   
@@ -9,11 +10,15 @@
       super(props);
       this.state = {};
       this.changeFontStyle = this.changeFontStyle.bind(this);
+      const idToken = Cookies.get('IdToken');
+      const decodedIdToken = jwt(idToken);
+      const userId = decodedIdToken.id;
       fetch(global.url + 'UserAccountSettings/GetFontStyle',
       {
           method: "POST",
-          headers: {'Content-type':'application/json'},
-          body: JSON.stringify("1")
+          headers: {'Content-type':'application/json',
+          'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
+          body: JSON.stringify(userId)
       }).
       then(r => r.json())
       .then(res=>{
@@ -32,12 +37,16 @@
 
   
     changeFontStyle() {
-      var ChangeFontStyleModel = {id: 1, fontStyle: this.fontStyle.value};
-  
+      const idToken = Cookies.get('IdToken');
+      const decodedIdToken = jwt(idToken);
+      const userId = decodedIdToken.id;
+      var ChangeFontStyleModel = {id: parseInt(userId), fontStyle: this.fontStyle.value};
+
       fetch(global.url + 'UserAccountSettings/ChangeFontStyle',
       {
           method: "POST",
-          headers: {'Content-type':'application/json'},
+          headers: {'Content-type':'application/json',
+          'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
           body: JSON.stringify(ChangeFontStyleModel)
       }).
       then(r => r.json())

@@ -62,7 +62,7 @@ function SiteHeader() {
                 <Grid.Column container>
                 <Menu inverted pointing secondary>
                     <Menu.Item href={global.urlRoute} name='home' />
-                    <Menu.Item link name='profile' />
+                    <Menu.Item link name='profile' href={global.urlRoute + "profile"}/>
                     <Menu.Item href={global.urlRoute + "ListingTable"} name='Listings' />
                     </Menu>
                 </Grid.Column>
@@ -84,7 +84,7 @@ function SiteHeader() {
                 <Grid.Column container floated="right" width={2} widescreen={1} computer={2} tablet={2}>
                     <Grid columns={3}>
                         <Grid.Column >
-                            <Button icon='conversation' className="message" />
+                            <Button href={global.urlRoute + "Messaging"} icon='conversation' className="message" />
                         </Grid.Column>
                         <Grid.Column >
                             <Button icon='bell' className="message"/>
@@ -96,7 +96,7 @@ function SiteHeader() {
                                     content = "none"
                                 >
                                     <Dropdown.Menu>
-                                    <Dropdown.Item icon='user' content='Account' />
+                                    <Dropdown.Item icon='user' content='Account' href={global.urlRoute + "UserAccountSettings"}/>
                                     <Dropdown.Item icon='privacy' text='Privacy' />
                                     <Dropdown.Item icon='help' text='Help' />
                                     <Dropdown.Item icon='logout' text='Logout' onClick={logout} />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../.././../../index'
-
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 export class DeleteAccount extends Component {
   static displayName = DeleteAccount.name;
 
@@ -13,12 +14,16 @@ export class DeleteAccount extends Component {
   }
 
   deleteAccount() {
-    var DeleteModel = {id: 1, password: this.textInput.value};
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
+    var DeleteModel = {id: parseInt(userId), password: this.textInput.value};
 
     fetch(global.url + 'UserAccountSettings/DeleteAccount',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(DeleteModel)
     }).
     then(r => r.json())
