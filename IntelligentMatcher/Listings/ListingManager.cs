@@ -68,7 +68,7 @@ namespace Listings
         //{
         //    ResultModel<int> resultModel = new ResultModel<int>();
 
-        //    await _listUpdationService.UpdateListing(businessListingModel);
+        //  await _listUpdationService.UpdateListing(businessListingModel);
 
         //    return new Tuple<bool, ResultModel<int>>(true, resultModel);
         //}
@@ -83,9 +83,12 @@ namespace Listings
         }
         */
 
-        public Task<bool> UpdateListing(BusinessListingModel businessListingModel)
+        public async Task<bool> UpdateListing(BusinessListingModel businessListingModel)
         {
-            throw new NotImplementedException();
+            //await _listUpdationService.UpdateListing(businessListingModel);
+
+            //return businessListingModel;
+          throw new NotImplementedException();
         }
     }
 }

@@ -1,5 +1,4 @@
 import UserManagement from "./Features/CoreFeatures/UserManagement/Pages/UserManagement";
-import ListingTable from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
 import ListingCategoryPage from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingCategoryPage"
 import Home from "./Features/CoreFeatures/Home/Pages/Home";
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
@@ -20,6 +19,7 @@ import FriendsList from "./Features/CoreFeatures/FriendsList/Pages/FriendsList";
 import UserProfile from "./Features/CoreFeatures/UserProfile/Pages/UserProfile";
 import StatusToggle from "./Features/CoreFeatures/UserProfile/Pages/StatusToggle";
 import ConfirmAccount from "./Features/CoreFeatures/Registration/Pages/ConfirmAccount";
+import ListingSearch from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
 
 import { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -46,8 +46,8 @@ function App() {
           <Route path="/ListingForm">
             <ListingForm />
           </Route>
-          <Route path="/ListingTable">
-            <ListingTable />
+          <Route path="/ListingSearch">
+            <ListingSearch />
           </Route>
           <Route path="/ListingCategoryPage">
             <ListingCategoryPage />

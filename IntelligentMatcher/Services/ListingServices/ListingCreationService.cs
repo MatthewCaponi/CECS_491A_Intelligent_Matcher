@@ -16,12 +16,12 @@ namespace Services.ListingServices
         private ITeamModelRepository _teamModelRepository;
 
         public ListingCreationService(IListingRepository listingRepository, ICollaborationRepository collaborationRepository, IRelationshipRepository relationshipRepository,
-           ITeamModelRepository teamModelRepository, IDatingRepository datingRepository)
+           ITeamModelRepository teamModelRepository)//IDatingRepository datingRepository)
         {
             _listingRepository = listingRepository;
             _collaborationRepository = collaborationRepository;
             _relationshipRepository = relationshipRepository;
-            _datingRepository = datingRepository;
+           // _datingRepository = datingRepository;
             _teamModelRepository = teamModelRepository;
         }
 

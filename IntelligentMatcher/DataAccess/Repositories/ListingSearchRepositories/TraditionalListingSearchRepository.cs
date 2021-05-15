@@ -22,7 +22,7 @@ namespace DataAccess.Repositories
         // doesnt like the star change it. 
         public async Task<IEnumerable<DALListingModel>> GetAllListings()
         {
-            string storedProcedure = "dbo.ListingSearch_GetAllListing";
+            string storedProcedure = "dbo.ListingSearch_GetAllListings";
             return await _dataGateway.LoadData<DALListingModel, dynamic>(storedProcedure,
                                                                          new { },
                                                                          _connectionString.SqlConnectionString);

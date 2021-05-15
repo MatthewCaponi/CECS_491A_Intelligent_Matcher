@@ -19,8 +19,9 @@ namespace Services.ListingServices
 
         public async Task<int> UpdateListing(DALListingModel dalListingModel)
         {
-
-            int returnValue = await _listingRepository.UpdateListing(dalListingModel);
+            
+            var businessListing = ModelConverterService.ConvertTo(new BusinessListingModel(),dalListingModel);
+            int returnValue = await _listingRepository.UpdateListing(businessListing);
 
             return returnValue;
 

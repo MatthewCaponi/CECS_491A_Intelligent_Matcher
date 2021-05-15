@@ -18,6 +18,10 @@ using Registration.Services;
 using IntelligentMatcher.Services;
 using Services;
 using UserManagement.Services;
+using Services.ListingServices;
+using TraditionalListings.Services;
+using DataAccess.Repositories.ListingRepositories;
+using BusinessModels.ListingModels;
 
 namespace WebApi
 {
@@ -28,13 +32,19 @@ namespace WebApi
 
 
 
-
+          
             IDataGateway dataGateway = new SQLServerGateway();
             IConnectionStringData connectionString = new ConnectionStringData();
+            IListingRepository listingRepository = new ListingRepository(dataGateway, connectionString);
+            ICollaborationRepository listingCollaborationRepository = new CollaborationRepository(dataGateway, connectionString);
+            IRelationshipRepository listingRelationshipRepository = new RelationshipRepository(dataGateway, connectionString);
+            ITeamModelRepository listingTeamModelRepository = new TeamModelRepository(dataGateway, connectionString);
             IUserAccountRepository userAccountRepository = new UserAccountRepository(dataGateway, connectionString);
             IUserProfileRepository userProfileRepository = new UserProfileRepository(dataGateway, connectionString);
             IUserAccountSettingsRepository userAccountSettingsRepository = new UserAccountSettingRepository(dataGateway, connectionString);
             ICryptographyService cryptographyService = new CryptographyService(userAccountRepository);
+            IListingCreationService listingCreationService = new ListingCreationService(listingRepository, listingCollaborationRepository, listingRelationshipRepository,
+                listingTeamModelRepository);
 
             var accounts = await userAccountRepository.GetAllAccounts();            
             var accountSettings = await userAccountSettingsRepository.GetAllSettings();
@@ -132,7 +142,6 @@ namespace WebApi
              (new SQLServerGateway(), new ConnectionStringData()), new AccountVerificationRepo
              (new SQLServerGateway(), new ConnectionStringData()), new UserAccountService(new UserAccountRepository
                  (new SQLServerGateway(), new ConnectionStringData())), configuration);
-
 
 
 
@@ -243,6 +252,25 @@ namespace WebApi
             await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
 
 
+           for(int i = 0; i < seedAmount; i++)
+            {
+                BusinessCollaborationModel newBusinessCollaborationModel = new BusinessCollaborationModel();
+                BusinessListingModel newBusinessListingModel = new BusinessListingModel();
+
+                newBusinessCollaborationModel.Title = "TestTitle"+i;
+                newBusinessCollaborationModel.Details = "TestDetails" + i;
+                newBusinessCollaborationModel.City = "TestCity" + i;
+                newBusinessCollaborationModel.State = "TestState" + i;
+                newBusinessCollaborationModel.NumberOfParticipants = i;
+                newBusinessCollaborationModel.InPersonOrRemote = "InpersonOrRemoteTest" +i;
+                newBusinessCollaborationModel.UserAccountId = i;
+                newBusinessCollaborationModel.CollaborationType = "TestcollaborationType" +i;
+                newBusinessCollaborationModel.InvolvementType = "InvolvementType" +i;
+                newBusinessCollaborationModel.Experience = "Testexperience"+i;
+
+
+                await listingCreationService.CreateListing(newBusinessCollaborationModel);
+            }
 
             IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);
             IValidationService validationService = new ValidationService(userAccountService, userProfileService);
