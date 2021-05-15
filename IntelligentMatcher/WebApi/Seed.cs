@@ -129,7 +129,8 @@ namespace WebApi
             var namedScopes = new List<string>() {"friends_list:read,", "friends_list:write,", "friends_list:delete,", "friends_list:block,", 
                 "friends_list:approve,", "user_profile:read,", "user_profile:report,", "user_profile:write,","user_profile.friends_list.status:read,",
             "application:read,", "user_profile.visibility:read,", "user_profile.photo:upload,", "messaging:send,","messaging:get,","messaging.users:get,", "messaging.channels:addUser,","messaging.channels:removeUser,","channels.user:getall,","channels:create,","channels:getowner,","channels:delete,","message:delete,","channel:setonline,","channel:setoffline,",
-            "account:delete,","account:passwordchange,","account.fontszie:change,","account.email:change,","account.fontSize:get,","account.fontstyle:change,","account.fontstyle:get,","account.theme:change,","account.theme:get,"};
+            "account:delete,","account:passwordchange,","account.fontszie:change,","account.email:change,","account.fontSize:get,","account.fontstyle:change,","account.fontstyle:get,","account.theme:change,","account.theme:get,",
+            "listings:read,", "listings:write,"};
             var claims = new List<ClaimModel>();
             claims.Add(new ClaimModel()
             {
@@ -303,11 +304,12 @@ namespace WebApi
 
             await DataAccessTestHelper.ReseedAsync("FriendBlockList", 0, connectionString, dataGateway);
 
-           for(int i = 0; i < seedAmount; i++)
+
+           for(int i = 0; i < 20; i++)
             {
                 BusinessCollaborationModel newBusinessCollaborationModel = new BusinessCollaborationModel();
                 BusinessListingModel newBusinessListingModel = new BusinessListingModel();
-
+           
                 newBusinessCollaborationModel.Title = "TestTitle"+i;
                 newBusinessCollaborationModel.Details = "TestDetails" + i;
                 newBusinessCollaborationModel.City = "TestCity" + i;
@@ -318,9 +320,54 @@ namespace WebApi
                 newBusinessCollaborationModel.CollaborationType = "TestcollaborationType" +i;
                 newBusinessCollaborationModel.InvolvementType = "InvolvementType" +i;
                 newBusinessCollaborationModel.Experience = "Testexperience"+i;
+                newBusinessCollaborationModel.CollaborationType = "TestCollaborationType" + i;
+                newBusinessCollaborationModel.InvolvementType = "TestInvolvementType" + i;
+                newBusinessCollaborationModel.Experience = "TestExperience" + i;
 
 
                 await listingCreationService.CreateListing(newBusinessCollaborationModel);
+                
+            }
+            for (int i = 21; i < 40; i++)
+            {
+                BusinessRelationshipModel newBusinessRelationshipModel = new BusinessRelationshipModel();
+                BusinessListingModel newBusinessListingModel1 = new BusinessListingModel();
+
+                newBusinessRelationshipModel.Title = "TestTitle" + i;
+                newBusinessRelationshipModel.Details = "TestDetails" + i;
+                newBusinessRelationshipModel.City = "TestCity" + i;
+                newBusinessRelationshipModel.State = "TestState" + i;
+                newBusinessRelationshipModel.NumberOfParticipants = i;
+                newBusinessRelationshipModel.InPersonOrRemote = "InpersonOrRemoteTest" + i;
+                newBusinessRelationshipModel.UserAccountId = i;
+                newBusinessRelationshipModel.RelationshipType = "TestcollaborationType" + i;
+                newBusinessRelationshipModel.Age = 21;
+                newBusinessRelationshipModel.Interests = "TestInterests" + i;
+                newBusinessRelationshipModel.GenderPreference = "TestGenderPreference" + i;
+
+                await listingCreationService.CreateListing(newBusinessRelationshipModel);
+
+            }
+            for (int i = 41; i < 60; i++)
+            {
+                BusinessTeamModel newBusinessTeamModel = new BusinessTeamModel();
+                BusinessListingModel newBusinessListingModel1 = new BusinessListingModel();
+
+                newBusinessTeamModel.Title = "TestTitle" + i;
+                newBusinessTeamModel.Details = "TestDetails" + i;
+                newBusinessTeamModel.City = "TestCity" + i;
+                newBusinessTeamModel.State = "TestState" + i;
+                newBusinessTeamModel.NumberOfParticipants = i;
+                newBusinessTeamModel.InPersonOrRemote = "InpersonOrRemoteTest" + i;
+                newBusinessTeamModel.UserAccountId = i +1;
+                newBusinessTeamModel.TeamType = "TestTeamType" + i;
+                newBusinessTeamModel.GameType = "TestGameType"+i;
+                newBusinessTeamModel.Platform = "TestPlatform" + i;
+                newBusinessTeamModel.Experience = "TestExperience" + i;
+
+
+                await listingCreationService.CreateListing(newBusinessTeamModel);
+
             }
 
             IUserReportsRepo userReportsRepo = new UserReportsRepo(dataGateway, connectionString);

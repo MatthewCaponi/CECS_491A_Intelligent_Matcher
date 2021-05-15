@@ -42,7 +42,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<DALCollaborationModel>> GetAllCollaborationListings()
         {
-            string storedProcedure = "dbo.ListingSearch_GetAllCollaborationListing";
+            string storedProcedure = "dbo.ListingSearch_GetAllCollaborationListings";
             return await _dataGateway.LoadData<DALCollaborationModel, dynamic>(storedProcedure,
                                                                                new { },
                                                                                _connectionString.SqlConnectionString);
@@ -51,7 +51,7 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<DALRelationshipModel>> GetAllRelationshipListings()
         {
-            string storedProcedure = "dbo.ListingSearch_GetAllRelationshipListing";
+            string storedProcedure = "dbo.ListingSearch_GetAllRelationshipListings";
             return await _dataGateway.LoadData<DALRelationshipModel, dynamic>(storedProcedure,
                                                                               new { },
                                                                               _connectionString.SqlConnectionString);
