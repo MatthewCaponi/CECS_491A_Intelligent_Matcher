@@ -1,8 +1,9 @@
-import { React, useReducer, useState, useContext } from 'react';
+import { React, useReducer, useState, useContext, useEffect } from 'react';
 import { Header, Segment, Icon, Menu, Input, Container, Grid, Label, Dropdown, Button} from 'semantic-ui-react';
 import './SiteHeader.css';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
+import jwt from 'jwt-decode';
 import {AuthnContext } from '../Context/AuthnContext';
 import '../App'
 
@@ -10,17 +11,37 @@ import '../App'
 function SiteHeader() {
     const authnContext = useContext(AuthnContext);
     const [cookies, setCookie, removeCookie] = useCookies(['IdToken']);
+    const [authorized, setAuthorized] = useState(false);
     const history = useHistory();
+    const cookie = cookies['IdToken'];
+    const decodedCookie = jwt(cookie);
+    console.log(decodedCookie.role);
     const buttonStyles = {
         backgroundColor: 'transparent',
         color: 'lightgrey'
     }
+    var admin = "admin";
+    var user = "user";
 
+    useEffect(() => {
+        try {
+          isAdmin()
+          } catch (error) {
+          console.log(error.message);
+        }
+        }, [])
     const trigger = (
         <span>
             <Button icon="setting" className="message"/>
         </span>
     )
+
+    function isAdmin() {
+        const userRole = decodedCookie.role;
+        if (userRole == admin){
+            setAuthorized(true);
+        }
+    }
 
     function logout() {
         removeCookie('IdToken');
@@ -29,7 +50,6 @@ function SiteHeader() {
         history.push('/');
     }
 
-    const authorized = true;
     return (
         <Segment inverted>
             <Grid columns={12}>
@@ -54,13 +74,10 @@ function SiteHeader() {
                 </Grid.Column>
                 <Grid.Column container only="computer"/>
                 <Grid.Column container floated="right" verticalAlign="center" width={2}>
-                    <Button href={global.urlRoute + "AnalysisDashboard"} className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
-                        AnalysisDashboard
-                    </Button>
                 </Grid.Column>
                 <Grid.Column container only="computer" only="tablet"/>
                 <Grid.Column container floated="right" verticalAlign="center" width={2}>
-                    <Button href={global.urlRoute + "UserManagement"} className={true ? 'adminVisible' : 'adminHidden'}circular inverted>
+                    <Button href={global.urlRoute + "AdminDashboard"} onChange={isAdmin} className={authorized ? 'adminVisible' : 'adminHidden'}circular inverted>
                         Admin
                     </Button>
                 </Grid.Column>
