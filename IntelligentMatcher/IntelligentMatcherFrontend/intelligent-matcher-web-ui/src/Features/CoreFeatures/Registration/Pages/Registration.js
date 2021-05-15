@@ -12,8 +12,12 @@ function Registration() {
     const [passwordState, setPasswordState] = useState("");
     const [emailState, setEmailState] = useState("");
     const [dateOfBirthState, setDateOfBirthState] = useState("");
+    const [passwordShown, showPassword] = useState(false);
     const history = useHistory();
 
+    function showPasswordHandler(){
+        showPassword(!passwordShown);
+    };
     function submitHandler(e){
         var RegistrationModel = e;
         // e.preventDefault();
@@ -113,8 +117,9 @@ function Registration() {
         </Grid.Row>
         <Grid.Row verticalAlign="middle">
             <div class="ui input">
-                <input type="password" name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
+                <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
             </div>
+            <Button color="violet" compact circular size='mini' onClick={showPasswordHandler}>Show Password</Button>
         </Grid.Row>
         <Grid.Row>
             <label htmlFor="emailAddress">

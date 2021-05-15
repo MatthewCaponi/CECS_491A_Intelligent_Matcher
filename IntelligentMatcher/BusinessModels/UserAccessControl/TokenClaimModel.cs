@@ -4,21 +4,18 @@ using System.Text;
 
 namespace BusinessModels.UserAccessControl
 {
-    public class UserClaimModel
+    public class TokenClaimModel
     {
-        public int Id { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
-        public int UserAccountId { get; set; }
 
-        public UserClaimModel()
+        public TokenClaimModel()
         {
 
         }
-
-        public UserClaimModel(string key, string value)
+        public TokenClaimModel(string type, string value)
         {
-            Type = key;
+            Type = type;
             Value = value;
         }
     }

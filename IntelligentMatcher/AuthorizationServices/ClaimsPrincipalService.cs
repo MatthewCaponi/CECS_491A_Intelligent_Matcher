@@ -44,38 +44,56 @@ namespace AuthorizationServices
         }
         public async Task<Result<ClaimsPrincipal>> GetUserClaimsPrincipal(int id, string role)
         {
-            var userScopeClaims = (await _userScopeClaimRepository.GetAllUserScopeClaimsByAccountIdAndRole(id, role)).ToList();
+            // Get all of a users UserScopeClaim for a specific role 
+            var userScopeClaims = await _userScopeClaimRepository.GetAllUserScopeClaimsByAccountIdAndRole(id, role);
 
-            List<UserScopeModel> blScopes = new List<UserScopeModel>();
-            List<UserClaimModel> blClaims = new List<UserClaimModel>();
+            // Get all scopes from that list of UserScopeClaims
 
+            var userScopes = new List<UserScopeModel>();
+            var userClaims = new List<UserClaimModel>();
             foreach (var userScopeClaim in userScopeClaims)
             {
-                var dalScope = await _userScopeRepository.GetUserScopeByScopeId(userScopeClaim.UserScopeId);
-                var dalClaim = await _userClaimRepository.GetUserClaimByUserClaimId(userScopeClaim.UserClaimId);
-                var scope = new UserScopeModel()
-                {
-                    Id = dalScope.Id,
-                    Type = dalScope.Type,
-                    UserAccountId = id
-                };
+                var userScope = await _userScopeRepository.GetUserScopeByScopeId(userScopeClaim.UserScopeId);
+                var userClaim = await _userClaimRepository.GetUserClaimByUserClaimId(userScopeClaim.UserClaimId);
 
-                var claim = new UserClaimModel()
+                var foundDuplicateScope = false;
+                foreach (var userScopeEntry in userScopes)
                 {
-                    Type = dalClaim.Type,
-                    UseraAccountId = id
-                };
+                    if (userScopeEntry.Id == userScopeClaim.UserScopeId)
+                    {
+                        foundDuplicateScope = true;
+                        break;
+                    }
+                }
 
-                blScopes.Add(scope);
-                blClaims.Add(claim);
+                if (!foundDuplicateScope)
+                {
+
+                    userScopes.Add(ModelConverterService.ConvertTo(userScope, new UserScopeModel()));
+                }
+
+                var foundDuplicateClaim = false;
+                foreach (var userClaimEntry in userClaims)
+                {
+                    if (userClaimEntry.Id == userScopeClaim.UserClaimId)
+                    {
+                        foundDuplicateClaim = true;
+                        break;
+                    }
+                }
+
+                if (!foundDuplicateClaim)
+                {
+                    userClaims.Add(ModelConverterService.ConvertTo(userClaim, new UserClaimModel()));
+                }
             }
-
+         
             var claimsPrincipal = new ClaimsPrincipal()
             {
                 UserAccountId = id,
                 Role = role,
-                Scopes = blScopes,
-                Claims = blClaims
+                Scopes = userScopes,
+                Claims = userClaims
             };
 
             return Result<ClaimsPrincipal>.Success(claimsPrincipal);
@@ -188,7 +206,7 @@ namespace AuthorizationServices
         public async Task<Result<bool>> AddUserClaim(UserClaimModel userClaimModel, string scope, string description)
         {
             // check to see if the desired scope exists
-            var dalUserClaims = await _userClaimRepository.GetAllUserClaimsByUserAccountId(userClaimModel.UseraAccountId);
+            var dalUserClaims = await _userClaimRepository.GetAllUserClaimsByUserAccountId(userClaimModel.UserAccountId);
             var claimMatch = (dalUserClaims.Where(x => x.Type == userClaimModel.Type).FirstOrDefault());
 
             if (claimMatch != null)

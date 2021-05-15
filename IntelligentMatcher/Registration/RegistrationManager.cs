@@ -143,7 +143,7 @@ namespace Registration
                             {
                                 Type = claim.Type,
                                 Value = claim.Value,
-                                UseraAccountId = accountID
+                                UserAccountId = accountID
                             };
 
                             userClaims.Add(userClaimModel);

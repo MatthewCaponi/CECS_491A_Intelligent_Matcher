@@ -24,7 +24,7 @@ namespace IdentityServices
             _configuration = configuration;
             _tokenBuilderService = tokenBuilderService;
         }
-        public string CreateToken(List<UserClaimModel> userClaims)
+        public string CreateToken(List<TokenClaimModel> userClaims)
         {
             var jwtPayloadModel = new JwtPayloadModel();
 
@@ -33,27 +33,27 @@ namespace IdentityServices
                 switch (userClaim.Type)
                 {
                     case "iss":
-                        jwtPayloadModel.Issuer = new UserClaimModel("iss", userClaim.Value);
+                        jwtPayloadModel.Issuer = new TokenClaimModel("iss", userClaim.Value);
                         break;
 
                     case "sub":
-                        jwtPayloadModel.Subject = new UserClaimModel("sub", userClaim.Value);
+                        jwtPayloadModel.Subject = new TokenClaimModel("sub", userClaim.Value);
                         break;
 
                     case "aud":
-                        jwtPayloadModel.Audience = new UserClaimModel("aud", userClaim.Value);
+                        jwtPayloadModel.Audience = new TokenClaimModel("aud", userClaim.Value);
                         break;
 
                     case "exp":
-                        jwtPayloadModel.ExpirationTime = new UserClaimModel("exp", userClaim.Value);
+                        jwtPayloadModel.ExpirationTime = new TokenClaimModel("exp", userClaim.Value);
                         break;
 
                     case "nbf":
-                        jwtPayloadModel.NotBefore = new UserClaimModel("nbf", userClaim.Value);
+                        jwtPayloadModel.NotBefore = new TokenClaimModel("nbf", userClaim.Value);
                         break;
 
                     case "iat":
-                        jwtPayloadModel.IssuedAt = new UserClaimModel("iat", userClaim.Value);
+                        jwtPayloadModel.IssuedAt = new TokenClaimModel("iat", userClaim.Value);
                         break;
 
                     default:

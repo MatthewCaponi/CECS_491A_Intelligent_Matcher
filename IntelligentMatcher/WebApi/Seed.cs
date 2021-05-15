@@ -116,7 +116,7 @@ namespace WebApi
             IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
 
             var assignedScopes = new List<ScopeModel>();
-            var namedScopes = new List<string>() { "profile", "friends_list", "friends_list:read", "friends_list:write" };
+            var namedScopes = new List<string>() {"friends_list,", "friends_list:read,", "friends_list:write" };
             var claims = new List<ClaimModel>();
             claims.Add(new ClaimModel()
             {
