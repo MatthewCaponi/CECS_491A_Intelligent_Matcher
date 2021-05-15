@@ -173,6 +173,8 @@ async createFriendRequest(){
     }).
     then(r => r.json()).then(res=>{
         this.setState({descriptionmessage: "Account Information Updated"});
+        this.setState({edit: "no"});
+
 
     }
     );    

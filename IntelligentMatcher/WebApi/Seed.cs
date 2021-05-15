@@ -128,7 +128,8 @@ namespace WebApi
             var assignedScopes = new List<ScopeModel>();
             var namedScopes = new List<string>() {"friends_list:read,", "friends_list:write,", "friends_list:delete,", "friends_list:block,", 
                 "friends_list:approve,", "user_profile:read,", "user_profile:report,", "user_profile:write,","user_profile.friends_list.status:read,",
-            "application:read,", "user_profile.visibility:read,", "user_profile.photo:upload,"};
+            "application:read,", "user_profile.visibility:read,", "user_profile.photo:upload,", "messaging:send,","messaging:get,","messaging.users:get,", "messaging.channels:addUser,","messaging.channels:removeUser,","channels.user:getall,","channels:create,","channels:getowner,","channels:delete,","message:delete,","channel:setonline,","channel:setoffline,",
+            "account:delete,","account:passwordchange,","account.fontszie:change,","account.email:change,","account.fontSize:get,","account.fontstyle:change,","account.fontstyle:get,","account.theme:change,","account.theme:get,"};
             var claims = new List<ClaimModel>();
             claims.Add(new ClaimModel()
             {

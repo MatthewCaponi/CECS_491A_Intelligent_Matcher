@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import '../.././../../index'
-
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 export class ChangeEmail extends Component {
   static displayName = ChangeEmail.name;
 
@@ -12,12 +13,16 @@ export class ChangeEmail extends Component {
   }
 
   changeEmail() {
-    var ChangeEmailModel = {id: 1, oldPassword: this.email.value, password: this.password.value};
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
+    var ChangeEmailModel = {id: parseInt(userId), oldPassword: this.email.value, password: this.password.value};
 
     fetch(global.url + 'UserAccountSettings/ChangeEmail',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(ChangeEmailModel)
     }).
     then(r => r.json())

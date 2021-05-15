@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../.././../../index'
-
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 export class ChangeFontSize extends Component {
   static displayName = ChangeFontSize.name;
 
@@ -8,11 +9,15 @@ export class ChangeFontSize extends Component {
     super(props);
     this.state = { fontsize: 0 };
     this.changeFontSize = this.changeFontSize.bind(this);
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
     fetch(global.url + 'UserAccountSettings/GetFontSize',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
-        body: JSON.stringify("1")
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
+        body: JSON.stringify(userId)
     }).
     then(r => r.json())
     .then(res=>{
@@ -27,12 +32,16 @@ export class ChangeFontSize extends Component {
 
 
   changeFontSize() {
-    var ChangeFontSizeModel = {id: 1, fontSize: this.fontSize.value};
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
+    var ChangeFontSizeModel = {id: parseInt(userId), fontSize: this.fontSize.value};
 
     fetch(global.url + 'UserAccountSettings/ChangeFontSize',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(ChangeFontSizeModel)
     }).
     then(r => r.json())

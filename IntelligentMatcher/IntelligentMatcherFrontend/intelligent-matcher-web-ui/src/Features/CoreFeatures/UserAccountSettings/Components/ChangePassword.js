@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../.././../../index'
-
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 export class ChangePassword extends Component {
   static displayName = ChangePassword.name;
 
@@ -11,12 +12,16 @@ export class ChangePassword extends Component {
   }
 
   changePassword() {
-    var ChangePasswordModel = {id: 1, oldPassword: this.oldPassword.value, newPassword: this.newPassword.value};
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
+    var ChangePasswordModel = {id: parseInt(userId), oldPassword: this.oldPassword.value, newPassword: this.newPassword.value};
 
     fetch(global.url + 'UserAccountSettings/PasswordChange',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(ChangePasswordModel)
     }).
     then(r => r.json())

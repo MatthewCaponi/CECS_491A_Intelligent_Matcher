@@ -4,9 +4,10 @@ import { animateScroll } from "react-scroll";
 import Picker from 'emoji-picker-react';
 import Gifs from 'react-giphy-picker'
 import '../.././../../App'
-import Cookies from 'js-cookie';
 import {AuthnContext } from '../../../../Context/AuthnContext'
 import '../.././../../index'
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 export class Messaging extends Component {
 
@@ -17,13 +18,17 @@ export class Messaging extends Component {
 
     super(props);
 
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
+
     this.state = {  channel: [], 
                     currentUsername: "", 
                     channelUsers: [],
                     usersgroups: [], 
                     channelId: 0, 
                     selectedUser: 0, 
-                    userId: 1, 
+                    userId: parseInt(userId), 
                     userRemoveSelect: 0, 
                     currentGroupOwner: 0, 
                     currentmessagecount: 0, 
@@ -786,7 +791,6 @@ async createChannel() {
 
     return(
         <div>
-            <input type="text" name="channelname"  ref={(input) => this.userselect = input} onChange={this.changeUser}/>
 
                 <Grid columns={2} divided width={10}  container centered>
 
