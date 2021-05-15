@@ -115,7 +115,7 @@ namespace BusinessLayerUnitTests.TraditionalListing
         //    BusinessRelationshipModel newBusinessRelationshipModel = new BusinessRelationshipModel();
         //    BusinessListingModel newBusinessListingModel = new BusinessListingModel();
         //    ListingCreationService listingCreationService = new ListingCreationService(new ListingRepository(new SQLServerGateway(), new ConnectionStringData()),
-        //        null, new RelationshipRepository(new SQLServerGateway(), new ConnectionStringData()), null, null);
+        //        null, new RelationshipRepository(new SQLServerGateway(), new ConnectionStringData()), null);
         //    newBusinessRelationshipModel.Id = expectedID;
         //    newBusinessRelationshipModel.Title = title;
         //    newBusinessRelationshipModel.Details = detail;
