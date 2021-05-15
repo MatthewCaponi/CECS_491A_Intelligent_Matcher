@@ -3,7 +3,7 @@ import AnalysisDashboard from '../Components/AnalysisDashboard';
 import { Grid, Header, Divider, Label, Search,Button,Message, Container } from 'semantic-ui-react'
 import { Router } from 'react-router';
 import ListingSearch from '../../TraditionalListingSearch/Pages/ListingSearch';
-import '../.././../../App'
+import '../.././../../index'
 
 
 function AnalysisDashboardPage () {

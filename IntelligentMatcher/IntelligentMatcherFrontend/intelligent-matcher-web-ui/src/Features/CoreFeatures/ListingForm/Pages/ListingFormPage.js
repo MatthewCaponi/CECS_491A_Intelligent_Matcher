@@ -4,7 +4,7 @@ import { Grid, Header, Divider, Label, Search,Button,Message, Container } from '
 import { Router } from 'react-router';
 import ListingSearch from '../../TraditionalListingSearch/Pages/ListingSearch';
 
-import '../.././../../App'
+import '../.././../../index'
 
 function ListingFormPage () {
     const [listings, setListings] = useState([]);

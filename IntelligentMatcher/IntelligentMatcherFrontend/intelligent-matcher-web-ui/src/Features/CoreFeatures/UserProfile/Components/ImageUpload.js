@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import { post } from 'axios';    
-import '../.././../../App'
+import '../.././../../index'
 
 class ImageUpload extends React.Component {    
 

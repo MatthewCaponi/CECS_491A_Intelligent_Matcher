@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,29 +13,32 @@ namespace Services.Archiving
         {
             try
             {
-                var folderResult = await Task.Run(() =>
+                List<string> subFolders = new List<string>();
+
+                if (Directory.Exists(path))
                 {
-                    List<string> subFolders = new List<string>();
+                    var folders = Directory.GetDirectories(path);
 
-                    if (Directory.Exists(path))
+                    foreach (var folder in folders)
                     {
-                        var folders = Directory.GetDirectories(path);
-
-                        foreach (var folder in folders)
-                        {
-                            DirectoryInfo directory = new DirectoryInfo(folder);
-                            subFolders.Add(directory.Name);
-                        }
+                        DirectoryInfo directory = new DirectoryInfo(folder);
+                        subFolders.Add(directory.Name);
                     }
+                }
 
-                    return subFolders;
-                });
-
-                return folderResult;
+                return subFolders;
+            }
+            catch (PathTooLongException e)
+            {
+                throw new PathTooLongException(e.Message, e.InnerException);
             }
             catch (IOException e)
             {
                 throw new IOException(e.Message, e.InnerException);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new UnauthorizedAccessException(e.Message, e.InnerException);
             }
         }
     }

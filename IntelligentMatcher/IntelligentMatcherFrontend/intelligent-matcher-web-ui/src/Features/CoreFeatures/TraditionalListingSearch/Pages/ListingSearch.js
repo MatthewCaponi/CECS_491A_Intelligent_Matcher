@@ -3,8 +3,8 @@ import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search,Table,TableBody } from 'semantic-ui-react'
 import '../../../../App'
 import ListingTable from '../Components/ListingTable';
-
-
+import { Grid, Header, Divider, Label, Search } from 'semantic-ui-react'
+import '../.././../../index'
 
 function ListingSearch () {
     const [listings, setListings] = useState([]);

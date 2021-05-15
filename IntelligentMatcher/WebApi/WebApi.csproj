@@ -22,6 +22,7 @@
     <ProjectReference Include="..\DataAccessUnitTestes\DataAccessUnitTestes.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
 	<ProjectReference Include="..\FriendList\FriendList.csproj" />
+	<ProjectReference Include="..\Help\Help.csproj" />
 	<ProjectReference Include="..\IdentityServices\IdentityServices.csproj" />
 	<ProjectReference Include="..\ListingSearch\ListingSearch.csproj" />
 	<ProjectReference Include="..\Listings\Listings.csproj" />

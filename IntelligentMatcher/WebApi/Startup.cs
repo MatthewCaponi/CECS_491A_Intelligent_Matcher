@@ -41,6 +41,7 @@ using DataAccess.Repositories.ListingRepositories;
 using Listings;
 using Services.ListingServices;
 using ListingSearch;
+using Help;
 
 namespace WebApi
 {
@@ -127,6 +128,7 @@ namespace WebApi
 
            
             services.AddScoped<IArchiveManager, ArchiveManager>();
+            services.AddScoped<IHelpManager, HelpManager>();
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IRegistrationManager, RegistrationManager>();
             services.AddScoped<IUserManager, UserManager>();

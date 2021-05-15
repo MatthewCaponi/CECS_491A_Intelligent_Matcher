@@ -37,7 +37,7 @@ namespace BusinessLayerUnitTests.Archiving
             var result = await archiveManager.ArchiveLogFiles(startTime, endTime);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -55,7 +55,7 @@ namespace BusinessLayerUnitTests.Archiving
             var result = await archiveManager.ArchiveLogFiles(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.IsFalse(result.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -76,7 +76,7 @@ namespace BusinessLayerUnitTests.Archiving
             var result = await archiveManager.ArchiveLogFilesByCategory(startTime, endTime, category);
 
             // Assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(result.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -96,7 +96,7 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime), category);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.IsFalse(result.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -116,7 +116,7 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime), category);
 
             // Assert
-            Assert.IsFalse(result);
+            Assert.IsFalse(result.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -138,7 +138,7 @@ namespace BusinessLayerUnitTests.Archiving
             var deleteResult = await archiveManager.DeleteArchivedFiles(startTime, endTime);
 
             // Assert
-            Assert.IsTrue(deleteResult);
+            Assert.IsTrue(deleteResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -160,7 +160,7 @@ namespace BusinessLayerUnitTests.Archiving
                 DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsFalse(deleteResult);
+            Assert.IsFalse(deleteResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -182,7 +182,7 @@ namespace BusinessLayerUnitTests.Archiving
             var recoverResult = await archiveManager.RecoverLogFiles(startTime, endTime);
 
             // Assert
-            Assert.IsTrue(recoverResult);
+            Assert.IsTrue(recoverResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -203,7 +203,7 @@ namespace BusinessLayerUnitTests.Archiving
             var recoverResult = await archiveManager.RecoverLogFiles(DateTimeOffset.Parse(startTime), DateTimeOffset.Parse(endTime));
 
             // Assert
-            Assert.IsFalse(recoverResult);
+            Assert.IsFalse(recoverResult.WasSuccessful);
         }
 
         [DataTestMethod]
@@ -223,7 +223,7 @@ namespace BusinessLayerUnitTests.Archiving
             var actualResult = await archiveManager.GetCategories();
 
             // Assert
-            Assert.IsTrue(actualResult.Count == expectedResult.Count);
+            Assert.IsTrue(actualResult.SuccessValue.Count == expectedResult.Count);
         }
         #endregion
     }

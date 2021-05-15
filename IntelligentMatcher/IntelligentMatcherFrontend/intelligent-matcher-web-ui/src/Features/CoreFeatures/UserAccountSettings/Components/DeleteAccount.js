@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../.././../../App'
+import '../.././../../index'
 
 export class DeleteAccount extends Component {
   static displayName = DeleteAccount.name;

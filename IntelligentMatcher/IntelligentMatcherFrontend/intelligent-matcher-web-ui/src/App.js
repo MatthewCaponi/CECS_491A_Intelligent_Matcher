@@ -4,6 +4,8 @@ import Home from "./Features/CoreFeatures/Home/Pages/Home";
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 import { Grid, Container } from 'semantic-ui-react'
 import SiteHeader from './Shared/SiteHeader';
+import AdminDashboard from "./Features/CoreFeatures/AdminDashboard/Pages/AdminDashboard";
+import Help from "./Features/CoreFeatures/Help/Pages/Help";
 import Messaging from "./Features/CoreFeatures/Messaging/Pages/Messaging";
 import ListingForm from "./Features/CoreFeatures/ListingForm/Pages/ListingFormPage"
 import Archive from "./Features/CoreFeatures/Archive/Pages/Archive";
@@ -30,16 +32,18 @@ import AnalysisDashboard from "./Features/CoreFeatures/UserAnalysisDashboard/Com
 
 function App() {
 
-  global.url = "http://localhost:5000/";
-  global.urlRoute = "http://localhost:3000/";
-
-
   return (
     <div className="box">
       <SiteHeader/>
       <StatusToggle />
       <Router>
         <Switch>
+          <Route path="/AdminDashboard">
+            <AdminDashboard />
+          </Route>
+          <Route path="/Help">
+            <Help />
+          </Route>
           <Route path="/UserManagement">
             <UserManagement />
           </Route>

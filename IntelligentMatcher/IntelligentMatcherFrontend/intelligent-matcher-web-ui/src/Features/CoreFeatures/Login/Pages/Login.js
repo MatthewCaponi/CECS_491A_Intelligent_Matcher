@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import '../.././../../App'
+import '../.././../../index'
 
 import './Login.css';
 
