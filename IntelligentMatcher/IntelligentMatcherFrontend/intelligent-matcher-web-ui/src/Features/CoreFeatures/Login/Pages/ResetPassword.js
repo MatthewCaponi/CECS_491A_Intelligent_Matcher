@@ -6,14 +6,9 @@ import '../.././../../index'
 
 function ResetPassword() {
     const history = useHistory();
-    const [accountState, setAccountState] = useState(0);
+    const [accountState, setAccountState] = useState(history.location.state.accountId);
     const [passwordState, setPasswordState] = useState("");
-    if(history.location.state == undefined){
-        history.push("/");
-    }
-    else{
-        setAccountState(history.location.state.accountId);
-    }
+
     //history.location.state.accountId
     const [passwordShown, showPassword] = useState(true);
 
@@ -65,6 +60,13 @@ function ResetPassword() {
 
     return (
         <Grid container centered>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
+        <Grid.Row></Grid.Row>
         <Grid.Row>
             <h1>Reset Password: </h1>
         </Grid.Row>
@@ -112,7 +114,7 @@ function ResetPassword() {
             >
             Submit
             </Button>
-            <Button href={global.urlRoute + ""} compact size="tiny" circular inverted color="blue">
+            <Button href={global.urlRoute} compact size="tiny" circular inverted color="blue">
                 Go Back to Login
             </Button>
         </Grid.Row>
