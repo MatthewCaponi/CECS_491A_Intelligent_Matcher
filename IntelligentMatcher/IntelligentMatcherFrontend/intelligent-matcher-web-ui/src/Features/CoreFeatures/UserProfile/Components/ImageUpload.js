@@ -3,10 +3,14 @@ import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import { post } from 'axios';    
 import '../.././../../index'
-
+import Cookies from 'js-cookie';
+import jwt from 'jwt-decode';
 class ImageUpload extends React.Component {    
 
-        constructor(props) {    
+        constructor(props) {  
+                const idToken = Cookies.get('IdToken');
+                const decodedIdToken = jwt(idToken);
+                const userId = decodedIdToken.id;  
                 super(props);    
                 this.state = {    
                     viewingId: 0,
@@ -16,7 +20,7 @@ class ImageUpload extends React.Component {
 
             let url = window.location.href;
             url = url.split("id=")
-            this.state.viewingId = parseInt(url[1]);  
+            this.state.viewingId = parseInt(userId);  
         }    
 
         async submit(e) {                   
@@ -28,7 +32,8 @@ class ImageUpload extends React.Component {
                         formData.append("userId", this.state.viewingId);
                         const config = {    
                         headers: {    
-                                'content-type': 'multipart/form-data',    
+                                'content-type': 'multipart/form-data',
+                                'Authorization': 'Bearer ' + Cookies.get('AccessToken'),    
                                 },    
                         };    
                         return post(url, formData, config); 

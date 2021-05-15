@@ -3,19 +3,23 @@ import { Table, Grid, Image } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import FriendsList from "../../FriendsList/Pages/FriendsList";
 import '../.././../../index'
+import Cookies from 'js-cookie';
+import jwt from 'jwt-decode';
 
 import _ from 'lodash'
 
 export class ProfileData extends Component {
   static displayName = ProfileData.name;
   constructor(props) {
-
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
     super(props);
 
     this.state = {  
-        viewingId: 0  ,
+        viewingId: 0,
         accountProfileData: [],
-        userId: 1,
+        userId: parseInt(userId),
         mutualFriends: [],
         friendStatus: "",
         edit: "no",
@@ -42,7 +46,8 @@ async saveData(){
     await fetch(global.url + 'UserProfile/SaveUserProfile',
     {
     method: "POST",
-    headers: {'Content-type':'application/json'},
+    headers: {'Content-type':'application/json',
+    'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
     body: JSON.stringify(userProfileModel)
     }).
     then(r => r.json()).then(res=>{
@@ -59,7 +64,8 @@ async getAccountData(){
     await fetch(global.url + 'UserProfile/GetUserProfile',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(this.state.viewingId)
     }).then(r => r.json()).then(res=>{
         this.setState({accountProfileData: res});
@@ -71,7 +77,8 @@ async getAccountData(){
     await fetch(global.url + 'FriendList/GetMutualFriends',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({mutualFriends: res});
@@ -83,7 +90,8 @@ async getAccountData(){
     await fetch(global.url + 'UserProfile/GetFriendStatus',
     {
         method: "POST",
-        headers: {'Content-type':'application/json'},
+        headers: {'Content-type':'application/json',
+        'Authorization': 'Bearer ' + Cookies.get('AccessToken')},
         body: JSON.stringify(IdsModel)
     }).then(r => r.json()).then(res=>{
         this.setState({friendStatus: res});

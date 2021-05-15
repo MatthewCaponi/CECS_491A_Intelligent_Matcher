@@ -31,6 +31,7 @@ namespace Registration
         private readonly ILogService _logger;
         private readonly IClaimsPrincipalService _claimsPrincipalService;
         private readonly IAssignmentPolicyService _assignmentPolicyService;
+        private readonly IPublicUserProfileService _publicUserProfileService;
         private IEmailService _emailService;
         private IUserAccountService _userAccountService;
         private IUserProfileService _userProfileService;
@@ -39,12 +40,9 @@ namespace Registration
 
         private static System.Timers.Timer _timer;
 
-
-
-
         public RegistrationManager(IEmailService emailService, IUserAccountService userAccountService,
             IUserProfileService userProfileService, IValidationService validationService, ICryptographyService cryptographyService, ILogService logger, IClaimsPrincipalService claimsPrincipalService,
-            IAssignmentPolicyService assignmentPolicyService)
+            IAssignmentPolicyService assignmentPolicyService, IPublicUserProfileService publicUserProfileService)
         {
             _emailService = emailService;
             _userAccountService = userAccountService;
@@ -54,6 +52,7 @@ namespace Registration
             _logger = logger;
             _claimsPrincipalService = claimsPrincipalService;
             _assignmentPolicyService = assignmentPolicyService;
+            _publicUserProfileService = publicUserProfileService;
         }
 
         public async Task<Result<int>> RegisterAccount(WebUserAccountModel accountModel,
@@ -104,6 +103,10 @@ namespace Registration
                     // Sets the password for the new Account
                     await _cryptographyService.newPasswordEncryptAsync(password, accountID);
 
+                    await _publicUserProfileService.CeatePublicUserProfileAsync(new PublicUserProfileModel()
+                    {
+                        UserId = accountID
+                    });
                     // Passes on the Account ID to the User Profile Model
                     userModel.UserAccountId = accountID;
 

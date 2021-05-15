@@ -22,7 +22,7 @@ namespace BusinessModels
         NoSuchFilesExist,
         Forbidden,
         UserAlreadyContainsClaim,
-        UserAlreadyContainsScope
+        UserAlreadyContainsScope,
         FolderPathTooLong,
         DataNotSupported,
         FileError

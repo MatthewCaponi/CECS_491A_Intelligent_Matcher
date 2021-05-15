@@ -7,18 +7,20 @@ import UserListings from "../Components/UserListings";
 import '../.././../../App'
 import Cookies from 'js-cookie';
 import '../.././../../index'
-
+import jwt from 'jwt-decode';
 import _ from 'lodash'
 
 export class UserProfile extends Component {
   static displayName = UserProfile.name;
 
   constructor(props) {
-
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
     super(props);
 
     this.state = {
-        userId: 1,
+        userId: parseInt(userId),
         viewingId: 0,
         otherData: [],
         friendStatus: "",

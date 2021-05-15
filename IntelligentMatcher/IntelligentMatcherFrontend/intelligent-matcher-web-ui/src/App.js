@@ -26,8 +26,6 @@ import jwt from 'jwt-decode';
 import { useCookies } from 'react-cookie';
 import { useEffect, useRef, useState, useContext } from 'react';
 import ListingSearch from "./Features/CoreFeatures/TraditionalListingSearch/Pages/ListingSearch"
-
-import { useHistory } from 'react-router-dom';
 import SiteFooter from './Shared/SiteFooter';
 import './App.css';
 import React from "react";
@@ -121,9 +119,6 @@ function App() {
               </Route>
               <Route path="/ListingSearch">
                 <ListingSearch />
-              </Route>
-              <Route path="/ListingTable">
-                <ListingTable />
               </Route>
               <Route path="/ListingCategoryPage">
                 <ListingCategoryPage />
