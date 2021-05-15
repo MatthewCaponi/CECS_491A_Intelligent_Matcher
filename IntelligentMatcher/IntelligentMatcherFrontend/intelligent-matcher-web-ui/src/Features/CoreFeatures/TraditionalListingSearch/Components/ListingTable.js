@@ -28,6 +28,7 @@ function ListingTable(props) {
                       <Table.HeaderCell>NumberOfParticipants</Table.HeaderCell>
                       <Table.HeaderCell>InPersonOrRemote</Table.HeaderCell>
                       <Table.HeaderCell>UserAccountId</Table.HeaderCell>
+                     
                   </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -41,6 +42,8 @@ function ListingTable(props) {
                       <Table.Cell>{listing.numberOfParticipants}</Table.Cell>
                       <Table.Cell>{listing.inPersonOrRemote}</Table.Cell>
                       <Table.Cell>{listing.userAccountId}</Table.Cell>
+                     
+
                   </Table.Row>
                   )))}
               </Table.Body>

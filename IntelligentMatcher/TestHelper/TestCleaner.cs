@@ -49,6 +49,9 @@ namespace TestHelper
             var accessPolicies = await accessPolicyRepository.GetAllAccessPolicies();
             var accesssPolicyPairings = await accessPolicyPairingRepository.GetAllAccessPoliciesPairings();
             var listings = await traditionalListingSearchRepository.GetAllListings();
+            var collaborationListings = await traditionalListingSearchRepository.GetAllCollaborationListings();
+            var relationshipListings = await traditionalListingSearchRepository.GetAllRelationshipListings();
+            var teamListings = await traditionalListingSearchRepository.GetAllTeamListings();
 
             if (resources != null)
             {
@@ -126,6 +129,24 @@ namespace TestHelper
             {
                 await DeleteAllFromTable("Listing");
                 await ReseedAsync("Listing", 0, connectionString, dataGateway);
+
+            }
+            if (collaborationListings != null)
+            {
+                await DeleteAllFromTable("Collaboration");
+                await ReseedAsync("Collaboration", 0, connectionString, dataGateway);
+
+            }
+            if (relationshipListings != null)
+            {
+                await DeleteAllFromTable("Relationship");
+                await ReseedAsync("Relationship", 0, connectionString, dataGateway);
+
+            }
+            if (teamListings != null)
+            {
+                await DeleteAllFromTable("TeamModel");
+                await ReseedAsync("TeamModel", 0, connectionString, dataGateway);
 
             }
         }

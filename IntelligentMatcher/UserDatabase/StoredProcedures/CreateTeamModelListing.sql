@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[CreateTeamModelListing]
 	@TeamType nvarchar(50),
-	@GameType int,
+	@GameType nvarchar(50),
 	@Platform nvarchar(50),
 	@Experience nvarchar(50),
 	@ListingId int,

@@ -30,7 +30,9 @@ namespace WebApi.Controllers
         {
             try
             {
+               
                 return Ok((await _listingSearchManager.GetAllListings()).SuccessValue);
+                
             }
             catch
             {
