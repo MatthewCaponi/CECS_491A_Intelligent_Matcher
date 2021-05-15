@@ -31,24 +31,51 @@ namespace UserAccessControlServices
 
         public async Task<Result<AssignmentPolicyModel>> GetAssignmentPolicyByRole(string role, int priority)
         {
+            // Get all assignment policies
             var assignmentPolices = (await _assignmentPolicyRepository.GetAllAssignmentPolicies()).ToList();
-            var roledAssignmentPolicies = assignmentPolices.Where(x => x.RequiredAccountType.ToUpper() == role.ToUpper());
-            var assignmentPolicy = roledAssignmentPolicies.Where(x => (x.Priority == (priority)) ||(x.Priority) == 1).FirstOrDefault();
 
-            var assignmentPairingPolicies = (await _assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings()).ToList();
-            var assignmentPairingPolicy = assignmentPairingPolicies.Where(x => x.PolicyId == assignmentPolicy.Id);
-
-            var blScopes = (await _scopeService.GetAllScopes()).ToList();
-
-            var blScopePairings = new List<ScopeModel>();
-
-            foreach(var blScope in blScopes)
+            //Get all assignment policies for the user's role
+            var roledAssignmentPolicies = new List<Models.User_Access_Control.AssignmentPolicyModel>();
+            foreach (var policy in assignmentPolices)
             {
-                foreach(var policy in assignmentPairingPolicies)
+                if (policy.RequiredAccountType.ToUpper() == role.ToUpper())
                 {
-                    if (blScope.Id == policy.ScopeId)
+                    roledAssignmentPolicies.Add(policy);
+                }
+            }
+
+            // for each assignment policy for that user's role
+            // // if the priority of that policy is equal to the desired priority or is equal to 1
+            // // // grab that policy
+            var assignmentPolicy = new Models.User_Access_Control.AssignmentPolicyModel();
+            foreach (var roledAssignmentPolicy in roledAssignmentPolicies)
+            {
+                if(roledAssignmentPolicy.Priority == priority || roledAssignmentPolicy.Priority == 1)
+                {
+                    assignmentPolicy = roledAssignmentPolicy;
+                    break;
+                }
+            }
+
+            // Get all junction tables between assignment policies and scopes
+            var assignmentPairingPolicies = (await _assignmentPolicyPairingRepository.GetAllAssignmentPolicyPairings()).ToList();
+
+            // for policy-scope junction table
+            // // if the junction table's policy id is equal to the desired policy
+            // // // grab that junction table
+            var assignmentPairingPolicy = new AssignmentPolicyPairingModel();
+            var blScopes = (await _scopeService.GetAllScopes()).ToList();
+            foreach (var policyPairing in assignmentPairingPolicies)
+            {
+                if (policyPairing.PolicyId == assignmentPolicy.Id)
+                {
+                    foreach (var scope in blScopes)
                     {
-                        blScopePairings.Add(blScope);
+                        if (scope.Id == policyPairing.ScopeId)
+                        {
+                            blScopes.Add(scope);
+                            break;
+                        }
                     }
                 }
             }
@@ -58,7 +85,7 @@ namespace UserAccessControlServices
                 Name = assignmentPolicy.Name,
                 Default = assignmentPolicy.IsDefault,
                 RequiredAccountType = role,
-                AssignedScopes = blScopePairings,
+                AssignedScopes = blScopes,
                 Priority = assignmentPolicy.Priority
             };
 

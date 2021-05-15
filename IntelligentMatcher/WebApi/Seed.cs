@@ -116,7 +116,7 @@ namespace WebApi
             IUserProfileService userProfileService = new UserProfileService(userProfileRepository);
 
             var assignedScopes = new List<ScopeModel>();
-            var namedScopes = new List<string>() {"friends_list,", "friends_list:read,", "friends_list:write" };
+            var namedScopes = new List<string>() {"friends_list:read,", "friends_list:write,", "friends_list:delete,", "friends_list:block,", "friends_list:approve," };
             var claims = new List<ClaimModel>();
             claims.Add(new ClaimModel()
             {
@@ -166,6 +166,15 @@ namespace WebApi
                 AssignedScopes = scopes,
                 Priority = 1,
                 RequiredAccountType = "user"
+            });
+
+            var adminPolicies = await assignmentPolicyService.CreateAssignmentPolicy(new BusinessModels.UserAccessControl.AssignmentPolicyModel()
+            {
+                Default = true,
+                Name = "DefaultAdminPolicy",
+                AssignedScopes = scopes,
+                Priority = 1,
+                RequiredAccountType = "admin"
             });
             PublicUserProfileManager publicUserProfileManager = new PublicUserProfileManager(new PublicUserProfileService(publicUserProfileRepo, new ValidationService(userAccountService, userProfileService)));
             IAccountVerificationRepo accountVerificationRepo = new AccountVerificationRepo(new SQLServerGateway(), new ConnectionStringData());
