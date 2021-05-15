@@ -3,14 +3,17 @@ import { Table, Grid } from 'semantic-ui-react'
 import ReactDataGrid from 'react-data-grid';
 import { Image } from 'semantic-ui-react'
 import '../.././../../App'
-import Cookies from 'js-cookie';
 import '../.././../../index'
 import _ from 'lodash'
+import jwt from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 export class FriendsList extends Component {
   static displayName = FriendsList.name;
   constructor(props) {
-
+    const idToken = Cookies.get('IdToken');
+    const decodedIdToken = jwt(idToken);
+    const userId = decodedIdToken.id;
     super(props);
 
     this.state = {  friends: [],    
@@ -19,7 +22,7 @@ export class FriendsList extends Component {
                     blocks: [],
                     blocking: [],
 
-                    userId: 1,
+                    userId: parseInt(userId),
                     friendRequestMessage: ''
            
                   };
