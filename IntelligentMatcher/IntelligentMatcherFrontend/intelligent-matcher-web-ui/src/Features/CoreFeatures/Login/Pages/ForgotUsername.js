@@ -46,20 +46,16 @@ function ForgotUsername() {
         <Grid.Row></Grid.Row>
         <Grid.Row></Grid.Row>
         <Grid.Row>
-            <h1>Forgot Username (Please Enter Your Information): </h1>
+            <h1>Forgot Username: </h1>
         </Grid.Row>
-        <Grid.Row>
-            <label htmlFor="emailAddress">
-                Email Address:
-            </label>
-        </Grid.Row>
+        <Grid.Row></Grid.Row>
         <Grid.Row verticalAlign="middle">
             <div class="ui input">
                 <input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
             </div>
         </Grid.Row>
         <Grid.Row>
-            <label htmlFor="dateOfBirth">
+            <label size="tiny" htmlFor="dateOfBirth">
                 Date Of Birth:
             </label>
         </Grid.Row>

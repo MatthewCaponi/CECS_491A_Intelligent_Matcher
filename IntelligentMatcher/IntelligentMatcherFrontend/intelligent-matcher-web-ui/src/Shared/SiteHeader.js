@@ -98,7 +98,7 @@ function SiteHeader() {
                                     <Dropdown.Menu>
                                     <Dropdown.Item icon='user' content='Account' href={global.urlRoute + "UserAccountSettings"}/>
                                     <Dropdown.Item icon='privacy' text='Privacy' />
-                                    <Dropdown.Item icon='help' text='Help' />
+                                    <Dropdown.Item icon='help' text='Help' href={global.urlRoute + "Help"}/>
                                     <Dropdown.Item icon='logout' text='Logout' onClick={logout} />
                                     </Dropdown.Menu>
                                 </Dropdown>
