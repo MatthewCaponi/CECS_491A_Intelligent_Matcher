@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button } from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button, Input } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import '../.././../../index'
 
@@ -37,49 +37,60 @@ function ForgotUsername() {
         }
     }
 
+    const gridStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      };
+
+      const divStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        height: '90%',
+        position: 'relative',
+        flexWrap: 'wrap'
+      };
+
     return (
-        <Grid container centered>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row>
-            <h1>Forgot Username: </h1>
-        </Grid.Row>
-        <Grid.Row></Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <label size="tiny" htmlFor="dateOfBirth">
-                Date Of Birth:
-            </label>
-        </Grid.Row>
-        <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                <input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY" onChange={e => setDateOfBirthState(e.target.value)}/>
-            </div>
-        </Grid.Row>
-        <Grid.Row>
-            <Button
-                onClick={()=>submitHandler({
-                    username:"",
-                    emailAddress:emailState,
-                    dateOfBirth:dateOfBirthState
-                })}
-                compact size="tiny"
-                circular inverted color="red"
-            >
-            Submit
-            </Button>
-            <Button href={global.urlRoute} compact size="tiny" circular inverted color="blue">Go Back</Button>
-        </Grid.Row>
+        <div style={divStyle}>
+            <Grid container stackable columns={3} centered stretched style={gridStyle}>
+                <Grid.Row>
+                    <Grid.Column textAlign='center'>
+                        <Header size="huge">Forgot Username</Header>
+                    </Grid.Column>
+                </Grid.Row>
+                    <Divider />
+                    <Divider section />
+                <Grid.Row verticalAlign="middle">
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY" onChange={e => setDateOfBirthState(e.target.value)}/>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column centered mobile={6} tablet={4} computer={2}>
+                        <Button
+                            onClick={()=>submitHandler({
+                                username:"",
+                                emailAddress:emailState,
+                                dateOfBirth:dateOfBirthState
+                            })}
+                            compact size="large"
+                            circular inverted color="blue"
+                        >
+                            Submit
+                        </Button>
+                    </Grid.Column>
+                    <Grid.Column centered mobile={6} tablet={4} computer={2}>
+                        <Button href={global.urlRoute} compact size="large" circular inverted color="violet">Go Back</Button>
+                    </Grid.Column>
+                </Grid.Row>
         </Grid>
+        </div>
     )
 }
 
