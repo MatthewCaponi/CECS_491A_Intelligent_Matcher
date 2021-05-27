@@ -107,10 +107,10 @@ function Registration() {
                 </Grid.Row>
                 <Grid.Column/>
                 <Grid.Column>
-                    <Checkbox compact color="violet" size="mini" onClick={showPasswordHandler} label="Show Password"></Checkbox> 
+                    <Checkbox compact size="mini" onClick={showPasswordHandler} label="Show Password"></Checkbox> 
                 </Grid.Column>
                 <Grid.Row>
-                    <Grid.Column centered mobile={9} tablet={6} computer={3}>
+                    <Grid.Column centered mobile={16} tablet={5} computer={2}>
                                 <Button compact
                                 onClick={()=>submitHandler({
                                     firstName:firstNameState,
@@ -122,14 +122,14 @@ function Registration() {
                                     ipAddress:"127.0.0.1"
                                 })}
                                 size="large"
-                                circular inverted color="red"
+                                circular inverted color="blue"
                             >
                             Register
                             </Button>
                             </Grid.Column>
-                            <Grid.Column centered mobile={9} tablet={6} computer={3}>
-                                <Button compact href={global.urlRoute}  size="large" circular inverted color="blue">
-                                Go Back to Login
+                            <Grid.Column centered mobile={7} tablet={5} computer={2}>
+                                <Button compact href={global.urlRoute}  size="large" circular inverted color="violet">
+                                    Login
                                 </Button>
                         </Grid.Column>
                 </Grid.Row>

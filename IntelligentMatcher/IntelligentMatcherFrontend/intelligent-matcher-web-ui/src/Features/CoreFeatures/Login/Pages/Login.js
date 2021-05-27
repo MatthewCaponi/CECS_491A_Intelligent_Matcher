@@ -94,9 +94,9 @@ function Login() {
         <div style={divStyle}>
             <Grid container stackable columns={3} centered stretched style={gridStyle}>
                 <Grid.Row>
-                        <Grid.Column textAlign='center'>
-                            <Header size="huge">Login</Header>
-                        </Grid.Column>
+                    <Grid.Column textAlign='center'>
+                        <Header size="huge">Login</Header>
+                    </Grid.Column>
                     </Grid.Row>
                     <Divider />
                     <Divider section />
