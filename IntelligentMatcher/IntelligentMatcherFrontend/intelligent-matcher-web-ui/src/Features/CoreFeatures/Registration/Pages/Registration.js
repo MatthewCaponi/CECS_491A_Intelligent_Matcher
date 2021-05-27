@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox, Input } from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox, Input, Loader, Segment, Dimmer } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import '../.././../../index'
 
 import './Registration.css';
+import LoaderRow from '../Components/LoaderRow';
 
 function Registration() {
     const [firstNameState, setFirstNameState] = useState("");
@@ -14,11 +15,15 @@ function Registration() {
     const [dateOfBirthState, setDateOfBirthState] = useState("");
     const [passwordShown, showPassword] = useState(true);
     const history = useHistory();
+    const [isValidationError, setIsValidationError] = useState(false);
+    const [validationError, setValidationError] = useState("");
+    const [isRegistering, setIsRegistering] = useState(false);
 
     function showPasswordHandler(){
         showPassword(!passwordShown);
     };
     function submitHandler(e){
+        setIsRegistering(true);
         var RegistrationModel = e;
         // e.preventDefault();
         if(e.firstName != "" && e.surname != "" && e.username != "" && e.password != "" && e.emailAddress != "" &&
@@ -34,10 +39,11 @@ function Registration() {
             }).
             then(r => r.json()).then(res=>{
                 if(res.success){
-                    alert("Registration Success");
+                    
                     history.push("/ResendEmail", { accountId: res.accountId });
                 }
                 else{
+                
                     alert(res.errorMessage);
                 }
             }
@@ -54,6 +60,7 @@ function Registration() {
         else{
             alert("This password is invalid!")
         }
+
     }
 
     const gridStyle = {
@@ -81,6 +88,8 @@ function Registration() {
                 </Grid.Row>
                 <Divider />
                 <Divider section />
+                    {isRegistering && <LoaderRow />}
+                <Grid.Row/>
                 <Grid.Row>
                     <Grid.Column mobile={16} tablet={8} computer={4}>
                         <Input type="text" name="firstname" placeholder="First Name" onChange={e => setFirstNameState(e.target.value)}/>
@@ -126,12 +135,12 @@ function Registration() {
                             >
                             Register
                             </Button>
-                            </Grid.Column>
-                            <Grid.Column centered mobile={7} tablet={5} computer={2}>
-                                <Button compact href={global.urlRoute}  size="large" circular inverted color="violet">
-                                    Login
-                                </Button>
-                        </Grid.Column>
+                    </Grid.Column>
+                    <Grid.Column  centered mobile={16} tablet={5} computer={2}>
+                        <Button circular ribbon="right" compact href={global.urlRoute}  size="large" inverted color="violet">
+                            Back
+                        </Button>
+                    </Grid.Column>
                 </Grid.Row>
             </Grid>  
         </div>

@@ -65,11 +65,7 @@ namespace WebApi.Controllers
                 if (registrationModel.username == null || registrationModel.password == null || registrationModel.emailAddress == null
                     || registrationModel.firstName == null || registrationModel.surname == null || registrationModel.dateOfBirth == null)
                 {
-                    registrationResultModel.Success = false;
-                    registrationResultModel.ErrorMessage = ErrorMessage.Null.ToString();
-
-                    Console.WriteLine("Register user failed: " + registrationResultModel.ErrorMessage.ToString());
-                    return StatusCode(404, registrationResultModel);
+                    return StatusCode(400);
                 }
 
                 var userAccount = new WebUserAccountModel();

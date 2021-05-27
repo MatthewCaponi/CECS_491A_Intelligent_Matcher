@@ -62,7 +62,14 @@ function ForgotPasswordValidation() {
                 </Grid.Row>
                 <Divider />
                 <Divider section />
-                <Grid.Row></Grid.Row>
+                <Grid.Row>
+                    <Grid.Column />
+                    <Grid.Column centered mobile={3} tablet={2} computer={1}>
+                            <Label ribbon="right" href={global.urlRoute} compact size="large" inverted color="violet">
+                                Back
+                            </Label>
+                    </Grid.Column>  
+                </Grid.Row>
                 <Grid.Row>
                     <Grid.Column mobile={16} tablet={8} computer={4}>
                         <Input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
@@ -92,11 +99,6 @@ function ForgotPasswordValidation() {
                             Submit
                         </Button>
                     </Grid.Column>
-                    <Grid.Column centered mobile={6} tablet={4} computer={2}>
-                        <Button href={global.urlRoute} compact size="large" circular inverted color="violet">
-                            Login
-                        </Button>
-                    </Grid.Column>  
                 </Grid.Row>
             </Grid>
         </div>

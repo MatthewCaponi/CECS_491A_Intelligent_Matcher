@@ -59,9 +59,15 @@ function ForgotUsername() {
                         <Header size="huge">Forgot Username</Header>
                     </Grid.Column>
                 </Grid.Row>
-                    <Divider />
-                    <Divider section />
-                <Grid.Row verticalAlign="middle">
+                <Divider />
+                <Divider section />
+                <Grid.Row>
+                    <Grid.Column />
+                    <Grid.Column centered mobile={3} tablet={2} computer={1}>
+                        <Label ribbon="right" href={global.urlRoute} size="large" inverted color="violet">Back</Label>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
                     <Grid.Column mobile={16} tablet={8} computer={4}>
                         <Input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
                     </Grid.Column>
@@ -84,9 +90,6 @@ function ForgotUsername() {
                         >
                             Submit
                         </Button>
-                    </Grid.Column>
-                    <Grid.Column centered mobile={6} tablet={4} computer={2}>
-                        <Button href={global.urlRoute} compact size="large" circular inverted color="violet">Go Back</Button>
                     </Grid.Column>
                 </Grid.Row>
         </Grid>

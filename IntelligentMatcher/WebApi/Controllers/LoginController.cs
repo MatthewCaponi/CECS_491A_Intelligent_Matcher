@@ -27,61 +27,44 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Result<LoginResultModel>>> Login([FromBody] LoginModel loginModel)
         {
-                var loginResultModel = new LoginResultModel();
-            
-                //if (loginModel.username == null || loginModel.password == null)
-                //{
-                //    loginResultModel.Success = false;
-                //    loginResultModel.ErrorMessage = ErrorMessage.Null.ToString();
+            if (loginModel.username == null || loginModel.password == null)
+            {
+                return StatusCode(400);
+            }
 
-                //    return loginResultModel;
-                //}
+            var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
 
-                var loginResult = await _loginManager.Login(loginModel.username, loginModel.password, loginModel.ipAddress);
+            if (loginResult.WasSuccessful)
+            {
+                var idToken = loginResult.SuccessValue.IdToken;
+                var accessToken = loginResult.SuccessValue.AccessToken;
+                CookieOptions idOption = new CookieOptions();
+                idOption.HttpOnly = false;
 
-                loginResultModel.Success = loginResult.WasSuccessful;
+                CookieOptions accessOption = new CookieOptions();
+                accessOption.HttpOnly = false;
 
-            //if (loginResultModel.Success)
-            //{
-            //    loginResultModel.Username = loginResult.SuccessValue.Username;
-            //    loginResultModel.AccountType = loginResult.SuccessValue.AccountType.ToString();
-            //    loginResultModel.AccountStatus = loginResult.SuccessValue.AccountStatus.ToString();
-            //}
-            //else
-            //{
-            //    loginResultModel.ErrorMessage = loginResult.ErrorMessage.ToString();
-            //}
-            var idToken = loginResult.SuccessValue.IdToken;
-            var accessToken = loginResult.SuccessValue.AccessToken;
-            CookieOptions idOption = new CookieOptions();
-            idOption.HttpOnly = false;
+                Response.Cookies.Append("IdToken", idToken, idOption);
+                Response.Cookies.Append("AccessToken", accessToken, accessOption);
 
-            CookieOptions accessOption = new CookieOptions();
-            accessOption.HttpOnly = false;
-
-            Response.Cookies.Append("IdToken", idToken, idOption);
-            Response.Cookies.Append("AccessToken", accessToken, accessOption);
-            
-            return Ok("Success");
-            
-            //catch (SqlCustomException)
-            //{
-            //    var loginResultModel = new LoginResultModel();
-
-            //    loginResultModel.Success = false;
-            //    loginResultModel.ErrorMessage = "Could not verify the information given. Try again.";
-
-            //    return loginResultModel;
-            //}
-            //catch (NullReferenceException)
-            //{
-            //    var loginResultModel = new LoginResultModel();
-
-            //    loginResultModel.Success = false;
-            //    loginResultModel.ErrorMessage = "A null was returned when checking the inputs.";
-
-            //    return loginResultModel;
-            //}
+                return Ok("Success");
+            }
+            else if (loginResult.ErrorMessage == ErrorMessage.NoMatch)
+            {
+                return StatusCode(401);
+            }
+            else if (loginResult.ErrorMessage == ErrorMessage.Null)
+            {
+                return StatusCode(400);
+            }
+            else if (loginResult.ErrorMessage == ErrorMessage.TooManyAttempts)
+            {
+                return StatusCode(429);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpPost]
