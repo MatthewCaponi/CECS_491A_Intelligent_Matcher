@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox} from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox, Input, Segment} from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { AuthnContext } from '../../../../Context/AuthnContext';
@@ -19,7 +19,7 @@ function Login() {
 
     try{
         if(location.state.message == "UserConfirmed"){
-            confMessage = "Account Confirmed, please login";
+            confMessage = "Account Confirmed. Please login";
         }
     }
     catch{
@@ -76,55 +76,73 @@ function Login() {
         }
     }
 
+    const gridStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      };
+
+      const divStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        height: '90%',
+        position: 'relative',
+        flexWrap: 'wrap'
+      };
+
     return (
-        <div>
-            <Grid container centered>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row>
-                <h1>Login</h1>
-            </Grid.Row>
-            <Grid.Row>
-                {confMessage}
-            </Grid.Row>
-            <Grid.Row verticalAlign="middle">
-                <div class="ui input">
-                    <input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
-                </div>
-            </Grid.Row>
-            <Grid.Row verticalAlign="middle">
-            <div class="ui input">
-                            <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
-                        </div>
-                        <div>
+        <div style={divStyle}>
+            <Grid container stackable columns={3} centered stretched style={gridStyle}>
+                <Grid.Row>
+                        <Grid.Column textAlign='center'>
+                            <Header size="huge">Login</Header>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Divider />
+                    <Divider section />
+                <Grid.Row>
+                    {confMessage != "" && <Label color="green" prompt>{confMessage}</Label>}
+                </Grid.Row>
+                <Grid.Row>
+                <Grid.Column mobile={16} tablet={8} computer={4}>
+                    <Input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
+                </Grid.Column>  
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                    <Input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
+                    <div>
                         <Checkbox color="violet" style={userstyle} size='mini' onClick={showPasswordHandler} label="Show Password"></Checkbox>
-            </div>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid.Column width={2}>
-                <a href={global.urlRoute + "ForgotUsername"}>Forgot Username</a>
-                </Grid.Column>
-                <Grid.Column width={2}>
-                <a href={global.urlRoute + "ForgotPasswordValidation"}>Forgot Password</a>
-                </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-                <Button
-                    onClick={()=>submitHandler({
-                        username:usernameState,
-                        password:passwordState,
-                        ipAddress:"127.0.0.1"
-                    })}
-                    compact size="large"
-                    circular inverted color="violet"
-                >
-                Login
-                </Button>
-                <Button href={global.urlRoute + "Registration"} compact size="large" circular inverted color="blue">Register New User</Button>
-            </Grid.Row>
+                    </div>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row />
+                <Grid.Row>
+                    <Grid.Column mobile={8} tablet={4} computer={2}>
+                        <Label link ribbon href={global.urlRoute + "ForgotUsername"}>Forgot Username</Label>
+                    </Grid.Column>
+                    <Grid.Column mobile={8} tablet={4} computer={2}>
+                        <Label link ribbon="right" href={global.urlRoute + "ForgotPasswordValidation"}>Forgot Password</Label>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column centered mobile={6} tablet={4} computer={2}>
+                        <Button
+                                onClick={()=>submitHandler({
+                                    username:usernameState,
+                                    password:passwordState,
+                                    ipAddress:"127.0.0.1"
+                                })}
+                                compact size="large"
+                                circular inverted color="violet"
+                            >
+                            Login
+                            </Button>
+                    </Grid.Column>
+                    <Grid.Column centered mobile={6} tablet={4} computer={2}>
+                        <Button href={global.urlRoute + "Registration"} compact size="large" circular inverted color="blue">Register</Button>
+                    </Grid.Column>
+                </Grid.Row>
             </Grid>
         </div>
         

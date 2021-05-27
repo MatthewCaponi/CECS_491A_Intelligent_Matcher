@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox } from 'semantic-ui-react'
+import { Grid, Header, Divider, Label, Search, Container, Button, Checkbox, Input } from 'semantic-ui-react'
 import { useHistory } from 'react-router-dom';
 import '../.././../../index'
 
@@ -55,95 +55,87 @@ function Registration() {
             alert("This password is invalid!")
         }
     }
-    return (
-        <Grid relaxed stackable columns={3} container centered>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row centered verticalAlign><h1>Registration</h1></Grid.Row>
 
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row></Grid.Row>
-            <Grid.Row>
-            
-                <Grid.Column width={4}>
-                    <Grid.Row>
-                        <div class="ui input">
-                            <input type="text" name="firstname" placeholder="First Name" onChange={e => setFirstNameState(e.target.value)}/>
-                        </div>
-                    </Grid.Row>
-                    <Grid.Row><Divider /></Grid.Row>
-                    <Grid.Row verticalAlign="middle">
-                        <div class="ui input">
-                            <input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
-                        </div>
-                    </Grid.Row>
-                    <Grid.Row><Divider /></Grid.Row>
-                    <Grid.Row verticalAlign="middle">
-                        <div class="ui input">
-                            <input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
-                        </div>
-                    </Grid.Row>
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    <Grid.Row verticalAlign="middle">
-                        <div class="ui input">
-                            <input type="text" name="surname" placeholder="Last Name" onChange={e => setSurnameState(e.target.value)}/>
-                        </div>
-                    </Grid.Row>
-                    <Grid.Row><Divider /></Grid.Row>
-                    <Grid.Row verticalAlign="middle" centered>
-                        <div class="ui input">
-                            <input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/>
-                        </div>
-                        <div>
-                        <Checkbox color="violet" size='mini' onClick={showPasswordHandler} label="Show Password"></Checkbox>
-                        </div>
-                    </Grid.Row>
-                    <Grid.Row><Divider /></Grid.Row>
-                    <Grid.Row verticalAlign="middle">
-                        <div class="ui input">
-                            <input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY"
-                            onChange={e => setDateOfBirthState(e.target.value)}/>
-                        </div>
+    const gridStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      };
+
+      const divStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        height: '90%',
+        position: 'relative',
+        flexWrap: 'wrap'
+
+      };
+      
+    return (
+        <div style={divStyle}>
+            <Grid container stackable columns={3} centered stretched style={gridStyle}>
+                <Grid.Row>
+                    <Grid.Column textAlign='center'>
+                        <Header size="huge">Registration</Header>
+                    </Grid.Column>
                 </Grid.Row>
+                <Divider />
+                <Divider section />
+                <Grid.Row>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="text" name="firstname" placeholder="First Name" onChange={e => setFirstNameState(e.target.value)}/>
+                    </Grid.Column>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="text" name="surname" placeholder="Last Name" onChange={e => setSurnameState(e.target.value)}/>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="email" name="emailAddress" placeholder="Email Address" onChange={e => setEmailState(e.target.value)}/>
+                    </Grid.Column>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="date" name="dateOfBirth" placeholder="MM/DD/YYYY" onChange={e => setDateOfBirthState(e.target.value)}/>
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row centered>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type="text" name="username" placeholder="Username" onChange={e => setUsernameState(e.target.value)}/>
+                    </Grid.Column>
+                    <Grid.Column mobile={16} tablet={8} computer={4}>
+                        <Input type={passwordShown ? "password" : "text"} name="password" placeholder="Password" onChange={e => setPasswordState(e.target.value)}/> 
+                    </Grid.Column>      
+                </Grid.Row>
+                <Grid.Column/>
+                <Grid.Column>
+                    <Checkbox compact color="violet" size="mini" onClick={showPasswordHandler} label="Show Password"></Checkbox> 
                 </Grid.Column>
-            </Grid.Row>
-            <Grid.Column></Grid.Column>
-            <Grid.Column>
-            <Grid.Row><Divider /></Grid.Row>
-            <Grid.Column centered width={9}>
-            <Grid.Row>
-                <Button
-                    onClick={()=>submitHandler({
-                        firstName:firstNameState,
-                        surname:surnameState,
-                        username:usernameState,
-                        password:passwordState,
-                        emailAddress:emailState,
-                        dateOfBirth:dateOfBirthState,
-                        ipAddress:"127.0.0.1"
-                    })}
-                     size="large"
-                    circular inverted color="red"
-                >
-                Register
-                </Button>
-                <Button href={global.urlRoute}  size="large" circular inverted color="blue">
-                    Go Back to Login
-                </Button>
-            </Grid.Row>
-            </Grid.Column>
-           
-            </Grid.Column>
-        <Grid.Column></Grid.Column>
-        
-        </Grid>
+                <Grid.Row>
+                    <Grid.Column centered mobile={9} tablet={6} computer={3}>
+                                <Button compact
+                                onClick={()=>submitHandler({
+                                    firstName:firstNameState,
+                                    surname:surnameState,
+                                    username:usernameState,
+                                    password:passwordState,
+                                    emailAddress:emailState,
+                                    dateOfBirth:dateOfBirthState,
+                                    ipAddress:"127.0.0.1"
+                                })}
+                                size="large"
+                                circular inverted color="red"
+                            >
+                            Register
+                            </Button>
+                            </Grid.Column>
+                            <Grid.Column centered mobile={9} tablet={6} computer={3}>
+                                <Button compact href={global.urlRoute}  size="large" circular inverted color="blue">
+                                Go Back to Login
+                                </Button>
+                        </Grid.Column>
+                </Grid.Row>
+            </Grid>  
+        </div>
+       
     )
 }
 
